@@ -20,7 +20,6 @@
 }
 
 * {
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: var(--default-color);
     text-decoration: none;
@@ -139,7 +138,7 @@ body {
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 html {
@@ -153,7 +152,6 @@ body.modal-open {
 
 button:focus {
     outline: none !important;
-    -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
 
@@ -330,7 +328,7 @@ h6 {
     font-weight: bolder !important;
 }
 
-.fsize10{
+.fsize10 {
     font-size: 10px !important;
 }
 
@@ -652,6 +650,7 @@ header .cart-icon i {
     width: 60px;
     height: 60px;
     min-width: 60px;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 3px 12px -5px #7c7c7c;
@@ -773,6 +772,7 @@ main.main-tag-mt-sm {
     background-repeat: no-repeat;
     background-size: cover;
     padding: 35px 0;
+    min-height: 140px;
 }
 
 /* Home Page */
@@ -848,6 +848,7 @@ button.btn-before-none::before,
 .card-members .mbr-img img {
     width: 30px;
     height: 30px;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
     background: #fff;
@@ -1064,6 +1065,7 @@ button.btn-before-none::before,
     width: 65px;
     height: 65px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1143,10 +1145,15 @@ button.btn-before-none::before,
     min-width: 60px;
     min-height: 55px;
     border-radius: 3px;
+    -webkit-animation-duration: 1.5s;
     animation-duration: 1.5s;
+    -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
+    -webkit-animation-name: placeHolderShimmer;
     animation-name: placeHolderShimmer;
+    -webkit-animation-timing-function: linear;
     animation-timing-function: linear;
     background: var(--light-color);
     background: linear-gradient(to right, var(--light-color), #ddd, var(--light-color));
@@ -1157,10 +1164,15 @@ button.btn-before-none::before,
     height: 0.65rem;
     border-radius: 5px;
     margin: 2px;
+    -webkit-animation-duration: 1.5s;
     animation-duration: 1.5s;
+    -webkit-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
+    -webkit-animation-name: placeHolderShimmer;
     animation-name: placeHolderShimmer;
+    -webkit-animation-timing-function: linear;
     animation-timing-function: linear;
     background: var(--light-color);
     background: linear-gradient(to right, var(--light-color), #ddd, var(--light-color));
@@ -1175,6 +1187,16 @@ button.btn-before-none::before,
 .item-card .item-data .preloader_div div.disabled h3,
 .item-card .item-data .preloader_div h3 {
     color: var(--light-color);
+}
+
+@-webkit-keyframes placeHolderShimmer {
+    0% {
+        background-position: 0;
+    }
+
+    100% {
+        background-position: 120px;
+    }
 }
 
 @keyframes placeHolderShimmer {
@@ -1285,6 +1307,7 @@ button.btn-before-none::before,
     width: 56px;
     height: 56px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1299,6 +1322,7 @@ button.btn-before-none::before,
     width: 42px;
     height: 42px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1312,6 +1336,7 @@ button.btn-before-none::before,
     width: 55px;
     height: 55px;
     min-width: 55px;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 3px 12px -5px #7c7c7c;
@@ -1584,7 +1609,6 @@ button.btn-before-none::before,
     height: 100%;
     top: 0;
     left: 0;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
     z-index: -1;
     opacity: 0;
@@ -1602,7 +1626,6 @@ button.btn-before-none::before,
     height: 170%;
     top: -35%;
     left: -35%;
-    -webkit-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 
@@ -1734,6 +1757,7 @@ button.btn-before-none::before,
     max-width: 55px;
     max-height: 55px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1763,6 +1787,7 @@ button.btn-before-none::before,
     width: 42px;
     height: 42px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1782,6 +1807,7 @@ button.btn-before-none::before,
 .user-img-sm img {
     border-radius: 50%;
     box-shadow: 0 4px 15px -4px #464646;
+    -o-object-fit: cover;
     object-fit: cover;
 }
 
@@ -1814,6 +1840,7 @@ button.btn-before-none::before,
 .user-review .user img {
     width: 65px;
     height: 65px;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 4px 15px -4px #464646;
@@ -2072,6 +2099,7 @@ button.btn-before-none::before,
 .profile-img img {
     width: 110px;
     height: 110px;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
     box-shadow: 0 3px 15px -4px #424242;
@@ -2145,15 +2173,7 @@ button.btn-before-none::before,
 .switch-input:checked + .switch-label {
     color: #fff;
     text-shadow: 0 1px rgba(255, 255, 255, 0.25);
-    -webkit-transition: 0.15s ease-out;
-    -moz-transition: 0.15s ease-out;
-    -ms-transition: 0.15s ease-out;
-    -o-transition: 0.15s ease-out;
     transition: 0.15s ease-out;
-    -webkit-transition-property: color, text-shadow;
-    -moz-transition-property: color, text-shadow;
-    -ms-transition-property: color, text-shadow;
-    -o-transition-property: color, text-shadow;
     transition-property: color, text-shadow;
 }
 
@@ -2182,18 +2202,8 @@ button.btn-before-none::before,
     height: 1.9rem;
     border-radius: 1px;
     background-color: var(--primary-color);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, var(--primary-color)), color-stop(100%, var(--primary-color-dark)));
-    background-image: -webkit-linear-gradient(top, var(--primary-color), var(--primary-color-dark));
-    background-image: -moz-linear-gradient(top, var(--primary-color), var(--primary-color-dark));
-    background-image: -ms-linear-gradient(top, var(--primary-color), var(--primary-color-dark));
-    background-image: -o-linear-gradient(top, var(--primary-color), var(--primary-color-dark));
     background-image: linear-gradient(top, var(--primary-color), var(--primary-color-dark));
-    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
-    -webkit-transition: left 0.15s ease-out;
-    -moz-transition: left 0.15s ease-out;
-    -ms-transition: left 0.15s ease-out;
-    -o-transition: left 0.15s ease-out;
     transition: left 0.15s ease-out;
 }
 
@@ -2211,6 +2221,8 @@ button.btn-before-none::before,
     border-radius: 10px;
     background: none;
     box-shadow: inset 0 0 0 2px #a3a3a3;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     padding: 0;
     margin: 0;
@@ -2233,15 +2245,6 @@ button.btn-before-none::before,
 
 
 /* ------------- Checkbox CSS ------------- */
-@-moz-keyframes dothabottomcheck {
-    0% {
-        height: 0;
-    }
-
-    100% {
-        height: 8px;
-    }
-}
 
 @-webkit-keyframes dothabottomcheck {
     0% {
@@ -2291,20 +2294,6 @@ button.btn-before-none::before,
     }
 }
 
-@-moz-keyframes dothatopcheck {
-    0% {
-        height: 0;
-    }
-
-    50% {
-        height: 0;
-    }
-
-    100% {
-        height: 18px;
-    }
-}
-
 input[type=checkbox] {
     display: none;
 }
@@ -2318,35 +2307,22 @@ input[type=checkbox] {
     border-radius: 2px;
     position: relative;
     display: inline-block;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    -moz-transition: border-color ease 0.2s;
-    -o-transition: border-color ease 0.2s;
-    -webkit-transition: border-color ease 0.2s;
     transition: border-color ease 0.2s;
     cursor: pointer;
 }
 
 .check-box::before,
 .check-box::after {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     position: absolute;
     height: 0;
     width: 3px;
     background-color: var(--primary-color);
     display: inline-block;
-    -moz-transform-origin: left top;
-    -ms-transform-origin: left top;
-    -o-transform-origin: left top;
-    -webkit-transform-origin: left top;
     transform-origin: left top;
     border-radius: 2px;
     content: " ";
-    -webkit-transition: opacity ease 0.5;
-    -moz-transition: opacity ease 0.5;
     transition: opacity ease 0.5;
 }
 
@@ -2354,20 +2330,12 @@ input[type=checkbox] {
     top: 11px;
     left: 7px;
     box-shadow: 0 0 0 2px #fff;
-    -moz-transform: rotate(-135deg);
-    -ms-transform: rotate(-135deg);
-    -o-transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
     transform: rotate(-135deg);
 }
 
 .check-box::after {
     top: 5px;
     left: 1px;
-    -moz-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
 }
 
@@ -2379,8 +2347,6 @@ input[type=checkbox]:checked + .check-box,
 input[type=checkbox]:checked + .check-box::after,
 .check-box.checked::after {
     height: 8px;
-    -moz-animation: dothabottomcheck 0.4s ease 0s forwards;
-    -o-animation: dothabottomcheck 0.4s ease 0s forwards;
     -webkit-animation: dothabottomcheck 0.4s ease 0s forwards;
     animation: dothabottomcheck 0.4s ease 0s forwards;
 }
@@ -2388,8 +2354,6 @@ input[type=checkbox]:checked + .check-box::after,
 input[type=checkbox]:checked + .check-box::before,
 .check-box.checked::before {
     height: 15px;
-    -moz-animation: dothatopcheck 0.3s ease 0s forwards;
-    -o-animation: dothatopcheck 0.3s ease 0s forwards;
     -webkit-animation: dothatopcheck 0.3s ease 0s forwards;
     animation: dothatopcheck 0.3s ease 0s forwards;
 }
@@ -2509,6 +2473,10 @@ input[type=checkbox]:checked + .check-box::before,
         min-height: calc(100vh - 73.3px - 171.69px);
     }
 
+    main.promain {
+        min-height: 100% !important;
+    }
+
     main.withOnlyFtr {
         min-height: calc(100vh - 171.69px);
     }
@@ -2609,10 +2577,10 @@ input[type=checkbox]:checked + .check-box::before,
     }
 
     .breadcrumbs.sticky {
-        position: fixed;
-        top: 0;
+        position: fixed !important;
+        top: 0 !important;
         width: 100%;
-        z-index: 999;
+        z-index: 999 !important;
     }
 
     .content {
@@ -2921,14 +2889,8 @@ input[type=checkbox]:checked + .check-box::before,
 }
 
 .modal-content .modal-header {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     position: relative;
     padding: 12px 25px;
@@ -2961,14 +2923,8 @@ input[type=checkbox]:checked + .check-box::before,
 }
 
 .modal-content .modal-footer {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
     justify-content: flex-end;
     position: relative;
     padding: 10px 25px;
@@ -2978,20 +2934,15 @@ input[type=checkbox]:checked + .check-box::before,
 }
 
 .modal.fade .modal-dialog.modal-dialog-zoom {
-    -webkit-transform: translate(0, 0) scale(0.8);
     transform: translate(0, 0) scale(0.8);
-    transition: -webkit-transform 0.3s ease-out;
     transition: transform 0.3s ease-out;
-    transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 
 .modal.show .modal-dialog.modal-dialog-zoom {
-    -webkit-transform: translate(0, 0) scale(1);
     transform: translate(0, 0) scale(1);
 }
 
 .modal.modal-static .modal-dialog.modal-dialog-zoom {
-    -webkit-transform: scale(1.02);
     transform: scale(1.02);
 }
 
@@ -3004,22 +2955,14 @@ input[type=checkbox]:checked + .check-box::before,
     margin: 0;
     width: 400px;
     max-width: 80vw;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-flow: column nowrap;
     flex-flow: column nowrap;
     background-color: #fff;
-    -ms-flex-line-pack: center;
     align-content: center;
-    -webkit-transform: translate(50px, 0);
     transform: translate(50px, 0);
 }
 
 .modal.show .modal-dialog-right {
-    -webkit-transform: translate(0px, 0);
     transform: translate(0px, 0);
 }
 
@@ -3067,7 +3010,7 @@ input[type=checkbox]:checked + .check-box::before,
     margin: 0;
     padding: 5px 8px;
     white-space: nowrap;
-    margin: auto;
+    /* margin: auto; */
     border-radius: 20px;
     background: var(--light-color);
     cursor: pointer;
@@ -3123,14 +3066,317 @@ input[type=checkbox]:checked + .check-box::before,
     min-width: 80px
 }
 
+/*
 @media screen and (max-width: 480px) {
     .pwaPopup {
         justify-content: ;
     }
-}
+} */
 
 .safari_share {
     height: 16px;
     width: 16px;
     margin-top: -5px;
+}
+
+/* =======================develope_bina css========================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
+.bgcream-product {
+    position: relative;
+    padding-bottom: 145px;
+    background-color: #fff;
+}
+
+.bgcream {
+    background-color: #fff;
+}
+
+.mobile_hr_card {
+    background-color: #F5F5F5;
+    padding: 12px 16px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    margin: 15px 0px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.mobile_hr_card .mainimg {
+    height: 100px;
+    width: 100px;
+    min-height: 100px;
+    min-width: 100px;
+    max-height: 100px;
+    max-width: 100px;
+    margin-right: 30px;
+    background-color: #fff;
+    border: 1px solid #D9D9D9;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.shop-datail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile_hr_card h3 {
+    font-size: 31px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: #000;
+    text-transform: capitalize;
+}
+
+.mobile_hr_card p {
+    margin-bottom: 0px;
+    font-size: 18px !important;
+    font-family: 'Montserrat', sans-serif;
+    color: #000;
+}
+
+
+.mobile_hr_card .qty .count {
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    padding: 0 2px;
+    min-width: 35px;
+    text-align: center;
+}
+
+.mobile_hr_card .qty .plus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    width: 30px;
+    height: 30px;
+    font: 30px/1 Arial, sans-serif;
+    text-align: center;
+    border-left: 1px solid #C4C4C4;
+    /* border-radius: 50%; */
+    padding-top: 5px;
+}
+
+.mobile_hr_card .qty .minus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    width: 30px;
+    height: 30px;
+    font: 30px/1 Arial, sans-serif;
+    text-align: center;
+    /* border-radius: 50%; */
+    border-right: 1px solid #C4C4C4;
+    background-clip: padding-box;
+    padding-top: 5px;
+}
+
+.mobile_hr_card .icon-shape {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.mobile_hr_card .icon-sm {
+    width: 2rem;
+    height: 2rem;
+
+}
+
+.mobile_hr_card .countitem input {
+    background-color: transparent;
+}
+
+.mobile_hr_card .lftcount {
+    border-right: 1px solid #C4C4C4 !important;
+    border-left: 0px !important;
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+
+}
+
+.mobile_hr_card .rgtcount {
+    border-left: 1px solid #C4C4C4 !important;
+    border-right: 0px !important;
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+}
+
+.mobile_hr_card .input-group.counterinput {
+    border: 1px solid #C4C4C4 !important;
+    max-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.mobile_hr_card input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.mobile_hr_card input.button-minus, .mobile_hr_card input.button-plus, .mobile_hr_card input.quantity-field {
+
+    color: #000;
+}
+
+p.fruite-location {
+    font-size: 19px !important;
+    line-height: 20.97px;
+    font-style: italic;
+    color: #000;
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+p.fruite-location span {
+    color: #4E4545;
+    font-size: 19px !important;
+    line-height: 20.97px;
+    display: inline;
+    padding-left: 5px;
+}
+
+a.sticky-button-bottom {
+    font-size: 31px !important;
+    display: block;
+    background-color: #E36F04;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    color: #fff !important;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.sticky-bottom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 30px;
+}
+
+.middlesec {
+    height: 500px;
+    overflow-y: scroll;
+
+}
+
+
+main.promain {
+    min-height: 100% !important;
+}
+
+
+@media screen and (max-width: 991px) {
+
+    .mobile_hr_card .mainimg {
+        height: 45px;
+        width: 45px;
+        min-height: 45px;
+        min-width: 45px;
+        max-height: 45px;
+        max-width: 45px;
+        margin-right: 15px;
+
+    }
+
+    .mobile_hr_card p {
+        font-size: 11px !important;
+    }
+
+    .mobile_hr_card h3 {
+        font-size: 14px;
+    }
+
+    .mobile_hr_card .icon-sm {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .mobile_hr_card .input-group.counterinput {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 80px;
+        flex-wrap: nowrap;
+
+    }
+
+    .mobile_hr_card .icon-sm {
+        width: 25px;
+        height: 25px;
+    }
+
+    .mobile_hr_card input.quantity-field {
+        font-size: 14px;
+    }
+
+    p.fruite-location, p.fruite-location span {
+        font-size: 10px !important;
+        font-style: italic;
+        color: #000;
+        font-weight: 600;
+        padding-left: 0px;
+    }
+
+    a.sticky-button-bottom {
+        font-size: 15px !important;
+    }
+
+    .middlesec {
+        height: 422px;
+        overflow-y: scroll;
+        /* margin-top: -24px!important; */
+    }
+
+
+    .bgcream-product {
+
+        padding-bottom: 100px;
+
+    }
+
+    .newClass {
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin: 0px auto;
+        width: 95%;
+        top: 119px;
+        z-index: 9999;
+    }
+
+    main.promain {
+        min-height: 100% !important;
+    }
+
+    header.header2 {
+        position: relative;
+    }
+
+    .navbar .container, .navbar {
+        display: flex;
+        flex-wrap: nowrap !important;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 }
