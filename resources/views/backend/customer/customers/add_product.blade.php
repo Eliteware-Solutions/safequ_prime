@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="aiz-titlebar text-left mt-2 mb-3">
-        <h5 class="mb-0 h6">{{translate('Add New Product')}}</h5>
+        <h5 class="mb-0 h6">{{translate('Add New Order')}}</h5>
     </div>
     <div class="">
         <form class="form form-horizontal mar-top" action="{{route('customers.add_customer_order')}}" method="POST"
@@ -14,7 +14,7 @@
                     <input type="hidden" name="owner_id" value="{{ $seller->user_id }}">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0 h6">{{translate('Product Information')}}</h5>
+                            <h5 class="mb-0 h6">{{translate('Order Information')}}</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group row">
@@ -64,7 +64,13 @@
                                                         <option value="">Select Product</option>
                                                         @foreach ($active_products as $product)
                                                             <option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
-                                                                {{ $product->product->name. ' ['.$product->product->variation.']' }}
+                                                                @php
+                                                                    $variation = '';
+                                                                    if($product->product->variation){
+                                                                        $variation = ' ['.$product->product->variation.']';
+                                                                    }
+                                                                @endphp
+                                                                {{ $product->product->name. $variation }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -133,9 +139,9 @@
 
                 <div class="col-12">
                     <div class="btn-toolbar float-right mb-3" role="toolbar" aria-label="Toolbar with button groups">
+                        <input type="submit" name="add_cart" class="btn btn-primary mr-4" value="{{ translate('Add to cart') }}">
                         <div class="btn-group" role="group" aria-label="Second group">
-                            <button type="submit" name="button"
-                                    class="btn btn-success">{{ translate('Save') }}</button>
+                            <input type="submit" name="add_order" class="btn btn-success" value="{{ translate('Place Order') }}">
                         </div>
                     </div>
                 </div>

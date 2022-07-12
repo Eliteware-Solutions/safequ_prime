@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomersExport;
+use App\Models\OrderDetail;
 use App\Models\ProductStock;
 use App\Models\Seller;
 use App\Models\Shop;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
@@ -24,10 +26,10 @@ class CustomerController extends Controller
     {
         $sort_search = null;
         $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
-        if ($request->has('search')){
+        if ($request->has('search')) {
             $sort_search = $request->search;
-            $users->where(function ($q) use ($sort_search){
-                $q->where('name', 'like', '%'.$sort_search.'%')->orWhere('email', 'like', '%'.$sort_search.'%');
+            $users->where(function ($q) use ($sort_search) {
+                $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
             });
         }
         $users = $users->paginate(15);
@@ -47,15 +49,15 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'name'          => 'required',
-            'email'         => 'required|unique:users|email',
-            'phone'         => 'required|unique:users',
+            'name'  => 'required',
+            'email' => 'required|unique:users|email',
+            'phone' => 'required|unique:users',
         ]);
 
         $response['status'] = 'Error';
@@ -70,12 +72,12 @@ class CustomerController extends Controller
         if (isset($user->id)) {
             $html = '';
             $html .= '<option value="">
-                        '. translate("Walk In Customer") .'
+                        ' . translate("Walk In Customer") . '
                     </option>';
-            foreach(Customer::all() as $key => $customer){
+            foreach (Customer::all() as $key => $customer) {
                 if ($customer->user) {
-                    $html .= '<option value="'.$customer->user->id.'" data-contact="'.$customer->user->email.'">
-                                '.$customer->user->name.'
+                    $html .= '<option value="' . $customer->user->id . '" data-contact="' . $customer->user->email . '">
+                                ' . $customer->user->name . '
                             </option>';
                 }
             }
@@ -90,7 +92,7 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -101,7 +103,7 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -112,8 +114,8 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -124,7 +126,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -134,8 +136,9 @@ class CustomerController extends Controller
         return redirect()->route('customers.index');
     }
 
-    public function bulk_customer_delete(Request $request) {
-        if($request->id) {
+    public function bulk_customer_delete(Request $request)
+    {
+        if ($request->id) {
             foreach ($request->id as $customer_id) {
                 $this->destroy($customer_id);
             }
@@ -153,10 +156,11 @@ class CustomerController extends Controller
         return redirect()->route('dashboard');
     }
 
-    public function ban($id) {
+    public function ban($id)
+    {
         $user = User::findOrFail(decrypt($id));
 
-        if($user->banned == 1) {
+        if ($user->banned == 1) {
             $user->banned = 0;
             flash(translate('Customer UnBanned Successfully'))->success();
         } else {
@@ -174,10 +178,13 @@ class CustomerController extends Controller
         $user = User::findOrFail($id);
 
         if ($user) {
-            $order_details = $user->all_order_details;
-            $wallet_history = $user->wallets;
+            $cart_orders = $user->carts;
+            $order_details = OrderDetail::with('order')->whereHas('order', function ($query) use ($id) {
+                $query->where('user_id', $id);
+            })->orderBy('created_at','desc')->paginate(10, ['*'], 'orders');
+            $wallet_history = Wallet::where('user_id', $id)->orderBy('created_at','desc')->paginate(10, ['*'], 'wallet');
 
-            return view('backend.customer.customers.details', compact('user', 'order_details', 'wallet_history'));
+            return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history'));
         } else {
             return back();
         }
@@ -196,7 +203,7 @@ class CustomerController extends Controller
                 $products_purchase_expired = isset($seller->products_purchase_expired) ? $seller->products_purchase_expired : [];
 
                 $active_products = [];
-                foreach ($products_purchase_started AS $product) {
+                foreach ($products_purchase_started as $product) {
                     $unit = '';
                     if (floatval($product->product->min_qty) >= 1) {
                         $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
@@ -204,12 +211,12 @@ class CustomerController extends Controller
                         $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
                     }
 
-                    $unit = single_price($product->price).' / '.$unit;
+                    $unit = single_price($product->price) . ' / ' . $unit;
                     $product->unit_label = $unit;
                     $active_products[] = $product;
                 }
 
-                foreach ($products_purchase_expired AS $product) {
+                foreach ($products_purchase_expired as $product) {
                     $unit = '';
                     if (floatval($product->product->min_qty) >= 1) {
                         $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
@@ -217,7 +224,7 @@ class CustomerController extends Controller
                         $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
                     }
 
-                    $unit = single_price($product->price).'/'.$unit;
+                    $unit = single_price($product->price) . '/' . $unit;
                     $product->unit_label = $unit;
                     $active_products[] = $product;
                 }
@@ -236,17 +243,20 @@ class CustomerController extends Controller
         $qtyAvailable = true;
         $msg = '';
         $prod_qty = $request->prod_qty;
-        foreach($request->proudct AS $key => $val) {
+        foreach ($request->proudct as $key => $val) {
             $productStock = ProductStock::find($val);
             if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
-                $msg = 'Available quantity for '.$productStock->product->name.' is less then required quantity';
+                $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
                 $qtyAvailable = false;
                 break;
             }
         }
 
         if ($qtyAvailable == true) {
-            (new OrderController)->save_order_from_backend($request);
+            if ($request->add_order)
+                (new OrderController)->save_order_from_backend($request);
+            else
+                (new CartController)->addToCustomerCart($request);
 
             flash(translate('Order has been added.'))->success();
             return redirect()->route('customers.detail', $request->user_id);
@@ -333,11 +343,11 @@ class CustomerController extends Controller
 
             $user = User::where('id', $request->user_id)->first();
 
-            $user->name                 = $request->name;
-            $user->phone                = '+' . $request->country_code . $request->phone;
-            $user->joined_community_id  = $request->community_id;
-            $user->email                = $request->email;
-            $user->address              = $request->address;
+            $user->name = $request->name;
+            $user->phone = '+' . $request->country_code . $request->phone;
+            $user->joined_community_id = $request->community_id;
+            $user->email = $request->email;
+            $user->address = $request->address;
             $user->save();
 
             flash(translate('Customer has been added.'))->success();

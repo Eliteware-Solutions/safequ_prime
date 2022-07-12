@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductStock;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -391,5 +392,107 @@ class CartController extends Controller
         return array(
             'cart_count' => $cart_count
         );
+    }
+
+    public function addToCustomerCart(Request $request)
+    {
+        $carts = array();
+        $data = array();
+
+        $user_id = $request->user_id;
+        $data['user_id'] = $user_id;
+        $carts = Cart::where('user_id', $user_id)->get();
+
+        $str = '';
+        $tax = 0;
+        $prod_qty = $request->prod_qty;
+        foreach ($request->proudct as $key => $val) {
+            $product_stock = ProductStock::with('product')->findOrFail($val);
+
+            $data['product_id'] = $product_stock->product_id;
+            $data['product_stock_id'] = $val;
+            $data['owner_id'] = $request->owner_id;
+
+            $price = $product_stock->price;
+
+            if ($product_stock->product->wholesale_product) {
+                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+                if ($wholesalePrice) {
+                    $price = $wholesalePrice->price;
+                }
+            }
+
+            //discount calculation
+            $discount_applicable = false;
+
+            if ($product_stock->product->discount_start_date == null) {
+                $discount_applicable = true;
+            } elseif (strtotime(date('d-m-Y H:i:s')) >= $product_stock->product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product_stock->product->discount_end_date) {
+                $discount_applicable = true;
+            }
+
+            if ($discount_applicable) {
+                if ($product_stock->product->discount_type == 'percent') {
+                    $price -= ($price * $product_stock->product->discount) / 100;
+                } elseif ($product_stock->product->discount_type == 'amount') {
+                    $price -= $product_stock->product->discount;
+                }
+            }
+
+            //calculation of taxes
+            foreach ($product_stock->product->taxes as $product_tax) {
+                if ($product_tax->tax_type == 'percent') {
+                    $tax += ($price * $product_tax->tax) / 100;
+                } elseif ($product_tax->tax_type == 'amount') {
+                    $tax += $product_tax->tax;
+                }
+            }
+
+            $data['quantity'] = $prod_qty[$key];
+            $data['price'] = $price;
+            $data['tax'] = $tax;
+            $data['shipping_cost'] = 0;
+            $data['shipping_type'] = 'home_delivery';
+            $data['product_referral_code'] = null;
+            $data['cash_on_delivery'] = $product_stock->product->cash_on_delivery;
+            $data['digital'] = $product_stock->product->digital;
+
+            if ($carts && count($carts) > 0) {
+                $foundInCart = false;
+
+                foreach ($carts as $cartItem) {
+                    $cart_product = Product::where('id', $cartItem['product_id'])->first();
+
+                    if ($cartItem['product_id'] == $product_stock->product_id && $cartItem['product_stock_id'] == $val) {
+                        $product_stock = $cart_product->stocks->where('variant', $str)->first();
+                        if (($str != null && $cartItem['variation'] == $str) || $str == null) {
+                            $foundInCart = true;
+
+                            $cartItem['quantity'] += $prod_qty[$key];
+
+                            if ($cart_product->wholesale_product) {
+                                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+                                if ($wholesalePrice) {
+                                    $price = $wholesalePrice->price;
+                                }
+                            }
+
+                            $cartItem['price'] = $price;
+
+                            $cartItem->save();
+                        }
+                    }
+                }
+                if (!$foundInCart) {
+                    Cart::create($data);
+                }
+            } else {
+                Cart::create($data);
+            }
+
+            calculateShippingCost($carts);
+
+        }
     }
 }

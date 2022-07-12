@@ -36,7 +36,7 @@
 
 @section('content')
 
-    <main class="main-tag mt-0">
+    <main class="main-tag mt-0 promain">
 
         <div class="breadcrumbs high">
             <div class="container">
@@ -45,15 +45,15 @@
         </div>
 
         <!-- Cards -->
-        <div class="content pb-5">
-            <div class="container">
-                <div class="row justify-content-center">
+        <div class="content  bgcream-product ">
+            <div class="container px-0">
+                <div class="row justify-content-center ">
 
                     @if ($categories && (count($products_purchase_expired) > 0 || count($products_purchase_started) > 0))
                         <div class="col-12 pb-md-5 pb-4 px-2">
                             <div class="srch-fltr-card mb-md-0 mb-2">
                                 <ul class="item-tags pb-3 mb-0 flex-acenter-jbtw">
-                                    <li class="active_filter filter-button" data-filter="all"> All </li>
+                                    <li class="active_filter filter-button" data-filter="all"> All</li>
 
                                     @foreach ($categories as $key => $cat)
                                         <li class="filter-button mr-1" data-filter="{{ $cat['filter'] }}">
@@ -75,7 +75,7 @@
                                         <div class="img-name pr-2">
                                             <div class="item-img item-img-sm text-center">
                                                 <img src="{{ uploaded_asset($expired_product->product->photos) }}"
-                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png;')}}'"
                                                      alt="{{ $expired_product->product->name }}"/>
                                             </div>
                                         </div>
@@ -109,7 +109,7 @@
                                                     @foreach ($expired_product->orders->unique('user_id') as $i => $order)
                                                         @if ($i < 5)
                                                             <img src="{{ uploaded_asset($order->user->avatar_original) }}"
-                                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}';">
+                                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}'">
                                                         @endif
                                                     @endforeach
                                                 </div>
@@ -162,7 +162,7 @@
                                                                 </div>
                                                                 <div class="user-img-sm m-0">
                                                                     <img src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"
-                                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}';">
+                                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -178,236 +178,80 @@
                     @endif
 
                     @if (count($products_purchase_started) > 0)
-                        @foreach ($products_purchase_started as $product)
-                            @php
-                                $qty_unit_main = $product->product->unit;
-                                if (floatval($product->product->min_qty) < 1) {
-                                        $qty_unit_main = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
-                                    }
-                            @endphp
-                            <div class="col-lg-4 col-md-6 col-sm-8 px-2 pb-4 filter {{ $product->product->category->slug }} ">
-                                <!-- Item Cards -->
-                                <div class="item-card">
-                                    <div class="card-top">
-                                        <div class="pricing text-center">
-                                            <span class="text-white">Price / {{ $qty_unit_main }}</span>
-                                            <h6 class="mb-0 mt-2 mx-auto">
-                                                {!! single_price_web($product->price) !!}
-                                            </h6>
-                                        </div>
-                                        <div class="item-img text-center">
-                                            <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
-                                                 alt="{{ $product->product->name }}"/>
-                                        </div>
-                                        <div class="nxt-delivery">
-                                            <span class="text-white">Next Delivery</span>
-                                            <h6 class="mb-0 mt-2 text-center mx-auto">
-                                                {{ date('d', strtotime($product->purchase_end_date. '+' . intval($product->est_shipping_days) . ' days')) }}
-                                                <br>
-                                                <ins>{{ date('M', strtotime($product->purchase_end_date. '+' . intval($product->est_shipping_days) . ' days')) }}</ins>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                    <div class="item-data text-center pt-5 px-3">
-                                        <div class="px-2">
-                                            <h6 class="pt-1 fw700 mb-1">{{ $product->product->name }}</h6>
-                                            <p class="fw600f fsize13 body-txt mb-2">
-                                                Variety: {{ $product->product->variation }}</p>
-                                            {{-- <p class="rating-stars"> --}}
-                                            {{-- {{ renderStarRating($product->rating) }} --}}
-                                            {{-- </p> --}}
-                                            <p class="body-txt fsize13 font-italic pb-1">
-                                                <i class="fad fa-tractor fsize16"></i> <b> Farm location: </b>
-                                                {{ $product->product->manufacturer_location }}
-                                            </p>
-                                            <hr>
-                                        </div>
-                                        <p class="fw700 px-2">Time Remaining</p>
 
-                                        <!-- Preloader -->
-                                        <div class="flex-astart-jcenter preloader_div pb-2 px-2">
-                                            @for ($i = 0; $i < 4; $i++)
-                                                <div>
-                                                    <div class="timing mb-0">
+                        <div class="container">
+                            <div class="middlesec row">
+
+
+                                @foreach ($products_purchase_started as $product)
+                                    @php
+                                        $qty_unit_main = $product->product->unit;
+                                        if (floatval($product->product->min_qty) < 1) {
+                                                $qty_unit_main = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
+                                            }
+                                    @endphp
+                                    <div class="col-lg-12 px-0 filter {{ $product->product->category->slug }} ">
+                                        <!-- Item Cards -->
+                                        <div class="mobile_hr_card">
+                                            <div class="shop-datail">
+                                                <div class="shop-datail">
+                                                    <div class="mainimg">
+                                                        <img src="../public/assets/img/fruite-1.png" class="img-fluid">
+                                                    </div>
+                                                    <div>
                                                         <div>
-                                                            <h3 class="mb-0"></h3>
+                                                            <h3>Beauty Pear</h3>
+                                                            <p>₹149.00 / 500 gms</p>
+
                                                         </div>
+
                                                     </div>
-                                                    <p class="mb-0"></p>
-                                                </div>
-                                            @endfor
-                                        </div>
-                                        <!-- Preloader -->
 
-                                        <div class="remaining-time pb-2 px-2"
-                                             data-time="{{ date('m-d-Y H:i:s', strtotime($product->purchase_end_date)) }}"
-                                             style="display: none">
-                                            <div class="timing">
-                                                <div class="cnt">
-                                                    <h3 class="mb-0 days ">00</h3>
-                                                </div>
-                                                <span>Days</span>
-                                            </div>
-                                            <div class="timing">
-                                                <div class="cnt">
-                                                    <h3 class="mb-0 hours">00</h3>
-                                                </div>
-                                                <span>Hours</span>
-                                            </div>
-                                            <div class="timing">
-                                                <div class="cnt">
-                                                    <h3 class="mb-0 minutes">00</h3>
-                                                </div>
-                                                <span>Minutes</span>
-                                            </div>
-                                            <div class="timing">
-                                                <div class="cnt">
-                                                    <h3 class="mb-0 seconds">00</h3>
-                                                </div>
-                                                <span>Seconds</span>
-                                            </div>
-                                        </div>
 
-                                        <div class="order-progress text-center pt-3 px-2">
-                                            <p class="fw600 target-qty">Available Harvest: {{ $product->qty }}
-                                                {{ $product->product->unit }}&nbsp;
-                                                <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
-                                                   title="Unlock special community benefits when the available harvest is booked out by your community.">
-                                                    <i class="fad fa-info-circle animated faa-tada align-middle"></i>
-                                                </a>
-                                            </p>
-                                        </div>
-                                        <div class="progress-div mb-4">
-                                            <div class="progress">
-                                                <div class="progress-bar" data-target="{{ $product->qty }}"
-                                                     data-progress="{{ $product->orderDetails->sum('quantity')*$product->product->min_qty }}"
-                                                     data-unit="{{ $product->product->unit }}">
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        @if (count($product->orders->where('payment_status','paid')->unique('user_id')) > 0)
-                                            <a href="javascript:void(0)" data-toggle="modal"
-                                               data-target="#orderListModal_{{ $product->id }}">
-                                                <div class="card-members pb-3">
-                                                    <div class="mbr-img pr-3">
-                                                        @php
-                                                            $i = 1;
-                                                        @endphp
-                                                        @foreach ($product->orders->where('payment_status','paid')->unique('user_id') as $order)
-                                                            @if ($i < 5)
-                                                                <img src="{{ uploaded_asset($order->user->avatar_original) }}"
-                                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}';">
-                                                            @endif
-                                                            @php
-                                                                $i++;
-                                                            @endphp
-                                                        @endforeach
-                                                    </div>
-                                                    <div class="mbr-cnt pl-2">
-                                                        <p class="mb-0 text-primary fsize13">have already ordered</p>
+                                                <div class="countitem ">
+                                                    <div class="input-group w-auto counterinput ">
+                                                        <input type="button" value="-"
+                                                               class="button-minus   icon-shape icon-sm  lftcount"
+                                                               data-field="quantity">
+                                                        <input type="number" step="1" max="10" value="0" name="quantity"
+                                                               class="quantity-field border-0 text-center w-25">
+                                                        <input type="button" value="+"
+                                                               class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                               data-field="quantity">
                                                     </div>
                                                 </div>
-                                            </a>
-                                        @endif
-
-                                        @if ($product->product->tags)
-                                            @php
-                                                $tagsAry = explode(',', $product->product->tags);
-                                                $cnt = count($tagsAry);
-                                            @endphp
-
-                                            <ul class="item-tags pb-3 mb-0 flex-acenter-jbtw">
-                                                @foreach ($tagsAry as $tag)
-                                                    <li class="fsize13 {{$cnt > 1 ? 'mr-1': ''}}">
-                                                        <i class="fas fsize15 fa-check-circle mr-1"></i> {{ $tag }}
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-bottom">
-                                        <button class="btn text-uppercase text-white fw600 w-100"
-                                                onclick="addToCart('{{ route('products-details', $product    ->id) }}');">
-                                            <i class="fas fa-shopping-cart text-white fsize18"></i>
-                                            &nbsp; Add to cart
-                                        </button>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-
-                            @if (count($product->orders->unique('user_id')) > 0)
-                                {{-- Users Order list Modal --}}
-                                <div class="modal fade orderListModal" id="orderListModal_{{ $product->id }}"
-                                     tabindex="-1" aria-labelledby="orderListModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Who Have Ordered</h5>
-                                                <div class="close-btn text-right">
-                                                    <a href="javascript:void(0)" class="fw900"
-                                                       data-dismiss="modal">X</a>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                @foreach ($product->orderDetails as $orderDetail)
-                                                    <div class="item-details px-sm-3">
-                                                        <div class="order-list">
-                                                            <div class="item-card p-3 mb-3">
-                                                                <div
-                                                                        class="d-flex justify-content-between align-items-center">
-                                                                    <div class="pr-2">
-                                                                        <p class="fw600 fsize15 title-txt mb-1">
-                                                                            {{ $orderDetail->order->user->name }}</p>
-                                                                        <p class="mb-0 lh-17">
-                                                                            <span class="fsize13 body-txt ordered-qty">
-                                                                                @php
-                                                                                    $qty_unit = ($orderDetail->quantity * floatval($product->product->min_qty)) . ' ' . $product->product->unit;
-                                                                                    if($orderDetail->quantity * floatval($product->product->min_qty) < 1){
-                                                                                        $qty_unit = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
-                                                                                    }
-                                                                                @endphp
-                                                                                {{ $qty_unit }}
-                                                                            </span>
-                                                                            <span class="fsize13 body-txt ordered-qty">
-                                                                                &nbsp;&bull;&nbsp;
-                                                                                {{ date('d F, Y H:i', $orderDetail->order->date) }}
-                                                                            </span>
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="user-img-sm m-0">
-                                                                        <img src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"
-                                                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}';">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
+                        </div>
                     @endif
 
                     @if (count($products_purchase_expired) == 0 && count($products_purchase_started) == 0)
-                            <div class="row pt-5">
-                                <div class="col-lg-12 mx-auto">
-                                    <img src="{{ static_asset('assets/img/product-not-found.jpg') }}" class="mw-100 mx-auto">
-                                </div>
+                        <div class="row pt-5">
+                            <div class="col-lg-12 mx-auto">
+                                <img src="{{ static_asset('assets/img/product-not-found.jpg') }}"
+                                     class="mw-100 mx-auto">
                             </div>
+                        </div>
                     @endif
 
                 </div>
-
             </div>
         </div>
 
+        <div class="container">
+            <div class="row ">
+                <div class="col-12 px-0">
+                    <div class="sticky-bottom sticky-bottom">
+                        <a href="" class="sticky-button-bottom">checkout</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <!-- Item Modal -->
         <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
@@ -536,26 +380,70 @@
                 }, 15);
             });
 
-            $(".filter-button").click(function(){
+
+            $(".filter-button").click(function () {
                 $('.filter-button').removeClass('active_filter');
                 $(this).addClass('active_filter');
                 var value = $(this).attr('data-filter');
 
-                if(value == "all")
-                {
+                if (value == "all") {
                     //$('.filter').removeClass('hidden');
                     $('.filter').show();
-                }
-                else
-                {
+                } else {
 //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
 //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
-                    $(".filter").not('.'+value).hide();
-                    $('.filter').filter('.'+value).show();
+                    $(".filter").not('.' + value).hide();
+                    $('.filter').filter('.' + value).show();
                 }
             });
 
         })
+    </script>
+    <script>
+        function incrementValue(e) {
+            e.preventDefault();
+            var fieldName = $(e.target).data('field');
+            var parent = $(e.target).closest('div');
+            var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
+
+            if (!isNaN(currentVal)) {
+                parent.find('input[name=' + fieldName + ']').val(currentVal + 1);
+            } else {
+                parent.find('input[name=' + fieldName + ']').val(0);
+            }
+        }
+
+        function decrementValue(e) {
+            e.preventDefault();
+            var fieldName = $(e.target).data('field');
+            var parent = $(e.target).closest('div');
+            var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
+
+            if (!isNaN(currentVal) && currentVal > 0) {
+                parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
+            } else {
+                parent.find('input[name=' + fieldName + ']').val(0);
+            }
+        }
+
+        $('.input-group').on('click', '.button-plus', function (e) {
+            incrementValue(e);
+        });
+
+        $('.input-group').on('click', '.button-minus', function (e) {
+            decrementValue(e);
+        });
+    </script>
+    <script>
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $('.srch-fltr-card').addClass('newClass');
+            } else {
+                $('.srch-fltr-card').removeClass('newClass');
+            }
+        });
+
     </script>
 
 @endsection
