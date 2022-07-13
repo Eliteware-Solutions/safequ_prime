@@ -281,6 +281,165 @@ class CartController extends Controller
         }
     }
 
+    public function bulkAddToCart(Request $request)
+    {
+        if ($request->data) {
+            foreach ($request->data AS $val) {
+                $req_quantity = $val['qty'];
+                $product_id = $val['product_id'];
+                $product_stock_id = $val['product_stock_id'];
+
+                $product = Product::find($product_id);
+                $carts = array();
+                $data = array();
+
+                if (auth()->user() != null) {
+                    $user_id = Auth::user()->id;
+                    $data['user_id'] = $user_id;
+                    $carts = Cart::where('user_id', $user_id)->get();
+                } else {
+                    if ($request->session()->get('temp_user_id')) {
+                        $temp_user_id = $request->session()->get('temp_user_id');
+                    } else {
+                        $temp_user_id = bin2hex(random_bytes(10));
+                        $request->session()->put('temp_user_id', $temp_user_id);
+                    }
+                    $data['temp_user_id'] = $temp_user_id;
+                    $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+                }
+
+                $data['product_id'] = $product->id;
+                $data['product_stock_id'] = $product_stock_id;
+                $data['owner_id'] = $product->user_id;
+
+                $str = '';
+                $tax = 0;
+
+                if ($product->digital != 1) {
+                    //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
+                    foreach (json_decode(Product::find($product_id)->choice_options) as $key => $choice) {
+                        if ($str != null) {
+                            $str .= '-' . str_replace(' ', '', $request['attribute_id_' . $choice->attribute_id]);
+                        } else {
+                            $str .= str_replace(' ', '', $request['attribute_id_' . $choice->attribute_id]);
+                        }
+                    }
+                }
+
+                $data['variation'] = $str;
+
+                $product_stock = $product->stocks->where('id', $data['product_stock_id'])->first();
+                $price = $product_stock->price;
+
+                if ($product->wholesale_product) {
+                    $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $req_quantity)->where('max_qty', '>=', $req_quantity)->first();
+                    if ($wholesalePrice) {
+                        $price = $wholesalePrice->price;
+                    }
+                }
+
+                $quantity = $product_stock->qty;
+
+                //discount calculation
+                $discount_applicable = false;
+
+                if ($product->discount_start_date == null) {
+                    $discount_applicable = true;
+                } elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                    strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+                    $discount_applicable = true;
+                }
+
+                if ($discount_applicable) {
+                    if ($product->discount_type == 'percent') {
+                        $price -= ($price * $product->discount) / 100;
+                    } elseif ($product->discount_type == 'amount') {
+                        $price -= $product->discount;
+                    }
+                }
+
+                //calculation of taxes
+                foreach ($product->taxes as $product_tax) {
+                    if ($product_tax->tax_type == 'percent') {
+                        $tax += ($price * $product_tax->tax) / 100;
+                    } elseif ($product_tax->tax_type == 'amount') {
+                        $tax += $product_tax->tax;
+                    }
+                }
+
+                $data['quantity'] = $req_quantity;
+                $data['price'] = $price;
+                $data['tax'] = $tax;
+                //$data['shipping'] = 0;
+                $data['shipping_cost'] = 0;
+                $data['shipping_type'] = 'home_delivery';
+                $data['product_referral_code'] = null;
+                $data['cash_on_delivery'] = $product->cash_on_delivery;
+                $data['digital'] = $product->digital;
+
+                if ($req_quantity == null) {
+                    $data['quantity'] = 1;
+                }
+
+                if (Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
+                    $data['product_referral_code'] = Cookie::get('product_referral_code');
+                }
+
+                if ($carts && count($carts) > 0) {
+                    $foundInCart = false;
+
+                    foreach ($carts as $key => $cartItem) {
+                        $cart_product = Product::where('id', $cartItem['product_id'])->first();
+
+                        if ($cartItem['product_id'] == $product_id && $cartItem['product_stock_id'] == $product_stock_id) {
+                            $product_stock = $cart_product->stocks->where('variant', $str)->first();
+                            $quantity = $product_stock->qty;
+
+                            if (($str != null && $cartItem['variation'] == $str) || $str == null) {
+                                $foundInCart = true;
+
+                                $cartItem['quantity'] += $req_quantity;
+
+                                if ($cart_product->wholesale_product) {
+                                    $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $req_quantity)->where('max_qty', '>=', $req_quantity)->first();
+                                    if ($wholesalePrice) {
+                                        $price = $wholesalePrice->price;
+                                    }
+                                }
+
+                                $cartItem['price'] = $price;
+
+                                $cartItem->save();
+                            }
+                        }
+                    }
+                    if (!$foundInCart) {
+                        Cart::create($data);
+                    }
+                } else {
+                    Cart::create($data);
+                }
+
+                if (auth()->user() != null) {
+                    $user_id = Auth::user()->id;
+                    $carts = Cart::where('user_id', $user_id)->get();
+                } else {
+                    $temp_user_id = $request->session()->get('temp_user_id');
+                    $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+                }
+                calculateShippingCost($carts);
+            }
+
+            return array(
+                'status'     => 1
+            );
+        } else {
+            return array(
+                'status'     => 0
+            );
+        }
+    }
+
     //removes from Cart
     public function removeFromCart(Request $request)
     {
@@ -318,6 +477,12 @@ class CartController extends Controller
             $quantity = $product_stock->qty;
             $price = $product_stock->price;
 
+            /*if ($quantity >= $request->quantity) {
+                $cartItem['quantity'] = $request->quantity;
+            } else {
+                $request->quantity = $cartItem['quantity'];
+            }*/
+
             if ($product->wholesale_product) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
                 if ($wholesalePrice) {
@@ -343,9 +508,7 @@ class CartController extends Controller
                 }
             }
 
-            if ($quantity >= $request->quantity) {
-                $cartItem['quantity'] = $request->quantity;
-            }
+            $cartItem['quantity'] = $request->quantity;
 
             /*if($quantity >= $request->quantity) {
                 if($request->quantity >= $product->min_qty){

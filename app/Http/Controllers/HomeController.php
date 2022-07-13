@@ -492,12 +492,12 @@ class HomeController extends Controller
             }
         }
 
-        $qty_unit = '(' . $product->unit . ')';
+        $qty_unit = $product->unit;
         if (floatval($product->min_qty) < 1) {
             if (($request->quantity * floatval($product->min_qty)) < 1) {
-                $qty_unit = '(' . (1000 * $request->quantity * floatval($product->min_qty)) . ' ' . $product->secondary_unit . ')';
+                $qty_unit = (1000 * $request->quantity * floatval($product->min_qty)) . ' ' . $product->secondary_unit;
             } else {
-                $qty_unit = '(' . ($request->quantity * floatval($product->min_qty)) . ' ' . $product->unit . ')';
+                $qty_unit = ($request->quantity * floatval($product->min_qty)) . ' ' . $product->unit;
             }
         }
 
@@ -568,7 +568,7 @@ class HomeController extends Controller
             'max_limit'   => $max_limit,
             'in_stock'    => $in_stock,
             'total_qty'   => $request->quantity,
-            'total_price' => single_price_web($request->quantity * $price)
+            'total_price' => round(floatval($request->quantity * $price), 3)
         );
     }
 
