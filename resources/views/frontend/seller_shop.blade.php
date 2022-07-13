@@ -192,7 +192,7 @@
                                                 $qty_unit_main = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
                                             }
                                     @endphp
-                                    <div class="col-lg-12 px-0 pb-4 filter {{ $product->product->category->slug }} ">
+                                    <div class="col-lg-12 px-0 pb-2 filter {{ $product->product->category->slug }} ">
                                         <!-- Item Cards -->
                                         <div class="mobile_hr_card">
                                             <input type="hidden" id="total_{{ $product->id }}" class="product_total" value="0">
@@ -230,62 +230,62 @@
                                         </div>
                                     </div>
 
-                                    @if (count($product->orders->unique('user_id')) > 0)
-                                        {{-- Users Order list Modal --}}
-                                        <div class="modal fade orderListModal" id="orderListModal_{{ $product->id }}"
-                                             tabindex="-1" aria-labelledby="orderListModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Who Have Ordered</h5>
-                                                        <div class="close-btn text-right">
-                                                            <a href="javascript:void(0)" class="fw900"
-                                                               data-dismiss="modal">X</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @foreach ($product->orderDetails as $orderDetail)
-                                                            <div class="item-details px-sm-3">
-                                                                <div class="order-list">
-                                                                    <div class="item-card p-3 mb-3">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center">
-                                                                            <div class="pr-2">
-                                                                                <p class="fw600 fsize15 title-txt mb-1">
-                                                                                    {{ $orderDetail->order->user->name }}</p>
-                                                                                <p class="mb-0 lh-17">
-                                                                            <span class="fsize13 body-txt ordered-qty">
-                                                                                @php
-                                                                                    $qty_unit = ($orderDetail->quantity * floatval($product->product->min_qty)) . ' ' . $product->product->unit;
-                                                                                    if($orderDetail->quantity * floatval($product->product->min_qty) < 1){
-                                                                                        $qty_unit = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
-                                                                                    }
-                                                                                @endphp
-                                                                                {{ $qty_unit }}
-                                                                            </span>
-                                                                                    <span
-                                                                                        class="fsize13 body-txt ordered-qty">
-                                                                                &nbsp;&bull;&nbsp;
-                                                                                {{ date('d F, Y H:i', $orderDetail->order->date) }}
-                                                                            </span>
-                                                                                </p>
-                                                                            </div>
-                                                                            <div class="user-img-sm m-0">
-                                                                                <img
-                                                                                    src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"
-                                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+{{--                                    @if (count($product->orders->unique('user_id')) > 0)--}}
+{{--                                        --}}{{-- Users Order list Modal --}}
+{{--                                        <div class="modal fade orderListModal" id="orderListModal_{{ $product->id }}"--}}
+{{--                                             tabindex="-1" aria-labelledby="orderListModalLabel" aria-hidden="true">--}}
+{{--                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">--}}
+{{--                                                <div class="modal-content">--}}
+{{--                                                    <div class="modal-header">--}}
+{{--                                                        <h5 class="modal-title">Who Have Ordered</h5>--}}
+{{--                                                        <div class="close-btn text-right">--}}
+{{--                                                            <a href="javascript:void(0)" class="fw900"--}}
+{{--                                                               data-dismiss="modal">X</a>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="modal-body">--}}
+{{--                                                        @foreach ($product->orderDetails as $orderDetail)--}}
+{{--                                                            <div class="item-details px-sm-3">--}}
+{{--                                                                <div class="order-list">--}}
+{{--                                                                    <div class="item-card p-3 mb-3">--}}
+{{--                                                                        <div--}}
+{{--                                                                            class="d-flex justify-content-between align-items-center">--}}
+{{--                                                                            <div class="pr-2">--}}
+{{--                                                                                <p class="fw600 fsize15 title-txt mb-1">--}}
+{{--                                                                                    {{ $orderDetail->order->user->name }}</p>--}}
+{{--                                                                                <p class="mb-0 lh-17">--}}
+{{--                                                                            <span class="fsize13 body-txt ordered-qty">--}}
+{{--                                                                                @php--}}
+{{--                                                                                    $qty_unit = ($orderDetail->quantity * floatval($product->product->min_qty)) . ' ' . $product->product->unit;--}}
+{{--                                                                                    if($orderDetail->quantity * floatval($product->product->min_qty) < 1){--}}
+{{--                                                                                        $qty_unit = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;--}}
+{{--                                                                                    }--}}
+{{--                                                                                @endphp--}}
+{{--                                                                                {{ $qty_unit }}--}}
+{{--                                                                            </span>--}}
+{{--                                                                                    <span--}}
+{{--                                                                                        class="fsize13 body-txt ordered-qty">--}}
+{{--                                                                                &nbsp;&bull;&nbsp;--}}
+{{--                                                                                {{ date('d F, Y H:i', $orderDetail->order->date) }}--}}
+{{--                                                                            </span>--}}
+{{--                                                                                </p>--}}
+{{--                                                                            </div>--}}
+{{--                                                                            <div class="user-img-sm m-0">--}}
+{{--                                                                                <img--}}
+{{--                                                                                    src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"--}}
+{{--                                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">--}}
+{{--                                                                            </div>--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </div>--}}
+{{--                                                                </div>--}}
 
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
+{{--                                                            </div>--}}
+{{--                                                        @endforeach--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    @endif--}}
                                 @endforeach
                             </div>
                         </div>
