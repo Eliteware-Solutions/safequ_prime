@@ -3101,7 +3101,6 @@ input[type=checkbox]:checked + .check-box::before,
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
-    margin: 15px 0px;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -3313,7 +3312,7 @@ main.promain {
         justify-content: space-between;
         max-width: 80px;
         flex-wrap: nowrap;
-
+        min-width: 80px;
     }
 
     .mobile_hr_card .icon-sm {
@@ -3389,9 +3388,18 @@ main.promain {
         left: 0;
         margin-bottom: 0px;
     } */
-
     .pointer-none {
         pointer-events: none;
     }
 
+}
+
+.mainimg img {
+    max-width: 45px;
+    min-width: 45px;
+    border-radius: 50%;
+    height: 45px;
+    min-height: 45px;
+    max-height: 45px;
+    object-fit: cover;
 }
