@@ -80,7 +80,18 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@if($seller->user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif {{$seller->user->shop->name}}</td>
+                            <td>
+                                @if($seller->user->banned == 1) <i class="fa fa-ban text-danger" aria-hidden="true"></i> @endif
+                                    <div class="row gutters-5 w-200px w-md-300px mw-100">
+                                        <div class="col-auto">
+                                            <img src="{{ uploaded_asset($seller->user->avatar_original)}}" alt="Image"
+                                                 class="size-50px img-fit">
+                                        </div>
+                                        <div class="col">
+                                            <span class="text-muted text-truncate-2">{{ $seller->user->shop->name }}</span>
+                                        </div>
+                                    </div>
+                            </td>
                             <td>{{$seller->user->phone}}</td>
                             <td>{{$seller->user->email}}</td>
                             <td>
