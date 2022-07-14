@@ -48,6 +48,7 @@
         <div class="content  bgcream-product ">
             <div class="container px-0">
                 <div class="row justify-content-center ">
+                    <input type="hidden" id="cart_data" value="{{ json_encode($cart) }}">
 
                     @if ($categories && (count($products_purchase_expired) > 0 || count($products_purchase_started) > 0))
                         <div class="col-12 pb-md-5 pb-4 px-2">
@@ -187,15 +188,30 @@
 
                                 @foreach ($products_purchase_started as $product)
                                     @php
+                                        $cart_qty = 0;
+                                        if (count($cart) > 0 && isset($cart[$product->id])) {
+                                            $cart_qty = $cart[$product->id]['qty'];
+                                        }
+
+                                        $product_total = 0;
+                                        if (count($cart) > 0 && isset($cart[$product->id])) {
+                                            $product_total = $cart[$product->id]['total'];
+                                        }
+
+                                        $product_price = $product->price;
+                                        if (count($cart) > 0 && isset($cart[$product->id])) {
+                                            $product_price = $cart[$product->id]['price'];
+                                        }
+
                                         $qty_unit_main = $product->product->unit;
                                         if (floatval($product->product->min_qty) < 1) {
                                                 $qty_unit_main = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
-                                            }
+                                        }
                                     @endphp
                                     <div class="col-lg-12 px-0 pb-2 filter {{ $product->product->category->slug }} ">
                                         <!-- Item Cards -->
                                         <div class="mobile_hr_card">
-                                            <input type="hidden" id="total_{{ $product->id }}" class="product_total" value="0">
+                                            <input type="hidden" id="total_{{ $product->id }}" class="product_total" value="{{ $product_total }}">
                                             <input type="hidden" id="secondary_unit_{{ $product->id }}" value="{{ $qty_unit_main }}">
 
                                             <div class="shop-datail">
@@ -207,7 +223,7 @@
                                                         <div>
                                                             <h3>{{ $product->product->name }}</h3>
                                                             <p id="unit_display_{{ $product->id }}">
-                                                                {!! single_price_web($product->price) !!} / {{ $qty_unit_main }}
+                                                                {!! single_price_web($product_price) !!} / {{ $qty_unit_main }}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -218,7 +234,7 @@
                                                                class="button-minus   icon-shape icon-sm  lftcount"
                                                                data-field="quantity" data-product_id="{{ $product->product->id }}"
                                                                data-product_stock_id="{{ $product->id }}">
-                                                        <input type="number" step="1" max="10" value="0" name="quantity" id="quantity"
+                                                        <input type="number" step="1" max="10" value="{{ $cart_qty }}" name="quantity" id="quantity"
                                                                class="quantity-field border-0 text-center w-25">
                                                         <input type="button" value="+"
                                                                class="button-plus icon-shape icon-sm lh-0 rgtcount"
@@ -230,62 +246,6 @@
                                         </div>
                                     </div>
 
-{{--                                    @if (count($product->orders->unique('user_id')) > 0)--}}
-{{--                                        --}}{{-- Users Order list Modal --}}
-{{--                                        <div class="modal fade orderListModal" id="orderListModal_{{ $product->id }}"--}}
-{{--                                             tabindex="-1" aria-labelledby="orderListModalLabel" aria-hidden="true">--}}
-{{--                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">--}}
-{{--                                                <div class="modal-content">--}}
-{{--                                                    <div class="modal-header">--}}
-{{--                                                        <h5 class="modal-title">Who Have Ordered</h5>--}}
-{{--                                                        <div class="close-btn text-right">--}}
-{{--                                                            <a href="javascript:void(0)" class="fw900"--}}
-{{--                                                               data-dismiss="modal">X</a>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                    <div class="modal-body">--}}
-{{--                                                        @foreach ($product->orderDetails as $orderDetail)--}}
-{{--                                                            <div class="item-details px-sm-3">--}}
-{{--                                                                <div class="order-list">--}}
-{{--                                                                    <div class="item-card p-3 mb-3">--}}
-{{--                                                                        <div--}}
-{{--                                                                            class="d-flex justify-content-between align-items-center">--}}
-{{--                                                                            <div class="pr-2">--}}
-{{--                                                                                <p class="fw600 fsize15 title-txt mb-1">--}}
-{{--                                                                                    {{ $orderDetail->order->user->name }}</p>--}}
-{{--                                                                                <p class="mb-0 lh-17">--}}
-{{--                                                                            <span class="fsize13 body-txt ordered-qty">--}}
-{{--                                                                                @php--}}
-{{--                                                                                    $qty_unit = ($orderDetail->quantity * floatval($product->product->min_qty)) . ' ' . $product->product->unit;--}}
-{{--                                                                                    if($orderDetail->quantity * floatval($product->product->min_qty) < 1){--}}
-{{--                                                                                        $qty_unit = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;--}}
-{{--                                                                                    }--}}
-{{--                                                                                @endphp--}}
-{{--                                                                                {{ $qty_unit }}--}}
-{{--                                                                            </span>--}}
-{{--                                                                                    <span--}}
-{{--                                                                                        class="fsize13 body-txt ordered-qty">--}}
-{{--                                                                                &nbsp;&bull;&nbsp;--}}
-{{--                                                                                {{ date('d F, Y H:i', $orderDetail->order->date) }}--}}
-{{--                                                                            </span>--}}
-{{--                                                                                </p>--}}
-{{--                                                                            </div>--}}
-{{--                                                                            <div class="user-img-sm m-0">--}}
-{{--                                                                                <img--}}
-{{--                                                                                    src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"--}}
-{{--                                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </div>--}}
-{{--                                                                    </div>--}}
-{{--                                                                </div>--}}
-
-{{--                                                            </div>--}}
-{{--                                                        @endforeach--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    @endif--}}
                                 @endforeach
                             </div>
                         </div>
@@ -308,9 +268,9 @@
             <div class="row ">
                 <div class="col-12 px-0">
                     <div class="sticky-bottom sticky2">
-                        <a href="javascript:void(0)" id="checkout-btn" class="sticky-button-bottom pointer-none" onclick="addProductToCart();">
+                        <a href="javascript:void(0)" id="checkout-btn" class="sticky-button-bottom @if($checkout_total == 0) pointer-none @endif" onclick="addProductToCart();">
                             checkout
-                            <span id="checkout-amount">( {!! single_price_web(0) !!} )</span>
+                            <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
                         </a>
                     </div>
                 </div>
@@ -363,6 +323,10 @@
         })
 
         $(document).ready(function () {
+            if ($('#cart_data').val()) {
+                tmpCart = JSON.parse($('#cart_data').val());
+            }
+
             // Remaining time
             $(".remaining-time").each(function () {
                 const currDiv = $(this);
@@ -571,6 +535,8 @@
         }
 
         function addProductToCart() {
+            tmpCart = $.map(tmpCart, function(value, index) { return [value]; });
+
             let cartData = [];
             $(tmpCart).each(function (k, tmp) {
                 if (tmp) {
@@ -587,7 +553,6 @@
                     url: '{{ route('cart.bulkAddToCart') }}',
                     data: {data: cartData},
                     success: function (data) {
-                        console.log(data);
                         if (data.status == 1) {
                             window.location.replace("{{ route('cart') }}");
                         } else {

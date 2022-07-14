@@ -33,7 +33,7 @@ class CartController extends Controller
 
                 Session::forget('temp_user_id');
             }
-            $carts = Cart::where('user_id', $user_id)->get();
+            $carts = Cart::with('product_stock')->where('user_id', $user_id)->get()->sortBy('product_stock.purchase_end_date');
             $shop = Shop::where('user_id', $user_data->joined_community_id)->first();
         } else {
             $temp_user_id = $request->session()->get('temp_user_id');
@@ -283,11 +283,12 @@ class CartController extends Controller
 
     public function bulkAddToCart(Request $request)
     {
+        Cart::where('user_id', auth()->user()->id)->delete();
         if ($request->data) {
             foreach ($request->data AS $val) {
-                $req_quantity = $val['qty'];
-                $product_id = $val['product_id'];
-                $product_stock_id = $val['product_stock_id'];
+                $req_quantity = floatval($val['qty']);
+                $product_id = intval($val['product_id']);
+                $product_stock_id = intval($val['product_stock_id']);
 
                 $product = Product::find($product_id);
                 $carts = array();

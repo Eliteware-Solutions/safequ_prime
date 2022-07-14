@@ -21,6 +21,11 @@ class Cart extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function product_stock()
+    {
+        return $this->belongsTo(ProductStock::class);
+    }
+
     public function address()
     {
         return $this->belongsTo(Address::class);

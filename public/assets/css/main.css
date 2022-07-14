@@ -3388,10 +3388,11 @@ main.promain {
         left: 0;
         margin-bottom: 0px;
     } */
-    .pointer-none {
-        pointer-events: none;
-    }
 
+}
+
+.pointer-none {
+    pointer-events: none;
 }
 
 .mainimg img {
@@ -3402,4 +3403,9 @@ main.promain {
     min-height: 45px;
     max-height: 45px;
     object-fit: cover;
+}
+
+.add_more_product_btn {
+    color: #ff6c31 !important;
+    text-decoration: underline;
 }
