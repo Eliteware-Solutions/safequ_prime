@@ -69,7 +69,7 @@
                     @if (count($products_purchase_expired) > 0)
                         @foreach ($products_purchase_expired as $expired_product)
                             <div
-                                class="col-lg-4 col-md-6 col-sm-8 px-2 pb-4 timeout-card filter {{ $expired_product->product->category->slug }} ">
+                                    class="col-lg-4 col-md-6 col-sm-8 px-2 pb-4 timeout-card filter {{ $expired_product->product->category->slug }} ">
                                 <!-- Item Cards -->
                                 <div class="item-card p-3">
 
@@ -96,7 +96,7 @@
                                                 <p class="mb-0 fsize13 text-white">
                                                     Ran out of time
                                                     <span
-                                                        class="fsize13 text-white">({{ $expired_product->orderDetails->sum('quantity') }}{{ $expired_product->unit }}
+                                                            class="fsize13 text-white">({{ $expired_product->orderDetails->sum('quantity') }}{{ $expired_product->unit }}
                                                         ordered)</span>
                                                 </p>
                                             </div>
@@ -111,8 +111,8 @@
                                                     @foreach ($expired_product->orders->unique('user_id') as $i => $order)
                                                         @if ($i < 5)
                                                             <img
-                                                                src="{{ uploaded_asset($order->user->avatar_original) }}"
-                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}'">
+                                                                    src="{{ uploaded_asset($order->user->avatar_original) }}"
+                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}'">
                                                         @endif
                                                     @endforeach
                                                 </div>
@@ -144,7 +144,7 @@
                                                     <div class="order-list">
                                                         <div class="item-card p-3 mb-3">
                                                             <div
-                                                                class="d-flex justify-content-between align-items-center">
+                                                                    class="d-flex justify-content-between align-items-center">
                                                                 <div class="pr-2">
                                                                     <p class="fw600 fsize15 title-txt mb-1">
                                                                         {{ $orderDetail->order->user->name }}</p>
@@ -166,8 +166,8 @@
                                                                 </div>
                                                                 <div class="user-img-sm m-0">
                                                                     <img
-                                                                        src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"
-                                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">
+                                                                            src="{{ uploaded_asset($orderDetail->order->user->avatar_original) }}"
+                                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp;') }}';">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -211,20 +211,30 @@
                                     <div class="col-lg-12 px-0 pb-2 filter {{ $product->product->category->slug }} ">
                                         <!-- Item Cards -->
                                         <div class="mobile_hr_card">
-                                            <input type="hidden" id="total_{{ $product->id }}" class="product_total" value="{{ $product_total }}">
-                                            <input type="hidden" id="secondary_unit_{{ $product->id }}" value="{{ $qty_unit_main }}">
+                                            <input type="hidden" id="total_{{ $product->id }}" class="product_total"
+                                                   value="{{ $product_total }}">
+                                            <input type="hidden" id="secondary_unit_{{ $product->id }}"
+                                                   value="{{ $qty_unit_main }}">
 
                                             <div class="shop-datail">
                                                 <div class="shop-datail">
                                                     <div class="mainimg">
-                                                        <img src="{{ uploaded_asset($product->product->photos) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';" class="img-fluid" alt="{{ $product->product->name }}">
+                                                        <img src="{{ uploaded_asset($product->product->photos) }}"
+                                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                             class="img-fluid" alt="{{ $product->product->name }}">
                                                     </div>
                                                     <div>
                                                         <div>
                                                             <h3>{{ $product->product->name }}</h3>
                                                             <p id="unit_display_{{ $product->id }}">
-                                                                {!! single_price_web($product_price) !!} / {{ $qty_unit_main }}
+                                                                {!! single_price_web($product_price) !!}
+                                                                / {{ $qty_unit_main }}
                                                             </p>
+                                                            @if($product->product->manufacturer_location)
+                                                                <p class="font-italic"><b>Farm
+                                                                        Location:</b> {{$product->product->manufacturer_location}}
+                                                                </p>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,13 +242,16 @@
                                                     <div class="input-group w-auto counterinput">
                                                         <input type="button" value="-"
                                                                class="button-minus   icon-shape icon-sm  lftcount"
-                                                               data-field="quantity" data-product_id="{{ $product->product->id }}"
+                                                               data-field="quantity"
+                                                               data-product_id="{{ $product->product->id }}"
                                                                data-product_stock_id="{{ $product->id }}">
-                                                        <input type="number" step="1" max="10" value="{{ $cart_qty }}" name="quantity" id="quantity"
+                                                        <input type="number" step="1" max="10" value="{{ $cart_qty }}"
+                                                               name="quantity" id="quantity"
                                                                class="quantity-field border-0 text-center w-25">
                                                         <input type="button" value="+"
                                                                class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                               data-field="quantity" data-product_id="{{ $product->product->id }}"
+                                                               data-field="quantity"
+                                                               data-product_id="{{ $product->product->id }}"
                                                                data-product_stock_id="{{ $product->id }}">
                                                     </div>
                                                 </div>
@@ -268,7 +281,9 @@
             <div class="row ">
                 <div class="col-12 px-0">
                     <div class="sticky-bottom sticky2">
-                        <a href="javascript:void(0)" id="checkout-btn" class="sticky-button-bottom @if($checkout_total == 0) pointer-none @endif" onclick="addProductToCart();">
+                        <a href="javascript:void(0)" id="checkout-btn"
+                           class="sticky-button-bottom @if($checkout_total == 0) pointer-none @endif"
+                           onclick="addProductToCart();">
                             checkout
                             <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
                         </a>
@@ -502,12 +517,12 @@
                 data: {id: productId, stock_id: productStockId, quantity: qty},
                 success: function (data) {
                     if (data.total_price != '') {
-                        $('#total_'+productStockId).val(data.total_price);
+                        $('#total_' + productStockId).val(data.total_price);
                     } else {
-                        $('#total_'+productStockId).val(0);
+                        $('#total_' + productStockId).val(0);
                     }
-                    $('#unit_display_'+productStockId).html('');
-                    $('#unit_display_'+productStockId).html(data.unit_price +' / '+ $('#secondary_unit_'+productStockId).val());
+                    $('#unit_display_' + productStockId).html('');
+                    $('#unit_display_' + productStockId).html(data.unit_price + ' / ' + $('#secondary_unit_' + productStockId).val());
 
                     calculateCheckOutTotal(qty, productId, productStockId);
                 }
@@ -525,7 +540,7 @@
                 $('#checkout-btn').addClass('pointer-none');
             }
             $('#checkout-amount').html('');
-            $('#checkout-amount').html('( <ins class="currency-symbol">₹</ins> '+checkoutTotal+' )');
+            $('#checkout-amount').html('( <ins class="currency-symbol">₹</ins> ' + checkoutTotal + ' )');
 
             if (checkoutTotal > 0) {
                 tmpCart[productStockId] = {'qty': qty, 'product_id': productId, 'product_stock_id': productStockId};
@@ -535,7 +550,9 @@
         }
 
         function addProductToCart() {
-            tmpCart = $.map(tmpCart, function(value, index) { return [value]; });
+            tmpCart = $.map(tmpCart, function (value, index) {
+                return [value];
+            });
 
             let cartData = [];
             $(tmpCart).each(function (k, tmp) {
