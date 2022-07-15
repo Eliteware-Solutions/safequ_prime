@@ -32,6 +32,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ $meta_title }}"/>
     <meta property="og:description" content="{{ $meta_description }}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
 @endsection
 
 @section('content')
@@ -230,11 +231,12 @@
                                                                 {!! single_price_web($product_price) !!}
                                                                 / {{ $qty_unit_main }}
                                                             </p>
+                                                          
                                                             @if($product->product->manufacturer_location)
-                                                                <p class="font-italic"><b>Farm
-                                                                        Location:</b> {{$product->product->manufacturer_location}}
+                                                                <p class="font-italic"><b> <i class="fad fa-tractor fsize16"></i> </b> {{$product->product->manufacturer_location}}
                                                                 </p>
                                                             @endif
+                                                            <p><i class="bi bi-clock"></i> 19th july</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -282,7 +284,7 @@
                 <div class="col-12 px-0">
                     <div class="sticky-bottom sticky2">
                         <a href="javascript:void(0)" id="checkout-btn"
-                           class="sticky-button-bottom @if($checkout_total == 0) pointer-none @endif"
+                           class="sticky-button-bottom my-lg-4 @if($checkout_total == 0) pointer-none @endif"
                            onclick="addProductToCart();">
                             checkout
                             <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>

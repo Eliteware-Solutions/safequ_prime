@@ -580,6 +580,7 @@ header.scrolled .bg-transparent {
 
 .home-header.scrolled nav {
     background: #f8f9fa !important;
+    transition: all 0.4s ease-in-out;
 }
 
 .navbar-brand img {
@@ -2581,6 +2582,7 @@ input[type=checkbox]:checked + .check-box::before,
         top: 0 !important;
         width: 100%;
         z-index: 999 !important;
+        transition: all 0.4s ease-in-out;
     }
 
     .content {
@@ -3278,7 +3280,45 @@ a.sticky-button-bottom > span .currency-symbol {
 main.promain {
     min-height: 100% !important;
 }
+.pointer-none {
+    pointer-events: none;
+}
 
+.mainimg img {
+    max-width: 100%;
+    min-width: 100%;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+}
+
+.add_more_product_btn {
+    color: #ff6c31 !important;
+    text-decoration: underline;
+}
+i.fad.fa-tractor.fsize16 {
+    display: inline-block;
+    margin-right: 5px;
+}
+.shop-datail h3 + p{font-weight: bold;}
+i.bi.bi-clock {
+    margin-right: 5px;
+}
+
+.shop-datail p.font-italic {
+    padding: 10px 0px;
+    display: flex;
+    align-items: start;
+    margin-right: 5px;
+
+}
+/* --------------------------------------
+media query 991
+-------------------------------------- */
 
 @media screen and (max-width: 991px) {
 
@@ -3379,6 +3419,7 @@ main.promain {
         bottom: 0 !important;
         left: 0;
         margin-bottom: 0px;
+        transition: all 0.4s ease-in-out;
     }
 
     /* .sticky-bottom {
@@ -3388,13 +3429,7 @@ main.promain {
         left: 0;
         margin-bottom: 0px;
     } */
-
-}
-
-.pointer-none {
-    pointer-events: none;
-}
-
+    
 .mainimg img {
     max-width: 45px;
     min-width: 45px;
@@ -3402,10 +3437,18 @@ main.promain {
     height: 45px;
     min-height: 45px;
     max-height: 45px;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
+}
+i.fad.fa-tractor.fsize16 {
+    font-size: 12px!important;
+}
+.shop-datail p.font-italic {
+    padding: 10px 0px;
+    display: flex;
+    align-items: start;
+
+}
 }
 
-.add_more_product_btn {
-    color: #ff6c31 !important;
-    text-decoration: underline;
-}
+
