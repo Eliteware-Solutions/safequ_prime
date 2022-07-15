@@ -231,12 +231,12 @@
                                                                 {!! single_price_web($product_price) !!}
                                                                 / {{ $qty_unit_main }}
                                                             </p>
-                                                          
+
                                                             @if($product->product->manufacturer_location)
                                                                 <p class="font-italic"><b> <i class="fad fa-tractor fsize16"></i> </b> {{$product->product->manufacturer_location}}
                                                                 </p>
                                                             @endif
-                                                            <p><i class="bi bi-clock"></i> 19th july</p>
+                                                            <p><i class="fad fa-shipping-timed"></i>  {{ date('dS F', strtotime($product->purchase_end_date. '+' . intval($product->est_shipping_days) . ' days')) }}</p>
                                                         </div>
                                                     </div>
                                                 </div>

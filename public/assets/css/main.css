@@ -3310,7 +3310,7 @@ i.bi.bi-clock {
 }
 
 .shop-datail p.font-italic {
-    padding: 10px 0px;
+    /*padding: 10px 0px;*/
     display: flex;
     align-items: start;
     margin-right: 5px;
@@ -3429,7 +3429,7 @@ media query 991
         left: 0;
         margin-bottom: 0px;
     } */
-    
+
 .mainimg img {
     max-width: 45px;
     min-width: 45px;
@@ -3444,7 +3444,7 @@ i.fad.fa-tractor.fsize16 {
     font-size: 12px!important;
 }
 .shop-datail p.font-italic {
-    padding: 10px 0px;
+    /*padding: 10px 0px;*/
     display: flex;
     align-items: start;
 
