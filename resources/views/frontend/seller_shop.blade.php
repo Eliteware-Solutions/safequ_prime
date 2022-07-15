@@ -226,8 +226,8 @@
                                                     </div>
                                                     <div>
                                                         <div>
-                                                            <h3>{{ $product->product->name }}</h3>
-                                                            <p id="unit_display_{{ $product->id }}">
+                                                            <h3 class="mb-1">{{ $product->product->name }}</h3>
+                                                            <p id="unit_display_{{ $product->id }}" class="mb-1">
                                                                 {!! single_price_web($product_price) !!}
                                                                 / {{ $qty_unit_main }}
                                                             </p>
@@ -236,7 +236,7 @@
                                                                 <p class="font-italic"><b> <i class="fad fa-tractor fsize16"></i> </b> {{$product->product->manufacturer_location}}
                                                                 </p>
                                                             @endif
-                                                            <p><i class="fad fa-shipping-timed"></i>  {{ date('dS F', strtotime($product->purchase_end_date. '+' . intval($product->est_shipping_days) . ' days')) }}</p>
+                                                            <p class="font-italic"><i class="fad fa-shipping-timed"></i>  {{ date('dS F', strtotime($product->purchase_end_date. '+' . intval($product->est_shipping_days) . ' days')) }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
