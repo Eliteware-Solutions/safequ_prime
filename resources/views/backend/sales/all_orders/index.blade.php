@@ -6,7 +6,7 @@
         <form class="" action="" id="sort_orders" method="GET">
             <div class="card-header row gutters-5">
                 <div class="row gutters-5">
-                    <h5 class="mb-md-0 h6">{{ translate('All Orders') }}</h5>
+                    <h5 class="mb-md-0 h6">{{ translate('Confirmed Orders') }}</h5>
                 </div>
                 <div class="row gutters-5 mt-2">
                     <div class="dropdown mb-2 mb-md-0">

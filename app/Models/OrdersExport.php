@@ -15,7 +15,7 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
 
     public function __construct($request)
     {
-        $this->delivery_status = $request->delivery_status;
+        $this->delivery_status = (trim($request->delivery_status) == '' ? 'pending' : $request->delivery_status);
         $this->payment_status = $request->payment_status;
         $this->filter_date = $request->filter_date;
         $this->search = $request->search;
@@ -23,7 +23,14 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
+        ini_set('memory_limit', -1);
         $orders = OrderDetail::orderBy('id', 'desc');
+        if ($this->payment_status != 'unpaid') {
+            $orders = $orders->whereHas('order', function ($query) {
+                $query->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
+            });
+        }
+
         if ($this->search != null) {
             $orders = $orders->whereHas('order', function ($query) {
                 $query->where('code', 'like', '%' . $this->search . '%');
@@ -33,13 +40,9 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
             $orders = $orders->where('delivery_status', $this->delivery_status);
         }
         if ($this->payment_status != null) {
-            if ($this->payment_status == 'unpaid') {
-                $orders = $orders->whereHas('order', function ($query) {
-                    $query->where('added_by_admin', 1)->where('payment_status', $this->payment_status);
-                });
-            } else {
-                $orders = $orders->where('payment_status', $this->payment_status);
-            }
+            $orders = $orders->whereHas('order', function ($query) {
+                $query->where('added_by_admin', 1)->where('payment_status', $this->payment_status);
+            });
         }
         if ($this->filter_date != null) {
             $orders = $orders->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $this->filter_date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $this->filter_date)[1])));

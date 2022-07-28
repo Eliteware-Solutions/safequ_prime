@@ -79,28 +79,28 @@ class OrderController extends Controller
     // All Orders
     public function all_orders(Request $request)
     {
-
-
         $date = $request->date;
         $sort_search = null;
         $delivery_status = null;
         $payment_status = null;
+        $request->delivery_status = (trim($request->delivery_status) == '' ? 'pending' : $request->delivery_status);
 
-        $orders = Order::orderBy('id', 'desc');
+        if ($request->payment_status != 'unpaid') {
+            $orders = Order::orderBy('id', 'desc')->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
+        }
+
         if ($request->has('search')) {
             $sort_search = $request->search;
-            $orders = $orders->where('code', 'like', '%' . $sort_search . '%');
+            if (trim($sort_search) != '') {
+                $orders = $orders->where('code', 'like', '%' . $sort_search . '%');
+            }
         }
         if ($request->delivery_status != null) {
             $orders = $orders->where('delivery_status', $request->delivery_status);
             $delivery_status = $request->delivery_status;
         }
         if ($request->payment_status != null) {
-            if ($request->payment_status == 'unpaid') {
-                $orders = $orders->where('payment_status', $request->payment_status)->where('added_by_admin', 1);
-            } else {
-                $orders = $orders->where('payment_status', $request->payment_status);
-            }
+            $orders = $orders->where('payment_status', $request->payment_status)->where('added_by_admin', 1);
             $payment_status = $request->payment_status;
         }
         if ($date != null) {
@@ -119,6 +119,39 @@ class OrderController extends Controller
             ->get();
 
         return view('backend.sales.all_orders.show', compact('order', 'delivery_boys'));
+    }
+
+    // Un-Paid Orders
+    public function unpaid_orders(Request $request)
+    {
+        $date = $request->date;
+        $sort_search = null;
+
+        $orders = Order::orderBy('id', 'desc')->where('added_by_admin', 0)->where('payment_status', 'unpaid');
+        if ($request->has('search')) {
+            $sort_search = $request->search;
+            if (trim($sort_search) != '') {
+                $orders = $orders->where('code', 'like', '%' . $sort_search . '%');
+            }
+        }
+        if ($date != null) {
+            $orders = $orders->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $date)[1])));
+        }
+        $orders = $orders->paginate(15);
+        return view('backend.sales.unpaid_orders.index', compact('orders', 'sort_search', 'date'));
+    }
+
+    public function cart_orders(Request $request)
+    {
+        $date = $request->date;
+        $sort_search = null;
+
+        $carts = Cart::orderBy('id', 'desc');
+        if ($date != null) {
+            $carts = $carts->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $date)[1])));
+        }
+        $carts = $carts->paginate(15);
+        return view('backend.sales.cart_orders.index', compact('carts', 'sort_search', 'date'));
     }
 
     // Inhouse Orders
