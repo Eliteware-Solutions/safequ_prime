@@ -85,8 +85,9 @@ class OrderController extends Controller
         $payment_status = null;
         $request->delivery_status = (trim($request->delivery_status) == '' ? 'pending' : $request->delivery_status);
 
+        $orders = Order::orderBy('id', 'desc');
         if ($request->payment_status != 'unpaid') {
-            $orders = Order::orderBy('id', 'desc')->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
+            $orders = $orders->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
         }
 
         if ($request->has('search')) {
@@ -106,6 +107,7 @@ class OrderController extends Controller
         if ($date != null) {
             $orders = $orders->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $date)[1])));
         }
+
         $orders = $orders->paginate(15);
         return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
     }
