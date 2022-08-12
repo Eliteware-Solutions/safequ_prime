@@ -133,6 +133,13 @@
                         $seller = \App\Models\User::where('id', $detail->seller_id)->first();
                         $sellerName = (isset($seller) ? $seller->name : '-');
                         $totalPrice = floatval($detail->price) + floatval($detail->tax) + floatval($detail->shipping_cost);
+                        if (isset($detail->product_stock->product) && !empty($detail->product_stock->product)) {
+                            $productName = $detail->product_stock->product->name;
+                        } elseif (isset($detail->archive_product_stock) && isset($detail->archive_product_stock->product) && !empty($detail->archive_product_stock->product)) {
+                            $productName = $detail->archive_product_stock->product->name;
+                        } else {
+                            $productName = '--';
+                        }
                     @endphp
                     <tr>
                         <td>{{ ($key+1) + ($order_details->currentPage() - 1)*$order_details->perPage() }}    </td>
@@ -142,7 +149,7 @@
                             {{ date('d-m-Y', strtotime($detail->created_at)) }}
                         </td>
                         <td>{{ $sellerName }}</td>
-                        <td>{{ (isset($detail->product_stock->product) ? $detail->product_stock->product->name : '--') }}</td>
+                        <td>{{ $productName }}</td>
                         <td>{{ $detail->quantity }}</td>
                         <td>{{ single_price($totalPrice) }}</td>
                         <td>{{ ucwords($detail->delivery_status) }}</td>
