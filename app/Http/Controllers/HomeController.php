@@ -369,7 +369,7 @@ class HomeController extends Controller
                 $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
 
                 $price = $cart_val->price;
-                if ($cart_val->product->wholesale_product) {
+                if ($cart_val->product_stock) {
                     $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
                     if ($wholesalePrice) {
                         $price = $wholesalePrice->price;
