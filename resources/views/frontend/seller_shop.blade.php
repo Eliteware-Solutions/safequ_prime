@@ -461,6 +461,8 @@
                 }
             });
 
+            $("#tykeModal").modal('show');
+
         });
 
         $(window).scroll(function () {

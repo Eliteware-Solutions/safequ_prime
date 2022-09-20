@@ -211,6 +211,43 @@
         </div>
     @endif
 
+    <!-- Tyke Support Modal Starts -->
+    <div class="modal fade safeq-lg" id="tykeModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span class="text-white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row  align-items-center">
+                            <div class="col-lg-7 col-md-9 col-12 ">
+                                <h2>Love what we do?</h2>
+                                <p>Join us on our growth journey to empower thousands of Indian farmers and make
+                                    farm to table a reality for millions of urban Indian households.
+                                </p>
+                                <div class="sf-sm">
+                                    <a href="https://www.tykeinvest.com/campaign/safequ-dMZtGjbz" target="_blank" class="safbtn">Subscribe to our Tyke Campaign <span><i class="la la-arrow-right la-2x text-white pl-3"></i></span>
+                                    </a>
+                                </div>
+
+                                <div class="logos-popup">
+                                    <img src="{{ static_asset('assets/img/tyke/l1.png') }}">
+                                    <img src="{{ static_asset('assets/img/tyke/l2.png') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tyke Support Modal Ends -->
+
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>

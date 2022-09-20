@@ -2922,6 +2922,10 @@ input[type=checkbox]:checked + .check-box::before,
     .modal-content .modal-body {
         max-height: 80vh;
     }
+
+    .safeq-lg .modal-content .modal-body {
+        max-height: unset !important;
+    }
 }
 
 .modal-content .modal-footer {
@@ -3280,6 +3284,7 @@ a.sticky-button-bottom > span .currency-symbol {
 main.promain {
     min-height: 100% !important;
 }
+
 .pointer-none {
     pointer-events: none;
 }
@@ -3293,18 +3298,23 @@ main.promain {
     min-height: 100%;
     max-height: 100%;
     -o-object-fit: cover;
-       object-fit: cover;
+    object-fit: cover;
 }
 
 .add_more_product_btn {
     color: #ff6c31 !important;
     text-decoration: underline;
 }
+
 i.fad.fa-tractor.fsize16 {
     display: inline-block;
     margin-right: 5px;
 }
-.shop-datail h3 + p{font-weight: bold;}
+
+.shop-datail h3 + p {
+    font-weight: bold;
+}
+
 i.bi.bi-clock {
     margin-right: 5px;
 }
@@ -3316,6 +3326,7 @@ i.bi.bi-clock {
     margin-right: 5px;
 
 }
+
 /* --------------------------------------
 media query 991
 -------------------------------------- */
@@ -3429,26 +3440,233 @@ media query 991
         left: 0;
         margin-bottom: 0px;
     } */
+    .mainimg img {
+        max-width: 45px;
+        min-width: 45px;
+        border-radius: 50%;
+        height: 45px;
+        min-height: 45px;
+        max-height: 45px;
+        -o-object-fit: cover;
+        object-fit: cover;
+    }
 
-.mainimg img {
-    max-width: 45px;
-    min-width: 45px;
+    i.fad.fa-tractor.fsize16 {
+        font-size: 12px !important;
+    }
+
+    .shop-datail p.font-italic {
+        /*padding: 10px 0px;*/
+        display: flex;
+        align-items: start;
+
+    }
+}
+
+
+/* --------------------------------------
+        Tyke Support Modal CSS
+-------------------------------------- */
+.safeq-lg .modal-content {
+    background-image: url(../img/tyke/deskbg.png);
+    background-size: 100% 100%;
+    background-position: right;
+}
+
+.safeq-lg.modal-dialog {
+    max-width: 900px;
+    margin: 1.75rem auto;
+}
+
+.safeq-lg .modal-header {
+    border-bottom: 0;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.safeq-lg .close {
+    float: right;
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    color: #fff !important;
+    opacity: 1;
+}
+
+.safeq-lg .close:hover {
+    color: #fff;
+    opacity: 1;
+}
+
+.safeq-lg .modal-header .close {
+    padding: 1rem 1rem;
+    margin: -1rem -1rem -1rem auto;
     border-radius: 50%;
-    height: 45px;
-    min-height: 45px;
-    max-height: 45px;
-    -o-object-fit: cover;
-       object-fit: cover;
+    border: 2px solid #fff;
 }
-i.fad.fa-tractor.fsize16 {
-    font-size: 12px!important;
-}
-.shop-datail p.font-italic {
-    /*padding: 10px 0px;*/
+
+.safeq-lg .modal-header .close span {
+    position: relative;
     display: flex;
-    align-items: start;
+    align-items: center;
+    justify-content: center;
+    top: -9px;
+}
+
+.safeq-lg .modal-header .close {
+    padding: 1rem 1rem;
+    margin: -1rem -1rem -1rem auto;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    position: absolute;
+    top: 31px;
+    right: 38px;
+    height: 25px;
+    width: 25px;
+}
+
+.safeq-lg .modal-header .close:before {
+    content: none;
+}
+
+.safeq-lg h2 {
+    font-style: normal;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    font-size: 47px;
+    line-height: 70px;
+    text-transform: capitalize;
+
+    color: #FFFFFF;
+    padding-bottom: 15px;
+}
+
+.safeq-lg p {
+    font-size: 30px !important;
+    line-height: 45px !important;
+    padding-bottom: 15px;
+    color: #FFFFFF;
+}
+
+div#tykeModal {
+    padding-left: 0 !important;
+}
+
+a.safbtn {
+    font-size: 22px !important;
+    line-height: 33px !important;
+    color: #FFFFFF !important;
+    display: flex;
+    align-items: center;
+    text-decoration: underline;
+}
+
+.logos-popup {
+    margin-top: 30px;
+    max-width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
 }
+
+.safeq-lg .modal-body {
+    display: flex;
+    align-items: center;
+    padding: 50px;
+    max-height: unset !important;
 }
 
 
+.logos-popup img {
+    filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5));
+    max-width: 110px;
+}
+
+
+@media (max-width: 1199.98px) {
+    .safeq-lg .modal-content {
+        background-size: cover;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .safeq-lg .modal-content {
+        background-size: 100% 100%;
+        background-position: center;
+    }
+}
+
+
+@media (min-width: 767.98px) {
+    .modal-dialog {
+        max-width: 1100px;
+        margin: 1.75rem auto;
+    }
+}
+
+
+@media (max-width: 767.98px) {
+    .safeq-lg .modal-content {
+        background-image: url(../img/tyke/sm-bg.png);
+        background-size: 100% 100%;
+        background-position: center;
+    }
+
+    .safeq-lg h2 {
+        font-weight: 800;
+        text-align: center;
+        font-size: 28px;
+        line-height: 34px !important;
+    }
+
+    .safeq-lg p {
+        font-weight: 500;
+        font-size: 22px !important;
+        line-height: 35px !important;
+        text-align: center;
+    }
+
+    .safeq-lg a {
+        font-size: 16px !important;
+        line-height: 33px;
+        display: flex;
+        align-items: center;
+        color: #333338;
+    }
+
+    .logos-popup {
+        max-width: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 30px auto;
+    }
+
+    .safeq-lg .modal-body {
+        padding: 30px 15px;
+    }
+
+    .sf-sm {
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .logos-popup img {
+        max-width: 95px;
+    }
+}

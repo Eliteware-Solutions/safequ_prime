@@ -15,11 +15,13 @@
                                         <h1 class="fw800 mb-3 primary-color">30%* cheaper.</h1>
                                         <p class="mb-2 pr-md-4 fw500 sub-txt">Farm fresh produce like strawberries &
                                             avocados delivered to your doorstep, <span
-                                                class="fw700 fsize17 primary-color">DIRECTLY</span> from your choice of
+                                                    class="fw700 fsize17 primary-color">DIRECTLY</span> from your choice
+                                            of
                                             local farms serving your community. ~30% cheaper than those expensive <u
-                                                class="fw500 text-underline">halls of food</u> or <u
-                                                class="fw500 text-underline">baskets of nature</u> <i
-                                                class="fas fa-smile-wink smiley primary-color-dark align-middle"></i></p>
+                                                    class="fw500 text-underline">halls of food</u> or <u
+                                                    class="fw500 text-underline">baskets of nature</u> <i
+                                                    class="fas fa-smile-wink smiley primary-color-dark align-middle"></i>
+                                        </p>
 
                                         <a href="#communities">
                                             <p class="explore-card my-4 fw500">Join your community now &nbsp;
@@ -44,7 +46,7 @@
                 <div class="row">
                     <div class="col-lg-3 col-sm-6 px-lg-4 pt-2 pb-3 text-center">
                         <div class="icons3D">
-                            <img src="{{ static_asset('assets/img/fast-delivery.png') }}" alt="3D Icon" />
+                            <img src="{{ static_asset('assets/img/fast-delivery.png') }}" alt="3D Icon"/>
                         </div>
                         <h6 class="fw700 my-2">Direct from farms of your choice</h6>
                         <p class="mb-0">Love strawberries? Order them directly from a farm in Nashik or
@@ -53,7 +55,7 @@
 
                     <div class="col-lg-3 col-sm-6 px-lg-4 pt-2 pb-3 text-center">
                         <div class="icons3D">
-                            <img src="{{ static_asset('assets/img/fruits-vector-graphic.png') }}" alt="3D Icon" />
+                            <img src="{{ static_asset('assets/img/fruits-vector-graphic.png') }}" alt="3D Icon"/>
                         </div>
 
                         <h6 class="fw700 fsize16 my-2">Fresh, like it's from your back garden</h6>
@@ -63,7 +65,7 @@
 
                     <div class="col-lg-3 col-sm-6 px-lg-4 pt-2 pb-3 text-center">
                         <div class="icons3D">
-                            <img src="{{ static_asset('assets/img/india-flag.png') }}" alt="3D Icon" />
+                            <img src="{{ static_asset('assets/img/india-flag.png') }}" alt="3D Icon"/>
                         </div>
 
                         <h6 class="fw700 fsize16 my-2">Atmanirbhar India</h6>
@@ -72,7 +74,7 @@
 
                     <div class="col-lg-3 col-sm-6 px-lg-4 pt-2 pb-3 text-center">
                         <div class="icons3D">
-                            <img src="{{ static_asset('assets/img/fair-pricing.png') }}" alt="3D Icon" />
+                            <img src="{{ static_asset('assets/img/fair-pricing.png') }}" alt="3D Icon"/>
                         </div>
 
                         <h6 class="fw700 fsize16 my-2">Fair Pricing</h6>
@@ -84,13 +86,16 @@
         </div>
 
         <div class="container py-5">
-
             <div class="mt-2">
                 <div class="community-serve text-center">
                     <div class="py-md-5 py-4">
-                        <h4 class="fw700 title-txt">Our most <ins class="primary-color fw700">popular communities</ins></h4>
-                        <p class="w-75 mx-auto mb-0 body-txt">More than <ins class="primary-color fw600">500+ customers
-                            </ins> across South Mumbai's finest gated communities have already signed up to the SafeQU
+                        <h4 class="fw700 title-txt">Our most
+                            <ins class="primary-color fw700">popular communities</ins>
+                        </h4>
+                        <p class="w-75 mx-auto mb-0 body-txt">More than
+                            <ins class="primary-color fw600">500+ customers
+                            </ins>
+                            across South Mumbai's finest gated communities have already signed up to the SafeQU
                             experience. Choose your community and get started now
                         </p>
 
@@ -103,12 +108,12 @@
                                             <div class="card-img mb-1">
                                                 @if (isset($community->user->avatar_original))
                                                     <img src="{{ uploaded_asset($community->user->avatar_original) }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
-                                                        class="img-rounded" alt="{{ $community->name }}">
+                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                         class="img-rounded" alt="{{ $community->name }}">
                                                 @else
                                                     <img src=""
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
-                                                        class="img-rounded" alt="{{ $community->name }}">
+                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                         class="img-rounded" alt="{{ $community->name }}">
                                                 @endif
                                             </div>
                                             <div class="card-data pt-3 pb-4">
@@ -137,11 +142,11 @@
 
                                             @if (auth()->user() && intval(auth()->user()->joined_community_id) > 0 && auth()->user()->joined_community_id != $community->user_id)
                                                 <a href="javascript:void(0);"
-                                                    class="btn primary-btn btn-block fw600 text-white"
-                                                    onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">JOIN</a>
+                                                   class="btn primary-btn btn-block fw600 text-white"
+                                                   onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">JOIN</a>
                                             @else
                                                 <a href="{{ route('shop.visit', $community->slug) }}"
-                                                    class="btn primary-btn btn-block fw600 text-white">JOIN</a>
+                                                   class="btn primary-btn btn-block fw600 text-white">JOIN</a>
                                             @endif
 
                                         </div>
@@ -165,11 +170,12 @@
                 <div class="row justify-content-center">
                     <div class="col-md-9 px-0">
                         <div class="px-4 py-5 text-center">
-                            <h5 class="text-white mb-3 fw600">Not able to find your community? <br />
+                            <h5 class="text-white mb-3 fw600">Not able to find your community? <br/>
                                 Request to get started now.
                             </h5>
 
-                            <p class="text-white fw500 mb-4">Ping us here and we will get your community setup in minutes.
+                            <p class="text-white fw500 mb-4">Ping us here and we will get your community setup in
+                                minutes.
                             </p>
                             <a href="https://uh19vww4t9p.typeform.com/to/ZuY8xtQq" target="_blank">
                                 <button type="button" class="btn mt-3">Create Community</button>
@@ -183,14 +189,15 @@
         <div class="py-5">
             <div class="container mb-3">
                 <h4 class="fw700 text-center">Why communities love <i
-                        class="fa fa-heart animated faa-pulse primary-color"></i> SafeQU?</h4>
+                            class="fa fa-heart animated faa-pulse primary-color"></i> SafeQU?</h4>
 
                 <div class="row justify-content-center pt-3">
                     <div class="col-md-7 light-bg">
                         <div class="testimonials owl-carousel owl-theme">
                             <div class="item p-4 px-md-5">
                                 <i class="fad fa-quote-left fa-3x mb-3"></i>
-                                <p class="body-txt text-center font-italic">SafeQU gives me a business class experience in
+                                <p class="body-txt text-center font-italic">SafeQU gives me a business class experience
+                                    in
                                     my grocery shopping.</p>
 
                                 <p class="fw700 text-center">NK
@@ -203,7 +210,8 @@
                             </div>
                             <div class="item p-4 px-md-5">
                                 <i class="fad fa-quote-left fa-3x mb-3"></i>
-                                <p class="body-txt text-center font-italic">Love all your produce….Avocados, Passion Fruits
+                                <p class="body-txt text-center font-italic">Love all your produce….Avocados, Passion
+                                    Fruits
                                     and Strawberries. Most of all your customer attention to detail. Thanks!</p>
 
                                 <p class="fw700 text-center">SK
@@ -231,7 +239,8 @@
                                 <i class="fad fa-quote-left fa-3x mb-3"></i>
                                 <p class="body-txt text-center font-italic">Thankyou
                                     <a href="https://www.instagram.com/safequ.india/" target="_blank">
-                                        <ins class="primary-color">@safequ.india</ins></a> for introducing me to the
+                                        <ins class="primary-color">@safequ.india</ins>
+                                    </a> for introducing me to the
                                     brilliant farm fresh produce and the weekly salad subscription service. The Romaine
                                     Lettuce particularly felt like it had been picked from my back garden
                                 </p>
@@ -253,7 +262,7 @@
 
         <!-- Change Community Modal Starts -->
         <div class="modal fade changeCommunityModal" id="changeCommunityModal" tabindex="-1"
-            aria-labelledby="changeCommunityModalLabel" aria-hidden="true">
+             aria-labelledby="changeCommunityModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -270,7 +279,8 @@
                                     <h6> Are you sure you want to leave {{ session()->get('shop_name') }}
                                         community ? </h6>
                                     <p class="mb-0">
-                                        <i class="fad primary-color fa-exclamation-circle fsize14" aria-hidden="true"></i>
+                                        <i class="fad primary-color fa-exclamation-circle fsize14"
+                                           aria-hidden="true"></i>
                                         <span class="fsize12 body-txt ordered-qty"> Cart items will get removed.
                                         </span>
                                     </p>
@@ -287,13 +297,12 @@
             </div>
         </div>
         <!-- Change Community Modal Ends -->
-
     </main>
 @endsection
 
 @section('script')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             $('.carousel').carousel({
                 interval: 7000,
@@ -340,7 +349,9 @@
                 smartSpeed: 700,
                 items: 1,
                 navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"]
-            })
+            });
+
+            $("#tykeModal").modal('show');
         })
 
         function confrimCommunityChange(url) {
