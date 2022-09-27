@@ -23,8 +23,8 @@ class AdminController extends Controller
     {
         CoreComponentRepository::initializeCache();
         $root_categories = Category::where('level', 0)->get();
-        $from = date('d-m-Y', strtotime('-29 days'));
-        $to = date('d-m-Y');
+        $from = date('01-m-Y');
+        $to = date('t-m-Y');
 //        $cached_data = Cache::remember('cached_data', 3600, function () use ($to, $from, $root_categories) {
         if ($request->date != null) {
             $from = explode(" to ", $request->date)[0];
