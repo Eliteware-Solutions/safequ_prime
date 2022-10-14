@@ -461,7 +461,7 @@
                 }
             });
 
-            $("#tykeModal").modal('show');
+            // $("#tykeModal").modal('show');
 
         });
 

@@ -41,27 +41,27 @@
             </div>
         </div>
 
-        <section class="tyke_subscription">
-            <div class="container">
-                <div class="row ">
-                    <div class="col-lg-4">
-                        <h1 class="fw800">Love what<span class="fw800 primary-color">we do?</span></h1>
-                    </div>
-                    <div class="col-lg-8">
-                        <p>Join us on our growth journey to empower thousands of Indian farmers and make farm to table a
-                            reality for millions of urban Indian households.</p>
-                        <div class="link">
-                            <a href="https://www.tykeinvest.com/campaign/safequ-dMZtGjbz" target="_blank">Subscribe to our Tyke Campaign<span><i class="la la-arrow-right la-2x ml-3"></i></span></a>
-                            <div class="logos">
-                                <img src="{{ static_asset('assets/img/safequ-logo.png') }}">
-                                <img src="{{ static_asset('assets/img/tyke/logo.png') }}">
-                            </div>
-                        </div>
-                    </div>
+{{--        <section class="tyke_subscription">--}}
+{{--            <div class="container">--}}
+{{--                <div class="row ">--}}
+{{--                    <div class="col-lg-4">--}}
+{{--                        <h1 class="fw800">Love what<span class="fw800 primary-color">we do?</span></h1>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-lg-8">--}}
+{{--                        <p>Join us on our growth journey to empower thousands of Indian farmers and make farm to table a--}}
+{{--                            reality for millions of urban Indian households.</p>--}}
+{{--                        <div class="link">--}}
+{{--                            <a href="https://www.tykeinvest.com/campaign/safequ-dMZtGjbz" target="_blank">Subscribe to our Tyke Campaign<span><i class="la la-arrow-right la-2x ml-3"></i></span></a>--}}
+{{--                            <div class="logos">--}}
+{{--                                <img src="{{ static_asset('assets/img/safequ-logo.png') }}">--}}
+{{--                                <img src="{{ static_asset('assets/img/tyke/logo.png') }}">--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
 
-                </div>
-            </div>
-        </section>
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </section>--}}
 
         <div class="light-bg py-5">
             <div class="container pt-3 services">
@@ -373,7 +373,7 @@
                 navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"]
             });
 
-            $("#tykeModal").modal('show');
+            // $("#tykeModal").modal('show');
         })
 
         function confrimCommunityChange(url) {
