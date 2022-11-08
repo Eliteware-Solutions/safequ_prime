@@ -147,3 +147,6 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ----------------------------
 ALTER TABLE `product_stocks`
 ADD COLUMN `is_best_selling` int(1) NULL DEFAULT 0 AFTER `est_shipping_days`;
+
+-- Category slug updated
+UPDATE `categories` SET `slug` = 'flowers' WHERE `categories`.`id` = 24;
