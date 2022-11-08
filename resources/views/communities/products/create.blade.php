@@ -157,6 +157,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row pt-3">
+                            <label class="col-md-6 col-from-label">{{translate('Best Selling Product')}}</label>
+                            <div class="col-md-6">
+                                <label class="aiz-switch aiz-switch-success mb-0">
+                                    <input type="checkbox" name="is_best_selling" value="1">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

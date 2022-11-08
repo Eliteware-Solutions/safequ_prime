@@ -429,6 +429,7 @@ class WholesaleService
         $product_stock->sku = $request->sku;
         $product_stock->qty = $request->current_stock;
         $product_stock->est_shipping_days = $request->est_shipping_days;
+        $product_stock->is_best_selling = $request->is_best_selling;
 
         if (intval($seller_id) > 0) {
             $product_stock->seller_id = $seller_id;
@@ -488,6 +489,7 @@ class WholesaleService
         $product_stock->sku = $request->sku;
         $product_stock->qty = $request->current_stock;
         $product_stock->est_shipping_days = $request->est_shipping_days;
+        $product_stock->is_best_selling = $request->is_best_selling;
         if (intval($seller_id) > 0) {
             $product_stock->seller_id = $seller_id;
         }
