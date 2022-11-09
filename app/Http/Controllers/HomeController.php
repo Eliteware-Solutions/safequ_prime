@@ -83,7 +83,9 @@ class HomeController extends Controller
             }
         }
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined'));
+        $seller = Seller::findOrfail(2);
+
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined', 'seller'));
     }
 
     public function login()
@@ -334,22 +336,22 @@ class HomeController extends Controller
 
     public function shop($slug)
     {
-        if (!Auth::check()) {
+        /*if (!Auth::check()) {
             session(['link' => route('shop.visit', $slug)]);
             return redirect()->route('user.registration');
-        }
+        }*/
         $shop = Shop::where('slug', $slug)->first();
 
         if ($shop != null) {
             // User Joining community
-            $user = User::findOrFail(auth()->user()->id);
+            /*$user = User::findOrFail(auth()->user()->id);
             if (intval($user->joined_community_id) > 0 && $user->joined_community_id != $shop->user_id) {
                 $user_id = auth()->user()->id;
                 Cart::where('user_id', $user_id)->delete();
-            }
+            }*/
 
-            $user->joined_community_id = $shop->user_id;
-            $user->save();
+//            $user->joined_community_id = $shop->user_id;
+//            $user->save();
 
             request()->session()->put('shop_slug', $shop->slug);
             request()->session()->put('shop_name', $shop->name);
@@ -384,7 +386,7 @@ class HomeController extends Controller
 
             $cart = [];
             $checkout_total = 0;
-            $cart_data = Cart::where('user_id', auth()->user()->id)->get();
+            /*$cart_data = Cart::where('user_id', auth()->user()->id)->get();
             foreach ($cart_data AS $cart_val) {
                 $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
                 $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
@@ -400,7 +402,7 @@ class HomeController extends Controller
                 $cart[$cart_val->product_stock_id]['price'] = $price;
                 $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
                 $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
-            }
+            }*/
 
             return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
         }
