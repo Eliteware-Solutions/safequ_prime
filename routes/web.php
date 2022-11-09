@@ -93,6 +93,7 @@ Route::get('/product/{slug}', 'HomeController@product')->name('product');
 Route::post('/product/variant_price', 'HomeController@variant_price')->name('products.variant_price');
 Route::get('/shop/{slug}', 'HomeController@shop')->name('shop.visit');
 Route::get('/shop/{slug}/{type}', 'HomeController@filter_shop')->name('shop.visit.type');
+Route::get('/shopfilter/{cat}', 'HomeController@product_filter')->name('shop.filter');
 
 Route::get('/cart', 'CartController@index')->name('cart');
 Route::post('/cart/show-cart-modal', 'CartController@showCartModal')->name('cart.showCartModal');

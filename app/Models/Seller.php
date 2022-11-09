@@ -33,4 +33,9 @@ class Seller extends Model
     {
         return $this->hasMany(ProductStock::class)->with('product')->where('purchase_end_date', '<=', date('Y-m-d H:i:s'))->whereDate('purchase_end_date', date('Y-m-d'));
     }
+
+    public function best_selling_products_purchase_started()
+    {
+        return $this->hasMany(ProductStock::class)->with('product')->where('is_best_selling', 1)->where('purchase_start_date', '<=', date('Y-m-d H:i:s'))->where('purchase_end_date', '>=', date('Y-m-d H:i:s'))->orderBy('purchase_end_date');
+    }
 }
