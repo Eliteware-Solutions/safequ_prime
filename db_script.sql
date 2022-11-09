@@ -139,3 +139,14 @@ CREATE TABLE `archive_product_stocks`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+-- ----------------------------
+-- Field aded for Best Selling products Dt: 29-6-22
+-- ----------------------------
+ALTER TABLE `product_stocks`
+ADD COLUMN `is_best_selling` int(1) NULL DEFAULT 0 AFTER `est_shipping_days`;
+
+-- Category slug updated
+UPDATE `categories` SET `slug` = 'flowers' WHERE `categories`.`id` = 24;

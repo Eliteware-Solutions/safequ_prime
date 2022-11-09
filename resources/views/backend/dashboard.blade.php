@@ -10,7 +10,7 @@
             </div>
         </div>
     @endif
-    @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
         <form class="" action="" id="dashboard_filter" method="GET">
             <div class="row gutters-10">
                 <div class="col-md-12">
@@ -157,7 +157,7 @@
         </div>
     @endif
 
-    @if(Auth::user()->user_type == 'admin' || in_array('1', json_decode(Auth::user()->staff->role->permissions)))
+    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
         <div class="row gutters-10">
             <div class="col-md-12">
                 <div class="card">

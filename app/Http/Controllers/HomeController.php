@@ -61,7 +61,29 @@ class HomeController extends Controller
 
         $communities = Shop::limit(10)->get();
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities'));
+
+        /* ----------------------
+        Best selling products from Lodha Park only ( Seller Id = 2 )
+        ---------------------- */
+
+        $parentCategories = Category::where('parent_id', 0)->get();
+
+        $best_selling_products = array();
+
+        foreach ($parentCategories as $cat) {
+            $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+                $query->where('parent_category_id', $cat->id);
+            })->where('is_best_selling', 1)->where('seller_id', 2)->inRandomOrder()->limit(8)->get();
+        }
+
+        $best_selling_products_combined = array();
+        foreach ($best_selling_products as $prd){
+            foreach($prd as $val){
+                $best_selling_products_combined[] = $val;
+            }
+        }
+
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined'));
     }
 
     public function login()
@@ -369,7 +391,7 @@ class HomeController extends Controller
                 $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
 
                 $price = $cart_val->price;
-                if ($cart_val->product->wholesale_product) {
+                if ($cart_val->product_stock) {
                     $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
                     if ($wholesalePrice) {
                         $price = $wholesalePrice->price;
