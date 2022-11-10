@@ -46,15 +46,9 @@
       <div class="content  bgcream-product ">
         <div class="container px-0">
           <div class="row justify-content-center ">
-            <input type="hidden" id="cart_data" value="{{ json_encode($cart) }}"> @if ($categories && (count($products_purchase_expired) > 0 || count($products_purchase_started) > 0))
-            <!-- <div class="col-12 pb-md-5 pb-4 px-2"><div class="srch-fltr-card mb-md-0 mb-2"><ul class="item-tags pb-3 mb-0 flex-acenter-jbtw"><li class="active_filter filter-button" data-filter="all"> All</li>
+            <input type="hidden" id="cart_data" value="{{ json_encode($cart) }}">
 
-                                    @foreach ($categories as $key => $cat)
-                                        <li class="filter-button mr-1" data-filter="{{ $cat['filter'] }}">
-                                            {{ $cat['name'] }}
-                                        </li>
-                                    @endforeach
-                                </ul></div></div> -->
+              @if ($categories && count($products_purchase_started) > 0)
 
                 <section class="lodha_nestedtab">
                     <div class="container">
@@ -130,6 +124,7 @@
                                                     if (count($cart) > 0 && isset($cart[$product->id])) {
                                                         $cart_qty = $cart[$product->id]['qty'];
                                                     }
+                                                    $addCartQty = $cart_qty + 1;
 
                                                     $product_total = 0;
                                                     if (count($cart) > 0 && isset($cart[$product->id])) {
@@ -158,7 +153,7 @@
                                                                 <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
                                                                 <div class="cartbtn">
                                                                     <img src="../public/assets/img/carts.svg" class="cart" alt="cart">
-                                                                    <a href="#" class="cartbtn"> Add to Cart</a>
+                                                                    <a href="javacript:;" class="cartbtn" onclick="addToCart({{ $product->product->id }}, {{ $product->id }}, {{ $addCartQty }});"> Add to Cart</a>
                                                                 </div>
 
                                                                 <div class="dlever">
@@ -180,6 +175,28 @@
                                         <!-- second tab second dot -->
                                         <div class="row ">
                                             @foreach ($products_purchase_started as $product)
+                                                @php
+                                                    $cart_qty = 0;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $cart_qty = $cart[$product->id]['qty'];
+                                                    }
+                                                    $addCartQty = $cart_qty + 1;
+
+                                                    $product_total = 0;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $product_total = $cart[$product->id]['total'];
+                                                    }
+
+                                                    $product_price = $product->price;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $product_price = $cart[$product->id]['price'];
+                                                    }
+
+                                                    $qty_unit_main = $product->product->unit;
+                                                    if (floatval($product->product->min_qty) < 1) {
+                                                            $qty_unit_main = (1000 * floatval($product->product->min_qty)) . ' ' . $product->product->secondary_unit;
+                                                    }
+                                                @endphp
                                                 <div class="col-lg-6 filter {{ $product->product->category->slug }} ">
                                                     <div class=" tab_horizontal_card">
                                                         <div class="tab_hori_inr">
@@ -191,7 +208,7 @@
                                                                 <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
                                                                 <div class="cartbtn">
                                                                     <img src="../public/assets/img/carts.svg" class=" cart" alt="cart">
-                                                                    <a href="#" class="cartbtn"> Add to Cart</a>
+                                                                    <a href="javacript:;" class="cartbtn"> Add to Cart</a>
                                                                 </div>
 
                                                                 <div class="dleverdt">
@@ -207,16 +224,16 @@
                                                         <div class="countitem">
                                                             <div class="input-group w-auto counterinput">
                                                                 <input type="button" value="-"
-                                                                       class="button-minus   icon-shape icon-sm  lftcount"
-                                                                       data-field="quantity" data-product_id="39"
-                                                                       data-product_stock_id="10975">
-                                                                <input type="number" step="1" max="10" value="0"
+                                                                       class="button-minus  icon-shape icon-sm lftcount"
+                                                                       data-field="quantity" data-product_id="{{ $product->product->id }}"
+                                                                       data-product_stock_id="{{ $product->id }}" onclick="decrementValue($(this))">
+                                                                <input type="number" step="1" min="0" max="10" value="{{ $cart_qty }}"
                                                                        name="quantity" id="quantity"
                                                                        class="quantity-field border-0 text-center w-25">
                                                                 <input type="button" value="+"
                                                                        class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                       data-field="quantity" data-product_id="39"
-                                                                       data-product_stock_id="10975">
+                                                                       data-field="quantity" data-product_id="{{ $product->product->id }}"
+                                                                       data-product_stock_id="{{ $product->id }}" onclick="incrementValue($(this))">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -261,7 +278,7 @@
             </div>
         </div>
 
-     <div class="container">
+<!--        <div class="container">
             <div class="row ">
                 <div class="col-12 px-0">
                     <div class="sticky-bottom
@@ -275,7 +292,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="sticky-stopper"></div>
 <!--
         <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
@@ -295,10 +312,10 @@
 
 @section('script')
 <script>
-     var inner = $(".sticky-bottom");
-            var elementPosTop = inner.position().top;
-            var viewportHeight = $(window).height();
-            $(window).on('scroll', function () {
+    var inner = $(".sticky-bottom");
+    var elementPosTop = inner.position().top;
+    var viewportHeight = $(window).height();
+    $(window).on('scroll', function () {
                 var scrollPos = $(window).scrollTop();
                 var elementFromTop = elementPosTop - scrollPos;
                 var bgcreheight = $('.middlesec').height();
@@ -310,309 +327,303 @@
                     inner.removeClass("sticky2");
                 }
             });
-    </script>
 
-    <script>
-        tmpCart = [];
+    let tmpCart = [];
 
-        function addToCart(url) {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: url,
-                type: 'POST',
-                data: {},
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    $('#itemModal').html('');
-                    $('#itemModal').html(response);
-                    $('#itemModal').modal('show');
-                }
-            });
+    // Tooltip
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $(document).ready(function () {
+        $('#noProductFoundFilter').hide();
+
+        if ($('#cart_data').val()) {
+            tmpCart = JSON.parse($('#cart_data').val());
         }
 
-        // Tooltip
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+        // Remaining time
+        $(".remaining-time").each(function () {
+            const currDiv = $(this);
 
-        $(document).ready(function () {
-            $(noProductFoundFilter).hide();
+            // Set the date we're counting down to
+            var countDownDate = new Date(currDiv.data("time")).getTime();
 
-            if ($('#cart_data').val()) {
-                tmpCart = JSON.parse($('#cart_data').val());
-            }
+            // Update the count down every 1 second
+            var x = setInterval(function () {
+                // Get today's date and time
+                var now = new Date().getTime();
 
-            // Remaining time
-            $(".remaining-time").each(function () {
-                const currDiv = $(this);
+                // Find the distance between now and the count down date
+                var distance = countDownDate - now;
 
-                // Set the date we're counting down to
-                var countDownDate = new Date(currDiv.data("time")).getTime();
+                // Time calculations for days, hours, minutes and seconds
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 *
+                    60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Update the count down every 1 second
-                var x = setInterval(function () {
-                    // Get today's date and time
-                    var now = new Date().getTime();
+                currDiv.find(".cnt").removeClass("active disabled");
+                currDiv.find(".days").text(days > 0 ? days : "00");
+                currDiv.find(".hours").text(hours > 0 ? hours : "00");
+                currDiv.find(".minutes").text(minutes > 0 ? minutes : "00");
+                currDiv.find(".seconds").text(seconds > 0 ? seconds : "00");
 
-                    // Find the distance between now and the count down date
-                    var distance = countDownDate - now;
-
-                    // Time calculations for days, hours, minutes and seconds
-                    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 *
-                        60));
-                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    currDiv.find(".cnt").removeClass("active disabled");
-                    currDiv.find(".days").text(days > 0 ? days : "00");
-                    currDiv.find(".hours").text(hours > 0 ? hours : "00");
-                    currDiv.find(".minutes").text(minutes > 0 ? minutes : "00");
-                    currDiv.find(".seconds").text(seconds > 0 ? seconds : "00");
-
-                    if (days > 0) {
-                        currDiv.find(".days").parent().addClass("active");
-                    } else if (days <= 0 && hours > 0) {
-                        currDiv.find(".days").parent().addClass("disabled");
-                        currDiv.find(".hours").parent().addClass("active");
-                    } else if (days <= 0 && hours <= 0 && minutes > 0) {
-                        currDiv.find(".days").parent().addClass("disabled");
-                        currDiv.find(".hours").parent().addClass("disabled");
-                        currDiv.find(".minutes").parent().addClass("active");
-                    } else if (days <= 0 && hours <= 0 && minutes > 0) {
-                        currDiv.find(".days").parent().addClass("disabled");
-                        currDiv.find(".hours").parent().addClass("disabled");
-                        currDiv.find(".minutes").parent().addClass("disabled");
-                        currDiv.find(".seconds").parent().addClass("active");
-                    } else {
-                        currDiv.find(".cnt").addClass("disabled");
-                    }
-
-                    $(".preloader_div").hide();
-                    $(".remaining-time").show();
-                }, 1000);
-            });
-
-            $(".progress-bar").each(function () {
-                let width = 0;
-                let progressCnt = 0;
-                let target = $(this).data("target");
-                let unit = $(this).data("unit");
-                let progress = $(this).data("progress");
-
-                let progressComplete = parseInt((progress * 100) / target);
-
-                const count = setInterval(() => {
-                    if (width != progressComplete) {
-                        width++;
-                        progressCnt++;
-                        $(this).css("opacity", "1");
-                        (width <= 100) ? $(this).css("width", width + "%") : '';
-                        $(this).text(progress + ' ' + unit);
-                        /*if (progressCnt <= progress) {
-                            $(this).text(progress + ' ' + unit);
-                        }*/
-                    } else {
-                        clearInterval(count);
-                    }
-                }, 15);
-            });
-
-            $(".filter-button").click(function () {
-                $('.filter-button').removeClass('active_filter');
-                $(this).addClass('active_filter');
-                let value = $(this).attr('data-filter');
-
-                if (value == "all") {
-                    //$('.filter').removeClass('hidden');
-                    $('.filter').show();
+                if (days > 0) {
+                    currDiv.find(".days").parent().addClass("active");
+                } else if (days <= 0 && hours > 0) {
+                    currDiv.find(".days").parent().addClass("disabled");
+                    currDiv.find(".hours").parent().addClass("active");
+                } else if (days <= 0 && hours <= 0 && minutes > 0) {
+                    currDiv.find(".days").parent().addClass("disabled");
+                    currDiv.find(".hours").parent().addClass("disabled");
+                    currDiv.find(".minutes").parent().addClass("active");
+                } else if (days <= 0 && hours <= 0 && minutes > 0) {
+                    currDiv.find(".days").parent().addClass("disabled");
+                    currDiv.find(".hours").parent().addClass("disabled");
+                    currDiv.find(".minutes").parent().addClass("disabled");
+                    currDiv.find(".seconds").parent().addClass("active");
                 } else {
+                    currDiv.find(".cnt").addClass("disabled");
+                }
+
+                $(".preloader_div").hide();
+                $(".remaining-time").show();
+            }, 1000);
+        });
+
+        $(".progress-bar").each(function () {
+            let width = 0;
+            let progressCnt = 0;
+            let target = $(this).data("target");
+            let unit = $(this).data("unit");
+            let progress = $(this).data("progress");
+
+            let progressComplete = parseInt((progress * 100) / target);
+
+            const count = setInterval(() => {
+                if (width != progressComplete) {
+                    width++;
+                    progressCnt++;
+                    $(this).css("opacity", "1");
+                    (width <= 100) ? $(this).css("width", width + "%") : '';
+                    $(this).text(progress + ' ' + unit);
+                    /*if (progressCnt <= progress) {
+                        $(this).text(progress + ' ' + unit);
+                    }*/
+                } else {
+                    clearInterval(count);
+                }
+            }, 15);
+        });
+
+        $(".filter-button").click(function () {
+            $('.filter-button').removeClass('active_filter');
+            $(this).addClass('active_filter');
+            let value = $(this).attr('data-filter');
+
+            if (value == "all") {
+                //$('.filter').removeClass('hidden');
+                $('.filter').show();
+            } else {
 //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
 //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
-                    $(".filter").not('.' + value).hide();
-                    $('.filter').filter('.' + value).show();
-                    if (document.querySelectorAll(".filter "+ value).length == 0) {
-                        $(noProductFoundFilter).show();
-                    }
-                }
-            });
-
-            $('.input-group').on('click', '.button-plus', function (e) {
-                incrementValue(e);
-            });
-
-            $('.input-group').on('click', '.button-minus', function (e) {
-                decrementValue(e);
-            });
-
-            // Sticky Bottom
-            var inner = $(".sticky-bottom");
-            var elementPosTop = inner.position().top;
-            var viewportHeight = $(window).height();
-            $(window).on('scroll', function () {
-                var scrollPos = $(window).scrollTop();
-                var elementFromTop = elementPosTop - scrollPos;
-                var bgcreheight = $('.middlesec').height();
-                bgcreheight = bgcreheight - 500;
-
-                if (bgcreheight >= scrollPos) {
-                    inner.addClass("sticky2");
+                $(".filter").not('.' + value).hide();
+                $('.filter').filter('.' + value).show();
+                if (document.querySelectorAll(".filter "+ value).length == 0) {
+                    $('#noProductFoundFilter').show();
                 } else {
-                    inner.removeClass("sticky2");
+                    $('#noProductFoundFilter').hide();
                 }
-            });
-
-            // $("#tykeModal").modal('show');
-
-        });
-
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 50) {
-                $('.srch-fltr-card').addClass('newClass');
-            } else {
-                $('.srch-fltr-card').removeClass('newClass');
             }
         });
 
-        function incrementValue(e) {
-            e.preventDefault();
-            var fieldName = $(e.target).data('field');
-            var productId = $(e.target).data('product_id');
-            var productStockId = $(e.target).data('product_stock_id');
-            var parent = $(e.target).closest('div');
-            var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
-            var qty = 0;
+        /*$('#repoStats2 .input-group').on('click', '.button-plus', function (e) {
+            incrementValue(e);
+        });*/
 
-            if (!isNaN(currentVal)) {
-                qty = currentVal + 1;
-                parent.find('input[name=' + fieldName + ']').val(currentVal + 1);
+        /*$('#repoStats2  .input-group').on('click', '.button-minus', function (e) {
+            decrementValue(e);
+        });*/
+
+        // Sticky Bottom
+        var inner = $(".sticky-bottom");
+        var elementPosTop = inner.position().top;
+        var viewportHeight = $(window).height();
+        $(window).on('scroll', function () {
+            var scrollPos = $(window).scrollTop();
+            var elementFromTop = elementPosTop - scrollPos;
+            var bgcreheight = $('.middlesec').height();
+            bgcreheight = bgcreheight - 500;
+
+            if (bgcreheight >= scrollPos) {
+                inner.addClass("sticky2");
             } else {
-                parent.find('input[name=' + fieldName + ']').val(0);
+                inner.removeClass("sticky2");
             }
+        });
 
-            getVariantPrice(qty, productId, productStockId);
+        // $("#tykeModal").modal('show');
+    });
+
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 50) {
+            $('.srch-fltr-card').addClass('newClass');
+        } else {
+            $('.srch-fltr-card').removeClass('newClass');
         }
+    });
 
-        function decrementValue(e) {
-            e.preventDefault();
-            var fieldName = $(e.target).data('field');
-            var productId = $(e.target).data('product_id');
-            var productStockId = $(e.target).data('product_stock_id');
-            var parent = $(e.target).closest('div');
-            var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
-            var qty = 0;
+    $( window ).on( "load", function() {
+        $( ".alltabs" ).clone().prependTo( ".rightDiv" );
+    });
 
-            if (!isNaN(currentVal) && currentVal > 0) {
-                qty = currentVal - 1;
-                parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
-            } else {
-                parent.find('input[name=' + fieldName + ']').val(0);
-            }
+    $(".tabdots2").mouseover(function () {
+        old_src = $(this).attr("../public/assets/img/inrtab2dot.svg");
+        $(this).attr("src", "../public/assets/img/dot2.svg");
+    }).mouseout(function () {
+        $(this).attr("src", "../public/assets/img/inrtab2dot.svg");
+    });
 
-            getVariantPrice(qty, productId, productStockId);
-        }
+    $(".tabdots1").mouseover(function () {
+        old_src = $(this).attr("./public/assets/img/dots2hvr.png");
+        $(this).attr("src", "../public/assets/img/inrtab1dot.svg.");
+    }).mouseout(function () {
+        $(this).attr("src", "../public/assets/img/dots2hvr.png");
+    });
 
-        function getVariantPrice(qty, productId, productStockId) {
+    function addToCart(product_id, product_stock_id, qty) {
+        if (product_id > 0 && product_stock_id > 0 && qty > 0) {
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: '{{ route('products.variant_price') }}',
-                data: {id: productId, stock_id: productStockId, quantity: qty},
+                url: '{{ route('cart.addToCart') }}',
+                data: {id: product_id, product_stock_id: product_stock_id, quantity: qty},
                 success: function (data) {
-                    if (data.total_price != '') {
-                        $('#total_' + productStockId).val(data.total_price);
+                    if (data.status == 1) {
+                        updateNavCart(data.cart_count);
+                        AIZ.plugins.notify('success', '{{ translate('Added to Cart') }}');
+                        {{--                            window.location.replace("{{ route('cart') }}");--}}
                     } else {
-                        $('#total_' + productStockId).val(0);
+                        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                     }
-                    $('#unit_display_' + productStockId).html('');
-                    $('#unit_display_' + productStockId).html(data.unit_price + ' / ' + $('#secondary_unit_' + productStockId).val());
-
-                    calculateCheckOutTotal(qty, productId, productStockId);
                 }
             });
         }
+    }
 
-        function calculateCheckOutTotal(qty, productId, productStockId) {
-            let checkoutTotal = 0.00;
-            $('.product_total').each(function (k, value) {
-                checkoutTotal = (parseFloat($(value).val()) + parseFloat(checkoutTotal)).toFixed(2);
-            });
-            if (checkoutTotal > 0) {
-                $('#checkout-btn').removeClass('pointer-none');
-            } else {
-                $('#checkout-btn').addClass('pointer-none');
-            }
-            $('#checkout-amount').html('');
-            $('#checkout-amount').html('( <ins class="currency-symbol">₹</ins> ' + checkoutTotal + ' )');
+    function incrementValue(obj) {
+        let fieldName = $(obj).data('field');
+        let productId = $(obj).data('product_id');
+        let productStockId = $(obj).data('product_stock_id');
+        let parent = $(obj).closest('div');
+        let currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
+        let qty = 0;
 
-            if (checkoutTotal > 0) {
-                tmpCart[productStockId] = {'qty': qty, 'product_id': productId, 'product_stock_id': productStockId};
-            } else {
-                tmpCart = [];
-            }
+        if (!isNaN(currentVal)) {
+            qty = currentVal + 1;
+            parent.find('input[name=' + fieldName + ']').val(currentVal + 1);
+        } else {
+            parent.find('input[name=' + fieldName + ']').val(0);
         }
 
-        function addProductToCart() {
-            tmpCart = $.map(tmpCart, function (value, index) {
-                return [value];
-            });
+        addToCart(productId, productStockId, qty);
+    }
 
-            let cartData = [];
-            $(tmpCart).each(function (k, tmp) {
-                if (tmp) {
-                    cartData.push(tmp);
+    function decrementValue(obj) {
+        let fieldName = $(obj).data('field');
+        let productId = $(obj).data('product_id');
+        let productStockId = $(obj).data('product_stock_id');
+        let parent = $(obj).closest('div');
+        let currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
+        let qty = 0;
+
+        if (!isNaN(currentVal) && currentVal > 0) {
+            qty = currentVal - 1;
+            parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
+        } else {
+            parent.find('input[name=' + fieldName + ']').val(0);
+        }
+
+        addToCart(productId, productStockId, qty);
+    }
+
+    function getVariantPrice(qty, productId, productStockId) {
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
+            url: '{{ route('products.variant_price') }}',
+            data: {id: productId, stock_id: productStockId, quantity: qty},
+            success: function (data) {
+                if (data.total_price != '') {
+                    $('#total_' + productStockId).val(data.total_price);
+                } else {
+                    $('#total_' + productStockId).val(0);
+                }
+                $('#unit_display_' + productStockId).html('');
+                $('#unit_display_' + productStockId).html(data.unit_price + ' / ' + $('#secondary_unit_' + productStockId).val());
+
+                calculateCheckOutTotal(qty, productId, productStockId);
+            }
+        });
+    }
+
+    function calculateCheckOutTotal(qty, productId, productStockId) {
+        let checkoutTotal = 0.00;
+        $('.product_total').each(function (k, value) {
+            checkoutTotal = (parseFloat($(value).val()) + parseFloat(checkoutTotal)).toFixed(2);
+        });
+        if (checkoutTotal > 0) {
+            $('#checkout-btn').removeClass('pointer-none');
+        } else {
+            $('#checkout-btn').addClass('pointer-none');
+        }
+        $('#checkout-amount').html('');
+        $('#checkout-amount').html('( <ins class="currency-symbol">₹</ins> ' + checkoutTotal + ' )');
+
+        if (checkoutTotal > 0) {
+            tmpCart[productStockId] = {'qty': qty, 'product_id': productId, 'product_stock_id': productStockId};
+        } else {
+            tmpCart = [];
+        }
+    }
+
+    function addProductToCart() {
+        tmpCart = $.map(tmpCart, function (value, index) {
+            return [value];
+        });
+
+        let cartData = [];
+        $(tmpCart).each(function (k, tmp) {
+            if (tmp) {
+                cartData.push(tmp);
+            }
+        });
+
+        if (cartData.length > 0) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: '{{ route('cart.bulkAddToCart') }}',
+                data: {data: cartData},
+                success: function (data) {
+                    if (data.status == 1) {
+                        window.location.replace("{{ route('cart') }}");
+                    } else {
+                        AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                    }
                 }
             });
-
-            if (cartData.length > 0) {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "POST",
-                    url: '{{ route('cart.bulkAddToCart') }}',
-                    data: {data: cartData},
-                    success: function (data) {
-                        if (data.status == 1) {
-                            window.location.replace("{{ route('cart') }}");
-                        } else {
-                            AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
-                        }
-                    }
-                });
-            }
         }
+    }
 
-    </script>
-   <script>
- $( window ).on( "load", function() {
-
-        $( ".alltabs" ).clone().prependTo( ".rightDiv" );
-    });
-</script>
-<script>
-     $(".tabdots2").mouseover(function () {
-        old_src = $(this).attr("../public/assets/img/inrtab2dot.svg");
-        $(this).attr("src", "../public/assets/img/dot2.svg");
-    }).mouseout(function () {
-        $(this).attr("src", "../public/assets/img/inrtab2dot.svg");
-
-    });
-</script>
-<script>
-     $(".tabdots1").mouseover(function () {
-        old_src = $(this).attr("./public/assets/img/dots2hvr.png");
-        $(this).attr("src", "../public/assets/img/inrtab1dot.svg.");
-    }).mouseout(function () {
-        $(this).attr("src", "../public/assets/img/dots2hvr.png");
-
-    });
 </script>
 
 @endsection

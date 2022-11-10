@@ -386,23 +386,29 @@ class HomeController extends Controller
 
             $cart = [];
             $checkout_total = 0;
-            /*$cart_data = Cart::where('user_id', auth()->user()->id)->get();
-            foreach ($cart_data AS $cart_val) {
-                $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
-                $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
-                $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
-
-                $price = $cart_val->price;
-                if ($cart_val->product_stock) {
-                    $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
-                    if ($wholesalePrice) {
-                        $price = $wholesalePrice->price;
-                    }
+            if (session('temp_user_id')) {
+                if (Auth::check()) {
+                    $cart_data = Cart::where('user_id', auth()->user()->id)->get();
+                } else {
+                    $cart_data = Cart::where('temp_user_id', session('temp_user_id'))->get();
                 }
-                $cart[$cart_val->product_stock_id]['price'] = $price;
-                $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
-                $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
-            }*/
+                foreach ($cart_data AS $cart_val) {
+                    $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
+                    $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
+                    $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
+
+                    $price = $cart_val->price;
+                    if ($cart_val->product_stock) {
+                        $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
+                        if ($wholesalePrice) {
+                            $price = $wholesalePrice->price;
+                        }
+                    }
+                    $cart[$cart_val->product_stock_id]['price'] = $price;
+                    $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
+                    $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
+                }
+            }
 
             return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
         }

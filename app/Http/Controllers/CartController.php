@@ -78,7 +78,7 @@ class CartController extends Controller
         }
 
         $data['product_id'] = $product->id;
-        $data['product_stock_id'] = $request->productStockId;
+        $data['product_stock_id'] = $request->product_stock_id;
         $data['owner_id'] = $product->user_id;
 
         $str = '';
@@ -159,7 +159,7 @@ class CartController extends Controller
                 }
             }
 
-            $data['quantity'] = $request['quantity'];
+            $data['quantity'] = $request->quantity;
             $data['price'] = $price;
             $data['tax'] = $tax;
             //$data['shipping'] = 0;
@@ -169,7 +169,7 @@ class CartController extends Controller
             $data['cash_on_delivery'] = $product->cash_on_delivery;
             $data['digital'] = $product->digital;
 
-            if ($request['quantity'] == null) {
+            if ($request->quantity == null) {
                 $data['quantity'] = 1;
             }
 
@@ -191,7 +191,7 @@ class CartController extends Controller
                         );
                     }
 
-                    if ($cartItem['product_id'] == $request->id && $cartItem['product_stock_id'] == $request->productStockId) {
+                    if ($cartItem['product_id'] == $request->id && $cartItem['product_stock_id'] == $request->product_stock_id) {
                         $product_stock = $cart_product->stocks->where('variant', $str)->first();
                         $quantity = $product_stock->qty;
                         /*if($quantity < $cartItem['quantity'] + $request['quantity']){
@@ -202,10 +202,11 @@ class CartController extends Controller
                                 'nav_cart_view' => view('frontend.partials.cart')->render(),
                             );
                         }*/
+
                         if (($str != null && $cartItem['variation'] == $str) || $str == null) {
                             $foundInCart = true;
-
-                            $cartItem['quantity'] += $request['quantity'];
+//                            $cartItem['quantity'] += $request['quantity'];
+                            $cartItem['quantity'] = $request->quantity;
 
                             if ($cart_product->wholesale_product) {
                                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
@@ -215,7 +216,6 @@ class CartController extends Controller
                             }
 
                             $cartItem['price'] = $price;
-
                             $cartItem->save();
                         }
                     }
@@ -550,6 +550,9 @@ class CartController extends Controller
         if (auth()->user() != null) {
             $user_id = Auth::user()->id;
             $carts = Cart::where('user_id', $user_id)->get();
+            $cart_count = $carts->count();
+        } else {
+            $carts = Cart::where('temp_user_id', session('temp_user_id'))->get();
             $cart_count = $carts->count();
         }
 
