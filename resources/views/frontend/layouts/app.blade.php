@@ -281,6 +281,28 @@
             }
         }
 
+        function addToCart(product_id, product_stock_id, qty) {
+            if (product_id > 0 && product_stock_id > 0 && qty > 0) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: '{{ route('cart.addToCart') }}',
+                    data: {id: product_id, product_stock_id: product_stock_id, quantity: qty},
+                    success: function (data) {
+                        if (data.status == 1) {
+                            updateNavCart(data.cart_count);
+                            AIZ.plugins.notify('success', '{{ translate('Added to Cart') }}');
+                            {{--                            window.location.replace("{{ route('cart') }}");--}}
+                        } else {
+                            AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                        }
+                    }
+                });
+            }
+        }
+
         function getCartCount(){
             $.post('{{ route('cart.cartCount') }}', {
                 _token   :  AIZ.data.csrf

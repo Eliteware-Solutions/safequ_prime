@@ -19,7 +19,7 @@
                         @if(count($carts) > 0)
                             <h6 class="fw600 title-txt pb-2 mb-2">My Exotic Farm Fresh Order List</h6>
 
-                            @if ($user_data && $user_data->address != '')
+                            @if ($user_data && isset($user_data->address) && $user_data->address != '')
                                 <div class="delivery-addr p-3 flex-astart-jstart mb-3">
                                     <input type="checkbox" name="delivery_address" id="delivery_address" class="mr-2"
                                            checked/>
@@ -275,7 +275,7 @@
                                         </h5>
                                     </div>
                                     <div>
-                                        @if ($user_data && $user_data->address == '')
+                                        @if ($user_data && isset($user_data->address) && $user_data->address == '')
                                             <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
                                                title="Please complete your profile before attempting to make payment">
                                                 <i class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
@@ -284,7 +284,7 @@
                                         <button type="button" id="btn_pay_now"
                                                 class="ml-2 btn primary-btn btn-round py-1"
                                                 onclick="submitOrder(this)"
-                                                @if (count($carts) == 0 || $user_data->address == '') disabled @endif>
+                                                @if (count($carts) == 0) disabled @endif>
                                             Pay Now
                                         </button>
                                     </div>
