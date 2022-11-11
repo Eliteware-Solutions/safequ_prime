@@ -840,6 +840,7 @@ button.btn-before-none::before,
 #joinCommunity .card-data h6 {
     font-size: 0.925rem;
 }
+
 #joinCommunity .card-data p {
     font-size: 0.875rem !important;
 }
@@ -4467,6 +4468,37 @@ a.loadbtn {
 
 .tab_horizontal_card_detailmobile_hr_card {
     padding-left: 20px;
+}
+
+
+/* Checkout Form */
+form.checkout-form .form-control {
+    border-radius: 2px;
+    border-color: #dddddd;
+    height: calc(1.5em + 1.15rem);
+    color: #767676;
+}
+form.checkout-form .label-radio {
+  border: 1px solid #dddddd;
+}
+
+form.checkout-form .form-control:focus,
+form.checkout-form .form-control:focus-visible {
+    border-color: #f55c1f70;
+    box-shadow: 0 0 8px -1px #f55c1f98;
+}
+
+.form-control::placeholder {
+    color: #a1a1a1;
+    opacity: 1;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #a1a1a1;
+}
+
+.form-control::-ms-input-placeholder {
+    color: #a1a1a1;
 }
 
 /* ----------------media query CSS ---------------- */
