@@ -64,7 +64,7 @@
         {{-- </section> --}}
 
 
-        @if(count($best_selling_products_combined) > 0)
+        @if (count($best_selling_products_combined) > 0)
             <section class="tabslidersec">
                 <div class="container">
                     <div class="row">
@@ -81,14 +81,14 @@
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs tabslider" role="tablist">
                                     <li role="presentation">
-                                        <a id="eventBtn" class="active" href="#all_prd" aria-controls="all_prd" role="tab"
-                                           data-toggle="tab">all</a>
+                                        <a id="eventBtn" class="active" href="#all_prd" aria-controls="all_prd"
+                                            role="tab" data-toggle="tab">all</a>
                                     </li>
                                     @foreach ($parentCategories as $p_category)
                                         <li role="presentation">
                                             <a href="#category_{{ $p_category->id }}" class="sec"
-                                               aria-controls="category_{{ $p_category->id }}" role="tab"
-                                               data-toggle="tab">{{ $p_category->name }}</a>
+                                                aria-controls="category_{{ $p_category->id }}" role="tab"
+                                                data-toggle="tab">{{ $p_category->name }}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -116,26 +116,28 @@
 
                                                     $qty_unit_main = $prd_val->product->unit;
                                                     if (floatval($prd_val->product->min_qty) < 1) {
-                                                            $qty_unit_main = (1000 * floatval($prd_val->product->min_qty)) . ' ' . $prd_val->product->secondary_unit;
+                                                        $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
                                                     }
                                                 @endphp
                                                 <div class="tab_slider_card">
                                                     <div>
                                                         <div class="card-img mb-1">
                                                             <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                                 alt="{{ $prd_val->product->getTranslation('name') }}"
-                                                                 class="img-rounded">
+                                                                data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                alt="{{ $prd_val->product->getTranslation('name') }}"
+                                                                class="img-rounded">
                                                         </div>
                                                         <div class="tabcard-detail">
                                                             <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
                                                             <p class="titlecard">{{ $prd_val->product->name ?? '-' }}</p>
-                                                            <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
+                                                            <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}
+                                                            </p>
                                                             <div class="cartbtn">
                                                                 <img src="public/assets/img/carts.svg" class=" cart"
-                                                                     alt="cart">
-                                                                <a href="javacript:;" class="cartbtn" onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                                    alt="cart">
+                                                                <a href="javacript:;" class="cartbtn"
+                                                                    onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                                     Add to Cart
                                                                 </a>
                                                             </div>
@@ -170,27 +172,30 @@
 
                                                             $qty_unit_main = $prd_val->product->unit;
                                                             if (floatval($prd_val->product->min_qty) < 1) {
-                                                                    $qty_unit_main = (1000 * floatval($prd_val->product->min_qty)) . ' ' . $prd_val->product->secondary_unit;
+                                                                $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
                                                             }
                                                         @endphp
                                                         <div class="tab_slider_card">
                                                             <div>
                                                                 <div class="card-img mb-1">
                                                                     <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                                         data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                                         alt="{{ $prd_val->product->getTranslation('name') }}"
-                                                                         class="img-rounded">
+                                                                        data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                        alt="{{ $prd_val->product->getTranslation('name') }}"
+                                                                        class="img-rounded">
                                                                 </div>
                                                                 <div class="tabcard-detail">
                                                                     <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
-                                                                    <p class="titlecard">{{ $prd_val->product->name ?? '-' }}
+                                                                    <p class="titlecard">
+                                                                        {{ $prd_val->product->name ?? '-' }}
                                                                     </p>
-                                                                    <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
+                                                                    <p class="price">{!! single_price_web($product_price) !!} /
+                                                                        {{ $qty_unit_main }}</p>
                                                                     <div class="cartbtn">
-                                                                        <img src="public/assets/img/carts.svg" class=" cart"
-                                                                             alt="cart">
-                                                                        <a href="javacript:;" class="cartbtn" onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                                        <img src="public/assets/img/carts.svg"
+                                                                            class=" cart" alt="cart">
+                                                                        <a href="javacript:;" class="cartbtn"
+                                                                            onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                                             Add to Cart
                                                                         </a>
                                                                     </div>
@@ -211,7 +216,8 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <div class=" text-center"><a href="{{ route('shop.visit', $seller->user->shop->slug) }}" class="viewbtn mt-0">View All</a></div>
+                            <div class=" text-center"><a href="{{ route('shop.visit', $seller->user->shop->slug) }}"
+                                    class="viewbtn mt-0">View All</a></div>
                         </div>
                     </div>
                 </div>
@@ -456,12 +462,61 @@
             </div>
         </div>
         <!-- Change Community Modal Ends -->
+
+        <!-- Join Community Modal -->
+        <div class="modal fade" id="joinCommunity" tabindex="-1" aria-labelledby="joinCommunityLabel"
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title" id="joinCommunityLabel">Select Your Community</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            @foreach ($communities as $community)
+                                <div class="col-lg-4 col-md-6 px-2 py-3">
+                                    <a href="javascript:void(0);" class="position-relative"
+                                        onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">
+                                        <div class="community-card mx-auto p-3">
+                                            <div class="card-img">
+                                                @if (isset($community->user->avatar_original))
+                                                    <img src="{{ uploaded_asset($community->user->avatar_original) }}"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
+                                                        class="img-rounded" alt="{{ $community->name }}">
+                                                @else
+                                                    <img src=""
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
+                                                        class="img-rounded" alt="{{ $community->name }}">
+                                                @endif
+                                            </div>
+                                            <div class="card-data ml-2 mr-auto">
+                                                <h6 class="mb-1">{{ $community->name }}</h6>
+                                                <p class="mb-0 body-txt">{{ $community->address }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </main>
 @endsection
 
 @section('script')
     <script>
         $(document).ready(function() {
+
+            // Join Community modal trigger after Page Load
+            setTimeout(function() {
+                $('#joinCommunity').modal('show');
+            }, 2500)
 
             $('.carousel').carousel({
                 interval: 7000,
