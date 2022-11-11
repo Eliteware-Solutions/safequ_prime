@@ -73,7 +73,7 @@ class HomeController extends Controller
         foreach ($parentCategories as $cat) {
             $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
                 $query->where('parent_category_id', $cat->id);
-            })->where('is_best_selling', 1)->where('seller_id', 2)->where('purchase_start_date', '<=', date('Y-m-d H:i:s'))->where('purchase_end_date', '>=', date('Y-m-d H:i:s'))->inRandomOrder()->limit(8)->get();
+            })->where('is_best_selling', 1)->where('seller_id', 2)->inRandomOrder()->limit(8)->get();
         }
 
         $best_selling_products_combined = array();
@@ -82,10 +82,18 @@ class HomeController extends Controller
                 $best_selling_products_combined[] = $val;
             }
         }
-        // Shuffle Products Array
-        $best_selling_products_combined = collect($best_selling_products_combined)->shuffle()->all();
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined'));
+        $seller = Seller::findOrfail(2);
+
+        $cart = [];
+        if (session('temp_user_id')) {
+            $cart_data = $this->get_product_cart();
+            if ($cart_data) {
+                $cart = $cart_data['cart'];
+            }
+        }
+
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined', 'seller', 'cart'));
     }
 
     public function login()
@@ -336,22 +344,22 @@ class HomeController extends Controller
 
     public function shop($slug)
     {
-        if (!Auth::check()) {
+        /*if (!Auth::check()) {
             session(['link' => route('shop.visit', $slug)]);
             return redirect()->route('user.registration');
-        }
+        }*/
         $shop = Shop::where('slug', $slug)->first();
 
         if ($shop != null) {
             // User Joining community
-            $user = User::findOrFail(auth()->user()->id);
+            /*$user = User::findOrFail(auth()->user()->id);
             if (intval($user->joined_community_id) > 0 && $user->joined_community_id != $shop->user_id) {
                 $user_id = auth()->user()->id;
                 Cart::where('user_id', $user_id)->delete();
-            }
+            }*/
 
-            $user->joined_community_id = $shop->user_id;
-            $user->save();
+            //            $user->joined_community_id = $shop->user_id;
+            //            $user->save();
 
             request()->session()->put('shop_slug', $shop->slug);
             request()->session()->put('shop_name', $shop->name);
@@ -379,7 +387,6 @@ class HomeController extends Controller
                             }
                         }
                     }
-                    $categories[$parCat->slug]['id'] = $parCat->id;
                     $categories[$parCat->slug]['name'] = $parCat->name;
                     $categories[$parCat->slug]['filter'] = implode(",.", $catFilter);
                 }
@@ -387,67 +394,49 @@ class HomeController extends Controller
 
             $cart = [];
             $checkout_total = 0;
-            $cart_data = Cart::where('user_id', auth()->user()->id)->get();
-            foreach ($cart_data as $cart_val) {
-                $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
-                $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
-                $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
-
-                $price = $cart_val->price;
-                if ($cart_val->product_stock) {
-                    $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
-                    if ($wholesalePrice) {
-                        $price = $wholesalePrice->price;
-                    }
+            if (session('temp_user_id')) {
+                $cart_data = $this->get_product_cart();
+                if ($cart_data) {
+                    $cart = $cart_data['cart'];
+                    $checkout_total = $cart_data['checkout_total'];
                 }
-                $cart[$cart_val->product_stock_id]['price'] = $price;
-                $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
-                $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
-            }
-
-            // Arrange Products Randomly
-            if (!empty($products_purchase_started)) {
-
-                foreach ($products_purchase_started as $prd_val) {
-                    $cart_qty = 0;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $cart_qty = $cart[$prd_val->id]['qty'];
-                    }
-
-                    $prd_val->cart_qty = $cart_qty;
-
-                    $product_total = 0;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $product_total = $cart[$prd_val->id]['total'];
-                    }
-
-                    $prd_val->product_total = $product_total;
-
-                    $product_price = $prd_val->price;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $product_price = $cart[$prd_val->id]['price'];
-                    }
-
-                    $prd_val->product_price = $product_price;
-
-                    $qty_unit_main = $prd_val->product->unit;
-                    if (floatval($prd_val->product->min_qty) < 1) {
-                        $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
-                    }
-
-                    $prd_val->qty_unit_main = $qty_unit_main;
-                }
-
-                $products_purchase_started = collect($products_purchase_started)->shuffle()->all();
-            }
-
-            if (!empty($products_purchase_expired)) {
-                $products_purchase_expired = collect($products_purchase_expired)->shuffle()->all();
             }
 
             return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
         }
         abort(404);
+    }
+
+    public function get_product_cart()
+    {
+        $result = array();
+        $cart = array();
+        $checkout_total = 0;
+        if (Auth::check()) {
+            $cart_data = Cart::where('user_id', auth()->user()->id)->get();
+        } else {
+            $cart_data = Cart::where('temp_user_id', session('temp_user_id'))->get();
+        }
+        foreach ($cart_data as $cart_val) {
+            $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
+            $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
+            $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
+
+            $price = $cart_val->price;
+            if ($cart_val->product_stock) {
+                $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
+                if ($wholesalePrice) {
+                    $price = $wholesalePrice->price;
+                }
+            }
+            $cart[$cart_val->product_stock_id]['price'] = $price;
+            $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
+            $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
+        }
+
+        $result['cart'] = $cart;
+        $result['checkout_total'] = $checkout_total;
+        return $result;
     }
 
     public function filter_shop($slug, $type)
@@ -455,122 +444,6 @@ class HomeController extends Controller
         $shop = Shop::where('slug', $slug)->first();
         if ($shop != null && $type != null) {
             return view('frontend.seller_shop', compact('shop', 'type'));
-        }
-        abort(404);
-    }
-
-    public function product_filter($cat)
-    {
-        if (!Auth::check()) {
-            session(['link' => route('shop.visit', $slug)]);
-            return redirect()->route('user.registration');
-        }
-        $shop = Shop::where('slug', $slug)->first();
-
-        if ($shop != null) {
-            // User Joining community
-            $user = User::findOrFail(auth()->user()->id);
-            if (intval($user->joined_community_id) > 0 && $user->joined_community_id != $shop->user_id) {
-                $user_id = auth()->user()->id;
-                Cart::where('user_id', $user_id)->delete();
-            }
-
-            $user->joined_community_id = $shop->user_id;
-            $user->save();
-
-            request()->session()->put('shop_slug', $shop->slug);
-            request()->session()->put('shop_name', $shop->name);
-
-            $seller = Seller::where('user_id', $shop->user_id)->first();
-            $products_purchase_started = isset($seller->products_purchase_started) ? $seller->products_purchase_started : [];
-            $products_purchase_expired = isset($seller->products_purchase_expired) ? $seller->products_purchase_expired : [];
-
-            $categories = [];
-            $parentCategories = Category::where('parent_id', 0)
-                ->with('childrenCategories')
-                ->get();
-            if ($parentCategories) {
-                foreach ($parentCategories as $parCat) {
-                    $catFilter = [];
-                    $catFilter[$parCat->slug] = $parCat->slug;
-                    if (!empty($parCat->childrenCategories)) {
-                        foreach ($parCat->childrenCategories as $childCat) {
-                            $catFilter[$childCat->slug] = $childCat->slug;
-
-                            if (!empty($childCat->categories)) {
-                                foreach ($childCat->categories as $chilCat2) {
-                                    $catFilter[$chilCat2->slug] = $chilCat2->slug;
-                                }
-                            }
-                        }
-                    }
-                    $categories[$parCat->slug]['id'] = $parCat->id;
-                    $categories[$parCat->slug]['name'] = $parCat->name;
-                    $categories[$parCat->slug]['filter'] = implode(",.", $catFilter);
-                }
-            }
-
-            $cart = [];
-            $checkout_total = 0;
-            $cart_data = Cart::where('user_id', auth()->user()->id)->get();
-            foreach ($cart_data as $cart_val) {
-                $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
-                $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
-                $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
-
-                $price = $cart_val->price;
-                if ($cart_val->product_stock) {
-                    $wholesalePrice = $cart_val->product_stock->wholesalePrices->where('min_qty', '<=', $cart_val->quantity)->where('max_qty', '>=', $cart_val->quantity)->first();
-                    if ($wholesalePrice) {
-                        $price = $wholesalePrice->price;
-                    }
-                }
-                $cart[$cart_val->product_stock_id]['price'] = $price;
-                $cart[$cart_val->product_stock_id]['total'] = floatval($cart_val->quantity * $price);
-                $checkout_total = floatval($cart_val->quantity * $price) + $checkout_total;
-            }
-
-            // Arrange Products Randomly
-            if (!empty($products_purchase_started)) {
-
-                foreach ($products_purchase_started as $prd_val) {
-                    $cart_qty = 0;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $cart_qty = $cart[$prd_val->id]['qty'];
-                    }
-
-                    $prd_val->cart_qty = $cart_qty;
-
-                    $product_total = 0;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $product_total = $cart[$prd_val->id]['total'];
-                    }
-
-                    $prd_val->product_total = $product_total;
-
-                    $product_price = $prd_val->price;
-                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                        $product_price = $cart[$prd_val->id]['price'];
-                    }
-
-                    $prd_val->product_price = $product_price;
-
-                    $qty_unit_main = $prd_val->product->unit;
-                    if (floatval($prd_val->product->min_qty) < 1) {
-                        $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
-                    }
-
-                    $prd_val->qty_unit_main = $qty_unit_main;
-                }
-
-                $products_purchase_started = collect($products_purchase_started)->shuffle()->all();
-            }
-
-            if (!empty($products_purchase_expired)) {
-                $products_purchase_expired = collect($products_purchase_expired)->shuffle()->all();
-            }
-
-            return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
         }
         abort(404);
     }

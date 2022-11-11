@@ -64,127 +64,159 @@
         {{-- </section> --}}
 
 
-        <section class="tabslidersec">
-            <div class="container">
-
-
-                <div class="row">
-                    <div class="col-12">
-                        <h4 class="fw700 title-txt text-center">Best Selling
-                            <ins class="primary-color fw700">Products</ins>
-                        </h4>
+        @if(count($best_selling_products_combined) > 0)
+            <section class="tabslidersec">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="fw700 title-txt text-center">Best Selling
+                                <ins class="primary-color fw700">Products</ins>
+                            </h4>
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="row">
-                    <div class="col-12">
-
-                        <div>
-
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs tabslider" role="tablist">
-                                <li role="presentation">
-                                    <a id="eventBtn" class="active" href="#all_prd" aria-controls="all_prd" role="tab"
-                                        data-toggle="tab">all</a>
-                                </li>
-
-                                @foreach ($parentCategories as $p_category)
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs tabslider" role="tablist">
                                     <li role="presentation">
-                                        <a href="#category_{{ $p_category->id }}" class="sec"
-                                            aria-controls="category_{{ $p_category->id }}" role="tab"
-                                            data-toggle="tab">{{ $p_category->name }}</a>
+                                        <a id="eventBtn" class="active" href="#all_prd" aria-controls="all_prd" role="tab"
+                                           data-toggle="tab">all</a>
                                     </li>
-                                @endforeach
-                            </ul>
+                                    @foreach ($parentCategories as $p_category)
+                                        <li role="presentation">
+                                            <a href="#category_{{ $p_category->id }}" class="sec"
+                                               aria-controls="category_{{ $p_category->id }}" role="tab"
+                                               data-toggle="tab">{{ $p_category->name }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content py-0">
+                                    <div role="tabpanel" class="tab-pane active" id="all_prd">
+                                        <div class="owl-carousel alltabs ">
+                                            @foreach ($best_selling_products_combined as $prd_val)
+                                                @php
+                                                    $cart_qty = 0;
+                                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                        $cart_qty = $cart[$prd_val->id]['qty'];
+                                                    }
+                                                    $addCartQty = $cart_qty + 1;
 
-                            <!-- Tab panes -->
-                            <div class="tab-content py-0">
-                                <div role="tabpanel" class="tab-pane active" id="all_prd">
-                                    <div class="owl-carousel alltabs ">
-                                        @foreach ($best_selling_products_combined as $prd_val)
-                                            <div class="tab_slider_card">
-                                                <div>
-                                                    <div class="card-img mb-1">
-                                                        <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                            data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                            alt="{{ $prd_val->product->getTranslation('name') }}"
-                                                            class="img-rounded">
-                                                    </div>
-                                                    <div class="tabcard-detail">
-                                                        <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
-                                                        <p class="titlecard">{{ $prd_val->product->name ?? '-' }}</p>
-                                                        <p class="price">₹ 349.00 / 500 Gms</p>
-                                                        <div class="cartbtn">
-                                                            <img src="public/assets/img/carts.svg" class=" cart"
-                                                                alt="cart">
-                                                            <a href="#" class="cartbtn">
-                                                                Add to Cart
-                                                            </a>
+                                                    $product_total = 0;
+                                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                        $product_total = $cart[$prd_val->id]['total'];
+                                                    }
+
+                                                    $product_price = $prd_val->price;
+                                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                        $product_price = $cart[$prd_val->id]['price'];
+                                                    }
+
+                                                    $qty_unit_main = $prd_val->product->unit;
+                                                    if (floatval($prd_val->product->min_qty) < 1) {
+                                                            $qty_unit_main = (1000 * floatval($prd_val->product->min_qty)) . ' ' . $prd_val->product->secondary_unit;
+                                                    }
+                                                @endphp
+                                                <div class="tab_slider_card">
+                                                    <div>
+                                                        <div class="card-img mb-1">
+                                                            <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                 alt="{{ $prd_val->product->getTranslation('name') }}"
+                                                                 class="img-rounded">
+                                                        </div>
+                                                        <div class="tabcard-detail">
+                                                            <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
+                                                            <p class="titlecard">{{ $prd_val->product->name ?? '-' }}</p>
+                                                            <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
+                                                            <div class="cartbtn">
+                                                                <img src="public/assets/img/carts.svg" class=" cart"
+                                                                     alt="cart">
+                                                                <a href="javacript:;" class="cartbtn" onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                                    Add to Cart
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-
+                                            @endforeach
+                                        </div>
                                     </div>
-                                </div>
 
-                                @foreach ($parentCategories as $p_category)
-                                    <div role="tabpanel" class="tab-pane " id="category_{{ $p_category->id }}">
+                                    @foreach ($parentCategories as $p_category)
+                                        <div role="tabpanel" class="tab-pane " id="category_{{ $p_category->id }}">
+                                            @if (count($best_selling_products[$p_category->id]) > 0)
+                                                <div class="owl-carousel alltabs ">
+                                                    @foreach ($best_selling_products[$p_category->id] as $prd_val)
+                                                        @php
+                                                            $cart_qty = 0;
+                                                            if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                                $cart_qty = $cart[$prd_val->id]['qty'];
+                                                            }
+                                                            $addCartQty = $cart_qty + 1;
 
-                                        @if (count($best_selling_products[$p_category->id]) > 0)
-                                            <div class="owl-carousel alltabs ">
+                                                            $product_total = 0;
+                                                            if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                                $product_total = $cart[$prd_val->id]['total'];
+                                                            }
 
-                                                @foreach ($best_selling_products[$p_category->id] as $prd_val)
-                                                    <div class="tab_slider_card">
-                                                        <div>
-                                                            <div class="card-img mb-1">
-                                                                <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                                    data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                                    alt="{{ $prd_val->product->getTranslation('name') }}"
-                                                                    class="img-rounded">
-                                                            </div>
-                                                            <div class="tabcard-detail">
-                                                                <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
-                                                                <p class="titlecard">{{ $prd_val->product->name ?? '-' }}
-                                                                </p>
-                                                                <p class="price">₹ 349.00 / 500 Gms</p>
-                                                                <div class="cartbtn">
-                                                                    <img src="public/assets/img/carts.svg" class=" cart"
-                                                                        alt="cart">
-                                                                    <a href="#" class="cartbtn">
-                                                                        Add to Cart
-                                                                    </a>
+                                                            $product_price = $prd_val->price;
+                                                            if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                                                $product_price = $cart[$prd_val->id]['price'];
+                                                            }
+
+                                                            $qty_unit_main = $prd_val->product->unit;
+                                                            if (floatval($prd_val->product->min_qty) < 1) {
+                                                                    $qty_unit_main = (1000 * floatval($prd_val->product->min_qty)) . ' ' . $prd_val->product->secondary_unit;
+                                                            }
+                                                        @endphp
+                                                        <div class="tab_slider_card">
+                                                            <div>
+                                                                <div class="card-img mb-1">
+                                                                    <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                                         data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                         alt="{{ $prd_val->product->getTranslation('name') }}"
+                                                                         class="img-rounded">
+                                                                </div>
+                                                                <div class="tabcard-detail">
+                                                                    <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
+                                                                    <p class="titlecard">{{ $prd_val->product->name ?? '-' }}
+                                                                    </p>
+                                                                    <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</p>
+                                                                    <div class="cartbtn">
+                                                                        <img src="public/assets/img/carts.svg" class=" cart"
+                                                                             alt="cart">
+                                                                        <a href="javacript:;" class="cartbtn" onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                                            Add to Cart
+                                                                        </a>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                @endforeach
-
-                                            </div>
-                                        @else
-                                            <h4 class="pt-3 pb-5 mb-3 text-center">No Products Available</h4>
-                                        @endif
-
-                                    </div>
-                                @endforeach
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <h4 class="pt-3 pb-5 mb-3 text-center">No Products Available</h4>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
-
                         </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-12">
+                            <div class=" text-center"><a href="{{ route('shop.visit', $seller->user->shop->slug) }}" class="viewbtn mt-0">View All</a></div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class=" text-center"><a href="#" class="viewbtn mt-0">View All</a></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+        @endif
 
 
         <div class="light-bg py-5">
@@ -266,26 +298,6 @@
                                                 <h6 class="fw700 mb-1">{{ $community->name }}</h6>
                                                 <p class="mb-0 body-txt">{{ $community->address }}</p>
                                             </div>
-
-                                            {{-- <div --}}
-                                            {{-- class="card-members  @if (count($community->orders->unique('user_id')) > 0) pb-3 @else pb-5 @endif"> --}}
-                                            {{-- <div class="mbr-img"> --}}
-                                            {{-- @foreach ($community->orders->unique('user_id') as $i => $order) --}}
-                                            {{-- @if ($i < 5) --}}
-                                            {{-- <img src="{{ uploaded_asset($order->user->avatar_original) }}" --}}
-                                            {{-- onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}';"> --}}
-                                            {{-- @endif --}}
-                                            {{-- @endforeach --}}
-                                            {{-- </div> --}}
-                                            {{-- @if (count($community->orders->unique('user_id')) > 0) --}}
-                                            {{-- <div class="mbr-cnt"> --}}
-                                            {{-- <p class="mb-0 body-txt"> --}}
-                                            {{-- {{ count($community->orders->unique('user_id')) > 1? count($community->orders->unique('user_id')) . ' Members': count($community->orders->unique('user_id')) . ' Member' }} --}}
-                                            {{-- </p> --}}
-                                            {{-- </div> --}}
-                                            {{-- @endif --}}
-                                            {{-- </div> --}}
-
                                             @if (auth()->user() &&
                                                 intval(auth()->user()->joined_community_id) > 0 &&
                                                 auth()->user()->joined_community_id != $community->user_id)
@@ -498,18 +510,6 @@
                 navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"]
             });
 
-            // $("#tykeModal").modal('show');
-        })
-
-        function confrimCommunityChange(url) {
-            $('#changeCommunityModal').modal('show');
-            $('#changeCommunityModal #change-community-form').attr('action', url);
-        }
-    </script>
-
-    <script>
-        $(document).ready(function() {
-
             $(".tabslidersec .owl-carousel").owlCarousel({
                 items: 4,
                 loop: true,
@@ -552,6 +552,13 @@
                 e.relatedTarget // previous active tab
                 $(".owl-carousel").trigger('refresh.owl.carousel');
             });
-        });
+
+            // $("#tykeModal").modal('show');
+        })
+
+        function confrimCommunityChange(url) {
+            $('#changeCommunityModal').modal('show');
+            $('#changeCommunityModal #change-community-form').attr('action', url);
+        }
     </script>
 @endsection

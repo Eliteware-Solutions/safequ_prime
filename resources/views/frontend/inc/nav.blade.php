@@ -29,13 +29,13 @@
                                 @endif
                             </a>
                         </div>
-                        <div class="cart-icon mr-3 crt-sm">
-                            <a href="{{ route('cart') }}">
-                                <i class="fad fa-shopping-cart fsize20 mr-2"></i>
-                                <span class="cart-item-count" style="display: none;"></span>
-                            </a>
-                        </div>
                     @endauth
+                    <div class="cart-icon mr-3 crt-sm">
+                        <a href="{{ route('cart') }}">
+                            <i class="fad fa-shopping-cart fsize20 mr-2"></i>
+                            <span class="cart-item-count" style="display: none;"></span>
+                        </a>
+                    </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -82,13 +82,13 @@
                                 @endif
                             </a>
                         </div>
-                        <div class="cart-icon pl-4">
-                            <a href="{{ route('cart') }}">
-                                <i class="fad fa-shopping-cart fsize20"></i>
-                                <span class="cart-item-count" style="display: none;"></span>
-                            </a>
-                        </div>
                     @endauth
+                    <div class="cart-icon pl-4">
+                        <a href="{{ route('cart') }}">
+                            <i class="fad fa-shopping-cart fsize20"></i>
+                            <span class="cart-item-count" style="display: none;"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
