@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\V2\AuthController;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Models\Customer;
 use App\Models\Seller;
 use App\Models\User;
@@ -30,6 +31,7 @@ use App\Utility\NotificationUtility;
 
 class CheckoutController extends Controller
 {
+    use RegistersUsers;
 
     public function __construct()
     {
@@ -41,21 +43,24 @@ class CheckoutController extends Controller
     {
         if ($request->payment_option != null) {
             if (!Auth::check()) {
-                $user = User::where('phone', $request->phone)->first();
+                $user = User::where('phone', '+91'.$request->phone)->first();
                 if ($user) {
-
+                    $this->guard()->login($user);
                 } else {
                     $user = User::create([
-                        'name'     => $request->name,
-                        'email'    => $request->email,
+                        'name' => $request->name,
+                        'address' => $request->address,
+                        'email' => $request->email,
                         'email_verified_at' => date("Y-m-d H:i:s"),
                         'password' => Hash::make($request->email),
-                        'phone' => '+91'.$request->phone,
-                        'balance' => 100,
+                        'phone' => '+91' . $request->phone,
+                        'balance' => env('WELCOME_BONUS_AMOUNT'),
+                        'joined_community_id' => $request->community,
                     ]);
 
                     $user->referral_key = md5($user->id);
                     $user->save();
+                    $this->guard()->login($user);
 
                     $customer = new Customer;
                     $customer->user_id = $user->id;
@@ -67,20 +72,15 @@ class CheckoutController extends Controller
                     $wallet->payment_method = 'bonus';
                     $wallet->payment_details = json_encode(array('id' => $user->id, 'amount' => env('WELCOME_BONUS_AMOUNT'), 'method' => 'bonus'));
                     $wallet->save();
-
-                    Cart::where('temp_user_id', session('temp_user_id'))
-                        ->update([
-                            'user_id'      => $user->id,
-//                            'temp_user_id' => null
-                        ]);
-
-                    Session::forget('temp_user_id');
-
-                    if ($user != null) {
-                        (new AuthController())->login($user);
-                    }
                 }
 
+                Cart::where('temp_user_id', session('temp_user_id'))
+                    ->update([
+                        'user_id' => $user->id,
+//                            'temp_user_id' => null
+                    ]);
+
+                Session::forget('temp_user_id');
             }
 
             (new OrderController)->store($request);

@@ -22,7 +22,7 @@
                             @if ($user_data && isset($user_data->address) && $user_data->address != '')
                                 <div class="delivery-addr p-3 flex-astart-jstart mb-3">
                                     <input type="checkbox" name="delivery_address" id="delivery_address" class="mr-2"
-                                        checked />
+                                           checked/>
                                     <span class="check-box"></span>
 
                                     <label for="delivery_address" class="body-txt mb-0">
@@ -64,8 +64,8 @@
                                     <div class="p-0 mxw-85px">
                                         <div class="item-img text-center">
                                             <img src="{{ uploaded_asset($product->photos) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
-                                                alt="{{ $product->name }}" />
+                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                 alt="{{ $product->name }}"/>
                                         </div>
                                     </div>
                                     <div class="pl-3 w-100">
@@ -75,26 +75,27 @@
                                                 <span class="act-price fw700">
                                                     {!! single_price_web($sub_total) !!}
                                                 </span>
-                                                <i class="body-txt fsize12">&nbsp; <br class="sm" />
-                                                    ({!! single_price_web($cartItem['price']) !!} / {{ $product->unit }})
+                                                <i class="body-txt fsize12">&nbsp; <br class="sm"/>
+                                                    ({!! single_price_web($cartItem['price']) !!} / {{ $product->unit }}
+                                                    )
                                                 </i>
                                             </p>
                                             <div class="action">
                                                 <div class="item-count flex-acenter-jbtw">
                                                     <button class="btn"
-                                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
-                                                        type="button" data-field="quantity[{{ $cartItem['id'] }}]"
-                                                        data-cart_id="{{ $cartItem['id'] }}">
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
+                                                            type="button" data-field="quantity[{{ $cartItem['id'] }}]"
+                                                            data-cart_id="{{ $cartItem['id'] }}">
                                                         <i class="fa fa-minus"></i>
                                                     </button>
                                                     <input class="quantity" min="1"
-                                                        name="quantity[{{ $cartItem['id'] }}]"
-                                                        value="{{ $cartItem['quantity'] }}" type="number"
-                                                        id="quantity_{{ $cartItem['id'] }}" readonly />
+                                                           name="quantity[{{ $cartItem['id'] }}]"
+                                                           value="{{ $cartItem['quantity'] }}" type="number"
+                                                           id="quantity_{{ $cartItem['id'] }}" readonly/>
                                                     <button class="btn"
-                                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp();"
-                                                        type="button" data-field="quantity[{{ $cartItem['id'] }}]"
-                                                        data-cart_id="{{ $cartItem['id'] }}">
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp();"
+                                                            type="button" data-field="quantity[{{ $cartItem['id'] }}]"
+                                                            data-cart_id="{{ $cartItem['id'] }}">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
@@ -143,13 +144,15 @@
                         @endif
 
                         @if ($total > 0)
-                            <!-- Amount -->
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a href="{{ route('shop.visit', session()->get('shop_slug')) }}"
-                                        class="add_more_product_btn">+ Add More Products</a>
+                        <!-- Amount -->
+                            @if(session()->get('shop_slug'))
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <a href="{{ route('shop.visit', session()->get('shop_slug')) }}"
+                                           class="add_more_product_btn">+ Add More Products</a>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <div class="payings py-4">
                                 <hr class="b-1">
                                 @if ($shipping > 0)
@@ -167,7 +170,8 @@
                                 @endif
                                 <h5>
                                     <ins class="fw700">Total :</ins>
-                                    <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total) !!} </ins>
+                                    <ins class="fw700 text-right"
+                                         id="basic_amount"> {!! single_price_web($total) !!} </ins>
                                 </h5>
                             </div>
 
@@ -181,7 +185,7 @@
                                                 <div class="form-control">{{ $carts[0]['coupon_code'] }}</div>
                                                 <div class="input-group-append">
                                                     <button type="button" id="coupon-remove"
-                                                        class="btn text-white primary-color-bg b-1 border-primary">{{ translate('Change Coupon') }}</button>
+                                                            class="btn text-white primary-color-bg b-1 border-primary">{{ translate('Change Coupon') }}</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -193,12 +197,12 @@
                                             <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="code"
-                                                    onkeydown="return event.key != 'Enter';"
-                                                    placeholder="{{ translate('Have coupon code? Enter here') }}"
-                                                    required>
+                                                       onkeydown="return event.key != 'Enter';"
+                                                       placeholder="{{ translate('Have coupon code? Enter here') }}"
+                                                       required>
                                                 <div class="input-group-append">
                                                     <button type="button" id="coupon-apply"
-                                                        class="btn text-white primary-color-bg b-1 border-primary">{{ translate('Apply') }}</button>
+                                                            class="btn text-white primary-color-bg b-1 border-primary">{{ translate('Apply') }}</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -207,137 +211,150 @@
                             @endif
 
 
-                            <!-- Checkout Form -->
-                            <form action="{{ route('payment.checkout') }}" role="form" class="checkout-form pb-5" id="checkout-form" method="POST">
-                                @csrf
-                                @if (count($carts) > 0)
-                                    <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
-                                @endif
-                                <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below options
-                                    to confirm your farm fresh order:</p>
+                        <!-- Checkout Form -->
+                            @if (!Auth::user())
+                                <form action="{{ route('payment.checkout') }}" role="form" class="checkout-form pb-5"
+                                      id="checkout-form" method="POST">
+                                    @csrf
+                                    @if (count($carts) > 0)
+                                        <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                                    @endif
+                                    <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
+                                        options
+                                        to confirm your farm fresh order:</p>
 
-                                <div class="row">
-                                    <div class="col-md-6 p-2">
-                                        <input type="text" class="form-control" name="name" id="name"
-                                            placeholder="Full Name">
-                                    </div>
-                                    <div class="col-md-6 p-2">
-                                        <div class="phone-form-group">
-                                            <input type="tel" id="phone-code" required maxlength="10" minlength="10"
-                                                class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
-                                                value="{{ old('phone') }}" placeholder="" name="phone"
-                                                autocomplete="off">
+                                    <div class="row">
+                                        <div class="col-md-6 p-2">
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                   placeholder="Full Name">
+                                        </div>
+                                        <div class="col-md-6 p-2">
+                                            <div class="phone-form-group">
+                                                <input type="tel" id="phone-code" required maxlength="10" minlength="10"
+                                                       class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                                       value="{{ old('phone') }}" placeholder="" name="phone"
+                                                       autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 p-2">
+                                            <input type="email" class="form-control" name="email" id="email"
+                                                   placeholder="Email">
+                                        </div>
+                                        <div class="col-md-6 p-2">
+                                            <select name="community" id="communityDropdown" class="form-control">
+                                                <option value="{{ $shop->user_id }}" selected>{{ $shop->name }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 p-2">
+                                            <textarea name="address" id="address" cols="30" rows="10"
+                                                      class="form-control" placeholder="Address"></textarea>
+                                        </div>
+                                        <div class="col-md-12 p-2">
+                                            <label for="pay-option1" class="label-radio m-0 p-3 d-block">
+                                                <input type="radio" id="pay-option1" name="payment_option"
+                                                       tabindex="1" value="razorpay" checked/>
+                                                <span class="align-middle body-txt">
+                                            PayTM / G-Pay / UPI / Net Banking
+                                        </span>
+                                            </label>
+                                        </div>
+
+                                        <div class="col-md-12 mt-4 p-2">
+                                            <button type="button" class="btn primary-btn btn-block"
+                                                    onclick="submitOrder(this)"
+                                                    @if (count($carts) == 0) disabled @endif>Place Your Order
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 p-2">
-                                        <input type="email" class="form-control" name="email" id="email"
-                                            placeholder="Email">
-                                    </div>
-                                    <div class="col-md-6 p-2">
-                                        <select name="community" id="communityDropdown" class="form-control">
-                                            <option value="{{ $shop->id }}" selected>{{ $shop->name }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-12 p-2">
-                                        <textarea name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>
-                                    </div>
-                                    <div class="col-md-12 p-2">
-                                        <label for="pay-option1" class="label-radio m-0 p-3 d-block">
-                                            <input type="radio" id="pay-option1" name="payment_option"
-                                                tabindex="1" value="razorpay" checked />
-                                            <span class="align-middle body-txt">
-                                                PayTM / G-Pay / UPI / Net Banking
-                                            </span>
-                                        </label>
-                                    </div>
+                                </form>
+                            @endif
 
-                                    <div class="col-md-12 mt-4 p-2">
-                                        <button type="button" class="btn primary-btn btn-block" onclick="submitOrder(this)" @if (count($carts) == 0) disabled @endif>Place Your Order</button>
-                                    </div>
-                                </div>
-                            </form>
+                            @if (Auth::user())
+                                <form action="{{ route('payment.checkout') }}" class="form-default" role="form"
+                                      method="POST" id="checkout-form-login">
+                                    @csrf
 
-
-                            <form action="" class="form-default" role="form"
-                                method="POST" id="checkout-form-old">
-                                @csrf
-
-                                @if (count($carts) > 0)
-                                    <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                                    @if (count($carts) > 0)
+                                        <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                                 @endif
 
                                 <!-- Payment Method -->
-                                <div class="pay-method pb-4">
-                                    @if (Auth::user())
-                                        <p class="fsize12">Complete your payment easily using the below options to
-                                            confirm your farm fresh order:</p>
-                                        @if ($total > Auth::user()->balance)
-                                            <div class="delivery-addr p-3 flex-astart-jstart mb-3">
-                                                <input type="checkbox" name="partial_payment" id="partial_payment"
-                                                    class="mr-2"
-                                                    @if (Auth::user()->balance == 0) disabled @else checked @endif />
-                                                <span class="check-box"></span>
+                                    <div class="pay-method pb-4">
+                                        @if (Auth::user())
+                                            <p class="fsize12">Complete your payment easily using the below options to
+                                                confirm your farm fresh order:</p>
+                                            @if ($total > Auth::user()->balance)
+                                                <div class="delivery-addr p-3 flex-astart-jstart mb-3">
+                                                    <input type="checkbox" name="partial_payment" id="partial_payment"
+                                                           class="mr-2"
+                                                           @if (Auth::user()->balance == 0) disabled
+                                                           @else checked @endif />
+                                                    <span class="check-box"></span>
 
-                                                <label for="partial_payment" class="body-txt mb-0">
-                                                    <span class="align-middle body-txt">Use SafeQu balance <ins
-                                                            class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
-                                                </label>
-                                            </div>
-                                            <input type="hidden" id="payable_amount" value='{!! single_price_web($total - Auth::user()->balance) !!}'>
-                                        @else
-                                            <div class="other-gatewy p-3 mb-3">
-                                                <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
-                                                    <input type="radio" id="pay-option2" name="payment_option"
-                                                        value="wallet" tabindex="1" checked />
-                                                    <span class="align-middle body-txt">SafeQu balance</span>
-                                                    <br>
-                                                    <span class="align-middle body-txt cart_wallet_bal">
-                                                        Available <ins class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!}
-                                                        </ins> for Payment
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        @endif
-
-                                        <div class="other-gatewy p-3 mb-3">
-                                            <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
-                                                <input type="radio" id="pay-option1" name="payment_option"
-                                                    tabindex="1" value="razorpay"
-                                                    @if ($total > Auth::user()->balance) checked @endif />
-                                                <span class="align-middle body-txt">
-                                                    PayTM / G-Pay / UPI / Net Banking
+                                                    <label for="partial_payment" class="body-txt mb-0">
+                                                <span class="align-middle body-txt">Use SafeQu balance <ins
+                                                        class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
+                                                    </label>
+                                                </div>
+                                                <input type="hidden" id="payable_amount"
+                                                       value='{!! single_price_web($total - Auth::user()->balance) !!}'>
+                                            @else
+                                                <div class="other-gatewy p-3 mb-3">
+                                                    <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
+                                                        <input type="radio" id="pay-option2" name="payment_option"
+                                                               value="wallet" tabindex="1" checked/>
+                                                        <span class="align-middle body-txt">SafeQu balance</span>
+                                                        <br>
+                                                        <span class="align-middle body-txt cart_wallet_bal">
+                                                    Available <ins class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!}
+                                                    </ins> for Payment
                                                 </span>
-                                            </label>
-                                        </div>
-                                    @endif
-                                </div>
+                                                    </label>
+                                                </div>
+                                            @endif
 
-                                <div class="p-3 pay-btn bt-1 flex-acenter-jbtw">
-                                    <div class="total">
-                                        <p class="fsize15 mb-1 body-txt w-100">Total:</p>
-                                        <h5 class="mb-0">
-                                            <span class="fw500 h5" id="total_amount">{!! single_price_web($total) !!}</span>
-                                            &nbsp;
-
-                                        </h5>
-                                    </div>
-                                    <div>
-                                        @if ($user_data && isset($user_data->address) && $user_data->address == '')
-                                            <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
-                                                title="Please complete your profile before attempting to make payment">
-                                                <i
-                                                    class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
-                                            </a>
+                                            <div class="other-gatewy p-3 mb-3">
+                                                <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
+                                                    <input type="radio" id="pay-option1" name="payment_option"
+                                                           tabindex="1" value="razorpay"
+                                                           @if ($total > Auth::user()->balance) checked @endif />
+                                                    <span class="align-middle body-txt">
+                                                PayTM / G-Pay / UPI / Net Banking
+                                            </span>
+                                                </label>
+                                            </div>
                                         @endif
-<!--                                        <button type="button" id="btn_pay_now"
-                                            class="ml-2 btn primary-btn btn-round py-1" onclick="submitOrder(this)"
+                                    </div>
+
+                                    <div class="p-3 pay-btn bt-1 flex-acenter-jbtw">
+                                        <div class="total">
+                                            <p class="fsize15 mb-1 body-txt w-100">Total:</p>
+                                            <h5 class="mb-0">
+                                                <span class="fw500 h5"
+                                                      id="total_amount">{!! single_price_web($total) !!}</span>
+                                                &nbsp;
+
+                                            </h5>
+                                        </div>
+                                        <div>
+                                            @if ($user_data && isset($user_data->address) && $user_data->address == '')
+                                                <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
+                                                   title="Please complete your profile before attempting to make payment">
+                                                    <i
+                                                        class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
+                                                </a>
+                                            @endif
+                                        <button type="button" id="btn_pay_now"
+                                            class="ml-2 btn primary-btn btn-round py-1" onclick="submitLoginOrder(this)"
                                             @if (count($carts) == 0) disabled @endif>
                                             Pay Now
-                                        </button>-->
+                                        </button>
+                                        </div>
                                     </div>
-                                </div>
 
-                            </form>
+                                </form>
+                            @endif
+
                         @endif
                     </div>
                 </div>
@@ -353,14 +370,14 @@
 @section('script')
     <script type="text/javascript">
         // Tooltip
-        $(function() {
+        $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             updateNavCart($('#item_count').val());
 
-            $('.item-count button').on('click', function() {
+            $('.item-count button').on('click', function () {
                 let cart_id = $(this).data('cart_id');
                 let qty = parseInt($("#quantity_" + cart_id).val());
 
@@ -376,7 +393,7 @@
                     $("#itm-cnt").addClass("d3");
                 }
 
-                (qty < 10) ? $("#itm-cnt").removeClass("d2 d3"): "";
+                (qty < 10) ? $("#itm-cnt").removeClass("d2 d3") : "";
 
                 $('#btn_pay_now').attr('disabled', 'disabled');
                 updateQuantity(cart_id, qty);
@@ -385,13 +402,16 @@
 
         function submitOrder(el) {
             $('#checkout-form').submit();
-            {{--$(el).prop('disabled', true);--}}
-            {{--if ($('#delivery_address').is(":checked")) {--}}
-            {{--    $('#checkout-form').submit();--}}
-            {{--} else {--}}
-            {{--    AIZ.plugins.notify('danger', '{{ translate('You need to select the address') }}');--}}
-            {{--    $(el).prop('disabled', false);--}}
-            {{--}--}}
+        }
+
+        function submitLoginOrder(el) {
+            $(el).prop('disabled', true);
+            if ($('#delivery_address').is(":checked")) {
+                $('#checkout-form-login').submit();
+            } else {
+                AIZ.plugins.notify('danger', '{{ translate('You need to select the address') }}');
+                $(el).prop('disabled', false);
+            }
         }
 
         function updateQuantity(cart_id, qty) {
@@ -399,7 +419,7 @@
                 _token: AIZ.data.csrf,
                 id: cart_id,
                 quantity: qty
-            }, function(data) {
+            }, function (data) {
                 updateNavCart(data.cart_count);
                 $('#cart_summary').html('');
                 $('#cart_summary').html(data.cart_view);
@@ -411,14 +431,14 @@
             $.post('{{ route('cart.removeFromCart') }}', {
                 _token: AIZ.data.csrf,
                 id: key
-            }, function(data) {
+            }, function (data) {
                 updateNavCart(data.cart_count);
                 $('#cart_summary').html(data.cart_view);
                 AIZ.plugins.notify('success', "{{ translate('Item has been removed from cart') }}");
             });
         }
 
-        $(document).on("click", "#coupon-apply", function() {
+        $(document).on("click", "#coupon-apply", function () {
             var data = new FormData($('#apply-coupon-form')[0]);
 
             $.ajax({
@@ -431,14 +451,14 @@
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function(data, textStatus, jqXHR) {
+                success: function (data, textStatus, jqXHR) {
                     AIZ.plugins.notify(data.response_message.response, data.response_message.message);
                     $("#cart_summary").html(data.html);
                 }
             })
         });
 
-        $(document).on("click", "#coupon-remove", function() {
+        $(document).on("click", "#coupon-remove", function () {
             var data = new FormData($('#remove-coupon-form')[0]);
 
             $.ajax({
@@ -451,7 +471,7 @@
                 cache: false,
                 contentType: false,
                 processData: false,
-                success: function(data, textStatus, jqXHR) {
+                success: function (data, textStatus, jqXHR) {
                     $("#cart_summary").html(data);
                 }
             });
@@ -462,7 +482,7 @@
             $('#total_amount').html($('#payable_amount').val());
         }
 
-        $('#partial_payment').on('change', function() {
+        $('#partial_payment').on('change', function () {
             if (this.checked == true) {
                 $('.total h5').append('<span class="fw500 mb-0 strikethrough">' + $('#total_amount').html() +
                     '</span>');
