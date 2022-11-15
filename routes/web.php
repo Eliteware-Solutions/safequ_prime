@@ -61,6 +61,7 @@ Route::post('/home/section/featured', 'HomeController@load_featured_section')->n
 Route::post('/home/section/best_selling', 'HomeController@load_best_selling_section')->name('home.section.best_selling');
 Route::post('/home/section/home_categories', 'HomeController@load_home_categories_section')->name('home.section.home_categories');
 Route::post('/home/section/best_sellers', 'HomeController@load_best_sellers_section')->name('home.section.best_sellers');
+Route::post('/home/set-local-community', 'HomeController@set_local_community')->name('home.set_local_community');
 //category dropdown menu ajax call
 Route::post('/category/nav-element-list', 'HomeController@get_category_items')->name('category.elements');
 
@@ -104,7 +105,8 @@ Route::post('/cart/updateQuantity', 'CartController@updateQuantity')->name('cart
 Route::post('/cart/cartCount', 'CartController@cartCount')->name('cart.cartCount');
 
 //Checkout Routes
-Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'verified', 'unbanned']], function() {
+//Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'verified', 'unbanned']], function() {
+Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'unbanned']], function() {
     Route::get('/', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
     Route::any('/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
     Route::post('/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');

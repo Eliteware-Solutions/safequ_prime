@@ -2,6 +2,8 @@
 
 @section('content')
     <main>
+        <input type="hidden" id="local_shop_id" name="local_shop_id" value="{{ intval($local_shop_id) }}">
+
         <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -478,7 +480,7 @@
                             @foreach ($communities as $community)
                                 <div class="col-lg-4 col-md-6 px-2 py-3">
                                     <a href="javascript:void(0);" class="position-relative"
-                                        onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">
+                                        onclick="setLocalCommunity({{ $community->id }});">
                                         <div class="community-card mx-auto p-3">
                                             <div class="card-img">
                                                 @if (isset($community->user->avatar_original))
@@ -514,9 +516,11 @@
         $(document).ready(function() {
 
             // Join Community modal trigger after Page Load
-            setTimeout(function() {
-                $('#joinCommunity').modal('show');
-            }, 2500)
+            if ($('#local_shop_id').val() == 0 || $('#local_shop_id').val() == null) {
+                setTimeout(function() {
+                    $('#joinCommunity').modal('show');
+                }, 1000)
+            }
 
             $('.carousel').carousel({
                 interval: 7000,
@@ -614,6 +618,29 @@
         function confrimCommunityChange(url) {
             $('#changeCommunityModal').modal('show');
             $('#changeCommunityModal #change-community-form').attr('action', url);
+        }
+
+        function setLocalCommunity(shop_id) {
+            if (shop_id > 0) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: '{{ route('home.set_local_community') }}',
+                    data: {id: shop_id},
+                    success: function (data) {
+                        if (data.status == 1) {
+                            window.location.reload();
+                            {{--window.location.replace("{{ route('shop.visit') }}"+"/"+data.shop_slug);--}}
+                        } else {
+                            AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+                        }
+                    }
+                });
+            } else {
+                AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
+            }
         }
     </script>
 @endsection

@@ -108,7 +108,7 @@
                         @endforeach
                         @php
                             $total += $shipping;
-                            if ($carts->sum('discount') > 0) {
+                            if ($carts && $carts->sum('discount') > 0) {
                                 $total -= $carts->sum('discount');
                             }
                         @endphp
@@ -208,8 +208,11 @@
 
 
                             <!-- Checkout Form -->
-                            <form action="" class="checkout-form pb-5" id="checkout-form-new" method="POST">
-
+                            <form action="{{ route('payment.checkout') }}" role="form" class="checkout-form pb-5" id="checkout-form" method="POST">
+                                @csrf
+                                @if (count($carts) > 0)
+                                    <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                                @endif
                                 <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below options
                                     to confirm your farm fresh order:</p>
 
@@ -232,10 +235,7 @@
                                     </div>
                                     <div class="col-md-6 p-2">
                                         <select name="community" id="communityDropdown" class="form-control">
-                                            <option value="lodha-park" selected>Lodha Park</option>
-                                            <option value="ahuja-towers">Ahuja Towers</option>
-                                            <option value="planet-godrej">Planet Godrej</option>
-                                            <option value="omkar">Omkar</option>
+                                            <option value="{{ $shop->id }}" selected>{{ $shop->name }}</option>
                                         </select>
                                     </div>
                                     <div class="col-md-12 p-2">
@@ -252,26 +252,22 @@
                                     </div>
 
                                     <div class="col-md-12 mt-4 p-2">
-                                        <button type="submit" class="btn primary-btn btn-block">Place Your Order</button>
+                                        <button type="button" class="btn primary-btn btn-block" onclick="submitOrder(this)" @if (count($carts) == 0) disabled @endif>Place Your Order</button>
                                     </div>
                                 </div>
-
                             </form>
 
 
-
-                            <form action="{{ route('payment.checkout') }}" class="form-default" role="form"
-                                method="POST" id="checkout-form">
+                            <form action="" class="form-default" role="form"
+                                method="POST" id="checkout-form-old">
                                 @csrf
 
                                 @if (count($carts) > 0)
                                     <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                                 @endif
 
-
                                 <!-- Payment Method -->
                                 <div class="pay-method pb-4">
-
                                     @if (Auth::user())
                                         <p class="fsize12">Complete your payment easily using the below options to
                                             confirm your farm fresh order:</p>
@@ -333,11 +329,11 @@
                                                     class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
                                             </a>
                                         @endif
-                                        <button type="button" id="btn_pay_now"
+<!--                                        <button type="button" id="btn_pay_now"
                                             class="ml-2 btn primary-btn btn-round py-1" onclick="submitOrder(this)"
                                             @if (count($carts) == 0) disabled @endif>
                                             Pay Now
-                                        </button>
+                                        </button>-->
                                     </div>
                                 </div>
 
@@ -388,13 +384,14 @@
         })
 
         function submitOrder(el) {
-            $(el).prop('disabled', true);
-            if ($('#delivery_address').is(":checked")) {
-                $('#checkout-form').submit();
-            } else {
-                AIZ.plugins.notify('danger', '{{ translate('You need to select the address') }}');
-                $(el).prop('disabled', false);
-            }
+            $('#checkout-form').submit();
+            {{--$(el).prop('disabled', true);--}}
+            {{--if ($('#delivery_address').is(":checked")) {--}}
+            {{--    $('#checkout-form').submit();--}}
+            {{--} else {--}}
+            {{--    AIZ.plugins.notify('danger', '{{ translate('You need to select the address') }}');--}}
+            {{--    $(el).prop('disabled', false);--}}
+            {{--}--}}
         }
 
         function updateQuantity(cart_id, qty) {

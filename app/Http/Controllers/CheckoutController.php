@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Api\V2\AuthController;
+use App\Models\Customer;
 use App\Models\Seller;
+use App\Models\User;
 use App\Models\Wallet;
 use App\Utility\PayfastUtility;
 use Illuminate\Http\Request;
@@ -20,6 +23,7 @@ use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Address;
 use App\Models\CombinedOrder;
+use Illuminate\Support\Facades\Hash;
 use Session;
 use App\Utility\PayhereUtility;
 use App\Utility\NotificationUtility;
@@ -36,6 +40,49 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         if ($request->payment_option != null) {
+            if (!Auth::check()) {
+                $user = User::where('phone', $request->phone)->first();
+                if ($user) {
+
+                } else {
+                    $user = User::create([
+                        'name'     => $request->name,
+                        'email'    => $request->email,
+                        'email_verified_at' => date("Y-m-d H:i:s"),
+                        'password' => Hash::make($request->email),
+                        'phone' => '+91'.$request->phone,
+                        'balance' => 100,
+                    ]);
+
+                    $user->referral_key = md5($user->id);
+                    $user->save();
+
+                    $customer = new Customer;
+                    $customer->user_id = $user->id;
+                    $customer->save();
+
+                    $wallet = new Wallet;
+                    $wallet->user_id = $user->id;
+                    $wallet->amount = env('WELCOME_BONUS_AMOUNT');
+                    $wallet->payment_method = 'bonus';
+                    $wallet->payment_details = json_encode(array('id' => $user->id, 'amount' => env('WELCOME_BONUS_AMOUNT'), 'method' => 'bonus'));
+                    $wallet->save();
+
+                    Cart::where('temp_user_id', session('temp_user_id'))
+                        ->update([
+                            'user_id'      => $user->id,
+//                            'temp_user_id' => null
+                        ]);
+
+                    Session::forget('temp_user_id');
+
+                    if ($user != null) {
+                        (new AuthController())->login($user);
+                    }
+                }
+
+            }
+
             (new OrderController)->store($request);
 
             $request->session()->put('payment_type', 'cart_payment');
