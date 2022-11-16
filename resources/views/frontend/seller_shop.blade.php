@@ -61,11 +61,11 @@
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
                                         <li><a href="#" data-toggle="tab" data-filter="all"
-                                                class="active filter-button">All</a></li>
+                                                class="filter-button active" onclick="filterCategory($(this))">All</a></li>
                                         @foreach ($categories as $key => $cat)
                                             <li>
                                                 <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                    class="filter-button">
+                                                    class="filter-button" onclick="filterCategory($(this))">
                                                     {{ $cat['name'] }}
                                                 </a>
                                             </li>
@@ -455,17 +455,14 @@
                 }, 15);
             });
 
-            $(".filter-button").click(function() {
+            /*$(".filter-button").click(function() {
                 $('.filter-button').removeClass('active_filter');
                 $(this).addClass('active_filter');
                 let value = $(this).attr('data-filter');
 
                 if (value == "all") {
-                    //$('.filter').removeClass('hidden');
                     $('.filter').show();
                 } else {
-                    //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
-                    //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
                     $(".filter").not('.' + value).hide();
                     $('.filter').filter('.' + value).show();
                     if (document.querySelectorAll(".filter " + value).length == 0) {
@@ -474,7 +471,7 @@
                         $('#noProductFoundFilter').hide();
                     }
                 }
-            });
+            });*/
 
             /*$('#repoStats2 .input-group').on('click', '.button-plus', function (e) {
                 incrementValue(e);
@@ -529,6 +526,24 @@
         }).mouseout(function() {
             $(this).attr("src", "../public/assets/img/dots2hvr.png");
         });
+
+        function filterCategory(obj) {
+            $(obj).removeClass('active_filter');
+            $(obj).addClass('active_filter');
+            let value = $(obj).attr('data-filter');
+
+            if (value == "all") {
+                $('.filter').show();
+            } else {
+                $(".filter").not('.' + value).hide();
+                $('.filter').filter('.' + value).show();
+                if (document.querySelectorAll(".filter " + value).length == 0) {
+                    $('#noProductFoundFilter').show();
+                } else {
+                    $('#noProductFoundFilter').hide();
+                }
+            }
+        }
 
         function incrementValue(obj) {
             let fieldName = $(obj).data('field');

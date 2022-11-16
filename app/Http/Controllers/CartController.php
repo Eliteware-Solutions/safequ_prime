@@ -39,6 +39,8 @@ class CartController extends Controller
             $temp_user_id = $request->session()->get('temp_user_id');
             // $carts = Cart::where('temp_user_id', $temp_user_id)->get();
             $carts = ($temp_user_id != null) ? Cart::where('temp_user_id', $temp_user_id)->get() : [];
+
+            $shop = Shop::findOrfail(Cookie::get('local_shop_id'));
         }
 
         return view('frontend.view_cart', compact('carts', 'user_data', 'shop'));
@@ -551,7 +553,7 @@ class CartController extends Controller
             $user_id = Auth::user()->id;
             $carts = Cart::where('user_id', $user_id)->get();
             $cart_count = $carts->count();
-        } else {
+        } elseif (session('temp_user_id')) {
             $carts = Cart::where('temp_user_id', session('temp_user_id'))->get();
             $cart_count = $carts->count();
         }
