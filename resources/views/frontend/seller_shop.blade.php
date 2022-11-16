@@ -151,7 +151,7 @@
                                                                     <div>
                                                                         <div class="card-img mb-1">
                                                                             <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                                 class="img-rounded top_img"
                                                                                 alt="{{ $product->product->name }}">
                                                                         </div>
@@ -222,7 +222,7 @@
                                                                     <div class="tab_hori_inr">
                                                                         <div>
                                                                             <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                                 class="img-rounded top_img"
                                                                                 alt="{{ $product->product->name }}">
                                                                         </div>
