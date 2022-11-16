@@ -1,6 +1,6 @@
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-7 px-1">
+        <div class="col-md-8 px-1">
             @if(count($carts) > 0)
                 <h6 class="fw600 title-txt pb-2 mb-2">My Exotic Farm Fresh Order List</h6>
 
