@@ -11,7 +11,7 @@
                     <div class="img-name">
                         <div class="item-img text-center">
                             <img src="{{ uploaded_asset($product->product->photos) }}"
-                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                  alt="{{ $product->product->name }}"/>
                         </div>
                         <div class="pl-3">

@@ -6,10 +6,10 @@
         <a href="{{ route('product', $product->slug) }}" class="d-block">
             <img
                 class="img-fit lazyload mx-auto h-140px h-md-210px"
-                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                 data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                 alt="{{  $product->getTranslation('name')  }}"
-                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
             >
         </a>
         @if ($product->wholesale_product)

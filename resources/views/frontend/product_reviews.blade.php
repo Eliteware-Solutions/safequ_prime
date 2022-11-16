@@ -10,7 +10,7 @@
                         <div class="review-itm-card p-3">
                             <div class="img-name">
                                 <div class="item-img text-center">
-                                    <img src="{{ uploaded_asset($product->photos) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';" alt="{{ $product->name }}" />
+                                    <img src="{{ uploaded_asset($product->photos) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';" alt="{{ $product->name }}" />
                                 </div>
                                 <div class="pl-3">
                                     <h6 class="fw700">{{ $product->name }}</h6>

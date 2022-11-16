@@ -42,7 +42,7 @@
                                 <li class="minw-0 col-4 col-md mt-3">
                                     <a href="{{ route('products.category', $category->slug) }}" class="d-block rounded bg-white p-2 text-reset shadow-sm">
                                         <img
-                                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                            src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                             data-src="{{ uploaded_asset($category->banner) }}"
                                             alt="{{ $category->getTranslation('name') }}"
                                             class="lazyload img-fit"
@@ -77,10 +77,10 @@
                                                 <div class="img">
                                                     <img
                                                         class="lazyload img-fit h-140px h-lg-80px"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                         data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                                                         alt="{{ $product->getTranslation('name') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                     >
                                                 </div>
                                             </div>
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                 </div>
-            </section>   
+            </section>
         @endif
     </div>
 
@@ -256,10 +256,10 @@
                                                 <a href="{{ route('customer.product', $classified_product->slug) }}" class="d-block">
                                                     <img
                                                         class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                         data-src="{{ uploaded_asset($classified_product->thumbnail_img) }}"
                                                         alt="{{ $classified_product->getTranslation('name') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                     >
                                                 </a>
                                                 <div class="absolute-top-left pt-2 pl-2">
@@ -336,11 +336,11 @@
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col-3 text-center">
                                                     <img
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                         data-src="{{ uploaded_asset($category->banner) }}"
                                                         alt="{{ $category->getTranslation('name') }}"
                                                         class="img-fluid img lazyload h-60px"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                     >
                                                 </div>
                                                 <div class="col-7">
@@ -375,11 +375,11 @@
                                             <div class="row align-items-center no-gutters">
                                                 <div class="col-4 text-center">
                                                     <img
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                         data-src="{{ uploaded_asset($brand->logo) }}"
                                                         alt="{{ $brand->getTranslation('name') }}"
                                                         class="img-fluid img lazyload h-60px"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                     >
                                                 </div>
                                                 <div class="col-6">

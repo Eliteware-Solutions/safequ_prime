@@ -31,7 +31,7 @@
                                     <div class="d-flex justify-content-between align-items-center pb-3">
                                         <div class="img-name d-flex align-items-center">
                                             <div class="item-img text-center">
-                                                <img src="{{ uploaded_asset($product->photos) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';" alt="{{ $product->name }}" />
+                                                <img src="{{ uploaded_asset($product->photos) }}" onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';" alt="{{ $product->name }}" />
                                             </div>
                                             <div class="pl-3">
                                                 <h6 class="fw700 mb-1">{{ $product->name }}</h6>

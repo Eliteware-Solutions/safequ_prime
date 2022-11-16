@@ -47,7 +47,7 @@
                         <div class="p-0 mxw-85px">
                             <div class="item-img text-center">
                                 <img src="{{ uploaded_asset($product->photos) }}"
-                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                      alt="{{ $product->name }}"/>
                             </div>
                         </div>

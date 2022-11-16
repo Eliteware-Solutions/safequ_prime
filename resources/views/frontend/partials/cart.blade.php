@@ -24,7 +24,7 @@ if(auth()->user() != null) {
     </span>
 </a>
 <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg p-0 stop-propagation">
-    
+
     @if(isset($cart) && count($cart) > 0)
         <div class="p-3 fs-15 fw-600 p-3 border-bottom">
             {{translate('Cart Items')}}
@@ -43,7 +43,7 @@ if(auth()->user() != null) {
                         <span class="d-flex align-items-center">
                             <a href="{{ route('product', $product->slug) }}" class="text-reset d-flex align-items-center flex-grow-1">
                                 <img
-                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                    src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                     data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                                     class="img-fit lazyload size-60px rounded"
                                     alt="{{  $product->getTranslation('name')  }}"
@@ -92,5 +92,5 @@ if(auth()->user() != null) {
             <h3 class="h6 fw-700">{{translate('Your Cart is empty')}}</h3>
         </div>
     @endif
-    
+
 </div>

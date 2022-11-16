@@ -124,9 +124,9 @@
                                                 <div class="tab_slider_card">
                                                     <div>
                                                         <div class="card-img mb-1">
-                                                            <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                            <img src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                 alt="{{ $prd_val->product->getTranslation('name') }}"
                                                                 class="img-rounded">
                                                         </div>
@@ -180,9 +180,9 @@
                                                         <div class="tab_slider_card">
                                                             <div>
                                                                 <div class="card-img mb-1">
-                                                                    <img src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                                    <img src="{{ static_asset('assets/img/no-image-found.jpg') }}"
                                                                         data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                         alt="{{ $prd_val->product->getTranslation('name') }}"
                                                                         class="img-rounded">
                                                                 </div>
@@ -294,11 +294,11 @@
                                             <div class="card-img mb-1">
                                                 @if (isset($community->user->avatar_original))
                                                     <img src="{{ uploaded_asset($community->user->avatar_original) }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                                         class="img-rounded" alt="{{ $community->name }}">
                                                 @else
                                                     <img src=""
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                                         class="img-rounded" alt="{{ $community->name }}">
                                                 @endif
                                             </div>

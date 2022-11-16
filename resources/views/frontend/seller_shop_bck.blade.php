@@ -76,7 +76,7 @@
                                         <div class="img-name pr-2">
                                             <div class="item-img item-img-sm text-center">
                                                 <img src="{{ uploaded_asset($expired_product->product->photos) }}"
-                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                      alt="{{ $expired_product->product->name }}"/>
                                             </div>
                                         </div>
@@ -202,7 +202,7 @@
                                         </div>
                                         <div class="item-img text-center">
                                             <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-place.png') }}';"
+                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                  alt="{{ $product->product->name }}"/>
                                         </div>
                                         <div class="nxt-delivery">
