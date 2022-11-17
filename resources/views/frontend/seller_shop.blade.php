@@ -528,6 +528,7 @@
         });
 
         function filterCategory(obj) {
+            $('#noProductFoundFilter').hide();
             $(obj).removeClass('active_filter');
             $(obj).addClass('active_filter');
             let value = $(obj).attr('data-filter');

@@ -124,7 +124,7 @@
                                                 <div class="tab_slider_card">
                                                     <div>
                                                         <div class="card-img mb-1">
-                                                            <img src="{{ static_asset('assets/img/no-image-found.jpg') }}"
+                                                            <img src="{{ uploaded_asset($prd_val->product->photos) }}"
                                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
                                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                 alt="{{ $prd_val->product->getTranslation('name') }}"
@@ -180,7 +180,7 @@
                                                         <div class="tab_slider_card">
                                                             <div>
                                                                 <div class="card-img mb-1">
-                                                                    <img src="{{ static_asset('assets/img/no-image-found.jpg') }}"
+                                                                    <img src="{{ uploaded_asset($prd_val->product->photos) }}"
                                                                         data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
                                                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
                                                                         alt="{{ $prd_val->product->getTranslation('name') }}"
