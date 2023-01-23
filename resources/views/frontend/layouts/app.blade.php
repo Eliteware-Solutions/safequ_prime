@@ -49,10 +49,14 @@
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
     <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600;700&family=Pacifico&display=swap">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css" />
@@ -73,6 +77,9 @@
     {{-- <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}"> --}}
     <link rel="stylesheet" href="{{ static_asset('assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+
+    <!-- New CSS Style -->
+    <link rel="stylesheet" href="{{ static_asset('assets/css/new-style.min.css') }}">
 
 
     <script>
@@ -153,6 +160,8 @@
     @endphp
 
     @laravelPWA
+
+    <script src="{{ static_asset('assets/js/svg-inject.min.js') }}"></script>
 </head>
 
 <body>
@@ -210,44 +219,6 @@
             </div>
         </div>
     @endif
-
-    <!-- Tyke Support Modal Starts -->
-{{--    <div class="modal fade safeq-lg" id="tykeModal" tabindex="-1" role="dialog"--}}
-{{--         aria-labelledby="exampleModalLabel"--}}
-{{--         aria-hidden="true">--}}
-{{--        <div class="modal-dialog" role="document">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header">--}}
-{{--                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">--}}
-{{--                        <span class="text-white" aria-hidden="true">&times;</span>--}}
-{{--                    </button>--}}
-{{--                </div>--}}
-{{--                <div class="modal-body">--}}
-{{--                    <div class="container">--}}
-{{--                        <div class="row  align-items-center">--}}
-{{--                            <div class="col-lg-7 col-md-9 col-12 ">--}}
-{{--                                <h2>Love what we do?</h2>--}}
-{{--                                <p>Join us on our growth journey to empower thousands of Indian farmers and make--}}
-{{--                                    farm to table a reality for millions of urban Indian households.--}}
-{{--                                </p>--}}
-{{--                                <div class="sf-sm">--}}
-{{--                                    <a href="https://www.tykeinvest.com/campaign/safequ-dMZtGjbz" target="_blank" class="safbtn">Subscribe to our Tyke Campaign <span><i class="la la-arrow-right la-2x text-white pl-3"></i></span>--}}
-{{--                                    </a>--}}
-{{--                                </div>--}}
-
-{{--                                <div class="logos-popup">--}}
-{{--                                    <img src="{{ static_asset('assets/img/tyke/l1.png') }}">--}}
-{{--                                    <img src="{{ static_asset('assets/img/tyke/l2.png') }}">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-    <!-- Tyke Support Modal Ends -->
-
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>

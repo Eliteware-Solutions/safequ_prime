@@ -4,7 +4,87 @@
     <main>
         <input type="hidden" id="local_shop_id" name="local_shop_id" value="{{ intval($local_shop_id) }}">
 
-        <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+        <!-- Hero Slider -->
+        <section class="hero-sec">
+
+            <div class="owl-carousel owl-theme hero-slider">
+                <div class="item p-0">
+
+                    <div class="d-flex carousel-item active position-relative py-5">
+                        <img src="{{ static_asset('assets/img/new-design/hero-bg-1.webp') }}" class="banner rounded-4"
+                            alt="Hero Image">
+
+                        <div class="container">
+                            <div class="row position-relative align-items-center h-100">
+                                <div class="col-lg-6">
+                                    <p class="text-white hero-subtitle mb-1">Exotic Fruits</p>
+
+                                    <h1 class="text-white mb-4 pb-1">30%* Cheaper</h1>
+
+                                    <p class="text-white fw500 mb-4">Farm fresh produce like strawberries & avocados
+                                        delivered to
+                                        your doorstep, DIRECTLY from your choice of local farms serving your community. ~30%
+                                        cheaper than those expensive halls of food or baskets of nature.</p>
+
+                                    <button class="btn btn-fill-white hover-primary">Join Your Community Now</button>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <img src="{{ static_asset('assets/img/new-design/hero-img-1.webp') }}"
+                                        class="crousel-img" width="731" height="557" alt="Hero Image">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="item p-0">
+                    <div class="d-flex carousel-item position-relative active py-5">
+                        <img src="{{ static_asset('assets/img/new-design/hero-bg-2.webp') }}" class="banner rounded-4"
+                            alt="Hero Image">
+
+                        <div class="container">
+                            <div class="row position-relative align-items-center h-100">
+                                <div class="col-lg-6">
+                                    <h1 class="text-white mb-4 pb-1">Strawberry</h1>
+
+                                    <div class="prd-desc d-flex mb-4">
+                                        <div class="d-flex align-items-center mr-md-4">
+                                            <img src="{{ static_asset('assets/img/new-design/hero-icon-1.svg') }}"
+                                                class="injectable" width="72" height="72" alt="Hero Icon">
+                                            <span class="text-white ml-3">Great for Skin</span>
+                                        </div>
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ static_asset('assets/img/new-design/hero-icon-2.svg') }}"
+                                                class="injectable" width="72" height="72" alt="Hero Icon">
+                                            <span class="text-white ml-3">Improves Heart Health</span>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn btn-fill-white mt-2">
+                                        <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                            onload="SVGInject(this)" alt="Btn Cart">
+                                        Add to cart
+                                    </button>
+                                </div>
+
+                                <div class="col-lg-5 offset-lg-1">
+                                    <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
+                                        class="crousel-img" width="569" height="406" alt="Hero Image">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        {{-- <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
 
@@ -41,30 +121,67 @@
 
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        {{-- <section class="tyke_subscription"> --}}
-        {{-- <div class="container"> --}}
-        {{-- <div class="row "> --}}
-        {{-- <div class="col-lg-4"> --}}
-        {{-- <h1 class="fw800">Love what<span class="fw800 primary-color">we do?</span></h1> --}}
-        {{-- </div> --}}
-        {{-- <div class="col-lg-8"> --}}
-        {{-- <p>Join us on our growth journey to empower thousands of Indian farmers and make farm to table a --}}
-        {{-- reality for millions of urban Indian households.</p> --}}
-        {{-- <div class="link"> --}}
-        {{-- <a href="https://www.tykeinvest.com/campaign/safequ-dMZtGjbz" target="_blank">Subscribe to our Tyke Campaign<span><i class="la la-arrow-right la-2x ml-3"></i></span></a> --}}
-        {{-- <div class="logos"> --}}
-        {{-- <img src="{{ static_asset('assets/img/safequ-logo.png') }}"> --}}
-        {{-- <img src="{{ static_asset('assets/img/tyke/logo.png') }}"> --}}
-        {{-- </div> --}}
-        {{-- </div> --}}
-        {{-- </div> --}}
+        <!-- Category Grid -->
+        <section class="cat-grid py-4">
+            <div class="container">
+                <div class="row py-md-3">
+                    <div class="col-md-4 py-2 px-lg-4">
+                        <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
+                            <p class="fw600 cat-name">Fresh <br> Vegetables</p>
+                            <div class="cat-img text-right">
+                                <img src="{{ static_asset('assets/img/new-design/vegs.png') }}" width="241" height="120" alt="Vegetables">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2 px-lg-4">
+                        <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
+                            <p class="fw600 cat-name">Fresh <br> Fruits</p>
+                            <div class="cat-img text-right">
+                                <img src="{{ static_asset('assets/img/new-design/fruits.png') }}" width="212" height="144" alt="Fruits">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 py-2 px-lg-4">
+                        <div class="cat-card cat-3 px-xl-4 p-3 b-rd-10">
+                            <p class="fw600 cat-name">Fresh <br> Flowers</p>
+                            <div class="cat-img text-right">
+                                <img src="{{ static_asset('assets/img/new-design/flowers.png') }}" width="171" height="159" alt="Flowers">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        {{-- </div> --}}
-        {{-- </div> --}}
-        {{-- </section> --}}
-
+        <!-- Customer Favourits -->
+        <section class="cust-fav pt-lg-5 py-4">
+            <div class="container">
+                <h2 class="title text-center">Customer Favorites</h2>
+                <div class="owl-carousel owl-theme product-slider">
+                    <div class="item">
+                        <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                            <div class="prd-img">
+                                <img src="{{ static_asset('assets/img/new-design/afghani-apricot.png') }}" class="object-cover-center" width="264"
+                                    height="215" alt="Afghanistan Apricot">
+                            </div>
+                            <div class="prd-content p-3 position-relative">
+                                <span class="prd-tag text-white b-rd-5">Hydroponic</span>
+                                <p class="prd-loc mb-1 secondary-text">Afghanistan</p>
+                                <p class="prd-name mb-1 fw700 text-black">Afghanistan Apricot</p>
+                                <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
+                                <p class="prd-pricing mb-2 fw700">&#8377; 349.00 / 500 Gms</p>
+                                <button class="btn secondary-btn-o">
+                                    <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}" onload="SVGInject(this)" alt="Btn Cart">
+                                    Add to cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         @if (count($best_selling_products_combined) > 0)
             <section class="tabslidersec">
@@ -133,7 +250,8 @@
                                                         <div class="tabcard-detail">
                                                             <span>{{ $prd_val->product->manufacturer_location ?? '-' }}</span>
                                                             <p class="titlecard">{{ $prd_val->product->name ?? '-' }}</p>
-                                                            <p class="price">{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}
+                                                            <p class="price">{!! single_price_web($product_price) !!} /
+                                                                {{ $qty_unit_main }}
                                                             </p>
                                                             <div class="cartbtn">
                                                                 <img src="public/assets/img/carts.svg" class=" cart"
@@ -227,6 +345,36 @@
         @endif
 
 
+        <!-- About -->
+        <section class="about pt-lg-5 py-4 v-light-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 py-2">
+                        <div class="d-flex justify-content-center flex-column h-100">
+                            <h2 class="title mb-2">Pay Lowest Price</h2>
+                            <h3 class="title title-large">
+                                <span class="secondary-text">Get Healthiest</span> <br>
+                                <span class="primary-text">Vegetables And Fruits.</span>
+                            </h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat neque velit nostrum error
+                                necessitatibus voluptates sit distinctio saepe quas!</p>
+
+                            <button class="btn btn-fill-black mb-3">Shop Now</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 offset-lg-1 py-2">
+                        <div class="about-img position-relative">
+                            <img src="{{ static_asset('assets/img/new-design/ellipse-bg.svg') }}" class="injectable" width="490" height="531"
+                                alt="Ellipse">
+                            <img src="{{ static_asset('assets/img/new-design/fruits-heart.webp') }}" class="position-relative" width="554"
+                                height="592" alt="Fruite">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         <div class="light-bg py-5">
             <div class="container pt-3 services">
                 <div class="row">
@@ -271,67 +419,62 @@
             </div>
         </div>
 
-        <div class="container py-5">
-            <div class="mt-2">
-                <div class="community-serve text-center">
-                    <div class="py-md-5 py-4">
-                        <h4 class="fw700 title-txt">Our most
-                            <ins class="primary-color fw700">popular communities</ins>
-                        </h4>
-                        <p class="w-75 mx-auto mb-0 body-txt">More than
-                            <ins class="primary-color fw600">500+ customers
-                            </ins>
-                            across South Mumbai's finest gated communities have already signed up to the SafeQU
-                            experience. Choose your community and get started now
-                        </p>
+        <!-- Communities -->
+        <section class="communities pt-lg-5 py-4">
+            <div class="container">
+                <h2 class="title text-center mb-2">Our Most Popular Communities</h2>
+                <p class="sub-text mb-4 text-center mx-auto fw500">
+                    More than <span class="primary-text fw700">500+ customers</span> across South Mumbai's finest gated
+                    communities have already signed up to the SafeQU experience. Choose your community.
+                </p>
 
-                        <div class="py-4">
-                            <div class="community-slider owl-carousel owl-theme">
-
-                                @foreach ($communities as $community)
-                                    <div class="item py-3 px-2">
-                                        <div class="community-card mx-auto p-3 pt-4">
-                                            <div class="card-img mb-1">
-                                                @if (isset($community->user->avatar_original))
-                                                    <img src="{{ uploaded_asset($community->user->avatar_original) }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
-                                                        class="img-rounded" alt="{{ $community->name }}">
-                                                @else
-                                                    <img src=""
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
-                                                        class="img-rounded" alt="{{ $community->name }}">
-                                                @endif
-                                            </div>
-                                            <div class="card-data pt-3 pb-4">
-                                                <h6 class="fw700 mb-1">{{ $community->name }}</h6>
-                                                <p class="mb-0 body-txt">{{ $community->address }}</p>
-                                            </div>
-                                            @if (auth()->user() &&
-                                                intval(auth()->user()->joined_community_id) > 0 &&
-                                                auth()->user()->joined_community_id != $community->user_id)
-                                                <a href="javascript:void(0);"
-                                                    class="btn primary-btn btn-block fw600 text-white"
-                                                    onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">JOIN</a>
-                                            @else
-                                                <a href="{{ route('shop.visit', $community->slug) }}"
-                                                    class="btn primary-btn btn-block fw600 text-white">JOIN</a>
-                                            @endif
-
-                                        </div>
-                                    </div>
-                                @endforeach
-
+                <div class="owl-carousel owl-theme community-slider mb-3">
+                    @foreach ($communities as $community)
+                        <div class="item">
+                            <div class="community-card p-3 trnsn-300ms position-relative b-rd-10">
+                                <div class="cm-img b-rd-10 overflow-hide">
+                                    @if (isset($community->user->avatar_original))
+                                        <img src="{{ uploaded_asset($community->user->avatar_original) }}"
+                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
+                                            class="img-rounded" alt="{{ $community->name }}" width="200"
+                                            height="200">
+                                    @else
+                                        <img src=""
+                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
+                                            class="img-rounded" alt="{{ $community->name }}">
+                                    @endif
+                                </div>
+                                <div class="content text-center pt-3">
+                                    <p class="cm-loc mb-1 fw500 secondary-text">
+                                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}"
+                                            onload="SVGInject(this)" width="10" height="12" alt="Map Pin">
+                                        {{ $community->address }}
+                                    </p>
+                                    <p class="cm-title fw700">{{ $community->name }}</p>
+                                    @if (auth()->user() &&
+                                            intval(auth()->user()->joined_community_id) > 0 &&
+                                            auth()->user()->joined_community_id != $community->user_id)
+                                        <a href="javascript:void(0);" class="btn secondary-btn-o"
+                                            onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">
+                                            Join Now</a>
+                                    @else
+                                        <a href="{{ route('shop.visit', $community->slug) }}"
+                                            class="btn secondary-btn-o">Join Now</a>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-
-                        {{-- @if (count($communities) > 5)
-                            <button class="btn fw700 view-more-btn px-4 mb-3 mb-md-0">View more</button>
-                        @endif --}}
-
-                    </div>
+                    @endforeach
                 </div>
+
+                <p class="sub-text text-center mx-auto fw600 pb-lg-3 pb-2">
+                    Not able to find your community? Request to get started now. Ping us here and we will get your community
+                    setup in minutes.
+                </p>
+
+                <button class="btn btn-fill-black mx-auto d-block mb-4">Create Community</button>
             </div>
-        </div>
+        </section>
 
         <div class="primary-color-bg community-create my-4">
             <div class="container py-3">
@@ -508,11 +651,55 @@
             </div>
         </div>
 
+        <!-- Rewards -->
+        <section class="rewards py-lg-5 py-4">
+            <div class="container py-lg-5 py-2">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h2 class="title">Rewards for Using App on <br> Continuous Basis</h2>
+                    </div>
+                    <div class="col-lg-6 text-center pt-2">
+                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598" height="357"
+                            class="injectable" alt="Rewards Image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <div class="whats-app-icon">
+        <a href="#" class="d-block" area-lable="Contact Us" title="Contact Us">
+            <img src="{{ static_asset('assets/img/new-design/whatsapp.svg') }}" class="injectable" width="40"
+                height="40" alt="WhatsApp">
+        </a>
+    </div>
 @endsection
 
 @section('script')
     <script>
+        // ---- SVG Injector -  To convert IMG tag in SVG code. (Only for SVG images)
+        SVGInject(document.querySelectorAll("img.injectable"));
+
+        $('.hero-slider').owlCarousel({
+            loop: true,
+            margin: 30,
+            items: 1.15,
+            center: true,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 7000,
+            smartSpeed: 2000,
+            responsive: {
+                0: {
+                    items: 1.05,
+                },
+                992: {
+                    items: 1.15,
+                },
+            }
+        })
+
         $(document).ready(function() {
 
             // Join Community modal trigger after Page Load
@@ -628,11 +815,13 @@
                     },
                     type: "POST",
                     url: '{{ route('home.set_local_community') }}',
-                    data: {id: shop_id},
-                    success: function (data) {
+                    data: {
+                        id: shop_id
+                    },
+                    success: function(data) {
                         if (data.status == 1) {
                             window.location.reload();
-                            {{--window.location.replace("{{ route('shop.visit') }}"+"/"+data.shop_slug);--}}
+                            {{-- window.location.replace("{{ route('shop.visit') }}"+"/"+data.shop_slug); --}}
                         } else {
                             AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                         }
