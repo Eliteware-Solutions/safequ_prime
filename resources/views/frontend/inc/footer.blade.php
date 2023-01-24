@@ -23,7 +23,7 @@
                 </li>
             </ul>
         </div>
-        
+
         <div class="container mt-3 py-3 text-center bt-1">
             <p class="mb-0 text-white">Copyright &copy; 2022. All rights reserved.</p>
         </div>

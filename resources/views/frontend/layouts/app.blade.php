@@ -75,7 +75,10 @@
     @endif
 
     {{-- <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}"> --}}
-    <link rel="stylesheet" href="{{ static_asset('assets/css/main.css') }}">
+
+    @if(!$new_header)
+        <link rel="stylesheet" href="{{ static_asset('assets/css/main.css') }}">
+    @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
 
     <!-- New CSS Style -->
@@ -166,7 +169,9 @@
 
 <body>
 
-    @include('frontend.inc.nav')
+    @if(!$new_header)
+        @include('frontend.inc.nav')
+    @endif
 
     @yield('content')
 

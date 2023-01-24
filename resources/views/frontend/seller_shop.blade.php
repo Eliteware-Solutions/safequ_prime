@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app', ['header_show' => true, 'header2' => true, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => true, 'new_footer' => false])
 
 @if (isset($category_id))
     @php
@@ -84,13 +84,13 @@
                                             <div class="dropbtn">
                                                 <!--                                        <div class="pr-2 short"> Sort by:</div>
 
-                                            <select class="form-control filter" id="product-type" name="product-type">
-                                                <option value="1">Best Selling Products</option>
-                                                <option value="2">Best Selling Products2</option>
-                                                <option value="3">Best Selling Products3</option>
-                                                <option value="4">Best Selling Products4</option>
-                                                <option value="5">Best Selling Products5</option>
-                                            </select>-->
+                                                    <select class="form-control filter" id="product-type" name="product-type">
+                                                        <option value="1">Best Selling Products</option>
+                                                        <option value="2">Best Selling Products2</option>
+                                                        <option value="3">Best Selling Products3</option>
+                                                        <option value="4">Best Selling Products4</option>
+                                                        <option value="5">Best Selling Products5</option>
+                                                    </select>-->
 
                                             </div>
                                             <div>
@@ -316,25 +316,25 @@
         </div>
 
         <!--        <div class="container">
-                <div class="row ">
-                    <div class="col-12 px-0">
-                        <div class="sticky-bottom
+                        <div class="row ">
+                            <div class="col-12 px-0">
+                                <div class="sticky-bottom
                     ">
-                            <a href="javascript:void(0)" id="checkout-btn"
-                               class="sticky-button-bottom my-lg-4 @if ($checkout_total == 0) pointer-none @endif"
-                               onclick="addProductToCart();">
-                                checkout
-                                <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
-                            </a>
+                                    <a href="javascript:void(0)" id="checkout-btn"
+                                       class="sticky-button-bottom my-lg-4 @if ($checkout_total == 0) pointer-none @endif"
+                                       onclick="addProductToCart();">
+                                        checkout
+                                        <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>-->
+                    </div>-->
         <div class="sticky-stopper"></div>
         <!--
-            <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
-                 aria-labelledby="itemModalLabel" aria-hidden="true">
-            </div> -->
+                    <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
+                         aria-labelledby="itemModalLabel" aria-hidden="true">
+                    </div> -->
 
 
         <a href="https://wa.me/917498107182" target="_blank">

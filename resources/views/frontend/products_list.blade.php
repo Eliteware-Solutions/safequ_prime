@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => true, 'header2' => true, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => true, 'new_footer' => false])
 
 @if (isset($category_id))
     @php
@@ -179,7 +179,8 @@
                                 <div class="px-3">
                                     <div class="progress-div mb-4">
                                         <div class="progress">
-                                            <div class="progress-bar" data-target="20" data-progress="8" data-unit="Kg">0
+                                            <div class="progress-bar" data-target="20" data-progress="8" data-unit="Kg">
+                                                0
                                             </div>
                                         </div>
                                     </div>
@@ -288,7 +289,8 @@
                                 <div class="px-3">
                                     <div class="progress-div mb-4">
                                         <div class="progress">
-                                            <div class="progress-bar" data-target="20" data-progress="8" data-unit="Kg">0
+                                            <div class="progress-bar" data-target="20" data-progress="8" data-unit="Kg">
+                                                0
                                             </div>
                                         </div>
                                     </div>
@@ -346,9 +348,9 @@
                                     </div>
                                 </div>
                                 <!-- <div class="nxtdelivery-date p-2">
-                                        <p class="mb-2 fsize13">Next Delivery</p>
-                                        <h5 class="fw700">22 <span class="fw400">Jan</span></h5>
-                                    </div> -->
+                                                <p class="mb-2 fsize13">Next Delivery</p>
+                                                <h5 class="fw700">22 <span class="fw400">Jan</span></h5>
+                                            </div> -->
                             </div>
 
                             <div class="distributor pt-2">
@@ -380,8 +382,8 @@
                                                 onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
                                                 type="button"><i class="fa fa-minus"></i></button>
 
-                                            <input class="quantity form-control" min="1" name="quantity" value="1"
-                                                type="number" id="quantity" readonly
+                                            <input class="quantity form-control" min="1" name="quantity"
+                                                value="1" type="number" id="quantity" readonly
                                                 onchange="this.value = this.value.replace(/[^0-9]/g, '')" />
 
                                             <span class="itm-unit fw500" id="itm-cnt">1</span>
@@ -580,7 +582,7 @@
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
         })
-        
+
         $(document).ready(function() {
 
             // Remaining time

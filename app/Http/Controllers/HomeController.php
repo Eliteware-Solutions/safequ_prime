@@ -68,12 +68,20 @@ class HomeController extends Controller
 
         $parentCategories = Category::where('parent_id', 0)->get();
 
-        $best_selling_products = array();
+        $customer_favourites = array();
+        $customer_favourites = ProductStock::where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
 
+        // $deals_of_the_day = array();
+        // $deals_of_the_day = ProductStock::where('todays_deal', 1)->inRandomOrder()->limit(10)->get();
+
+        $best_selling_products = array();
         foreach ($parentCategories as $cat) {
+            // $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+            //     $query->where('parent_category_id', $cat->id);
+            // })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
             $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
                 $query->where('parent_category_id', $cat->id);
-            })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
+            })->where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
         }
 
         $best_selling_products_combined = array();
@@ -97,7 +105,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined', 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'customer_favourites', 'best_selling_products_combined', /*'deals_of_the_day',*/ 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
     }
 
     public function set_local_community(Request $request)
