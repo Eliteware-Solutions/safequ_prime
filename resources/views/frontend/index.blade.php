@@ -263,7 +263,7 @@
         </section>
 
         <!-- Deals Of The Day -->
-        {{-- <section class="deals pt-lg-5 py-4">
+        <section class="deals pt-lg-5 py-4">
             <div class="container">
                 <div class="content pt-lg-5 pt-4 overflow-hide">
                     <h2 class="title text-center pt-2 text-white">Deals Of The Day</h2>
@@ -321,7 +321,7 @@
                     </div>
                 </div>
             </div>
-        </section> --}}
+        </section>
 
         <!-- Hear from Customers -->
         <section class="hear-customers pt-lg-5 py-4 v-light-bg">
@@ -359,7 +359,7 @@
         </section>
 
         <!-- Our Full Range -->
-        @if (count($best_selling_products_combined) > 0)
+        @if (count($our_full_range_of_products) > 0)
             <section class="our-range pt-lg-5 py-4" id="our-range">
                 <div class="container">
                     <h2 class="title text-center">Our Full Range</h2>
@@ -375,7 +375,7 @@
                     <div class="tab-content py-0">
                         <div role="tabpanel" class="filter-carousel tab-pane active" id="all_prd">
                             <div class="owl-carousel owl-theme product-slider">
-                                @foreach ($best_selling_products_combined as $prd_val)
+                                @foreach ($our_full_range_of_products as $prd_val)
                                     @php
                                         $cart_qty = 0;
                                         if (count($cart) > 0 && isset($cart[$prd_val->id])) {
