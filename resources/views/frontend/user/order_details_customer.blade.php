@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => true, 'header2' => true, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => true, 'new_footer' => false])
 
 @section('content')
     <main class="main-tag mt-0">
@@ -18,10 +18,10 @@
                             <div class="img-name-sm px-3 mb-2">
                                 <div class="user-img-sm m-0">
                                     <img src="" alt="User Img"
-                                         onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}'"
-                                         id="userProfileImage">
+                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}'"
+                                        id="userProfileImage">
                                     <input type="hidden" class="selected-files" name="photo" id="userAvatar"
-                                           value="{{ Auth::user()->avatar_original }}">
+                                        value="{{ Auth::user()->avatar_original }}">
                                 </div>
                                 <div class="pl-3">
                                     <p class="fw600 fsize14 mb-1">{{ Auth::user()->name }}</p>
@@ -47,7 +47,7 @@
                                     {{ date('d M Y H:i A', strtotime($order->created_at)) }}</span>
                             </p>
 
-                            @if(json_decode($order->shipping_address))
+                            @if (json_decode($order->shipping_address))
                                 <p class="text-white fw600 mb-2">Delivery Address:</p>
                                 <p class="text-white address mb-0">
                                     {{ json_decode($order->shipping_address)->address }},<br>
@@ -62,66 +62,66 @@
                         <div class="order-data pt-4 mt-3">
                             <table class="table w-100">
                                 <thead>
-                                <tr>
-                                    <th class="fw700 fsize13">Item Name</th>
-                                    <th class="fw700 fsize13 text-center">Qty</th>
-                                    <th class="fw700 fsize13 text-right">Price</th>
-                                </tr>
+                                    <tr>
+                                        <th class="fw700 fsize13">Item Name</th>
+                                        <th class="fw700 fsize13 text-center">Qty</th>
+                                        <th class="fw700 fsize13 text-right">Price</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($order->orderDetails as $key => $orderDetail)
-                                    @php
-                                        if($orderDetail->quantity * floatval($orderDetail->product->min_qty) < 1){
-                                            $qty_unit =  (1000 * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->secondary_unit;
-                                        } else {
-                                            $qty_unit = ($orderDetail->quantity * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->unit;
-                                        }
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $orderDetail->product->getTranslation('name') }}</td>
-                                        <td class="text-center">{{ $qty_unit }}</td>
-                                        <td class="text-right">{!! single_price_web($orderDetail->price) !!} </td>
-                                    </tr>
-                                @endforeach
+                                    @foreach ($order->orderDetails as $key => $orderDetail)
+                                        @php
+                                            if ($orderDetail->quantity * floatval($orderDetail->product->min_qty) < 1) {
+                                                $qty_unit = 1000 * floatval($orderDetail->product->min_qty) . ' ' . $orderDetail->product->secondary_unit;
+                                            } else {
+                                                $qty_unit = $orderDetail->quantity * floatval($orderDetail->product->min_qty) . ' ' . $orderDetail->product->unit;
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $orderDetail->product->getTranslation('name') }}</td>
+                                            <td class="text-center">{{ $qty_unit }}</td>
+                                            <td class="text-right">{!! single_price_web($orderDetail->price) !!} </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
-                                {{--                                 <tr>--}}
-                                {{--                                    <th colspan="2">Sub Total</th>--}}
-                                {{--                                    <th class="text-right">{{$order->grand_total}}</th>--}}
-                                {{--                                </tr>--}}
-                                {{--                                <tr>--}}
-                                {{--                                    <th colspan="2" class="bt-0">Discount</th>--}}
-                                {{--                                    <th class="text-right bt-0">- 200</th>--}}
-                                {{--                                </tr>--}}
-                                @if($order->orderDetails->sum('shipping_cost') > 0)
-                                    <tr>
-                                        <th colspan="2" class="bt-0">Shipping cost</th>
-                                        <th class="text-right bt-0"> {!! single_price_web($order->orderDetails->sum('shipping_cost')) !!}</th>
+                                    {{--                                 <tr> --}}
+                                    {{--                                    <th colspan="2">Sub Total</th> --}}
+                                    {{--                                    <th class="text-right">{{$order->grand_total}}</th> --}}
+                                    {{--                                </tr> --}}
+                                    {{--                                <tr> --}}
+                                    {{--                                    <th colspan="2" class="bt-0">Discount</th> --}}
+                                    {{--                                    <th class="text-right bt-0">- 200</th> --}}
+                                    {{--                                </tr> --}}
+                                    @if ($order->orderDetails->sum('shipping_cost') > 0)
+                                        <tr>
+                                            <th colspan="2" class="bt-0">Shipping cost</th>
+                                            <th class="text-right bt-0"> {!! single_price_web($order->orderDetails->sum('shipping_cost')) !!}</th>
+                                        </tr>
+                                    @endif
+                                    @if ($order->coupon_discount > 0)
+                                        <tr>
+                                            <th colspan="2" class="bt-0">{{ translate('Coupon Discount') }}</th>
+                                            <th class="text-right bt-0">
+                                                - {!! single_price_web($order->coupon_discount) !!}</th>
+                                        </tr>
+                                    @endif
+                                    {{--                                <tr> --}}
+                                    {{--                                    <th colspan="2" class="bt-0">Service Tax</th> --}}
+                                    {{--                                    <th class="text-right bt-0">80</th> --}}
+                                    {{--                                </tr> --}}
+                                    <tr class="bb-1">
+                                        <th colspan="2" class="fw600 fsize15 py-2">Total</th>
+                                        <th class="fw600 fsize15 text-right py-2">
+                                            {!! single_price_web($order->grand_total) !!}
+                                        </th>
                                     </tr>
-                                @endif
-                                @if($order->coupon_discount > 0)
-                                    <tr>
-                                        <th colspan="2" class="bt-0">{{translate('Coupon Discount')}}</th>
-                                        <th class="text-right bt-0">
-                                            - {!! single_price_web($order->coupon_discount) !!}</th>
-                                    </tr>
-                                @endif
-                                {{--                                <tr>--}}
-                                {{--                                    <th colspan="2" class="bt-0">Service Tax</th>--}}
-                                {{--                                    <th class="text-right bt-0">80</th>--}}
-                                {{--                                </tr> --}}
-                                <tr class="bb-1">
-                                    <th colspan="2" class="fw600 fsize15 py-2">Total</th>
-                                    <th class="fw600 fsize15 text-right py-2">
-                                        {!! single_price_web($order->grand_total) !!}
-                                    </th>
-                                </tr>
                                 </tfoot>
                             </table>
                         </div>
 
                         <div class="pt-4 text-center">
-                            @if(session()->has('shop_slug'))
+                            @if (session()->has('shop_slug'))
                                 <a href="{{ route('shop.visit', session()->get('shop_slug')) }}">
                                     <button class="btn primary-btn btn-round px-5">
                                         Continue Shopping &nbsp;&nbsp;

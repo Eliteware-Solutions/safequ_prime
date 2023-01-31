@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => true, 'header2' => false, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
 @section('content')
     <main class="main-tag-mt-sm">
@@ -14,10 +14,10 @@
                                 <div class="notify-crd">
                                     <div class="d-flex justify-content-start align-items-center pr-2">
                                         <!-- <div class="img-name pr-2">
-                                                <div class="item-img item-img-sm text-center">
-                                                    <img src="{{ static_asset('assets/img/strawberry.png') }}" alt="Item image" />
-                                                </div>
-                                            </div>-->
+                                                        <div class="item-img item-img-sm text-center">
+                                                            <img src="{{ static_asset('assets/img/strawberry.png') }}" alt="Item image" />
+                                                        </div>
+                                                    </div>-->
                                         <div>
                                             <p class="fw500 fsize14 title-txt mb-1">
                                                 {{ translate('Your Order: ') }}

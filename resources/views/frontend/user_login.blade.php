@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => false, 'header2' => false, 'footer' => false])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => false, 'header2' => false, 'footer' => false])
 
 @section('content')
     <div class="login-screen container py-4">
@@ -26,9 +26,9 @@
 
                     <button type="submit" class="btn primary-btn btn-block">Request OTP</button>
 
-{{--                    <a href="{{ route('home') }}">--}}
-{{--                        <p class="text-center pt-3 act-price">Skip for now</p>--}}
-{{--                    </a>--}}
+                    {{--                    <a href="{{ route('home') }}"> --}}
+                    {{--                        <p class="text-center pt-3 act-price">Skip for now</p> --}}
+                    {{--                    </a> --}}
                 </form>
 
             </div>

@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => true, 'header2' => false, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
 @section('content')
     <main class="main-tag-mt-sm">
@@ -12,37 +12,39 @@
                     </h5>
 
                     <form id="userProfileForm" action="{{ route('user.profile.update') }}" method="POST"
-                          enctype="multipart/form-data">
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="profile-img mb-4">
                             <img src="{{ Auth::user()->avatar_original }}" alt="User Img"
-                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}'"
-                                 id="userProfileImage">
+                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/avatar-default.webp') }}'"
+                                id="userProfileImage">
 
                             <div class="cmr-btn flex-acenter-jcenter" data-toggle="aizuploader" data-type="image">
                                 <i class="fad fa-camera-alt text-white"></i>
                                 <input type="hidden" class="selected-files" name="photo" id="userAvatar"
-                                       value="{{ Auth::user()->avatar_original }}">
+                                    value="{{ Auth::user()->avatar_original }}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" onkeyup="validate_name();"
-                                   value="{{ Auth::user()->name == 'Guest User' ? '' : Auth::user()->name }}" required/>
+                                value="{{ Auth::user()->name == 'Guest User' ? '' : Auth::user()->name }}" required />
                         </div>
                         <div class="form-group">
                             <label for="phone-code">Mobile number</label>
                             <input type="text" name="phone" id="phone-code" value="{{ Auth::user()->phone }}" required
-                                   disabled/>
+                                disabled />
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" value="{{ Auth::user()->email }}" required/>
+                            <input type="email" name="email" id="email" value="{{ Auth::user()->email }}"
+                                required />
                         </div>
                         <div class="form-group">
                             <label for="address">Flat / House No.</label>
-                            <input type="text" name="address" id="address" value="{{ Auth::user()->address }}" required/>
+                            <input type="text" name="address" id="address" value="{{ Auth::user()->address }}"
+                                required />
                         </div>
                         <button type="submit" class="btn primary-btn mt-4 btn-block">Save</button>
                     </form>
@@ -57,7 +59,7 @@
 @endsection
 
 <script>
-    function validate_name(){
+    function validate_name() {
         let element = document.getElementById('name');
         element.value = element.value.replace(/[^a-zA-Z\s@]+/, '');
     }

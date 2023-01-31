@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app',['header_show' => true, 'header2' => false, 'footer' => true])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
 @section('content')
     <main class="main-tag main-tag-mt">
@@ -14,7 +14,7 @@
                         </h4>
                         @if (get_setting('razorpay') == 1)
                             <button class="btn btn-outline-light fsize14 fw500 px-4 btn-round btn-before-none"
-                                    data-toggle="modal" data-target="#addMoneyModal">
+                                data-toggle="modal" data-target="#addMoneyModal">
                                 Add Money
                             </button>
                         @endif
@@ -24,13 +24,14 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0 fw700 title-txt">Transaction History</h6>
                             <i class="fad fa-filter fsize16 py-1 px-2" data-toggle="modal"
-                               data-target="#filterTransModal"></i>
+                                data-target="#filterTransModal"></i>
                         </div>
 
                         <div class="pt-4">
                             @forelse ($wallets as $key => $wallet)
                                 <div class="transactions">
-                                    <div class="flex-acenter-jbtw viewDetails cursor-pointer flex-wrap @if ($wallet->amount > 0) credit @else debit @endif">
+                                    <div
+                                        class="flex-acenter-jbtw viewDetails cursor-pointer flex-wrap @if ($wallet->amount > 0) credit @else debit @endif">
                                         <div class="flex-acenter-jstart">
                                             <div class="indicater text-center">
                                                 <i class="fad fa-long-arrow-left text-danger"></i>
@@ -63,32 +64,28 @@
                                                 $payment_detail = json_decode($wallet->payment_details);
                                             @endphp
                                             @if ($wallet->payment_method == 'razorpay')
-                                                <p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Payment method:</span>
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Payment method:</span>
                                                     Razorpay</p>
-                                                <p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Transaction id:</span> {{$payment_detail->id}}
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Transaction id:</span>
+                                                    {{ $payment_detail->id }}
                                                 </p>
                                             @elseif ($wallet->payment_method == 'order')
-                                                <a href="{{ route('purchase_details', encrypt($payment_detail->id)) }}"><p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Order No.:</span>
-                                                    #{{$payment_detail->code}}</p></a>
+                                                <a href="{{ route('purchase_details', encrypt($payment_detail->id)) }}">
+                                                    <p class="body-txt mb-1"><span class="fw500 fsize13">Order No.:</span>
+                                                        #{{ $payment_detail->code }}</p>
+                                                </a>
                                             @elseif ($wallet->payment_method == 'bonus')
-                                                <p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Payment method:</span>
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Payment method:</span>
                                                     Welcome Bonus</p>
                                             @elseif ($wallet->payment_method == 'admin_recharge')
-                                                <p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Payment method:</span>
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Payment method:</span>
                                                     Offline Recharge</p>
-                                                <p class="body-txt mb-1"><span
-                                                            class="fw500 fsize13">Reason:</span> {{$payment_detail->reason}}
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Reason:</span>
+                                                    {{ $payment_detail->reason }}
                                                 </p>
                                             @else
-                                                <p class="body-txt mb-1"><span
-                                                        class="fw500 fsize13">Payment method:</span>
+                                                <p class="body-txt mb-1"><span class="fw500 fsize13">Payment method:</span>
                                                     Referral Bonus</p>
-
                                             @endif
                                         </div>
                                     </div>
@@ -120,7 +117,7 @@
 @section('modal')
     <!-- Add Money to wallet Popup -->
     <div class="modal fade" id="addMoneyModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
-         aria-labelledby="addMoneyModalLabel" aria-hidden="true">
+        aria-labelledby="addMoneyModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -140,7 +137,7 @@
                                     </span>
                                 </div>
                                 <input type="text" class="form-control" name="amount" id="wallet_amount"
-                                       placeholder="0"/>
+                                    placeholder="0" />
                             </div>
                             <div class="amt-select text-center pb-3">
                                 <button type="button" class="btn amt-btn my-1 btn-round" data-amt="100">100</button>
@@ -162,7 +159,7 @@
 
     <!-- Filter Popup -->
     <div class="modal fade" id="filterTransModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
-         aria-labelledby="filterTransModalLabel" aria-hidden="true">
+        aria-labelledby="filterTransModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -178,27 +175,27 @@
                             <div class="form-group">
                                 <label for="from_date" class="fw500">From Date</label>
                                 <input type="date" class="form-control" name="from_date" id="from_date"
-                                       value="{{ $request->from_date ?? '' }}"/>
+                                    value="{{ $request->from_date ?? '' }}" />
                             </div>
                             <div class="form-group pb-3">
                                 <label for="from_date" class="fw500">To Date</label>
                                 <input type="date" class="form-control" name="to_date" id="to_date"
-                                       value="{{ $request->to_date ?? '' }}"/>
+                                    value="{{ $request->to_date ?? '' }}" />
                             </div>
                             <div class="form-group pb-3">
                                 <label for="from_date" class="fw500">Transaction Type</label>
 
                                 <div class="switch">
-                                    <input type="radio" class="switch-input" name="view" value="all" id="all"
-                                           @if (isset($request->view) && $request->view == 'all') checked @endif>
+                                    <input type="radio" class="switch-input" name="view" value="all"
+                                        id="all" @if (isset($request->view) && $request->view == 'all') checked @endif>
                                     <label for="all" class="switch-label switch-label-all mb-0">All</label>
 
-                                    <input type="radio" class="switch-input" name="view" value="credit" id="credit"
-                                           @if (isset($request->view) && $request->view == 'credit') checked @endif />
+                                    <input type="radio" class="switch-input" name="view" value="credit"
+                                        id="credit" @if (isset($request->view) && $request->view == 'credit') checked @endif />
                                     <label for="credit" class="switch-label switch-label-in">Credit</label>
 
-                                    <input type="radio" class="switch-input" name="view" value="debit" id="debit"
-                                           @if (isset($request->view) && $request->view == 'debit') checked @endif />
+                                    <input type="radio" class="switch-input" name="view" value="debit"
+                                        id="debit" @if (isset($request->view) && $request->view == 'debit') checked @endif />
                                     <label for="debit" class="switch-label switch-label-out">Debit</label>
 
                                     <span class="switch-selection"></span>
@@ -217,16 +214,16 @@
 
 @section('script')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Unit Qty select
-            $(".amt-btn").on('click', function () {
+            $(".amt-btn").on('click', function() {
                 let amount = $(this).data('amt');
                 $('#wallet_amount').val(amount);
                 $('#btnAmt').text(amount);
                 $('#btnAmt').parent().removeClass("disabled");
             })
 
-            $('#wallet_amount').on('keyup touchend', function () {
+            $('#wallet_amount').on('keyup touchend', function() {
                 let value = $(this).val();
 
                 if (value != '' && value != 0) {
@@ -236,12 +233,13 @@
                 }
             })
 
-            $(".viewDetails").on('click', function () {
+            $(".viewDetails").on('click', function() {
                 let icn = $(this).find('i.fa-caret-circle-right');
                 let el = $(this).parent().find('.transDetails');
                 let hght = el.children('.pt-2').outerHeight();
 
-                el.hasClass('active') ? (el.toggleClass('active').css('height', '0'), icn.css('transform', 'rotate(0deg)')) :
+                el.hasClass('active') ? (el.toggleClass('active').css('height', '0'), icn.css('transform',
+                        'rotate(0deg)')) :
                     (el.toggleClass('active').css('height', hght), icn.css('transform', 'rotate(90deg)'));
             })
         })

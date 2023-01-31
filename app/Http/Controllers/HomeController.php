@@ -68,18 +68,32 @@ class HomeController extends Controller
 
         $parentCategories = Category::where('parent_id', 0)->get();
 
-        $best_selling_products = array();
+        $customer_favourites = array();
+        $customer_favourites = ProductStock::where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
 
-        foreach ($parentCategories as $cat) {
-            $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
-                $query->where('parent_category_id', $cat->id);
-            })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
+        $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
+
+        $deals_of_the_day = array();
+        foreach ($flash_deal->flash_deal_products as $deal_products) {
+            if ($deal_products->deal_products->deal_stocks) {
+                $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->deal_stocks;
+            }
         }
 
-        $best_selling_products_combined = array();
+        $best_selling_products = array();
+        foreach ($parentCategories as $cat) {
+            // $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+            //     $query->where('parent_category_id', $cat->id);
+            // })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
+            $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+                $query->where('parent_category_id', $cat->id);
+            })->where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
+        }
+
+        $our_full_range_of_products = array();
         foreach ($best_selling_products as $prd) {
             foreach ($prd as $val) {
-                $best_selling_products_combined[] = $val;
+                $our_full_range_of_products[] = $val;
             }
         }
 
@@ -97,7 +111,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'best_selling_products_combined', 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'customer_favourites', 'our_full_range_of_products', 'deals_of_the_day', 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
     }
 
     public function set_local_community(Request $request)
