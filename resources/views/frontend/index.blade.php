@@ -263,65 +263,67 @@
         </section>
 
         <!-- Deals Of The Day -->
-        <section class="deals pt-lg-5 py-4">
-            <div class="container">
-                <div class="content pt-lg-5 pt-4 overflow-hide">
-                    <h2 class="title text-center pt-2 text-white">Deals Of The Day</h2>
-                    <div class="owl-carousel owl-theme product-slider2 mx-auto">
-                        @foreach ($deals_of_the_day as $prd_val)
-                            @php
-                                $cart_qty = 0;
-                                if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                    $cart_qty = $cart[$prd_val->id]['qty'];
-                                }
-                                $addCartQty = $cart_qty + 1;
+        @if($deals_of_the_day)
+            <section class="deals pt-lg-5 py-4">
+                <div class="container">
+                    <div class="content pt-lg-5 pt-4 overflow-hide">
+                        <h2 class="title text-center pt-2 text-white">Deals Of The Day</h2>
+                        <div class="owl-carousel owl-theme product-slider2 mx-auto">
+                            @foreach ($deals_of_the_day as $prd_val)
+                                @php
+                                    $cart_qty = 0;
+                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                        $cart_qty = $cart[$prd_val->id]['qty'];
+                                    }
+                                    $addCartQty = $cart_qty + 1;
 
-                                $product_total = 0;
-                                if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                    $product_total = $cart[$prd_val->id]['total'];
-                                }
+                                    $product_total = 0;
+                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                        $product_total = $cart[$prd_val->id]['total'];
+                                    }
 
-                                $product_price = $prd_val->price;
-                                if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                    $product_price = $cart[$prd_val->id]['price'];
-                                }
+                                    $product_price = $prd_val->price;
+                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
+                                        $product_price = $cart[$prd_val->id]['price'];
+                                    }
 
-                                $qty_unit_main = $prd_val->product->unit;
-                                if (floatval($prd_val->product->min_qty) < 1) {
-                                    $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
-                                }
-                            @endphp
-                            <div class="item">
-                                <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
-                                    <div class="prd-img">
-                                        <img src="{{ uploaded_asset($prd_val->product->photos) }}"
-                                            data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                            class="object-cover-center" width="250" height="250"
-                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                            alt="{{ $prd_val->product->getTranslation('name') }}">
-                                    </div>
-                                    <div class="prd-content p-3 position-relative">
-                                        <span class="prd-tag text-white b-rd-5">Organic</span>
-                                        <p class="prd-loc mb-1 secondary-text">
-                                            {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
-                                        <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}</p>
-                                        <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
-                                        <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
-                                            {{ $qty_unit_main }}</p>
-                                        <button class="btn secondary-btn-o"
-                                            onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
-                                            <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                                onload="SVGInject(this)" alt="Btn Cart">
-                                            Add to cart
-                                        </button>
+                                    $qty_unit_main = $prd_val->product->unit;
+                                    if (floatval($prd_val->product->min_qty) < 1) {
+                                        $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
+                                    }
+                                @endphp
+                                <div class="item">
+                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                                        <div class="prd-img">
+                                            <img src="{{ uploaded_asset($prd_val->product->photos) }}"
+                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                 class="object-cover-center" width="250" height="250"
+                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                 alt="{{ $prd_val->product->getTranslation('name') }}">
+                                        </div>
+                                        <div class="prd-content p-3 position-relative">
+                                            <span class="prd-tag text-white b-rd-5">Organic</span>
+                                            <p class="prd-loc mb-1 secondary-text">
+                                                {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
+                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}</p>
+                                            <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
+                                            <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
+                                                {{ $qty_unit_main }}</p>
+                                            <button class="btn secondary-btn-o"
+                                                    onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                                     onload="SVGInject(this)" alt="Btn Cart">
+                                                Add to cart
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endif
 
         <!-- Hear from Customers -->
         <section class="hear-customers pt-lg-5 py-4 v-light-bg">
