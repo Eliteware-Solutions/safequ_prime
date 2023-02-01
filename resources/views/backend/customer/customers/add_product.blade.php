@@ -11,7 +11,6 @@
                 <div class="col-lg-12">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
-                    <input type="hidden" name="owner_id" value="{{ $seller->user_id }}">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{translate('Order Information')}}</h5>
@@ -40,14 +39,26 @@
                                 <label class="col-md-3 col-from-label">{{translate('Payment Type')}}</label>
                                 <div class="col-md-8">
                                     <input type="text" class="form-control" name="payment_type" id="payment_type"
-                                           placeholder="{{ translate('G-Pay etc..') }}">
+                                           placeholder="{{ translate('G-Pay etc..') }}" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">{{translate('Transaction Id')}}</label>
                                 <div class="col-md-8">
                                     <input type="text" class="form-control" name="transaction_id" id="transaction_id"
-                                           placeholder="{{ translate('GP123456 etc..') }}">
+                                           placeholder="{{ translate('GP123456 etc..') }}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="owner_id">
+                                <label class="col-md-3 col-from-label">{{translate('Community')}} <span
+                                        class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                    <select class="form-control aiz-selectpicker" name="owner_id" id="owner_id" required>
+                                        <option>Select Community</option>
+                                        @foreach ($shop as $val)
+                                            <option value="{{ $val->id }}">{{ $val->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -81,12 +92,12 @@
                                                     <input type="text" class="form-control prod_qty" placeholder="{{ translate('Qty') }}" name="prod_qty[]" required>
                                                 </div>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-2">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control prod_unit" placeholder="{{ translate('Unit') }}" name="price_per_unit[]">
                                                 </div>
                                             </div>
-                                            <div class="col-auto">
+                                            <div class="col-auto ml-2">
                                                 <button type="button" class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger" data-toggle="remove-parent" data-parent=".row">
                                                     <i class="las la-times"></i>
                                                 </button>
@@ -104,7 +115,7 @@
                                                 <option value="">Select Product</option>
                                                 @foreach ($active_products as $product)
                                                 <option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
-                                                                    {{ $product->product->name. ' ['.$product->product->variation.']' }}
+                                                    {{ $product->product->name. ' ['.$product->product->variation.']' }}
                                                 </option>
                                                 @endforeach
                                             </select>
@@ -115,12 +126,12 @@
                                             <input type="text" class="form-control prod_qty" placeholder="{{ translate('Qty') }}" name="prod_qty[]" required>
                                                 </div>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-2">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control prod_unit" placeholder="{{ translate('Unit') }}" name="price_per_unit[]">
                                                 </div>
                                             </div>
-                                            <div class="col-auto">
+                                            <div class="col-auto ml-2">
                                                 <button type="button" class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger" data-toggle="remove-parent" data-parent=".row">
                                                     <i class="las la-times"></i>
                                                 </button>
@@ -173,17 +184,20 @@
 
         function checkPaymentDetails(obj) {
             if ($(obj).val() == 'paid') {
-                $('#payment_type').attr('required', true);
-                $('#transaction_id').attr('required', true);
+                $('#payment_type').removeAttr('disabled').attr('required', true);
+                $('#transaction_id').removeAttr('disabled').attr('required', true);
+                $('input[name="add_cart"]').attr('disabled', true);
             } else {
-                $('#payment_type').removeAttr('required');
-                $('#transaction_id').removeAttr('required');
+                $('#payment_type').removeAttr('required').attr('disabled', true);
+                $('#transaction_id').removeAttr('required').attr('disabled', true);
+                $('input[name="add_cart"]').removeAttr('disabled');
             }
         }
 
         function loadProductUnit(Obj) {
             let unit_label = $(Obj).find(':selected').data('unit_label');
             $(Obj).parent().parent().parent().parent().find('.prod_unit').val(unit_label);
+            $(Obj).parent().parent().parent().parent().find('.prod_qty').val(1);
         }
 
     </script>

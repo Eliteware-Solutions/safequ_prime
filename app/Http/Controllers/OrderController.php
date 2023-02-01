@@ -511,6 +511,7 @@ class OrderController extends Controller
         $order = new Order;
         $order->combined_order_id = $combined_order->id;
         $order->user_id = $request->user_id;
+        $order->seller_id = $request->owner_id;
         $order->shipping_address = $combined_order->shipping_address;
         $order->payment_type = $request->payment_type;
         $order->payment_status = $request->payment_status;
@@ -545,7 +546,7 @@ class OrderController extends Controller
 
             $order_detail = new OrderDetail;
             $order_detail->order_id = $order->id;
-            $order_detail->seller_id = $product_stock->seller->user_id;
+            $order_detail->seller_id = $request->owner_id;
             $order_detail->product_id = $product->id;
             $order_detail->product_stock_id = $product_stock->id;
             $order_detail->price =  $productPrice * $prod_qty[$key];
@@ -567,7 +568,6 @@ class OrderController extends Controller
                 $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
             }
             $order->payment_details = $payment_details;
-            $order->seller_id = $product_stock->seller->user_id;
 
             $order->grand_total = $subtotal + $tax + $shipping;
 

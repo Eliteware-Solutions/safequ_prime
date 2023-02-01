@@ -139,8 +139,10 @@ class CartController extends Controller
 
             if ($product->discount_start_date == null) {
                 $discount_applicable = true;
-            } elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+            } elseif (
+                strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+            ) {
                 $discount_applicable = true;
             }
 
@@ -207,7 +209,7 @@ class CartController extends Controller
 
                         if (($str != null && $cartItem['variation'] == $str) || $str == null) {
                             $foundInCart = true;
-//                            $cartItem['quantity'] += $request['quantity'];
+                            // $cartItem['quantity'] += $request['quantity'];
                             $cartItem['quantity'] = $request->quantity;
 
                             if ($cart_product->wholesale_product) {
@@ -287,7 +289,7 @@ class CartController extends Controller
     {
         Cart::where('user_id', auth()->user()->id)->delete();
         if ($request->data) {
-            foreach ($request->data AS $val) {
+            foreach ($request->data as $val) {
                 $req_quantity = floatval($val['qty']);
                 $product_id = intval($val['product_id']);
                 $product_stock_id = intval($val['product_stock_id']);
@@ -348,8 +350,10 @@ class CartController extends Controller
 
                 if ($product->discount_start_date == null) {
                     $discount_applicable = true;
-                } elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-                    strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+                } elseif (
+                    strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                    strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+                ) {
                     $discount_applicable = true;
                 }
 
@@ -498,8 +502,10 @@ class CartController extends Controller
 
             if ($product->discount_start_date == null) {
                 $discount_applicable = true;
-            } elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+            } elseif (
+                strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+            ) {
                 $discount_applicable = true;
             }
 
@@ -596,8 +602,10 @@ class CartController extends Controller
 
             if ($product_stock->product->discount_start_date == null) {
                 $discount_applicable = true;
-            } elseif (strtotime(date('d-m-Y H:i:s')) >= $product_stock->product->discount_start_date &&
-                strtotime(date('d-m-Y H:i:s')) <= $product_stock->product->discount_end_date) {
+            } elseif (
+                strtotime(date('d-m-Y H:i:s')) >= $product_stock->product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product_stock->product->discount_end_date
+            ) {
                 $discount_applicable = true;
             }
 
@@ -661,7 +669,110 @@ class CartController extends Controller
             }
 
             calculateShippingCost($carts);
-
         }
+    }
+
+    public function editItemInCustomerCart(Request $request)
+    {
+        $carts = array();
+        $data = array();
+
+        $user_id = $request->user_id;
+        $data['user_id'] = $user_id;
+        $carts = Cart::where('id', $request->cart_id)->get();
+
+        $str = '';
+        $tax = 0;
+        $prod_qty = intval($request->prod_qty);
+
+        $product_stock = ProductStock::with('product')->findOrFail($request->proudct);
+
+        $data['product_id'] = $product_stock->product_id;
+        $data['product_stock_id'] = $request->proudct;
+        $data['owner_id'] = $request->owner_id;
+
+        $price = $product_stock->price;
+
+        if ($product_stock->product->wholesale_product) {
+            $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty)->where('max_qty', '>=', $prod_qty)->first();
+            if ($wholesalePrice) {
+                $price = $wholesalePrice->price;
+            }
+        }
+
+        //discount calculation
+        $discount_applicable = false;
+
+        if ($product_stock->product->discount_start_date == null) {
+            $discount_applicable = true;
+        } elseif (
+            strtotime(date('d-m-Y H:i:s')) >= $product_stock->product->discount_start_date &&
+            strtotime(date('d-m-Y H:i:s')) <= $product_stock->product->discount_end_date
+        ) {
+            $discount_applicable = true;
+        }
+
+        if ($discount_applicable) {
+            if ($product_stock->product->discount_type == 'percent') {
+                $price -= ($price * $product_stock->product->discount) / 100;
+            } elseif ($product_stock->product->discount_type == 'amount') {
+                $price -= $product_stock->product->discount;
+            }
+        }
+
+        //calculation of taxes
+        foreach ($product_stock->product->taxes as $product_tax) {
+            if ($product_tax->tax_type == 'percent') {
+                $tax += ($price * $product_tax->tax) / 100;
+            } elseif ($product_tax->tax_type == 'amount') {
+                $tax += $product_tax->tax;
+            }
+        }
+
+        $data['quantity'] = $prod_qty;
+        $data['price'] = $price;
+        $data['tax'] = $tax;
+        $data['shipping_cost'] = 0;
+        $data['shipping_type'] = 'home_delivery';
+        $data['product_referral_code'] = null;
+        $data['cash_on_delivery'] = $product_stock->product->cash_on_delivery;
+        $data['digital'] = $product_stock->product->digital;
+
+        if ($carts && count($carts) > 0) {
+            $foundInCart = false;
+
+            foreach ($carts as $cartItem) {
+                $cart_product = Product::where('id', $cartItem['product_id'])->first();
+
+                if ($cartItem['product_id'] == $product_stock->product_id && $cartItem['product_stock_id'] == intval($request->proudct)) {
+                    $product_stock = $cart_product->stocks->where('variant', $str)->first();
+
+                    if (($str != null && $cartItem['variation'] == $str) || $str == null) {
+                        $foundInCart = true;
+
+                        $cartItem['quantity'] = $prod_qty;
+
+                        if ($cart_product->wholesale_product) {
+                            $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty)->where('max_qty', '>=', $prod_qty)->first();
+                            if ($wholesalePrice) {
+                                $price = $wholesalePrice->price;
+                            }
+                        }
+
+                        $cartItem['price'] = $price;
+
+                        $cartItem->save();
+                    }
+                }
+            }
+
+            if (!$foundInCart) {
+                Cart::create($data);
+            }
+        } else {
+            Cart::create($data);
+        }
+
+        calculateShippingCost($carts);
     }
 }
