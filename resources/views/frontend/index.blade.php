@@ -466,11 +466,10 @@
         <!-- Change Community Modal Ends -->
 
         <!-- Join Community Modal -->
-        <div class="modal fade" id="joinCommunity" tabindex="-1" aria-labelledby="joinCommunityLabel"
+<!--        <div class="modal fade" id="joinCommunity" tabindex="-1" aria-labelledby="joinCommunityLabel"
             aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
-
                     <div class="modal-header text-center">
                         <h5 class="modal-title" id="joinCommunityLabel">Select Your Community</h5>
                     </div>
@@ -503,10 +502,9 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
             </div>
-        </div>
+        </div>-->
 
     </main>
 @endsection
@@ -516,11 +514,11 @@
         $(document).ready(function() {
 
             // Join Community modal trigger after Page Load
-            if ($('#local_shop_id').val() == 0 || $('#local_shop_id').val() == null) {
+            /*if ($('#local_shop_id').val() == 0 || $('#local_shop_id').val() == null) {
                 setTimeout(function() {
                     $('#joinCommunity').modal('show');
                 }, 1000)
-            }
+            }*/
 
             $('.carousel').carousel({
                 interval: 7000,
