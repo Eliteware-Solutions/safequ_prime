@@ -463,7 +463,7 @@ class WholesaleService
             $sellers = Seller::all();
 
             foreach ($sellers AS $seller) {
-                $product_stock = ProductStock::where('seller_id', $seller->id)->where('product_id', $request->product_id)->first();
+                $product_stock = ProductStock::where('seller_id', $seller->id)->where('product_id', $request->product_id)->orderBy('id', 'desc')->first();
 
                 if ($product_stock) {
                     $this->update_product_for_community($request, $seller->id, $product_stock->id);
