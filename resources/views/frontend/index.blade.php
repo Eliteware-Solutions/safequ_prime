@@ -632,83 +632,7 @@
             <div class="container">
                 <h2 class="title text-center">Instagram Feeds</h2>
 
-                <div class="owl-carousel owl-theme insta-feed-slider">
-                    <div class="item">
-                        <div class="feed-card trnsn-300ms">
-                            <div class="feed-img">
-                                <img src="{{ static_asset('assets/img/new-design/feed-1.png') }}" width="281"
-                                    height="281" alt="Insta Feed">
-                            </div>
-                            <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                                <img src="{{ static_asset('assets/img/new-design/like.svg') }}" onload="SVGInject(this)"
-                                    alt="Like">
-                                16 likes
-                            </div>
-                            <p class="mb-0"><b class="text-black">@Johndoi</b> Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="feed-card trnsn-300ms">
-                            <div class="feed-img">
-                                <img src="{{ static_asset('assets/img/new-design/feed-2.png') }}" width="281"
-                                    height="281" alt="Insta Feed">
-                            </div>
-                            <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                                <img src="{{ static_asset('assets/img/new-design/like.svg') }}" onload="SVGInject(this)"
-                                    alt="Like">
-                                16 likes
-                            </div>
-                            <p class="mb-0"><b class="text-black">@Johndoi</b> Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="feed-card trnsn-300ms">
-                            <div class="feed-img">
-                                <img src="{{ static_asset('assets/img/new-design/feed-3.png') }}" width="281"
-                                    height="281" alt="Insta Feed">
-                            </div>
-                            <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                                <img src="{{ static_asset('assets/img/new-design/like.svg') }}" onload="SVGInject(this)"
-                                    alt="Like">
-                                16 likes
-                            </div>
-                            <p class="mb-0"><b class="text-black">@Johndoi</b> Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="feed-card trnsn-300ms">
-                            <div class="feed-img">
-                                <img src="{{ static_asset('assets/img/new-design/feed-4.png') }}" width="281"
-                                    height="281" alt="Insta Feed">
-                            </div>
-                            <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                                <img src="{{ static_asset('assets/img/new-design/like.svg') }}" onload="SVGInject(this)"
-                                    alt="Like">
-                                16 likes
-                            </div>
-                            <p class="mb-0"><b class="text-black">@Johndoi</b> Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit.</p>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="feed-card trnsn-300ms">
-                            <div class="feed-img">
-                                <img src="{{ static_asset('assets/img/new-design/feed-5.png') }}" width="281"
-                                    height="281" alt="Insta Feed">
-                            </div>
-                            <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                                <img src="{{ static_asset('assets/img/new-design/like.svg') }}" onload="SVGInject(this)"
-                                    alt="Like">
-                                16 likes
-                            </div>
-                            <p class="mb-0"><b class="text-black">@Johndoi</b> Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="owl-carousel owl-theme insta-feed-slider" id="instafeed"></div>
 
             </div>
         </section>
@@ -896,7 +820,7 @@
             ]
         }
 
-        $('.product-slider, .insta-feed-slider, .community-slider').owlCarousel({
+        $('.product-slider, .community-slider').owlCarousel({
             ...carouselObj,
             ...{
                 margin: 30,
@@ -1055,5 +979,55 @@
                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
             }
         }
+    </script>
+
+    <script src="{{ static_asset('assets/js/instafeed.min.js')}}"></script>
+    <script type="text/javascript">
+        let templateHTML = `<div class="item">
+            <div class="feed-card trnsn-300ms">
+                <div class="feed-img">
+                    <img src="{{ image }}" width="281" height="281" alt="Insta Feed">
+                </div>
+                <div class="likes d-flex align-items-center py-2 fw600 light-text">
+                    <img src="./assets/images/like.svg" onload="SVGInject(this)" alt="Like">
+                    16 likes
+                </div>
+                <p class="mb-0">{{ caption }}</p>
+            </div>
+        </div>`;
+
+        var feed = new Instafeed({
+            accessToken: 'IGQVJVMEpHcFBwZAEw0NHFVa1NTWHluejlhSWJNV0VWbFB3LWswSHNtRjNwbjdXTFhhb0RlM2ZAvb2dkMDRFNmRIaURDVFRCU0kyOVlyR1lqTUV6aTFwT0tKTENScW8yWVBzNXhGOWJfNHVyd0lYTnRGWQZDZD',
+            template: templateHTML
+        });
+        feed.run();
+
+        setTimeout(() => {
+            $(".insta-feed-slider").owlCarousel({
+                ...carouselObj,
+                margin: 30,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    575: {
+                        items: 2
+                    },
+                    768: {
+                        items: 3
+                    },
+                    992: {
+                        items: 4
+                    },
+                    1200: {
+                        items: 4,
+                        nav: !0
+                    },
+                    1440: {
+                        items: 5
+                    }
+                }
+            })
+        }, 2000);
     </script>
 @endsection
