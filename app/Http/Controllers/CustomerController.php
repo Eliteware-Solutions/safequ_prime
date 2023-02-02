@@ -223,10 +223,13 @@ class CustomerController extends Controller
     {
         $user = User::findOrFail($user_id);
         $shop = User::where(array('banned' => 0, 'user_type' => 'seller'))->get();
+
+        $order_details = array();
         if ($type == 'cart_order') {
             $order = Cart::where('id', $ord_id)->first();
         } else {
             $order = Order::where('id', $ord_id)->first();
+            $order_details = $order->orderDetails;
         }
 
         $all_products = ProductStock::groupBy('product_id')->get();
@@ -247,22 +250,22 @@ class CustomerController extends Controller
 
         $order_type = $type;
 
-        return view('backend.customer.customers.edit_product', compact('order_type', 'user', 'shop', 'order', 'active_products'));
+        return view('backend.customer.customers.edit_product', compact('order_type', 'user', 'shop', 'order', 'order_details', 'active_products'));
     }
 
     public function add_customer_order(Request $request)
     {
         $qtyAvailable = true;
         $msg = '';
-        $prod_qty = $request->prod_qty;
-        foreach ($request->proudct as $key => $val) {
-            $productStock = ProductStock::find($val);
-            if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
-                $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
-                $qtyAvailable = false;
-                break;
-            }
-        }
+        // $prod_qty = $request->prod_qty;
+        // foreach ($request->proudct as $key => $val) {
+        //     $productStock = ProductStock::find($val);
+        //     if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
+        //         $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
+        //         $qtyAvailable = false;
+        //         break;
+        //     }
+        // }
 
         if ($qtyAvailable == true) {
             if ($request->add_order) (new OrderController)->save_order_from_backend($request);
@@ -278,26 +281,11 @@ class CustomerController extends Controller
 
     public function edit_customer_order(Request $request)
     {
-        $qtyAvailable = true;
-        $msg = '';
-        $prod_qty = $request->prod_qty;
+        if ($request->edit_order) (new OrderController)->edit_order_from_backend($request);
+        else (new CartController)->editItemInCustomerCart($request);
 
-        $productStock = ProductStock::find($request->proudct);
-        if (floatval($prod_qty) > floatval($productStock->qty)) {
-            $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
-            $qtyAvailable = false;
-        }
-
-        if ($qtyAvailable == true) {
-            if ($request->edit_order) (new OrderController)->edit_order_from_backend($request);
-            else (new CartController)->editItemInCustomerCart($request);
-
-            flash(translate('Order has been Updated.'))->success();
-            return redirect()->route('customers.detail', $request->user_id);
-        } else {
-            flash($msg)->error();
-            return back();
-        }
+        flash(translate('Order has been Updated.'))->success();
+        return redirect()->route('customers.detail', $request->user_id);
     }
 
     public function delete_cart_item($user_id, $ord_id)
@@ -305,6 +293,17 @@ class CustomerController extends Controller
         Cart::destroy($ord_id);
         flash(translate('Item has been deleted successfully'))->success();
         return redirect()->route('customers.detail', $user_id);
+    }
+
+    public function delete_order_item($user_id, $order_detail_id)
+    {
+        $dataAry['user_id'] = $user_id;
+        $dataAry['order_detail_id'] = $order_detail_id;
+
+        $status = (new OrderController)->delete_order_item($dataAry);
+
+        flash(translate($status))->success();
+        return redirect()->route('customers.detail', $dataAry['user_id']);
     }
 
     public function add_customer()

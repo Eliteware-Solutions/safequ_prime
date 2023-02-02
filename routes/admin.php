@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('customer/add-product/{id}', 'CustomerController@add_customer_product')->name('customers.add_product');
     Route::get('customer/edit-product/{type}/{user_id}/{ord_id}', 'CustomerController@edit_customer_product')->name('customers.edit_product');
     Route::get('customer/delete-cart-item/{user_id}/{ord_id}', 'CustomerController@delete_cart_item')->name('customers.delete_cart_item');
+    Route::get('customer/delete-order-item/{user_id}/{order_detail_id}', 'CustomerController@delete_order_item')->name('customers.delete_order_item');
     Route::post('customer/store-customer', 'CustomerController@store_customer')->name('customers.store_customer');
     Route::get('customer/edit-customer/{id}', 'CustomerController@edit_customer')->name('customers.edit');
     Route::post('customer/update-customer', 'CustomerController@update_customer')->name('customers.update_customer');

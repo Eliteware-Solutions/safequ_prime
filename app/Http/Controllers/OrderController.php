@@ -109,7 +109,7 @@ class OrderController extends Controller
         }
 
         $orders = $orders->paginate(15);
-        return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
+        return view('backend.sales.all_orders.index', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
     }
 
     public function all_orders_show($id)
@@ -166,8 +166,7 @@ class OrderController extends Controller
         $delivery_status = null;
         $sort_search = null;
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
-        $orders = Order::orderBy('id', 'desc')
-                        ->where('seller_id', $admin_user_id);
+        $orders = Order::orderBy('id', 'desc')->where('seller_id', $admin_user_id);
 
         if ($request->payment_type != null) {
             $orders = $orders->where('payment_status', $request->payment_type);
@@ -255,9 +254,7 @@ class OrderController extends Controller
         $sort_search = null;
         $orders = Order::query();
         if (Auth::user()->user_type == 'staff' && Auth::user()->staff->pick_up_point != null) {
-            $orders->where('shipping_type', 'pickup_point')
-                    ->where('pickup_point_id', Auth::user()->staff->pick_up_point->id)
-                    ->orderBy('code', 'desc');
+            $orders->where('shipping_type', 'pickup_point')->where('pickup_point_id', Auth::user()->staff->pick_up_point->id)->orderBy('code', 'desc');
 
             if ($request->has('search')) {
                 $sort_search = $request->search;
@@ -373,10 +370,10 @@ class OrderController extends Controller
         $combined_order->save();
 
         $seller_products = array();
-        foreach ($carts as $cartItem){
+        foreach ($carts as $cartItem) {
             $product_ids = array();
             $product = Product::find($cartItem['product_id']);
-            if(isset($seller_products[$product->user_id])){
+            if (isset($seller_products[$product->user_id])) {
                 $product_ids = $seller_products[$product->user_id];
             }
             array_push($product_ids, $cartItem);
@@ -448,7 +445,7 @@ class OrderController extends Controller
 
                 $order->seller_id = $product_stock->seller->user_id;
 
-                if ($product->added_by == 'seller' && $product->user->seller != null){
+                if ($product->added_by == 'seller' && $product->user->seller != null) {
                     $seller = $product->user->seller;
                     $seller->num_of_sale += $cartItem['quantity'];
                     $seller->save();
@@ -528,7 +525,7 @@ class OrderController extends Controller
         $coupon_discount = 0;
 
         $prod_qty = $request->prod_qty;
-        foreach ($request->proudct as $key => $val){
+        foreach ($request->proudct as $key => $val) {
             $product_stock = ProductStock::find($val);
             $product = $product_stock->product;
 
@@ -564,7 +561,7 @@ class OrderController extends Controller
             $product->save();
 
             $payment_details = '';
-            if($request->payment_status == 'paid') {
+            if ($request->payment_status == 'paid') {
                 $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
             }
             $order->payment_details = $payment_details;
@@ -577,6 +574,109 @@ class OrderController extends Controller
         }
 
         $combined_order->save();
+    }
+
+    public function edit_order_from_backend(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+
+        $shippingAddress = [];
+        $shippingAddress['name']        = $user->name;
+        $shippingAddress['email']       = $user->email;
+        $shippingAddress['address']     = $user->address;
+        $shippingAddress['country']     = $user->country;
+        $shippingAddress['state']       = $user->state;
+        $shippingAddress['city']        = $user->city;
+        $shippingAddress['postal_code'] = $user->postal_code;
+        $shippingAddress['phone']       = $user->phone;
+
+        $combined_order = CombinedOrder::where('id', $request->combined_order_id)->first();
+        $combined_order->user_id = $user->id;
+        $combined_order->shipping_address = json_encode($shippingAddress);
+        $combined_order->save();
+
+        $order = Order::where('id', $request->order_id)->first();
+        $order->seller_id = $request->owner_id;
+        $order->shipping_address = $combined_order->shipping_address;
+        $order->payment_type = $request->payment_type;
+        $order->payment_status = $request->payment_status;
+        $order->date = strtotime('now');
+        $order->save();
+
+        $subtotal = 0;
+        $tax = 0;
+        $shipping = 0;
+        $coupon_discount = 0;
+
+        $prod_qty = $request->prod_qty;
+
+        OrderDetail::where('order_id', $request->order_id)->delete();
+
+        foreach ($request->proudct as $key => $val) {
+            $product_stock = ProductStock::find($val);
+            $product = $product_stock->product;
+            $productPrice = $product_stock->price;
+
+            $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+            if ($wholesalePrice) {
+                $productPrice = $wholesalePrice->price;
+            }
+
+            $subtotal += $productPrice * $prod_qty[$key];
+
+            $order_detail = new OrderDetail;
+            $order_detail->order_id = $request->order_id;
+            $order_detail->product_id = $product->id;
+            $order_detail->seller_id = $request->owner_id;
+            $order_detail->product_stock_id = $product_stock->id;
+            $order_detail->price =  $productPrice * $prod_qty[$key];
+            $order_detail->tax = $tax;
+            $order_detail->shipping_cost = $shipping;
+            $order_detail->quantity = $prod_qty[$key];
+            $order_detail->payment_status = $request->payment_status;
+
+            $shipping += $order_detail->shipping_cost;
+
+            //End of storing shipping cost
+            $order_detail->save();
+
+            $product->num_of_sale += $prod_qty[$key];
+            $product->save();
+
+            $payment_details = '';
+            if ($request->payment_status == 'paid') {
+                $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
+            }
+            $order->payment_details = $payment_details;
+
+            $order->grand_total = $subtotal + $tax + $shipping;
+
+            $combined_order->grand_total = $order->grand_total;
+
+            $order->save();
+        }
+
+        $combined_order->save();
+    }
+
+    public function delete_order_item($dataAry)
+    {
+        $order_id = (OrderDetail::where('id', $dataAry['order_detail_id'])->first('order_id'))->order_id;
+
+        OrderDetail::where('id', $dataAry['order_detail_id'])->delete();
+        $msg = 'Item has been deleted successfully';
+
+        $cnt = (OrderDetail::where('order_id', $order_id)->get())->count();
+
+        if ($cnt == 0) {
+            $combined_order_id = (Order::where('id', $order_id)->first('combined_order_id'))->combined_order_id;
+            Order::where('id', $order_id)->delete();
+            CombinedOrder::where('id', $combined_order_id)->delete();
+
+            $msg = 'Order has been deleted successfully';
+        }
+
+        return $msg;
     }
 
     /**
@@ -628,9 +728,7 @@ class OrderController extends Controller
                         $product_stock->qty += $orderDetail->quantity;
                         $product_stock->save();
                     }
-
                 } catch (\Exception $e) {
-
                 }
 
                 $orderDetail->delete();
@@ -690,14 +788,12 @@ class OrderController extends Controller
                         SmsUtility::delivery_status_change(json_decode($order->shipping_address)->phone, $order);
                     }
                 } catch (\Exception $e) {
-
                 }
             }
             flash(translate('Order(s) status has been changed'))->success();
         } else {
             flash(translate('Something went wrong'))->error();
         }
-
     }
 
     public function order_details(Request $request)
@@ -764,8 +860,7 @@ class OrderController extends Controller
                 }
 
                 if (addon_is_activated('affiliate_system')) {
-                    if (($request->status == 'delivered' || $request->status == 'cancelled') &&
-                        $orderDetail->product_referral_code) {
+                    if (($request->status == 'delivered' || $request->status == 'cancelled') && $orderDetail->product_referral_code ) {
 
                         $no_of_delivered = 0;
                         $no_of_canceled = 0;
@@ -797,7 +892,6 @@ class OrderController extends Controller
                     SmsUtility::delivery_status_change(json_decode($order->shipping_address)->phone, $order);
                 }
             } catch (\Exception $e) {
-
             }
         }
 
@@ -839,7 +933,7 @@ class OrderController extends Controller
             $newOrder->date = strtotime('now');
             $newOrder->save();
 
-            foreach ($request->order_detail_ids AS $orderDetailId) {
+            foreach ($request->order_detail_ids as $orderDetailId) {
                 $orderDetail = OrderDetail::findOrFail($orderDetailId);
                 $orderDetail->delivery_status = $request->status;
                 $orderDetail->save();
@@ -874,18 +968,19 @@ class OrderController extends Controller
         }*/
     }
 
-   public function update_tracking_code(Request $request) {
+    public function update_tracking_code(Request $request)
+    {
         $order = Order::findOrFail($request->order_id);
         $order->tracking_code = $request->tracking_code;
         $order->save();
 
         return 1;
-   }
+    }
 
     public function update_payment_status(Request $request)
     {
         $order = Order::findOrFail($request->order_id);
-        if($request->status == 'paid' && $request->added_by_admin == 1) {
+        if ($request->status == 'paid' && $request->added_by_admin == 1) {
             $order->payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $order->grand_total));
         }
         $order->payment_status_viewed = '0';
@@ -937,7 +1032,6 @@ class OrderController extends Controller
             try {
                 SmsUtility::payment_status_change(json_decode($order->shipping_address)->phone, $order);
             } catch (\Exception $e) {
-
             }
         }
 
@@ -982,7 +1076,6 @@ class OrderController extends Controller
                 try {
                     Mail::to($order->delivery_boy->email)->queue(new InvoiceEmailManager($array));
                 } catch (\Exception $e) {
-
                 }
             }
 
@@ -990,7 +1083,6 @@ class OrderController extends Controller
                 try {
                     SmsUtility::assign_delivery_boy($order->delivery_boy->phone, $order->code);
                 } catch (\Exception $e) {
-
                 }
             }
         }

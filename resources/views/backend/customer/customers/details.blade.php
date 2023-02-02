@@ -86,7 +86,7 @@
                         <th>{{ translate('Product') }}</th>
                         <th>{{ translate('Quantity') }}</th>
                         <th>{{ translate('Price') }}</th>
-                        <th>{{ translate('Options') }}</th>
+                        <th class="text-center">{{ translate('Options') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,7 +105,7 @@
                             <td>{{ isset($order->product) ? $order->product->name : '--' }}</td>
                             <td>{{ $order->quantity }}</td>
                             <td>{{ single_price($totalPrice) }}</td>
-                            <td>
+                            <td class="text-center">
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                     href="{{ route('customers.edit_product', ['type' => 'cart_order', 'user_id' => $user->id, 'ord_id' => $order->id]) }}"
                                     title="{{ translate('Edit') }}">
@@ -140,6 +140,7 @@
                         <th>{{ translate('Price') }}</th>
                         <th>{{ translate('Delivery Status') }}</th>
                         <th>{{ translate('Payment Status') }}</th>
+                        <th class="text-center">{{ translate('Options') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -169,6 +170,22 @@
                             <td>{{ single_price($totalPrice) }}</td>
                             <td>{{ ucwords($detail->delivery_status) }}</td>
                             <td>{{ ucwords($detail->payment_status) }}</td>
+                            <td class="text-center">
+                                @if ($detail->payment_status == 'unpaid')
+                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
+                                        href="{{ route('customers.edit_product', ['type' => 'order', 'user_id' => $user->id, 'ord_id' => $detail->order_id]) }}"
+                                        title="{{ translate('Edit') }}">
+                                        <i class="las la-edit"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
+                                        data-href="{{ route('customers.delete_order_item', ['user_id' => $user->id, 'order_detail_id' => $detail->id]) }}"
+                                        title="{{ translate('Delete') }}">
+                                        <i class="las la-trash"></i>
+                                    </a>
+                                @else
+                                    --
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
