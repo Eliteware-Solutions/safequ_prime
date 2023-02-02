@@ -111,45 +111,58 @@ class OrderController extends Controller
 
         $orders = $orders->paginate(15);
 
-        foreach ($orders AS $order) {
-            $payment_link = '';
-            if ($order->payment_status != 'paid') {
-                $fields = array('amount'=>$order->grand_total, 'currency'=>'INR', "reference_id" => $order->id.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>true, 'email'=>true), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => "https://example-callback-url.com/", "callback_method" => "get");
+        return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
+    }
 
-                $curl = curl_init();
+    public function order_payment_link(Request $request)
+    {
+        $result = array();
+        $order = Order::findOrFail($request->id);
+        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
 
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_SSL_VERIFYHOST => FALSE,
-                    CURLOPT_SSL_VERIFYPEER => FALSE,
-                    CURLOPT_POSTFIELDS => json_encode($fields),
-                    CURLOPT_HTTPHEADER => array(
-                        'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
-                        'Content-Type: application/json'
-                    ),
-                ));
+        $curl = curl_init();
 
-                $response = curl_exec($curl);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_VERIFYHOST => FALSE,
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_POSTFIELDS => json_encode($fields),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
+                'Content-Type: application/json'
+            ),
+        ));
 
-                curl_close($curl);
-                $razorpay_result = json_decode($response);
-                if ($razorpay_result && isset($razorpay_result->status) && $razorpay_result->status == 'created') {
-                    $payment_link = $razorpay_result->short_url;
-                }
-            } else {
-                $payment_link = '';
-            }
-            $order->payment_link = $payment_link;
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $razorpay_result = json_decode($response);
+
+        if ($razorpay_result && isset($razorpay_result->status) && $razorpay_result->status == 'created') {
+            $payment_link = $razorpay_result->short_url;
+
+            $order->razorpay_payment_link = $payment_link;
+            $order->save();
+
+            $result = array(
+                'status'  => 1,
+                'payment_link' => $payment_link
+            );
+        } else {
+            $result = array(
+                'status'  => 0,
+                'payment_link' => ''
+            );
         }
 
-        return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
+        return $result;
     }
 
     public function all_orders_show($id)

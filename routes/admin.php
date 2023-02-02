@@ -185,6 +185,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
 
     Route::post('/bulk-order-status', 'OrderController@bulk_order_status')->name('bulk-order-status');
 
+    Route::post('/order-payment-link', 'OrderController@order_payment_link')->name('order-payment-link');
+
 
     // Pickup point orders
     Route::get('orders_by_pickup_point', 'OrderController@pickup_point_order_index')->name('pick_up_point.order_index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 use Session;
@@ -86,5 +87,19 @@ class RazorpayController extends Controller
                 }
             }
         }
+    }
+
+    public function link_payment_success(Request $request)
+    {
+        $order = array();
+        $reference_id = $request->razorpay_payment_link_reference_id;
+        $reference_id_ary = explode("#", $reference_id);
+        if (isset($reference_id_ary[0])) {
+            $order_id = $reference_id_ary[0];
+
+            $order = Order::findOrFail($order_id);
+        }
+
+        return view('frontend.link_payment_order_confirmed', compact('order'));
     }
 }

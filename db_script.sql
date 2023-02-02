@@ -150,3 +150,9 @@ ADD COLUMN `is_best_selling` int(1) NULL DEFAULT 0 AFTER `est_shipping_days`;
 
 -- Category slug updated
 UPDATE `categories` SET `slug` = 'flowers' WHERE `categories`.`id` = 24;
+
+
+-- ----------------------------
+-- Dt: 2-02-23
+-- ----------------------------
+ALTER TABLE `orders` ADD COLUMN `razorpay_payment_link` varchar(500) NULL AFTER `replaced_order_id`;

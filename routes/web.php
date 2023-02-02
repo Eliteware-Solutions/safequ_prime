@@ -313,6 +313,8 @@ Route::get('/instamojo/payment/pay-success', 'InstamojoController@success')->nam
 
 Route::post('rozer/payment/pay-success', 'RazorpayController@payment')->name('payment.rozer');
 
+Route::get('rozer/payment/link-payment-success', 'RazorpayController@link_payment_success')->name('payment.link_payment_success');
+
 Route::get('/paystack/payment/callback', 'PaystackController@handleGatewayCallback');
 
 Route::get('/vogue-pay', 'VoguePayController@showForm');
