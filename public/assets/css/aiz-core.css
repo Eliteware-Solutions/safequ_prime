@@ -7301,3 +7301,14 @@ ul.social.colored [class*="linkedin"] {
 [dir="rtl"] .badge-custom{
     border-radius: 50em 0 0 50em;
 }
+.v-light-border {
+    border: 1px solid #eff2f7;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.v-light-bg {
+    background-color: #eff2f7;
+}

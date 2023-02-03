@@ -531,9 +531,13 @@ class OrderController extends Controller
 
             $productPrice = $product_stock->price;
 
-            $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
-            if ($wholesalePrice) {
-                $productPrice = $wholesalePrice->price;
+            if (floatval($request->custom_price[$key]) <= 0) {
+                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+                if ($wholesalePrice) {
+                    $productPrice = $wholesalePrice->price;
+                }
+            } else {
+                $productPrice = $request->custom_price[$key];
             }
 
             $subtotal += $productPrice * $prod_qty[$key];
@@ -547,6 +551,9 @@ class OrderController extends Controller
             $order_detail->product_id = $product->id;
             $order_detail->product_stock_id = $product_stock->id;
             $order_detail->price =  $productPrice * $prod_qty[$key];
+            if (floatval($request->custom_price[$key]) > 0) {
+                $order_detail->custom_price = $request->custom_price[$key];
+            }
             $order_detail->tax = $tax;
             $order_detail->shipping_cost = $shipping;
             $order_detail->quantity = $prod_qty[$key];
@@ -617,9 +624,13 @@ class OrderController extends Controller
             $product = $product_stock->product;
             $productPrice = $product_stock->price;
 
-            $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
-            if ($wholesalePrice) {
-                $productPrice = $wholesalePrice->price;
+            if (floatval($request->custom_price[$key]) <= 0) {
+                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+                if ($wholesalePrice) {
+                    $productPrice = $wholesalePrice->price;
+                }
+            } else {
+                $productPrice = $request->custom_price[$key];
             }
 
             $subtotal += $productPrice * $prod_qty[$key];
@@ -630,6 +641,9 @@ class OrderController extends Controller
             $order_detail->seller_id = $request->owner_id;
             $order_detail->product_stock_id = $product_stock->id;
             $order_detail->price =  $productPrice * $prod_qty[$key];
+            if (floatval($request->custom_price[$key]) > 0) {
+                $order_detail->custom_price = $request->custom_price[$key];
+            }
             $order_detail->tax = $tax;
             $order_detail->shipping_cost = $shipping;
             $order_detail->quantity = $prod_qty[$key];
@@ -661,19 +675,22 @@ class OrderController extends Controller
 
     public function delete_order_item($dataAry)
     {
-        $order_id = (OrderDetail::where('id', $dataAry['order_detail_id'])->first('order_id'))->order_id;
+        $orderData = (OrderDetail::where('id', $dataAry['order_detail_id'])->first());
 
         OrderDetail::where('id', $dataAry['order_detail_id'])->delete();
         $msg = 'Item has been deleted successfully';
 
-        $cnt = (OrderDetail::where('order_id', $order_id)->get())->count();
+        $cnt = (OrderDetail::where('order_id', $orderData->order_id)->get())->count();
+        $order = (Order::where('id', $orderData->order_id)->first());
 
         if ($cnt == 0) {
-            $combined_order_id = (Order::where('id', $order_id)->first('combined_order_id'))->combined_order_id;
-            Order::where('id', $order_id)->delete();
-            CombinedOrder::where('id', $combined_order_id)->delete();
+            Order::where('id', $order->id)->delete();
+            CombinedOrder::where('id', $order->combined_order_id)->delete();
 
             $msg = 'Order has been deleted successfully';
+        } else {
+            $order->grand_total = abs($order->grand_total - $orderData->price);
+            $order->save();
         }
 
         return $msg;
@@ -860,7 +877,7 @@ class OrderController extends Controller
                 }
 
                 if (addon_is_activated('affiliate_system')) {
-                    if (($request->status == 'delivered' || $request->status == 'cancelled') && $orderDetail->product_referral_code ) {
+                    if (($request->status == 'delivered' || $request->status == 'cancelled') && $orderDetail->product_referral_code) {
 
                         $no_of_delivered = 0;
                         $no_of_canceled = 0;

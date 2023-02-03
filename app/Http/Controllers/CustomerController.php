@@ -33,7 +33,16 @@ class CustomerController extends Controller
                 $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
             });
         }
+
         $users = $users->paginate(15);
+
+        // TODO: Remove following loop and get pending bills of user while calling Users data by -> JOIN `orders` Table
+        $pending_bill = NULL;
+        foreach($users as $key => $val){
+            $pending_bill = Order::where(['user_id' => $users[$key]['id'], 'payment_status' => 'unpaid'])->get()->sum('grand_total');
+            $users[$key]['pending_bill'] = $pending_bill;
+        }
+
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
 
