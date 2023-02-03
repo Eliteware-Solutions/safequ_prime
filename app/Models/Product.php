@@ -96,4 +96,9 @@ class Product extends Model
     {
         return $query->where('digital', 0);
     }
+
+    public function productStock()
+    {
+        return $this->hasOne(ProductStock::class)->where('seller_id', 0);
+    }
 }

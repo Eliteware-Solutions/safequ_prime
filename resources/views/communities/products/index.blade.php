@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ $product->seller->user->name }}</td>
+                            <td>{{ (isset($product->seller) ? $product->seller->user->name : '--')  }}</td>
                             <td>
                                 <strong>{{translate('From')}} :</strong> {{ $product->purchase_start_date }} </br>
                                 <strong>{{translate('To')}} :</strong> {{ $product->purchase_end_date }}
