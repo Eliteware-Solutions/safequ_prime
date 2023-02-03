@@ -15,6 +15,7 @@ use App\Models\CustomerPackage;
 use App\Models\SellerPackage;
 use App\Http\Controllers\CustomerPackageController;
 use Auth;
+use Illuminate\Support\Facades\Log;
 
 class RazorpayController extends Controller
 {
@@ -101,5 +102,30 @@ class RazorpayController extends Controller
         }
 
         return view('frontend.link_payment_order_confirmed', compact('order'));
+    }
+
+    public function payment_link_webhook(Request $request)
+    {
+        Log::error('Webhook Data Start');
+        Log::error($request);
+        Log::error('Webhook Data Ends');
+        if ($request) {
+            if ($request['event'] == 'payment_link.paid') {
+                if ($request['event'] && $request['payload']['payment']) {
+                    $payment = $request['payload']['payment'];
+                    $order_id = $payment['entity']['notes']['order_id'];
+                    $order = Order::findOrFail($order_id);
+                    if ($order->payment_status != 'paid') {
+                        $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => $payment['entity']['base_amount'], 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
+
+                        $order->payment_status = 'paid';
+                        $order->payment_details = $payment_detalis;
+                        $order->save();
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

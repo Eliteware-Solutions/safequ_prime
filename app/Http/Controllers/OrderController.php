@@ -118,7 +118,8 @@ class OrderController extends Controller
     {
         $result = array();
         $order = Order::findOrFail($request->id);
-        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
+//        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
+        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => "https://13.234.232.150/rozer/payment/link-payment-success", "callback_method" => "get");
 
         $curl = curl_init();
 
