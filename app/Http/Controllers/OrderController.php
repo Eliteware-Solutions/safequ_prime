@@ -470,18 +470,20 @@ class OrderController extends Controller
                 $product_variation = $cartItem['variation'];
 
                 $product_stock = $product->stocks->where('id', $cartItem['product_stock_id'])->first();
-                if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
+                /*if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
                     flash(translate('The requested quantity is not available for ') . $product->getTranslation('name'))->warning();
                     $order->delete();
                     return redirect()->route('cart')->send();
-                } elseif ($product->digital != 1) {
+                } else
+                    if ($product->digital != 1) {
                     $product_stock->qty -= $cartItem['quantity'];
                     $product_stock->save();
-                }
+                }*/
 
                 $order_detail = new OrderDetail;
                 $order_detail->order_id = $order->id;
-                $order_detail->seller_id = $product_stock->seller->user_id;
+//                $order_detail->seller_id = $product_stock->seller->user_id;
+                $order_detail->seller_id = Auth::user()->joined_community_id;
                 $order_detail->product_id = $product->id;
                 $order_detail->product_stock_id = $cartItem['product_stock_id'];
                 $order_detail->variation = $product_variation;
@@ -500,13 +502,13 @@ class OrderController extends Controller
                 $product->num_of_sale += $cartItem['quantity'];
                 $product->save();
 
-                $order->seller_id = $product_stock->seller->user_id;
+                $order->seller_id = Auth::user()->joined_community_id;
 
-                if ($product->added_by == 'seller' && $product->user->seller != null){
+                /*if ($product->added_by == 'seller' && $product->user->seller != null){
                     $seller = $product->user->seller;
                     $seller->num_of_sale += $cartItem['quantity'];
                     $seller->save();
-                }
+                }*/
 
                 if (addon_is_activated('affiliate_system')) {
                     if ($order_detail->product_referral_code) {
