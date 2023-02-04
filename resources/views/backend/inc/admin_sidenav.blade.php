@@ -241,11 +241,11 @@
                                     <span class="aiz-side-nav-text">{{translate('Confirmed Orders')}}</span>
                                 </a>
                             </li>
-                            <li class="aiz-side-nav-item">
+<!--                            <li class="aiz-side-nav-item">
                                 <a href="{{ route('unpaid_orders.list') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Unpaid Orders')}}</span>
                                 </a>
-                            </li>
+                            </li>-->
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('cart_orders.list') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('Cart Orders')}}</span>

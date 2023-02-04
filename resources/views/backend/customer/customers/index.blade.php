@@ -67,7 +67,8 @@
                         <th>{{translate('Phone')}}</th>
                         <th>{{translate('Wallet Balance')}}</th>
                         <th>{{translate('Referred By')}}</th>
-                        <th>{{translate('Options')}}</th>
+                        <th>{{translate('Pending Bills')}}</th>
+                        <th class="text-center">{{translate('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -104,7 +105,8 @@
                                         {{ '--' }}
                                     @endif
                                 </td>
-                                <td class="text-right">
+                                <td>{{ single_price($user->pending_bill) }}</td>
+                                <td class="text-center">
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                        href="{{route('customers.edit', ['id'=>$user->id] )}}"
                                        title="{{ translate('Edit') }}">
@@ -120,7 +122,7 @@
                                        title="{{ translate('Wallet') }}">
                                         <i class="las la-wallet"></i>
                                     </a>
-                                    @if($user->banned != 1)
+                                    {{-- @if($user->banned != 1)
                                         <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm"
                                            onclick="confirm_ban('{{route('customers.ban', encrypt($user->id))}}');"
                                            title="{{ translate('Ban this Customer') }}">
@@ -132,7 +134,7 @@
                                            title="{{ translate('Unban this Customer') }}">
                                             <i class="las la-user-check"></i>
                                         </a>
-                                    @endif
+                                    @endif --}}
                                     <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete"
                                        data-href="{{route('customers.destroy', $user->id)}}"
                                        title="{{ translate('Delete') }}">

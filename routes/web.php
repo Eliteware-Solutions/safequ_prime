@@ -315,7 +315,8 @@ Route::post('rozer/payment/pay-success', 'RazorpayController@payment')->name('pa
 
 Route::get('rozer/payment/link-payment-success', 'RazorpayController@link_payment_success')->name('payment.link_payment_success');
 
-Route::post('rozer/payment/payment-link-webhook', 'RazorpayController@payment_link_webhook')->name('payment.payment_link_webhook');
+//Route::post('rozer/payment/payment-link-webhook', 'RazorpayController@payment_link_webhook')->name('payment.payment_link_webhook');
+Route::post('razorpay/payment/payment-link-webhook', 'RazorpayController@payment_link_webhook')->name('payment.payment_link_webhook');
 
 Route::get('/paystack/payment/callback', 'PaystackController@handleGatewayCallback');
 

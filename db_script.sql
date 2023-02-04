@@ -156,3 +156,4 @@ UPDATE `categories` SET `slug` = 'flowers' WHERE `categories`.`id` = 24;
 -- Dt: 2-02-23
 -- ----------------------------
 ALTER TABLE `orders` ADD COLUMN `razorpay_payment_link` varchar(500) NULL AFTER `replaced_order_id`;
+ALTER TABLE `order_details` ADD COLUMN `custom_price` decimal(20, 2) NULL DEFAULT 0 AFTER `updated_at`;
