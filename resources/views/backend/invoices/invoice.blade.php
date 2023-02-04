@@ -120,6 +120,13 @@
 				<tbody class="strong">
 	                @foreach ($order->orderDetails as $key => $orderDetail)
 		                @if ($orderDetail->product != null)
+                            @php
+                                if($orderDetail->quantity * floatval($orderDetail->product->min_qty) < 1){
+                                    $qty_unit =  (1000 * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->secondary_unit;
+                                } else {
+                                    $qty_unit = ($orderDetail->quantity * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->unit;
+                                }
+                            @endphp
 							<tr class="">
 								<td>{{ $orderDetail->product->name }} @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif</td>
 <!--								<td>
@@ -131,7 +138,7 @@
 										@endif
 									@endif
 								</td>-->
-								<td class="">{{ $orderDetail->quantity }}</td>
+								<td class="">{{ $qty_unit }}</td>
 								<td class="currency">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
 								<td class="currency">{{ single_price($orderDetail->tax/$orderDetail->quantity) }}</td>
 			                    <td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td>
