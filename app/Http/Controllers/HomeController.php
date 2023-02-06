@@ -69,31 +69,33 @@ class HomeController extends Controller
         $parentCategories = Category::where('parent_id', 0)->get();
 
         $customer_favourites = array();
-        $customer_favourites = ProductStock::where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
+        $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->inRandomOrder()->limit(10)->get();
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
 
         $deals_of_the_day = array();
         if ($flash_deal) {
             foreach ($flash_deal->flash_deal_products as $deal_products) {
-                if ($deal_products->deal_products->deal_stocks) {
-                    $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->deal_stocks;
+                if ($deal_products->deal_products->productStock) {
+                    $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->productStock;
                 }
             }
         }
 
-        $best_selling_products = array();
+
+        // $best_selling_products = array();
+        $all_products = array();
         foreach ($parentCategories as $cat) {
             // $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
             //     $query->where('parent_category_id', $cat->id);
             // })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
-            $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+            $all_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
                 $query->where('parent_category_id', $cat->id);
-            })->where('is_best_selling', 1)->inRandomOrder()->limit(10)->get();
+            })->where('seller_id', 0)->inRandomOrder()->limit(10)->get();
         }
 
         $our_full_range_of_products = array();
-        foreach ($best_selling_products as $prd) {
+        foreach ($all_products as $prd) {
             foreach ($prd as $val) {
                 $our_full_range_of_products[] = $val;
             }
@@ -113,7 +115,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'best_selling_products', 'customer_favourites', 'our_full_range_of_products', 'deals_of_the_day', 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products', 'newest_products', 'communities', 'parentCategories', 'all_products', 'customer_favourites', 'our_full_range_of_products', 'deals_of_the_day', 'seller', 'cart', 'local_shop_id', 'local_shop_slug'));
     }
 
     public function set_local_community(Request $request)
@@ -380,56 +382,108 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function shop($slug)
+    public function shop()
     {
-        $shop = Shop::where('slug', $slug)->first();
+        $categories = [];
+        $parentCategories = Category::where('parent_id', 0)->with('childrenCategories')->get();
 
-        if ($shop != null) {
-            request()->session()->put('shop_slug', $shop->slug);
-            request()->session()->put('shop_name', $shop->name);
+        if ($parentCategories) {
+            foreach ($parentCategories as $parCat) {
+                $catFilter = [];
+                $catFilter[$parCat->slug] = $parCat->slug;
+                if (!empty($parCat->childrenCategories)) {
+                    foreach ($parCat->childrenCategories as $childCat) {
+                        $catFilter[$childCat->slug] = $childCat->slug;
 
-            $seller = Seller::where('user_id', $shop->user_id)->first();
-            $products_purchase_started = isset($seller->products_purchase_started) ? $seller->products_purchase_started : [];
-            $products_purchase_expired = isset($seller->products_purchase_expired) ? $seller->products_purchase_expired : [];
-
-            $categories = [];
-            $parentCategories = Category::where('parent_id', 0)
-                ->with('childrenCategories')
-                ->get();
-            if ($parentCategories) {
-                foreach ($parentCategories as $parCat) {
-                    $catFilter = [];
-                    $catFilter[$parCat->slug] = $parCat->slug;
-                    if (!empty($parCat->childrenCategories)) {
-                        foreach ($parCat->childrenCategories as $childCat) {
-                            $catFilter[$childCat->slug] = $childCat->slug;
-
-                            if (!empty($childCat->categories)) {
-                                foreach ($childCat->categories as $chilCat2) {
-                                    $catFilter[$chilCat2->slug] = $chilCat2->slug;
-                                }
+                        if (!empty($childCat->categories)) {
+                            foreach ($childCat->categories as $chilCat2) {
+                                $catFilter[$chilCat2->slug] = $chilCat2->slug;
                             }
                         }
                     }
-                    $categories[$parCat->slug]['name'] = $parCat->name;
-                    $categories[$parCat->slug]['filter'] = implode(",.", $catFilter);
                 }
+                $categories[$parCat->slug]['name'] = $parCat->name;
+                $categories[$parCat->slug]['filter'] = implode(",.", $catFilter);
             }
-
-            $cart = [];
-            $checkout_total = 0;
-            if (session('temp_user_id')) {
-                $cart_data = $this->get_product_cart();
-                if ($cart_data) {
-                    $cart = $cart_data['cart'];
-                    $checkout_total = $cart_data['checkout_total'];
-                }
-            }
-
-            return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
         }
-        abort(404);
+
+        $categorizedProd = array();
+        foreach ($parentCategories as $cat) {
+            $categorizedProd[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
+                $query->where('parent_category_id', $cat->id);
+            })->where('seller_id', 0)->inRandomOrder()->limit(10)->get();
+        }
+
+        $all_products = array();
+        foreach ($categorizedProd as $prd) {
+            foreach ($prd as $val) {
+                $all_products[] = $val;
+            }
+        }
+
+        $cart = [];
+        $checkout_total = 0;
+        if (session('temp_user_id')) {
+            $cart_data = $this->get_product_cart();
+            if ($cart_data) {
+                $cart = $cart_data['cart'];
+                $checkout_total = $cart_data['checkout_total'];
+            }
+        }
+
+        return view('frontend.seller_shop', compact('categories', 'all_products', 'categorizedProd', 'cart', 'checkout_total'));
     }
+
+    // public function shop($slug)
+    // {
+    //     $shop = Shop::where('slug', $slug)->first();
+
+    //     if ($shop != null) {
+    //         request()->session()->put('shop_slug', $shop->slug);
+    //         request()->session()->put('shop_name', $shop->name);
+
+    //         $seller = Seller::where('user_id', $shop->user_id)->first();
+    //         $products_purchase_started = isset($seller->products_purchase_started) ? $seller->products_purchase_started : [];
+    //         $products_purchase_expired = isset($seller->products_purchase_expired) ? $seller->products_purchase_expired : [];
+
+    //         $categories = [];
+    //         $parentCategories = Category::where('parent_id', 0)
+    //             ->with('childrenCategories')
+    //             ->get();
+    //         if ($parentCategories) {
+    //             foreach ($parentCategories as $parCat) {
+    //                 $catFilter = [];
+    //                 $catFilter[$parCat->slug] = $parCat->slug;
+    //                 if (!empty($parCat->childrenCategories)) {
+    //                     foreach ($parCat->childrenCategories as $childCat) {
+    //                         $catFilter[$childCat->slug] = $childCat->slug;
+
+    //                         if (!empty($childCat->categories)) {
+    //                             foreach ($childCat->categories as $chilCat2) {
+    //                                 $catFilter[$chilCat2->slug] = $chilCat2->slug;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //                 $categories[$parCat->slug]['name'] = $parCat->name;
+    //                 $categories[$parCat->slug]['filter'] = implode(",.", $catFilter);
+    //             }
+    //         }
+
+    //         $cart = [];
+    //         $checkout_total = 0;
+    //         if (session('temp_user_id')) {
+    //             $cart_data = $this->get_product_cart();
+    //             if ($cart_data) {
+    //                 $cart = $cart_data['cart'];
+    //                 $checkout_total = $cart_data['checkout_total'];
+    //             }
+    //         }
+
+    //         return view('frontend.seller_shop', compact('shop', 'products_purchase_started', 'products_purchase_expired', 'categories', 'cart', 'checkout_total'));
+    //     }
+    //     abort(404);
+    // }
 
     public function get_product_cart()
     {

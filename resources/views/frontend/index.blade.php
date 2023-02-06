@@ -32,7 +32,7 @@
 
                 <ul class="nav-menu p-0 m-0 d-flex align-items-center">
                     <li><a href="/" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
-                    <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
+                    <li><a href="{{ route('shop.visit') }}" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
                     <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li>
                     <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Community</a></li>
                 </ul>
@@ -56,7 +56,7 @@
         </nav>
     </header>
 
-    <main>
+    <main class="main-tg-index">
         <input type="hidden" id="local_shop_id" name="local_shop_id" value="{{ intval($local_shop_id) }}">
 
         <!-- Hero Slider -->
@@ -434,9 +434,9 @@
 
                         @foreach ($parentCategories as $p_category)
                             <div role="tabpanel" class="filter-carousel tab-pane" id="category_{{ $p_category->id }}">
-                                @if (count($best_selling_products[$p_category->id]) > 0)
+                                @if (count($all_products[$p_category->id]) > 0)
                                     <div class="owl-carousel owl-theme product-slider">
-                                        @foreach ($best_selling_products[$p_category->id] as $prd_val)
+                                        @foreach ($all_products[$p_category->id] as $prd_val)
                                             @php
                                                 $cart_qty = 0;
                                                 if (count($cart) > 0 && isset($cart[$prd_val->id])) {
@@ -631,14 +631,14 @@
         </section>
 
         <!-- Insta Feed -->
-        <section class="insta-feed pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="insta-feed pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <h2 class="title text-center">Instagram Feeds</h2>
 
                 <div class="owl-carousel owl-theme insta-feed-slider" id="instafeed"></div>
 
             </div>
-        </section>
+        </section> --}}
 
         <!-- Get In Touch -->
         <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
@@ -825,9 +825,9 @@
                 loop: true,
                 responsiveClass: true,
                 dots: false,
-                // autoplay: true,
-                // autoplayTimeout: 4500,
-                // smartSpeed: 1500,
+                autoplay: true,
+                autoplayTimeout: 4500,
+                smartSpeed: 1500,
                 navText: [
                     "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
                     "<img src='{{ static_asset('assets/img/new-design/right-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>"
@@ -838,10 +838,11 @@
                 interval: 7000,
             })
 
-            $('.product-slider, .community-slider').owlCarousel({
+            $('.community-slider, .product-slider').owlCarousel({
                 ...carouselObj,
                 ...{
                     margin: 30,
+                    nav: false,
                     responsive: {
                         0: {
                             items: 1,
@@ -861,6 +862,7 @@
                         },
                         1440: {
                             items: 5,
+                            nav: true,
                         },
                     },
                 }
@@ -870,6 +872,7 @@
                 ...carouselObj,
                 ...{
                     margin: 15,
+                    nav: false,
                     responsive: {
                         0: {
                             items: 1,
@@ -892,6 +895,7 @@
                 ...carouselObj,
                 ...{
                     margin: 15,
+                    nav: false,
                     responsive: {
                         0: {
                             items: 1,
@@ -965,55 +969,5 @@
                 AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
             }
         }
-    </script>
-
-    <script src="{{ static_asset('assets/js/instafeed.min.js') }}"></script>
-    <script type="text/javascript">
-        let templateHTML = `<div class="item">
-            <div class="feed-card trnsn-300ms">
-                <div class="feed-img">
-                    <img src="{{ image }}" width="281" height="281" alt="Insta Feed">
-                </div>
-                <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                    <img src="./assets/images/like.svg" onload="SVGInject(this)" alt="Like">
-                    16 likes
-                </div>
-                <p class="mb-0">{{ caption }}</p>
-            </div>
-        </div>`;
-
-        var feed = new Instafeed({
-            accessToken: 'IGQVJVMEpHcFBwZAEw0NHFVa1NTWHluejlhSWJNV0VWbFB3LWswSHNtRjNwbjdXTFhhb0RlM2ZAvb2dkMDRFNmRIaURDVFRCU0kyOVlyR1lqTUV6aTFwT0tKTENScW8yWVBzNXhGOWJfNHVyd0lYTnRGWQZDZD',
-            template: templateHTML
-        });
-        feed.run();
-
-        setTimeout(() => {
-            $(".insta-feed-slider").owlCarousel({
-                ...carouselObj,
-                margin: 30,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    575: {
-                        items: 2
-                    },
-                    768: {
-                        items: 3
-                    },
-                    992: {
-                        items: 4
-                    },
-                    1200: {
-                        items: 4,
-                        nav: !0
-                    },
-                    1440: {
-                        items: 5
-                    }
-                }
-            })
-        }, 2000);
     </script>
 @endsection

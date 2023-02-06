@@ -40,7 +40,7 @@
     <main class="main-tag mt-0 promain">
         <div class="breadcrumbs high">
             <div class="container">
-                <h5 class="mb-0 fw700 text-white text-uppercase">Your Community - {{ $shop->name }}</h5>
+                <h5 class="mb-0 fw700 text-white text-uppercase">{{ translate('Products') }}</h5>
             </div>
         </div>
         <div class="content  bgcream-product ">
@@ -48,7 +48,7 @@
                 <div class="row justify-content-center ">
                     <input type="hidden" id="cart_data" value="{{ json_encode($cart) }}">
 
-                    @if ($categories && count($products_purchase_started) > 0)
+                    @if ($categories)
 
                         <section class="lodha_nestedtab">
                             <div class="container">
@@ -82,47 +82,48 @@
                                         <!-- Repo Tabs --->
                                         <div class="inertabs">
                                             <div class="dropbtn">
-                                                <!--                                        <div class="pr-2 short"> Sort by:</div>
-
-                                                    <select class="form-control filter" id="product-type" name="product-type">
-                                                        <option value="1">Best Selling Products</option>
-                                                        <option value="2">Best Selling Products2</option>
-                                                        <option value="3">Best Selling Products3</option>
-                                                        <option value="4">Best Selling Products4</option>
-                                                        <option value="5">Best Selling Products5</option>
-                                                    </select>-->
-
+                                                {{-- <div class="pr-2 short"> Sort by:</div>
+                                                <select class="form-control filter" id="product-type" name="product-type">
+                                                    <option value="1">Best Selling Products</option>
+                                                    <option value="2">Best Selling Products2</option>
+                                                    <option value="3">Best Selling Products3</option>
+                                                    <option value="4">Best Selling Products4</option>
+                                                    <option value="5">Best Selling Products5</option>
+                                                </select> --}}
                                             </div>
+
                                             <div>
-
                                                 <div class="inertabs">
-
                                                     <div class="viewbtns">
                                                         <div class="short">View by:</div>
-
                                                         <div>
                                                             <ul class="nav nav-tabs" id="repoTabs2">
-                                                                <li class="pl-2"><a href="#repoInfo2"
-                                                                        data-toggle="tab"><img
-                                                                            src="../public/assets/img/inrtab1dot.svg"
-                                                                            alt="dot1" class="tabdots1"></a></li>
-                                                                <li class="pl-2"><a href="#repoStats2"
-                                                                        data-toggle="tab"><img
-                                                                            src="../public/assets/img/inrtab2dot.svg"
-                                                                            alt="dot2" class="tabdots2"></a></li>
+                                                                <li class="pl-2">
+                                                                    <a href="#repoInfo2" data-toggle="tab">
+                                                                        <img src="./public/assets/img/inrtab1dot.svg"
+                                                                            alt="dot1" class="tabdots1">
+                                                                    </a>
+                                                                </li>
+                                                                <li class="pl-2">
+                                                                    <a href="#repoStats2" data-toggle="tab">
+                                                                        <img src="./public/assets/img/inrtab2dot.svg"
+                                                                            alt="dot2" class="tabdots2">
+                                                                    </a>
+                                                                </li>
                                                             </ul>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        @if (count($products_purchase_started) > 0)
+                                        @if (count($all_products) > 0)
                                             <!-- first tab first-->
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="repoInfo2">
                                                     <div class="row ">
-                                                        @foreach ($products_purchase_started as $product)
+                                                        @foreach ($all_products as $product)
                                                             @php
                                                                 $cart_qty = 0;
                                                                 if (count($cart) > 0 && isset($cart[$product->id])) {
@@ -164,7 +165,7 @@
                                                                             <p class="price">{!! single_price_web($product_price) !!} /
                                                                                 {{ $qty_unit_main }}</p>
                                                                             <div class="cartbtn">
-                                                                                <img src="../public/assets/img/carts.svg"
+                                                                                <img src="./public/assets/img/carts.svg"
                                                                                     class="cart" alt="cart">
                                                                                 <a href="javacript:;" class="cartbtn"
                                                                                     onclick="addToCart({{ $product->product->id }}, {{ $product->id }}, {{ $addCartQty }});">
@@ -173,10 +174,10 @@
 
                                                                             <div class="dlever">
                                                                                 <span class="d-inline-block pr-2">
-                                                                                    <img src="../public/assets/img/truck-blk.svg"
+                                                                                    <img src="./public/assets/img/truck-blk.svg"
                                                                                         class="truck-blk blktruck"
                                                                                         alt="truck-blk">
-                                                                                    <img src="../public/assets/img/truck-wht.svg"
+                                                                                    <img src="./public/assets/img/truck-wht.svg"
                                                                                         class="truck-blk whttruck"
                                                                                         alt="truck-blk">
                                                                                 </span>
@@ -193,7 +194,7 @@
                                                 <div class="tab-pane" id="repoStats2">
                                                     <!-- second tab second dot -->
                                                     <div class="row ">
-                                                        @foreach ($products_purchase_started as $product)
+                                                        @foreach ($all_products as $product)
                                                             @php
                                                                 $cart_qty = 0;
                                                                 if (count($cart) > 0 && isset($cart[$product->id])) {
@@ -235,7 +236,7 @@
                                                                             <p class="price">{!! single_price_web($product_price) !!} /
                                                                                 {{ $qty_unit_main }}</p>
                                                                             <div class="cartbtn">
-                                                                                <img src="../public/assets/img/carts.svg"
+                                                                                <img src="./public/assets/img/carts.svg"
                                                                                     class=" cart" alt="cart">
                                                                                 <a href="javacript:;" class="cartbtn"> Add
                                                                                     to Cart</a>
@@ -243,7 +244,7 @@
 
                                                                             <div class="dleverdt">
                                                                                 <span class="d-inline-block pr-2">
-                                                                                    <img src="../public/assets/img/truck-blk.svg"
+                                                                                    <img src="./public/assets/img/truck-blk.svg"
                                                                                         class=" truck-blk "
                                                                                         alt="truck-blk">
                                                                                 </span>
@@ -280,7 +281,7 @@
 
                                                         <div class="col-md-12">
                                                             <a href="#" class="loadbtn">
-                                                                <img src="../public/assets/img/Vector.png"
+                                                                <img src="./public/assets/img/Vector.png"
                                                                     class="proces mr-2" alt="proces">
                                                                 Load More
                                                             </a>
@@ -303,7 +304,7 @@
                         </section>
                     @endif
 
-                    @if (count($products_purchase_started) == 0)
+                    @if (count($all_products) == 0)
                         <div class="row pt-5">
                             <div class="col-lg-12 mx-auto">
                                 <img src="{{ static_asset('assets/img/product-not-found.jpg') }}" class="mw-100 mx-auto">
@@ -315,26 +316,25 @@
             </div>
         </div>
 
-        <!--        <div class="container">
-                        <div class="row ">
-                            <div class="col-12 px-0">
-                                <div class="sticky-bottom
-                    ">
-                                    <a href="javascript:void(0)" id="checkout-btn"
-                                       class="sticky-button-bottom my-lg-4 @if ($checkout_total == 0) pointer-none @endif"
-                                       onclick="addProductToCart();">
-                                        checkout
-                                        <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
+        {{-- <div class="container">
+            <div class="row ">
+                <div class="col-12 px-0">
+                    <div class="sticky-bottom">
+                        <a href="javascript:void(0)" id="checkout-btn"
+                            class="sticky-button-bottom my-lg-4 @if ($checkout_total == 0) pointer-none @endif"
+                            onclick="addProductToCart();">
+                            checkout
+                            <span id="checkout-amount">( {!! single_price_web($checkout_total) !!} )</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
         <div class="sticky-stopper"></div>
-        <!--
-                    <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
-                         aria-labelledby="itemModalLabel" aria-hidden="true">
-                    </div> -->
+
+        {{-- <div class="modal fade itemModal" id="itemModal" data-backdrop="static" tabindex="-1"
+            aria-labelledby="itemModalLabel" aria-hidden="true"></div> --}}
 
 
         <a href="https://wa.me/917498107182" target="_blank">
@@ -514,17 +514,17 @@
         });
 
         $(".tabdots2").mouseover(function() {
-            old_src = $(this).attr("../public/assets/img/inrtab2dot.svg");
-            $(this).attr("src", "../public/assets/img/dot2.svg");
+            old_src = $(this).attr("./public/assets/img/inrtab2dot.svg");
+            $(this).attr("src", "./public/assets/img/dot2.svg");
         }).mouseout(function() {
-            $(this).attr("src", "../public/assets/img/inrtab2dot.svg");
+            $(this).attr("src", "./public/assets/img/inrtab2dot.svg");
         });
 
         $(".tabdots1").mouseover(function() {
             old_src = $(this).attr("./public/assets/img/dots2hvr.png");
-            $(this).attr("src", "../public/assets/img/inrtab1dot.svg.");
+            $(this).attr("src", "./public/assets/img/inrtab1dot.svg.");
         }).mouseout(function() {
-            $(this).attr("src", "../public/assets/img/dots2hvr.png");
+            $(this).attr("src", "./public/assets/img/dots2hvr.png");
         });
 
         function filterCategory(obj) {
