@@ -26,7 +26,8 @@ class Seller extends Model
 
     public function products_purchase_started()
     {
-        return $this->hasMany(ProductStock::class)->with('product')->where('purchase_start_date', '<=', date('Y-m-d H:i:s'))->where('purchase_end_date', '>=', date('Y-m-d H:i:s'))->orderBy('purchase_end_date');
+//        return $this->hasMany(ProductStock::class)->with('product')->where('purchase_start_date', '<=', date('Y-m-d H:i:s'))->where('purchase_end_date', '>=', date('Y-m-d H:i:s'))->orWhere('seller_id','=',0)->orderBy('purchase_end_date');
+        return $this->hasMany(ProductStock::class)->with('product')->orWhere('seller_id','=',0)->orderBy('updated_at');
     }
 
     public function products_purchase_expired()

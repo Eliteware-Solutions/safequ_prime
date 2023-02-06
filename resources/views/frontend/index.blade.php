@@ -263,7 +263,7 @@
         </section>
 
         <!-- Deals Of The Day -->
-        @if($deals_of_the_day)
+        @if ($deals_of_the_day)
             <section class="deals pt-lg-5 py-4">
                 <div class="container">
                     <div class="content pt-lg-5 pt-4 overflow-hide">
@@ -296,23 +296,24 @@
                                     <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
                                         <div class="prd-img">
                                             <img src="{{ uploaded_asset($prd_val->product->photos) }}"
-                                                 data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
-                                                 class="object-cover-center" width="250" height="250"
-                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                 alt="{{ $prd_val->product->getTranslation('name') }}">
+                                                data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                                class="object-cover-center" width="250" height="250"
+                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                alt="{{ $prd_val->product->getTranslation('name') }}">
                                         </div>
                                         <div class="prd-content p-3 position-relative">
                                             <span class="prd-tag text-white b-rd-5">Organic</span>
                                             <p class="prd-loc mb-1 secondary-text">
                                                 {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
-                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}</p>
+                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}
+                                            </p>
                                             <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
                                             <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
                                                 {{ $qty_unit_main }}</p>
                                             <button class="btn secondary-btn-o"
-                                                    onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                 <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                                     onload="SVGInject(this)" alt="Btn Cart">
+                                                    onload="SVGInject(this)" alt="Btn Cart">
                                                 Add to cart
                                             </button>
                                         </div>
@@ -693,11 +694,10 @@
         </div>
 
         <!-- Join Community Modal -->
-        <div class="modal fade" id="joinCommunity" tabindex="-1" aria-labelledby="joinCommunityLabel"
+        {{-- <div class="modal fade" id="joinCommunity" tabindex="-1" aria-labelledby="joinCommunityLabel"
             aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
-
                     <div class="modal-header text-center">
                         <h5 class="modal-title" id="joinCommunityLabel">Select Your Community</h5>
                     </div>
@@ -730,10 +730,9 @@
                             @endforeach
                         </div>
                     </div>
-
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </main>
 
@@ -809,134 +808,7 @@
         // ---- SVG Injector -  To convert IMG tag in SVG code. (Only for SVG images)
         SVGInject(document.querySelectorAll("img.injectable"));
 
-        let carouselObj = {
-            loop: true,
-            responsiveClass: true,
-            dots: false,
-            // autoplay: true,
-            // autoplayTimeout: 4500,
-            // smartSpeed: 1500,
-            navText: [
-                "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
-                "<img src='{{ static_asset('assets/img/new-design/right-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>"
-            ]
-        }
-
-        $('.product-slider, .community-slider').owlCarousel({
-            ...carouselObj,
-            ...{
-                margin: 30,
-                responsive: {
-                    0: {
-                        items: 1,
-                    },
-                    575: {
-                        items: 2,
-                    },
-                    768: {
-                        items: 3,
-                    },
-                    992: {
-                        items: 4,
-                    },
-                    1200: {
-                        items: 4,
-                        nav: true,
-                    },
-                    1440: {
-                        items: 5,
-                    },
-                },
-            }
-        })
-
-        $('.product-slider2').owlCarousel({
-            ...carouselObj,
-            ...{
-                margin: 15,
-                responsive: {
-                    0: {
-                        items: 1,
-                    },
-                    767: {
-                        items: 2,
-                    },
-                    992: {
-                        items: 3,
-                    },
-                    1200: {
-                        items: 4,
-                        nav: true,
-                    },
-                }
-            }
-        })
-
-        $('.testimonials').owlCarousel({
-            ...carouselObj,
-            ...{
-                margin: 15,
-                responsive: {
-                    0: {
-                        items: 1,
-                    },
-                    767: {
-                        items: 2,
-                    },
-                    1200: {
-                        items: 3,
-                        nav: true,
-                    },
-                }
-            }
-        })
-
-        $('.hero-slider').owlCarousel({
-            loop: true,
-            margin: 30,
-            items: 1.15,
-            center: true,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 7000,
-            smartSpeed: 2000,
-            responsive: {
-                0: {
-                    items: 1.05,
-                },
-                992: {
-                    items: 1.15,
-                },
-            }
-        })
-
-        setTimeout(() => {
-            $(".our-range").css('height', document.getElementById('our-range').clientHeight);
-        }, 1000)
-
-        $('.menu-toggle').click(function() {
-            $(this).toggleClass('active');
-            $('.collapsible').toggleClass('active');
-        })
-
         $(document).ready(function() {
-
-            // Join Community modal trigger after Page Load
-            if ($('#local_shop_id').val() == 0 || $('#local_shop_id').val() == null) {
-                setTimeout(function() {
-                    $('#joinCommunity').modal('show');
-                }, 1000)
-            }
-
-            // $('.carousel').carousel({
-            //     interval: 7000,
-            // })
-
-            // setInterval(() => {
-            //     $(".smiley").hasClass("fa-smile-wink") ? $(".smiley").removeClass("fa-smile-wink").addClass(
-            //         "fa-smile") : $(".smiley").removeClass("fa-smile").addClass("fa-smile-wink");
-            // }, 1000);
-
             $('a[data-toggle="tab"]').click(function() {
                 $('a[data-toggle="tab"]').removeClass('selected');
                 $(this).addClass('selected');
@@ -949,7 +821,119 @@
                 $(".filter-carousel .owl-carousel").trigger('refresh.owl.carousel');
             })
 
-            // $("#tykeModal").modal('show');
+            let carouselObj = {
+                loop: true,
+                responsiveClass: true,
+                dots: false,
+                // autoplay: true,
+                // autoplayTimeout: 4500,
+                // smartSpeed: 1500,
+                navText: [
+                    "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
+                    "<img src='{{ static_asset('assets/img/new-design/right-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>"
+                ]
+            }
+
+            $('.carousel').carousel({
+                interval: 7000,
+            })
+
+            $('.product-slider, .community-slider').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 30,
+                    responsive: {
+                        0: {
+                            items: 1,
+                        },
+                        575: {
+                            items: 2,
+                        },
+                        768: {
+                            items: 3,
+                        },
+                        992: {
+                            items: 4,
+                        },
+                        1200: {
+                            items: 4,
+                            nav: true,
+                        },
+                        1440: {
+                            items: 5,
+                        },
+                    },
+                }
+            })
+
+            $('.product-slider2').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 15,
+                    responsive: {
+                        0: {
+                            items: 1,
+                        },
+                        767: {
+                            items: 2,
+                        },
+                        992: {
+                            items: 3,
+                        },
+                        1200: {
+                            items: 4,
+                            nav: true,
+                        },
+                    }
+                }
+            })
+
+            $('.testimonials').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 15,
+                    responsive: {
+                        0: {
+                            items: 1,
+                        },
+                        767: {
+                            items: 2,
+                        },
+                        1200: {
+                            items: 3,
+                            nav: true,
+                        },
+                    }
+                }
+            })
+
+            $('.hero-slider').owlCarousel({
+                loop: true,
+                margin: 30,
+                items: 1.15,
+                center: true,
+                dots: false,
+                autoplay: true,
+                autoplayTimeout: 7000,
+                smartSpeed: 2000,
+                responsive: {
+                    0: {
+                        items: 1.05,
+                    },
+                    992: {
+                        items: 1.15,
+                    },
+                }
+            })
+
+            setTimeout(() => {
+                $(".our-range").css('height', document.getElementById('our-range').clientHeight);
+            }, 1000)
+
+            $('.menu-toggle').click(function() {
+                $(this).toggleClass('active');
+                $('.collapsible').toggleClass('active');
+            })
         })
 
         function confrimCommunityChange(url) {
@@ -983,7 +967,7 @@
         }
     </script>
 
-    <script src="{{ static_asset('assets/js/instafeed.min.js')}}"></script>
+    <script src="{{ static_asset('assets/js/instafeed.min.js') }}"></script>
     <script type="text/javascript">
         let templateHTML = `<div class="item">
             <div class="feed-card trnsn-300ms">

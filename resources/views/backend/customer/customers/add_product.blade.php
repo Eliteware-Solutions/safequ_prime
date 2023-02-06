@@ -11,6 +11,7 @@
                 <div class="col-lg-12">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    <input type="hidden" name="owner_id" value="{{ $user->joined_community_id }}">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{ translate('Order Information') }}</h5>
@@ -49,7 +50,7 @@
                                         placeholder="{{ translate('GP123456 etc..') }}" disabled>
                                 </div>
                             </div>
-                            <div class="form-group row" id="owner_id">
+                            {{-- <div class="form-group row" id="owner_id">
                                 <label class="col-md-3 col-lg-2 col-from-label">{{ translate('Community') }} <span
                                         class="text-danger">*</span></label>
                                 <div class="col-md-8">
@@ -60,7 +61,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label class="col-md-3 col-lg-2 col-from-label">
                                     {{ translate('Products') }} <span class="text-danger">*</span>
@@ -109,7 +110,8 @@
                                                     </div>
                                                     <div class="col-lg-3 col-4 px-2">
                                                         <div class="form-group">
-                                                            <input  type="number" step="any" min="0" class="form-control custom_price pl-4"
+                                                            <input type="number" step="any" min="0"
+                                                                class="form-control custom_price pl-4"
                                                                 placeholder="{{ translate('Custom Price') }}"
                                                                 name="custom_price[]">
                                                         </div>
@@ -131,47 +133,45 @@
 
                                     <button type="button" class="btn btn-soft-secondary btn-sm" data-toggle="add-more"
                                         data-content='<div class="row m-0 v-light-bg pt-3 mb-3">
-
-                                            <div class="col-11 px-2">
-                                                <div class="row m-0">
-
-                                                    <div class="col-md-6 px-2">
-                                                        <div class="form-group">
-                                                            <select class="form-control aiz-selectpicker" name="proudct[]" data-live-search="true" required onchange="loadProductUnit(this);">
-                                                                <option value="">Select Product</option>
-                                                                @foreach ($active_products as $product)
-                                                                    <option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
-                                                                    {{ $product->product->name . ' [' . $product->product->variation . ']' }}
-                                                                </option>
-                                                            @endforeach
-                                                            </select>
+                                                        <div class="col-11 px-2">
+                                                            <div class="row m-0">
+                                                                <div class="col-md-6 px-2">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control aiz-selectpicker" name="proudct[]" data-live-search="true" required onchange="loadProductUnit(this);">
+                                                                            <option value="">Select Product</option>
+                                                                            @foreach ($active_products as $product)
+                                                                                <option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
+                                                                                    {{ $product->product->name . ' [' . $product->product->variation . ']' }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 px-2">
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control prod_qty" placeholder="{{ translate('Qty') }}" name="prod_qty[]" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 px-2">
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control prod_unit" placeholder="{{ translate('Unit') }}" name="price_per_unit[]">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3 px-2">
+                                                                    <div class="form-group">
+                                                                        <input  type="number" step="any" min="0" class="form-control custom_price pl-4"
+                                                                        placeholder="{{ translate('Custom Price') }}"
+                                                                        name="custom_price[]">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-3 px-2">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control prod_qty" placeholder="{{ translate('Qty') }}" name="prod_qty[]" required>
+                                                        <div class="col-1">
+                                                            <button type="button" class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger" data-toggle="remove-parent" data-parent=".row">
+                                                                <i class="las la-times"></i>
+                                                            </button>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-3 px-2">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control prod_unit" placeholder="{{ translate('Unit') }}" name="price_per_unit[]">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-3 px-2">
-                                                        <div class="form-group">
-                                                            <input  type="number" step="any" min="0" class="form-control custom_price pl-4"
-                                                            placeholder="{{ translate('Custom Price') }}"
-                                                            name="custom_price[]" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-1">
-                                                <button type="button" class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger" data-toggle="remove-parent" data-parent=".row">
-                                                    <i class="las la-times"></i>
-                                                </button>
-                                            </div>
-                                        </div>'
+                                                    </div>'
                                         data-target=".qunatity-price">
                                         {{ translate('Add More') }}
                                     </button>
@@ -179,9 +179,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
 
                 <div class="col-12">
                     <div class="btn-toolbar float-right mb-3" role="toolbar" aria-label="Toolbar with button groups">

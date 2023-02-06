@@ -382,23 +382,9 @@ class HomeController extends Controller
 
     public function shop($slug)
     {
-        /*if (!Auth::check()) {
-            session(['link' => route('shop.visit', $slug)]);
-            return redirect()->route('user.registration');
-        }*/
         $shop = Shop::where('slug', $slug)->first();
 
         if ($shop != null) {
-            // User Joining community
-            /*$user = User::findOrFail(auth()->user()->id);
-            if (intval($user->joined_community_id) > 0 && $user->joined_community_id != $shop->user_id) {
-                $user_id = auth()->user()->id;
-                Cart::where('user_id', $user_id)->delete();
-            }*/
-
-            //            $user->joined_community_id = $shop->user_id;
-            //            $user->save();
-
             request()->session()->put('shop_slug', $shop->slug);
             request()->session()->put('shop_name', $shop->name);
 

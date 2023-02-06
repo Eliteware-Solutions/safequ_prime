@@ -129,7 +129,7 @@
                         @if (addon_is_activated('refund_request'))
                             <th>{{ translate('Refund') }}</th>
                         @endif
-                        <th class="text-right" width="15%">{{translate('options')}}</th>
+                        <th class="text-right" width="20%">{{translate('options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -191,6 +191,13 @@
                                 </td>
                             @endif
                             <td class="text-right">
+                                @if($order->payment_status != 'paid')
+                                    <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                                       href="javascript:void(0)" onclick="copyPaymentUrl(this)" data-url="{{ $order->razorpay_payment_link }}"
+                                       data-id="{{ $order->id }}" title="{{ translate('Generate Payment Link') }}">
+                                        <i class="las la-money-bill"></i>
+                                    </a>
+                                @endif
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                    href="{{route('all_orders.show', encrypt($order->id))}}"
                                    title="{{ translate('View') }}">
@@ -294,6 +301,50 @@
             url = url.replace(':search', '&search=' + search);
 
             window.location.href = url;
+        }
+
+        function copyPaymentUrl(e) {
+            // let url = $(e).data('url');
+            let url = null;
+            let orderId = $(e).data('id');
+            if (!url) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('order-payment-link')}}",
+                    type: 'POST',
+                    data: {id: orderId},
+                    success: function (response) {
+                        if(response.status == 1) {
+                            url = response.payment_link;
+                            let $temp = $("<input>");
+                            $("body").append($temp);
+                            $temp.val(url).select();
+
+                            try {
+                                document.execCommand("copy");
+                                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                            } catch (err) {
+                                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                            }
+                            $temp.remove();
+                        }
+                    }
+                });
+            } else {
+                let $temp = $("<input>");
+                $("body").append($temp);
+                $temp.val(url).select();
+
+                try {
+                    document.execCommand("copy");
+                    AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                } catch (err) {
+                    AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                }
+                $temp.remove();
+            }
         }
     </script>
 @endsection

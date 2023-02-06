@@ -32,6 +32,7 @@ use App\Mail\InvoiceEmailManager;
 use App\Utility\NotificationUtility;
 use CoreComponentRepository;
 use App\Utility\SmsUtility;
+use Razorpay\Api\Api;
 
 class OrderController extends Controller
 {
@@ -109,7 +110,60 @@ class OrderController extends Controller
         }
 
         $orders = $orders->paginate(15);
-        return view('backend.sales.all_orders.index', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
+
+        return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
+    }
+
+    public function order_payment_link(Request $request)
+    {
+        $result = array();
+        $order = Order::findOrFail($request->id);
+        // $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
+        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => "https://13.234.232.150/rozer/payment/link-payment-success", "callback_method" => "get");
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_VERIFYHOST => FALSE,
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_POSTFIELDS => json_encode($fields),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $razorpay_result = json_decode($response);
+
+        if ($razorpay_result && isset($razorpay_result->status) && $razorpay_result->status == 'created') {
+            $payment_link = $razorpay_result->short_url;
+
+            $order->razorpay_payment_link = $payment_link;
+            $order->save();
+
+            $result = array(
+                'status'  => 1,
+                'payment_link' => $payment_link
+            );
+        } else {
+            $result = array(
+                'status'  => 0,
+                'payment_link' => ''
+            );
+        }
+
+        return $result;
     }
 
     public function all_orders_show($id)
@@ -413,18 +467,20 @@ class OrderController extends Controller
                 $product_variation = $cartItem['variation'];
 
                 $product_stock = $product->stocks->where('id', $cartItem['product_stock_id'])->first();
-                if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
+                /*if ($product->digital != 1 && $cartItem['quantity'] > $product_stock->qty) {
                     flash(translate('The requested quantity is not available for ') . $product->getTranslation('name'))->warning();
                     $order->delete();
                     return redirect()->route('cart')->send();
-                } elseif ($product->digital != 1) {
+                } else
+                    if ($product->digital != 1) {
                     $product_stock->qty -= $cartItem['quantity'];
                     $product_stock->save();
-                }
+                }*/
 
                 $order_detail = new OrderDetail;
                 $order_detail->order_id = $order->id;
-                $order_detail->seller_id = $product_stock->seller->user_id;
+//                $order_detail->seller_id = $product_stock->seller->user_id;
+                $order_detail->seller_id = Auth::user()->joined_community_id;
                 $order_detail->product_id = $product->id;
                 $order_detail->product_stock_id = $cartItem['product_stock_id'];
                 $order_detail->variation = $product_variation;
@@ -443,13 +499,13 @@ class OrderController extends Controller
                 $product->num_of_sale += $cartItem['quantity'];
                 $product->save();
 
-                $order->seller_id = $product_stock->seller->user_id;
+                $order->seller_id = Auth::user()->joined_community_id;
 
-                if ($product->added_by == 'seller' && $product->user->seller != null) {
+                /*if ($product->added_by == 'seller' && $product->user->seller != null){
                     $seller = $product->user->seller;
                     $seller->num_of_sale += $cartItem['quantity'];
                     $seller->save();
-                }
+                }*/
 
                 if (addon_is_activated('affiliate_system')) {
                     if ($order_detail->product_referral_code) {
@@ -530,7 +586,6 @@ class OrderController extends Controller
             $product = $product_stock->product;
 
             $productPrice = $product_stock->price;
-
             if (floatval($request->custom_price[$key]) <= 0) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                 if ($wholesalePrice) {
@@ -539,7 +594,6 @@ class OrderController extends Controller
             } else {
                 $productPrice = $request->custom_price[$key];
             }
-
             $subtotal += $productPrice * $prod_qty[$key];
 
             $product_stock->qty -= $prod_qty[$key];
@@ -572,7 +626,6 @@ class OrderController extends Controller
                 $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
             }
             $order->payment_details = $payment_details;
-
             $order->grand_total = $subtotal + $tax + $shipping;
 
             $combined_order->grand_total += $order->grand_total;
@@ -614,7 +667,6 @@ class OrderController extends Controller
         $tax = 0;
         $shipping = 0;
         $coupon_discount = 0;
-
         $prod_qty = $request->prod_qty;
 
         OrderDetail::where('order_id', $request->order_id)->delete();
@@ -623,7 +675,6 @@ class OrderController extends Controller
             $product_stock = ProductStock::find($val);
             $product = $product_stock->product;
             $productPrice = $product_stock->price;
-
             if (floatval($request->custom_price[$key]) <= 0) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                 if ($wholesalePrice) {
@@ -632,9 +683,7 @@ class OrderController extends Controller
             } else {
                 $productPrice = $request->custom_price[$key];
             }
-
             $subtotal += $productPrice * $prod_qty[$key];
-
             $order_detail = new OrderDetail;
             $order_detail->order_id = $request->order_id;
             $order_detail->product_id = $product->id;
@@ -648,25 +697,18 @@ class OrderController extends Controller
             $order_detail->shipping_cost = $shipping;
             $order_detail->quantity = $prod_qty[$key];
             $order_detail->payment_status = $request->payment_status;
-
             $shipping += $order_detail->shipping_cost;
-
             //End of storing shipping cost
             $order_detail->save();
-
             $product->num_of_sale += $prod_qty[$key];
             $product->save();
-
             $payment_details = '';
             if ($request->payment_status == 'paid') {
                 $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
             }
             $order->payment_details = $payment_details;
-
             $order->grand_total = $subtotal + $tax + $shipping;
-
             $combined_order->grand_total = $order->grand_total;
-
             $order->save();
         }
 
@@ -676,23 +718,18 @@ class OrderController extends Controller
     public function delete_order_item($dataAry)
     {
         $orderData = (OrderDetail::where('id', $dataAry['order_detail_id'])->first());
-
         OrderDetail::where('id', $dataAry['order_detail_id'])->delete();
         $msg = 'Item has been deleted successfully';
-
         $cnt = (OrderDetail::where('order_id', $orderData->order_id)->get())->count();
         $order = (Order::where('id', $orderData->order_id)->first());
-
         if ($cnt == 0) {
             Order::where('id', $order->id)->delete();
             CombinedOrder::where('id', $order->combined_order_id)->delete();
-
             $msg = 'Order has been deleted successfully';
         } else {
             $order->grand_total = abs($order->grand_total - $orderData->price);
             $order->save();
         }
-
         return $msg;
     }
 

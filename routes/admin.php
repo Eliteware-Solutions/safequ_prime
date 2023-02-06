@@ -60,9 +60,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('customer/add-product/{id}', 'CustomerController@add_customer_product')->name('customers.add_product');
     Route::get('customer/edit-product/{type}/{user_id}/{ord_id}', 'CustomerController@edit_customer_product')->name('customers.edit_product');
     Route::get('customer/delete-cart-item/{user_id}/{ord_id}', 'CustomerController@delete_cart_item')->name('customers.delete_cart_item');
+    Route::get('customer/add-product', 'CustomerController@add_customer')->name('customers.add');
+    Route::get('customer/add-product/{id}', 'CustomerController@add_customer_product')->name('customers.add_product');
+    Route::get('customer/edit-product/{type}/{user_id}/{ord_id}', 'CustomerController@edit_customer_product')->name('customers.edit_product');
+    Route::get('customer/delete-cart-item/{user_id}/{ord_id}', 'CustomerController@delete_cart_item')->name('customers.delete_cart_item');
     Route::get('customer/delete-order-item/{user_id}/{order_detail_id}', 'CustomerController@delete_order_item')->name('customers.delete_order_item');
     Route::post('customer/store-customer', 'CustomerController@store_customer')->name('customers.store_customer');
     Route::get('customer/edit-customer/{id}', 'CustomerController@edit_customer')->name('customers.edit');
+    Route::get('customer/delete-order-item/{user_id}/{order_detail_id}', 'CustomerController@delete_order_item')->name('customers.delete_order_item');
     Route::post('customer/update-customer', 'CustomerController@update_customer')->name('customers.update_customer');
     Route::post('customer/add-customer-order', 'CustomerController@add_customer_order')->name('customers.add_customer_order');
     Route::post('customer/edit-customer-order', 'CustomerController@edit_customer_order')->name('customers.edit_customer_order');
@@ -188,6 +193,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/seller_orders/{id}/show', 'OrderController@seller_orders_show')->name('seller_orders.show');
 
     Route::post('/bulk-order-status', 'OrderController@bulk_order_status')->name('bulk-order-status');
+
+    Route::post('/order-payment-link', 'OrderController@order_payment_link')->name('order-payment-link');
 
 
     // Pickup point orders

@@ -233,7 +233,9 @@ class WholesaleProductController extends Controller
             ->where('banned', 0)
             ->get();
 
-        return view('wholesale.products.edit', compact('product', 'categories', 'tags','lang', 'users', 'sub_categories', 'cat_variants'));
+        $product_stock = $product->productStock;
+
+        return view('wholesale.products.edit', compact('product', 'categories', 'tags','lang', 'users', 'sub_categories', 'cat_variants', 'product_stock'));
     }
 
     public function product_edit_seller(Request $request, $id)

@@ -128,6 +128,120 @@
                             @endif
                         </div>
                     </div>
+
+                    <!-- Product Price & Stock Starts -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 h6">{{translate('Product price + stock')}}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-from-label">{{translate('Unit price')}}</label>
+                                <div class="col-lg-6">
+                                    <input type="text" placeholder="{{translate('Unit price')}}" name="unit_price"
+                                           class="form-control" value="{{ (isset($product_stock->price) ? $product_stock->price : '') }}" required>
+                                </div>
+                            </div>
+
+                            <div id="show-hide-div">
+                                <div class="form-group row" id="quantity">
+                                    <label class="col-lg-3 col-from-label">{{translate('Quantity')}}</label>
+                                    <div class="col-lg-6">
+                                        <input type="number" lang="en" value="{{ (isset($product_stock->qty) ? $product_stock->qty : '') }}" step="1"
+                                               placeholder="{{translate('Quantity')}}" name="current_stock"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-from-label">
+                                        {{translate('SKU')}}
+                                    </label>
+                                    <div class="col-md-6">
+                                        <input type="text" placeholder="{{ translate('SKU') }}"
+                                               value="{{ (isset($product_stock->sku) ? $product_stock->sku : '') }}" name="sku" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-from-label">
+                                    {{translate('Wholesale Prices')}}
+                                </label>
+                                <div class="col-md-6">
+                                    <div class="qunatity-price">
+                                        @if(isset($product_stock->wholesalePrices))
+                                            @foreach ($product_stock->wholesalePrices as $wholesalePrice)
+                                                <div class="row gutters-5">
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="{{translate('Min QTY')}}"
+                                                                   name="wholesale_min_qty[]"
+                                                                   value="{{ $wholesalePrice->min_qty }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="{{ translate('Max QTY') }}"
+                                                                   name="wholesale_max_qty[]"
+                                                                   value="{{ $wholesalePrice->max_qty }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control"
+                                                                   placeholder="{{ translate('Price per piece') }}"
+                                                                   name="wholesale_price[]"
+                                                                   value="{{ $wholesalePrice->price }}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <button type="button"
+                                                                class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger"
+                                                                data-toggle="remove-parent" data-parent=".row">
+                                                            <i class="las la-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                        @endif
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="btn btn-soft-secondary btn-sm"
+                                        data-toggle="add-more"
+                                        data-content='<div class="row gutters-5">
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="{{translate('Min Qty')}}" name="wholesale_min_qty[]" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="{{ translate('Max Qty') }}" name="wholesale_max_qty[]" required>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="{{ translate('Price per piece') }}" name="wholesale_price[]" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger" data-toggle="remove-parent" data-parent=".row">
+                                                <i class="las la-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>'
+                                        data-target=".qunatity-price">
+                                        {{ translate('Add More') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Price & Stock Ends -->
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{translate('Product Images')}}</h5>
@@ -345,6 +459,36 @@
                                     </a>
                                 </p>
                             @endif
+
+                            <div class="form-group row pt-3">
+                                <label class="col-md-6 col-from-label">{{translate('Best Selling Product')}}</label>
+                                <div class="col-md-6">
+                                    <label class="aiz-switch aiz-switch-success mb-0">
+                                        @if(isset($product_stock->is_best_selling))
+                                            <input type="checkbox" name="is_best_selling" {{ $product_stock->is_best_selling ? 'checked' : '' }} value="1">
+                                            <span></span>
+                                        @else
+                                            <input type="checkbox" name="is_best_selling" value="1">
+                                            <span></span>
+                                        @endif
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="name">
+                                    {{translate('Shipping Days')}}
+                                </label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="est_shipping_days"
+                                           value="{{ (isset($product_stock->est_shipping_days) ? $product_stock->est_shipping_days : '') }}" min="1" step="1"
+                                           placeholder="{{translate('Shipping Days')}}">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text"
+                                          id="inputGroupPrepend">{{translate('Days')}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

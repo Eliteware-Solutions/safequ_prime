@@ -158,6 +158,15 @@ class WholesaleService
         $product->wholesale_product = 1;
         $product->save();
 
+        if ($product->id > 0) {
+            $product_stock_data = ProductStock::where(array('product_id' => $product->id, 'seller_id' => 0))->first();
+            if ($product_stock_data) { // If stock available then update price and wholesale prices
+                $this->update_product_stock_data($request, $product_stock_data->id);
+            } else { // Make new entry for Product Stock and Wholesale prices
+                $this->add_product_stock_data($request, $product->id);
+            }
+        }
+
         //VAT & Tax
         if ($request->tax_id) {
             foreach ($request->tax_id as $key => $val) {
@@ -188,6 +197,63 @@ class WholesaleService
 
         Artisan::call('view:clear');
         Artisan::call('cache:clear');
+    }
+
+    public function add_product_stock_data($request, $product_id)
+    {
+        $product_stock = new ProductStock;
+        $product_stock->product_id = $product_id;
+        $product_stock->variant = '';
+        $product_stock->price = $request->unit_price;
+        $product_stock->sku = $request->sku;
+        $product_stock->qty = intval($request->current_stock);
+        $product_stock->est_shipping_days = $request->est_shipping_days;
+        $product_stock->is_best_selling = $request->is_best_selling;
+        $product_stock->seller_id = 0;
+
+        $product_stock->save();
+
+        if ($request->has('wholesale_price')) {
+            foreach ($request->wholesale_price as $key => $price) {
+                $wholesale_price = new WholesalePrice;
+                $wholesale_price->product_stock_id = $product_stock->id;
+                $wholesale_price->min_qty = $request->wholesale_min_qty[$key];
+                $wholesale_price->max_qty = $request->wholesale_max_qty[$key];
+                $wholesale_price->price = $price;
+                $wholesale_price->save();
+            }
+        }
+
+        return true;
+    }
+
+    public function update_product_stock_data($request, $id)
+    {
+        $product_stock = ProductStock::findOrFail($id);
+        $product_stock->price = $request->unit_price;
+        $product_stock->sku = $request->sku;
+        $product_stock->qty = $request->current_stock;
+        $product_stock->est_shipping_days = $request->est_shipping_days;
+        $product_stock->is_best_selling = $request->is_best_selling;
+
+        $product_stock->save();
+
+        foreach ($product_stock->wholesalePrices as $key => $wholesalePrice) {
+            $wholesalePrice->delete();
+        }
+
+        if ($request->has('wholesale_price')) {
+            foreach ($request->wholesale_price as $key => $price) {
+                $wholesale_price = new WholesalePrice;
+                $wholesale_price->product_stock_id = $product_stock->id;
+                $wholesale_price->min_qty = $request->wholesale_min_qty[$key];
+                $wholesale_price->max_qty = $request->wholesale_max_qty[$key];
+                $wholesale_price->price = $price;
+                $wholesale_price->save();
+            }
+        }
+
+        return true;
     }
 
     public function update(Request $request, $id)
@@ -334,6 +400,15 @@ class WholesaleService
         $product->choice_options = json_encode($choice_options, JSON_UNESCAPED_UNICODE);
         $product->save();
 
+        // Manage Product Price and Stock
+        if ($id > 0) {
+            $product_stock_data = ProductStock::where(array('product_id' => $id, 'seller_id' => 0))->first();
+            if ($product_stock_data) { // If stock available then update price and wholesale prices
+                $this->update_product_stock_data($request, $product_stock_data->id);
+            } else { // Make new entry for Product Stock and Wholesale prices
+                $this->add_product_stock_data($request, $id);
+            }
+        }
 
         //Flash Deal
         if ($request->flash_deal_id) {

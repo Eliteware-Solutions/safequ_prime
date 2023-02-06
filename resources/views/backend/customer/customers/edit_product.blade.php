@@ -2,11 +2,14 @@
 
 @php
     $disabled = '';
+    $payment_paid = '';
+    $payment_unpaid = '';
     $type = $order_type == 'cart_order' ? 'cart' : '';
 
-    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {
-        $disabled = 'disabled';
-    }
+    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {$disabled = 'disabled';}
+
+    if($order->payment_status == 'paid') $payment_paid = 'selected';
+    else $payment_unpaid = 'selected';
 @endphp
 
 @section('content')
@@ -23,6 +26,7 @@
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
                     <input type="hidden" name="@php echo $type ? 'cart_id' : 'order_id'; @endphp"
                         value="{{ $order->id }}">
+                    <input type="hidden" name="owner_id" value="{{ $user->joined_community_id }}">
 
                     <div class="card">
                         <div class="card-header">
@@ -44,8 +48,8 @@
                                     <select class="form-control aiz-selectpicker" name="payment_status" id="payment_status"
                                         data-live-search="true" required onchange="checkPaymentDetails(this)"
                                         {{ $order_type == 'cart_order' ? 'disabled' : '' }}>
-                                        <option value="unpaid">{{ translate('Un-Paid') }}</option>
-                                        <option value="paid">{{ translate('Paid') }}</option>
+                                        <option value="unpaid" {{ $payment_unpaid }}>{{ translate('Un-Paid') }}</option>
+                                        <option value="paid" {{ $payment_paid }}>{{ translate('Paid') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -63,7 +67,7 @@
                                         placeholder="{{ translate('GP123456 etc..') }}" {{ $disabled }}>
                                 </div>
                             </div>
-                            <div class="form-group row" id="owner_id">
+                            {{-- <div class="form-group row" id="owner_id">
                                 <label class="col-md-3 col-from-label">{{ translate('Community') }} <span
                                         class="text-danger">*</span></label>
                                 <div class="col-md-8">
@@ -76,7 +80,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">
@@ -144,14 +148,15 @@
 
                                                             <div class="col-lg-6 col-8 px-2">
                                                                 <div class="form-group">
+                                                                    @php
+                                                                        $qty = '';
+                                                                        $unit = '';
+                                                                        $custom_price = '';
+                                                                    @endphp
                                                                     <select class="form-control aiz-selectpicker"
                                                                         name="proudct[]" data-live-search="true" required
                                                                         onchange="loadProductUnit(this);">
                                                                         <option value="">Select Product</option>
-                                                                        @php
-                                                                            $qty = '';
-                                                                            $unit = '';
-                                                                        @endphp
 
                                                                         @foreach ($active_products as $product)
                                                                             <option value="{{ $product->id }}"
@@ -201,7 +206,6 @@
                                                                         name="custom_price[]">
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                     </div>
 
@@ -253,7 +257,7 @@
                                                             <div class="form-group">
                                                                 <input  type="number" step="any" min="0" class="form-control custom_price pl-4"
                                                                 placeholder="{{ translate('Custom Price') }}"
-                                                                name="custom_price[]" readonly>
+                                                                name="custom_price[]">
                                                             </div>
                                                         </div>
                                                     </div>

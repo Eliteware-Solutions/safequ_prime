@@ -97,9 +97,8 @@ class Product extends Model
         return $query->where('digital', 0);
     }
 
-    public function deal_stocks()
+    public function productStock()
     {
-        // return $this->hasMany(ProductStock::class);
-        return $this->hasOne(ProductStock::class)->where('purchase_start_date', '<=', date('Y-m-d H:i:s'))->where('purchase_end_date', '>=', date('Y-m-d H:i:s'))->orderBy('purchase_end_date');
+        return $this->hasOne(ProductStock::class)->where('seller_id', 0);
     }
 }
