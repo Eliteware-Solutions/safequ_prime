@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -125,6 +126,10 @@ class RazorpayController extends Controller
                             $order->payment_status = 'paid';
                             $order->payment_details = $payment_detalis;
                             $order->save();
+
+                            OrderDetail::where('order_id', $order_id)->update([
+                                            'payment_status' => 'paid'
+                                        ]);
                         }
                     } elseif ($payment_for == 'customer_pending_bill') { // When Payment done from Customer Pending Bill Link
                         $user_id = $payment['entity']['notes']['user_id'];
@@ -138,6 +143,10 @@ class RazorpayController extends Controller
                                 $order->payment_status = 'paid';
                                 $order->payment_details = $payment_detalis;
                                 $order->save();
+
+                                OrderDetail::where('order_id', $order->id)->update([
+                                                'payment_status' => 'paid'
+                                            ]);
                             }
 
                             $user->pending_bill_url = null;
