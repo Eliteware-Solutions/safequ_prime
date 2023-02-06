@@ -58,6 +58,25 @@
                         </svg>
                     </div>
                 </div>
+                @if($pending_bill > 0)
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div>
+                                    <label class="mt-2"><b>Pending Bill: </b> {{ single_price($pending_bill) }}</label>
+
+                                    <a href="javascript:void(0)" class="float-right" onclick="copyPendingBillUrl(this)"
+                                       data-url="{{ $user->pending_bill_url }}"
+                                       data-amount="{{ $pending_bill }}"
+                                       data-id="{{ $user->id }}">
+                                        <button type="submit" class="btn btn-primary"><i class="las la-clipboard mr-2"></i>
+                                            {{ translate('Payment Link') }}</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -136,7 +155,7 @@
                         <th>{{ translate('Order No') }}</th>
                         <th>{{ translate('Community') }}</th>
                         <th>{{ translate('Product') }}</th>
-                        <th>{{ translate('Quantity') }}</th>
+                        <th>{{ translate('Qty') }}</th>
                         <th>{{ translate('Price') }}</th>
                         <th>{{ translate('Delivery Status') }}</th>
                         <th>{{ translate('Payment Status') }}</th>
@@ -158,19 +177,19 @@
                             }
                         @endphp
                         <tr>
-                            <td>{{ $key + 1 + ($order_details->currentPage() - 1) * $order_details->perPage() }} </td>
-                            <td>
+                            <td style="width: 1%;">{{ $key + 1 + ($order_details->currentPage() - 1) * $order_details->perPage() }} </td>
+                            <td style="width: 10%;">
                                 {{ $detail->order->code }}
                                 <br />
                                 {{ date('d-m-Y', strtotime($detail->created_at)) }}
                             </td>
-                            <td>{{ $sellerName }}</td>
-                            <td>{{ $productName }}</td>
-                            <td>{{ $detail->quantity }}</td>
-                            <td>{{ single_price($totalPrice) }}</td>
-                            <td>{{ ucwords($detail->delivery_status) }}</td>
-                            <td>{{ ucwords($detail->payment_status) }}</td>
-                            <td class="text-center">
+                            <td style="width: 5%;">{{ $sellerName }}</td>
+                            <td style="width: 25%;">{{ $productName }}</td>
+                            <td style="width: 3%;">{{ $detail->quantity }}</td>
+                            <td style="width: 7%;">{{ single_price($totalPrice) }}</td>
+                            <td style="width: 5%;">{{ ucwords($detail->delivery_status) }}</td>
+                            <td style="width: 5%;">{{ ucwords($detail->payment_status) }}</td>
+                            <td class="text-center" style="width: 15%;">
                                 @if ($detail->payment_status == 'unpaid')
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                         href="{{ route('customers.edit_product', ['type' => 'order', 'user_id' => $user->id, 'ord_id' => $detail->order_id]) }}"
@@ -256,6 +275,51 @@
                 AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
             }
             $temp.remove();
+        }
+
+        function copyPendingBillUrl(e) {
+            // let url = $(e).data('url');
+            let url = null;
+            let userId = $(e).data('id');
+            let amount = $(e).data('amount');
+            if (!url) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('customer-bill-payment-link')}}",
+                    type: 'POST',
+                    data: {id: userId, pending_bill: amount},
+                    success: function (response) {
+                        if(response.status == 1) {
+                            url = response.payment_link;
+                            let $temp = $("<input>");
+                            $("body").append($temp);
+                            $temp.val(url).select();
+
+                            try {
+                                document.execCommand("copy");
+                                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                            } catch (err) {
+                                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                            }
+                            $temp.remove();
+                        }
+                    }
+                });
+            } else {
+                let $temp = $("<input>");
+                $("body").append($temp);
+                $temp.val(url).select();
+
+                try {
+                    document.execCommand("copy");
+                    AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                } catch (err) {
+                    AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                }
+                $temp.remove();
+            }
         }
     </script>
 @endsection

@@ -193,7 +193,9 @@ class CustomerController extends Controller
             })->orderBy('created_at','desc')->paginate(10, ['*'], 'orders');
             $wallet_history = Wallet::where('user_id', $id)->orderBy('created_at','desc')->paginate(10, ['*'], 'wallet');
 
-            return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history'));
+            $pending_bill = Order::where('payment_status', 'unpaid')->where('user_id', $user->id)->sum('grand_total');
+
+            return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history', 'pending_bill'));
         } else {
             return back();
         }
@@ -400,5 +402,58 @@ class CustomerController extends Controller
     public function export(Request $request)
     {
         return Excel::download(new CustomersExport($request), 'customers.xlsx');
+    }
+
+    public function customer_bill_payment_link(Request $request)
+    {
+        $result = array();
+        $user = User::findOrFail($request->id);
+//        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => route('payment.user_bill_payment_link_success'), "callback_method" => "get");
+        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => "https://13.234.232.150/razorpay/payment/payment-link-webhook", "callback_method" => "get");
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_VERIFYHOST => FALSE,
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_POSTFIELDS => json_encode($fields),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $razorpay_result = json_decode($response);
+
+        if ($razorpay_result && isset($razorpay_result->status) && $razorpay_result->status == 'created') {
+            $payment_link = $razorpay_result->short_url;
+
+            $user->pending_bill_url = $payment_link;
+            $user->pending_url_amt = $request->pending_bill;
+            $user->save();
+
+            $result = array(
+                'status'  => 1,
+                'payment_link' => $payment_link
+            );
+        } else {
+            $result = array(
+                'status'  => 0,
+                'payment_link' => ''
+            );
+        }
+
+        return $result;
     }
 }

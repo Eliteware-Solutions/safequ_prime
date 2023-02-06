@@ -30,6 +30,6 @@ class VerifyCsrfToken extends Middleware
          '/aamarpay*',
          '/mock_payments',
          '/lnmo*',
-         'rozer/payment/payment-link-webhook'
+         'razorpay/payment/payment-link-webhook'
      ];
 }

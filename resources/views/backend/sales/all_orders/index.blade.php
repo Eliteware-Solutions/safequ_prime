@@ -304,8 +304,7 @@
         }
 
         function copyPaymentUrl(e) {
-            // let url = $(e).data('url');
-            let url = null;
+            let url = $(e).data('url');
             let orderId = $(e).data('id');
             if (!url) {
                 $.ajax({
