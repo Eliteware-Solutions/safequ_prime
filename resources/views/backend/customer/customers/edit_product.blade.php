@@ -2,11 +2,14 @@
 
 @php
     $disabled = '';
+    $payment_paid = '';
+    $payment_unpaid = '';
     $type = $order_type == 'cart_order' ? 'cart' : '';
 
-    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {
-        $disabled = 'disabled';
-    }
+    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {$disabled = 'disabled';}
+    
+    if($order->payment_status == 'paid') $payment_paid = 'selected';
+    else $payment_unpaid = 'selected';
 @endphp
 
 @section('content')
@@ -45,8 +48,8 @@
                                     <select class="form-control aiz-selectpicker" name="payment_status" id="payment_status"
                                         data-live-search="true" required onchange="checkPaymentDetails(this)"
                                         {{ $order_type == 'cart_order' ? 'disabled' : '' }}>
-                                        <option value="unpaid">{{ translate('Un-Paid') }}</option>
-                                        <option value="paid">{{ translate('Paid') }}</option>
+                                        <option value="unpaid" {{ $payment_unpaid }}>{{ translate('Un-Paid') }}</option>
+                                        <option value="paid" {{ $payment_paid }}>{{ translate('Paid') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -64,7 +67,7 @@
                                         placeholder="{{ translate('GP123456 etc..') }}" {{ $disabled }}>
                                 </div>
                             </div>
-<!--                            <div class="form-group row" id="owner_id">
+                            <!-- <div class="form-group row" id="owner_id">
                                 <label class="col-md-3 col-from-label">{{ translate('Community') }} <span
                                         class="text-danger">*</span></label>
                                 <div class="col-md-8">
@@ -77,7 +80,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>-->
+                            </div> -->
 
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">

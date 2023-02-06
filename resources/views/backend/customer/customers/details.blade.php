@@ -188,8 +188,14 @@
                             <td style="width: 3%;">{{ $detail->quantity }}</td>
                             <td style="width: 7%;">{{ single_price($totalPrice) }}</td>
                             <td style="width: 5%;">{{ ucwords($detail->delivery_status) }}</td>
-                            <td style="width: 5%;">{{ ucwords($detail->payment_status) }}</td>
-                            <td class="text-center" style="width: 15%;">
+                            <td style="width: 5%;">
+                                @if ($detail->payment_status == 'paid')
+                                    <span class="badge badge-inline badge-success">{{translate('Paid')}}</span>
+                                @else
+                                    <span class="badge badge-inline badge-danger">{{translate('Unpaid')}}</span>
+                                @endif
+                            </td>
+                            <td class="text-center">
                                 @if ($detail->payment_status == 'unpaid')
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                         href="{{ route('customers.edit_product', ['type' => 'order', 'user_id' => $user->id, 'ord_id' => $detail->order_id]) }}"
@@ -202,7 +208,11 @@
                                         <i class="las la-trash"></i>
                                     </a>
                                 @else
-                                    --
+                                    <a class="btn btn-soft-info btn-icon btn-circle btn-sm"
+                                        href="{{ route('customers.edit_product', ['type' => 'order', 'user_id' => $user->id, 'ord_id' => $detail->order_id]) }}"
+                                        title="{{ translate('Edit') }}">
+                                        <i class="las la-edit"></i>
+                                    </a>
                                 @endif
                             </td>
                         </tr>
