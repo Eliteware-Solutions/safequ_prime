@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Cart;
 use Excel;
 use Illuminate\Support\Facades\Hash;
 
@@ -32,7 +33,16 @@ class CustomerController extends Controller
                 $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
             });
         }
+
         $users = $users->paginate(15);
+
+        // TODO: Remove following loop and get pending bills of user while calling Users data by -> JOIN `orders` Table
+        $pending_bill = NULL;
+        foreach($users as $key => $val){
+            $pending_bill = Order::where(['user_id' => $users[$key]['id'], 'payment_status' => 'unpaid'])->get()->sum('grand_total');
+            $users[$key]['pending_bill'] = $pending_bill;
+        }
+
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
 
@@ -181,8 +191,8 @@ class CustomerController extends Controller
             $cart_orders = $user->carts;
             $order_details = OrderDetail::with('order')->whereHas('order', function ($query) use ($id) {
                 $query->where('user_id', $id);
-            })->orderBy('created_at','desc')->paginate(10, ['*'], 'orders');
-            $wallet_history = Wallet::where('user_id', $id)->orderBy('created_at','desc')->paginate(10, ['*'], 'wallet');
+            })->orderBy('created_at', 'desc')->paginate(10, ['*'], 'orders');
+            $wallet_history = Wallet::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'wallet');
 
             return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history'));
         } else {
@@ -195,68 +205,80 @@ class CustomerController extends Controller
         $user = User::findOrFail($id);
 
         if ($user) {
-            $shop = Shop::where('user_id', $user->joined_community_id)->first();
+            $shop = User::where(array('banned' => 0, 'user_type' => 'seller'))->get();
+            $all_products = ProductStock::groupBy('product_id')->get();
 
-            if ($shop != null) {
-                $seller = Seller::where('user_id', $shop->user_id)->first();
-                $products_purchase_started = isset($seller->products_purchase_started) ? $seller->products_purchase_started : [];
-                $products_purchase_expired = isset($seller->products_purchase_expired) ? $seller->products_purchase_expired : [];
-
-                $active_products = [];
-                foreach ($products_purchase_started as $product) {
-                    $unit = '';
-                    if (floatval($product->product->min_qty) >= 1) {
-                        $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                    } else {
-                        $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                    }
-
-                    $unit = single_price($product->price) . ' / ' . $unit;
-                    $product->unit_label = $unit;
-                    $active_products[] = $product;
+            $active_products = [];
+            foreach ($all_products as $product) {
+                $unit = '';
+                if (floatval($product->product->min_qty) < 1) {
+                    $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
+                } else {
+                    $unit = $product->product->min_qty . ' ' . $product->product->secondary_unit;
                 }
 
-                foreach ($products_purchase_expired as $product) {
-                    $unit = '';
-                    if (floatval($product->product->min_qty) >= 1) {
-                        $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                    } else {
-                        $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                    }
-
-                    $unit = single_price($product->price) . '/' . $unit;
-                    $product->unit_label = $unit;
-                    $active_products[] = $product;
-                }
-
-                return view('backend.customer.customers.add_product', compact('user', 'shop', 'seller', 'active_products'));
-            } else {
-                return back();
+                $unit = single_price($product->price) . ' / ' . $unit;
+                $product->unit_label = $unit;
+                $active_products[] = $product;
             }
+
+            return view('backend.customer.customers.add_product', compact('user', 'shop', 'active_products'));
         } else {
             return back();
         }
+    }
+
+    public function edit_customer_product($type, $user_id, $ord_id)
+    {
+        $user = User::findOrFail($user_id);
+        $shop = User::where(array('banned' => 0, 'user_type' => 'seller'))->get();
+
+        $order_details = array();
+        if ($type == 'cart_order') {
+            $order = Cart::where('id', $ord_id)->first();
+        } else {
+            $order = Order::where('id', $ord_id)->first();
+            $order_details = $order->orderDetails;
+        }
+
+        $all_products = ProductStock::groupBy('product_id')->get();
+
+        $active_products = [];
+        foreach ($all_products as $product) {
+            $unit = '';
+            if (floatval($product->product->min_qty) < 1) {
+                $unit = floatval(1000 * $product->product->min_qty) . ' ' . $product->product->secondary_unit;
+            } else {
+                $unit = $product->product->min_qty . ' ' . $product->product->secondary_unit;
+            }
+
+            $unit = single_price($product->price) . ' / ' . $unit;
+            $product->unit_label = $unit;
+            $active_products[] = $product;
+        }
+
+        $order_type = $type;
+
+        return view('backend.customer.customers.edit_product', compact('order_type', 'user', 'shop', 'order', 'order_details', 'active_products'));
     }
 
     public function add_customer_order(Request $request)
     {
         $qtyAvailable = true;
         $msg = '';
-        $prod_qty = $request->prod_qty;
-        foreach ($request->proudct as $key => $val) {
-            $productStock = ProductStock::find($val);
-            if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
-                $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
-                $qtyAvailable = false;
-                break;
-            }
-        }
+        // $prod_qty = $request->prod_qty;
+        // foreach ($request->proudct as $key => $val) {
+        //     $productStock = ProductStock::find($val);
+        //     if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
+        //         $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
+        //         $qtyAvailable = false;
+        //         break;
+        //     }
+        // }
 
         if ($qtyAvailable == true) {
-            if ($request->add_order)
-                (new OrderController)->save_order_from_backend($request);
-            else
-                (new CartController)->addToCustomerCart($request);
+            if ($request->add_order) (new OrderController)->save_order_from_backend($request);
+            else (new CartController)->addToCustomerCart($request);
 
             flash(translate('Order has been added.'))->success();
             return redirect()->route('customers.detail', $request->user_id);
@@ -264,7 +286,33 @@ class CustomerController extends Controller
             flash($msg)->error();
             return back();
         }
+    }
 
+    public function edit_customer_order(Request $request)
+    {
+        if ($request->edit_order) (new OrderController)->edit_order_from_backend($request);
+        else (new CartController)->editItemInCustomerCart($request);
+
+        flash(translate('Order has been Updated.'))->success();
+        return redirect()->route('customers.detail', $request->user_id);
+    }
+
+    public function delete_cart_item($user_id, $ord_id)
+    {
+        Cart::destroy($ord_id);
+        flash(translate('Item has been deleted successfully'))->success();
+        return redirect()->route('customers.detail', $user_id);
+    }
+
+    public function delete_order_item($user_id, $order_detail_id)
+    {
+        $dataAry['user_id'] = $user_id;
+        $dataAry['order_detail_id'] = $order_detail_id;
+
+        $status = (new OrderController)->delete_order_item($dataAry);
+
+        flash(translate($status))->success();
+        return redirect()->route('customers.detail', $dataAry['user_id']);
     }
 
     public function add_customer()

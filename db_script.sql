@@ -150,3 +150,8 @@ ADD COLUMN `is_best_selling` int(1) NULL DEFAULT 0 AFTER `est_shipping_days`;
 
 -- Category slug updated
 UPDATE `categories` SET `slug` = 'flowers' WHERE `categories`.`id` = 24;
+
+
+-- 03-02-2023
+ALTER TABLE `safequ_prime`.`order_details`
+ADD COLUMN `custom_price` decimal(20, 2) NULL DEFAULT 0 AFTER `updated_at`;

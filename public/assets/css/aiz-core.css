@@ -4172,7 +4172,7 @@ input[type="number"] {
 }
 [dir="rtl"] .aiz-steps > *:not(:first-of-type):before {
     left: calc(50% + 20px);
-    right: auto; 
+    right: auto;
 }
 .aiz-steps .title {
     font-size: 15px;
@@ -4265,6 +4265,13 @@ input[type="number"] {
 }
 .form-control::placeholder {
     color: #898b92;
+}
+.btn.disabled,
+.btn:disabled,
+input:disabled,
+textarea:disabled,
+.form-control:disabled {
+    cursor: not-allowed;
 }
 .form-control:disabled,
 .form-control[readonly] {
@@ -4616,6 +4623,10 @@ input[type="number"] {
     color: #898b92;
     background-color: transparent !important;
     border-color: #e2e5ec;
+}
+.bootstrap-select .dropdown-toggle.disabled {
+    background-color: #f6f8fc !important;
+    opacity: 1;
 }
 .bootstrap-select.form-control-sm .dropdown-toggle {
     padding: 0.416rem 0.7rem;
@@ -6749,7 +6760,7 @@ ul.social.colored [class*="linkedin"] {
     right: 20px;
 }
 [dir="rtl"] .hover-category-menu .all-category::before {
-    left: 20px;    
+    left: 20px;
     right: auto;
 }
 
@@ -7278,7 +7289,7 @@ ul.social.colored [class*="linkedin"] {
     box-shadow: 2px 1px 6px 2px rgba(0, 0, 0, 0.1), 0 4px 4px 0px rgba(0, 0, 0, 0.06) !important;
 }
 
-.badge-custom .box {    
+.badge-custom .box {
     height: 26px;
     width: 26px;
     background: #ff0000;
@@ -7289,4 +7300,15 @@ ul.social.colored [class*="linkedin"] {
 }
 [dir="rtl"] .badge-custom{
     border-radius: 50em 0 0 50em;
+}
+.v-light-border {
+    border: 1px solid #eff2f7;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.v-light-bg {
+    background-color: #eff2f7;
 }
