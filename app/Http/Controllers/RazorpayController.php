@@ -140,7 +140,7 @@ class RazorpayController extends Controller
                                 $order->save();
                             }
 
-                            $user->pending_bill_url = '';
+                            $user->pending_bill_url = null;
                             $user->pending_url_amt = 0;
                             $user->save();
                         }
@@ -149,7 +149,7 @@ class RazorpayController extends Controller
             }
         }
 
-        return true;
+        return response()->json('success', 200);
     }
 
     public function user_bill_payment_link_success(Request $request)
