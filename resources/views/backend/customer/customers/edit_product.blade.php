@@ -145,14 +145,15 @@
 
                                                             <div class="col-lg-6 col-8 px-2">
                                                                 <div class="form-group">
+                                                                    @php
+                                                                        $qty = '';
+                                                                        $unit = '';
+                                                                        $custom_price = '';
+                                                                    @endphp
                                                                     <select class="form-control aiz-selectpicker"
                                                                         name="proudct[]" data-live-search="true" required
                                                                         onchange="loadProductUnit(this);">
                                                                         <option value="">Select Product</option>
-                                                                        @php
-                                                                            $qty = '';
-                                                                            $unit = '';
-                                                                        @endphp
 
                                                                         @foreach ($active_products as $product)
                                                                             <option value="{{ $product->id }}"
@@ -202,7 +203,6 @@
                                                                         name="custom_price[]">
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                     </div>
 
