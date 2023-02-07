@@ -338,8 +338,9 @@
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
                                     <div class="usr-img mr-2">
-                                        <img src="{{ static_asset('assets/img/new-design/user-icon.svg') }}"
-                                            onload="SVGInject(this)" alt="Star">
+                                        <img src="{{ static_asset('assets/img/testimonials/' . $rev['image']) }}"
+                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
+                                            alt="Star">
                                     </div>
                                     <div class="usr-data">
                                         <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
@@ -536,8 +537,9 @@
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
                                     <div class="usr-img mr-2">
-                                        <img src="{{ static_asset('assets/img/new-design/user-icon.svg') }}"
-                                            onload="SVGInject(this)" alt="Star">
+                                        <img src="{{ static_asset('assets/img/testimonials/' . $rev['image']) }}"
+                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
+                                            alt="User">
                                     </div>
                                     <div class="usr-data">
                                         <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
