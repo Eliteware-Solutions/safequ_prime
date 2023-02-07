@@ -11,13 +11,13 @@
     <meta name="app-url" content="{{ getBaseURL() }}">
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', get_setting('website_name') . ' | ' . get_setting('site_motto'))</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
-    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description'))" />
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords'))">
 
     @yield('meta')
 
@@ -76,13 +76,13 @@
 
     {{-- <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}"> --}}
 
-    @if(!$new_header)
-        <link rel="stylesheet" href="{{ static_asset('assets/css/main.css') }}">
-    @endif
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
 
-    <!-- New CSS Style -->
-    <link rel="stylesheet" href="{{ static_asset('assets/css/new-style.min.css') }}">
+    @if (isset($new_header) && !$new_header)
+        <link rel="stylesheet" href="{{ static_asset('assets/css/main.css') }}">
+    @else
+        <link rel="stylesheet" href="{{ static_asset('assets/css/new-style.min.css') }}">
+    @endif
 
 
     <script>
@@ -169,7 +169,7 @@
 
 <body>
 
-    @if(!$new_header)
+    @if (isset($new_header) && !$new_header)
         @include('frontend.inc.nav')
     @endif
 
@@ -246,8 +246,8 @@
             }
         }
 
-        function updateNavCart(count){
-            if(count > 0){
+        function updateNavCart(count) {
+            if (count > 0) {
                 $('.cart-item-count').show();
                 $('.cart-item-count').html(count);
                 $("main.cart-main-tag").removeClass("withOnlyHdr");
@@ -265,12 +265,16 @@
                     },
                     type: "POST",
                     url: '{{ route('cart.addToCart') }}',
-                    data: {id: product_id, product_stock_id: product_stock_id, quantity: qty},
-                    success: function (data) {
+                    data: {
+                        id: product_id,
+                        product_stock_id: product_stock_id,
+                        quantity: qty
+                    },
+                    success: function(data) {
                         if (data.status == 1) {
                             updateNavCart(data.cart_count);
                             AIZ.plugins.notify('success', '{{ translate('Added to Cart') }}');
-                            {{--                            window.location.replace("{{ route('cart') }}");--}}
+                            {{--                            window.location.replace("{{ route('cart') }}"); --}}
                         } else {
                             AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                         }
@@ -279,22 +283,23 @@
             }
         }
 
-        function getCartCount(){
+        function getCartCount() {
             $.post('{{ route('cart.cartCount') }}', {
-                _token   :  AIZ.data.csrf
-            }, function(data){
+                _token: AIZ.data.csrf
+            }, function(data) {
                 updateNavCart(data.cart_count);
             });
         }
 
         function referFriend(referLink, name, amount) {
             navigator.share({
-                title: 'Join SafeQU!',
-                text: name + ' has sent you '+ amount + ' to get started with SafeQU!\n\nYou can get a choice of farm fresh produce like strawberries, avocados & mangoes DIRECTLY from a variety of local farms at ~30% cheaper than halls of food or baskets of nature 😉.\n',
-                url: referLink
-            })
-            .then(() => console.log('Share was successful.'))
-            .catch((error) => console.log('Sharing failed', error));
+                    title: 'Join SafeQU!',
+                    text: name + ' has sent you ' + amount +
+                        ' to get started with SafeQU!\n\nYou can get a choice of farm fresh produce like strawberries, avocados & mangoes DIRECTLY from a variety of local farms at ~30% cheaper than halls of food or baskets of nature 😉.\n',
+                    url: referLink
+                })
+                .then(() => console.log('Share was successful.'))
+                .catch((error) => console.log('Sharing failed', error));
         }
 
         $(document).ready(function() {
@@ -347,7 +352,7 @@
                 onlyCountries: ['in'],
                 customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
                     // if (selectedCountryData.iso2 == 'bd') {
-                        return "81234 56789";
+                    return "81234 56789";
                     // }
                     return selectedCountryPlaceholder;
                 }

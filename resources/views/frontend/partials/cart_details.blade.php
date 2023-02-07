@@ -264,7 +264,7 @@
                                 </a>
                             @endif
                             <button id="btn_pay_now" class="btn primary-btn btn-round py-1" onclick="submitOrder(this)"
-                                    @if(count($carts) == 0 || $user_data->address == '') disabled @endif >Pay Now
+                                    @if(count($carts) == 0 || ($user_data && $user_data->address == '')) disabled @endif >Pay Now
                             </button>
                         </div>
                     </div>

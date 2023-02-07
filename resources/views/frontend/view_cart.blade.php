@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => false])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => false, 'new_footer' => false])
 
 @section('content')
     <main class="main-tag mt-0 cart-main-tag">
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="pt-4 text-center">
                                         @if ($user_data && intval($user_data->joined_community_id) > 0)
-                                            <a href="{{ route('shop.visit', $shop->slug) }}">
+                                            <a href="{{ route('shop.visit') }}">
                                                 <button class="btn primary-btn btn-round px-5">
                                                     Continue Shopping &nbsp;&nbsp;
                                                     <i class="fal fa-long-arrow-right text-white"></i>
@@ -240,9 +240,11 @@
                                                 placeholder="Email">
                                         </div>
                                         <div class="col-md-6 p-2">
-                                            <select name="community" id="communityDropdown" class="form-control">
-                                                <option value="{{ $shop->user_id }}" selected>{{ $shop->name }}
-                                                </option>
+                                            <select name="community" id="communityDropdown" class="form-control" required>
+                                                <option value="">Select Community</option>
+                                                @foreach ($shops as $val)
+                                                    <option value="{{ $val->user_id }}">{{ $val->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-12 p-2">
