@@ -408,8 +408,7 @@ class CustomerController extends Controller
     {
         $result = array();
         $user = User::findOrFail($request->id);
-//        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => route('payment.user_bill_payment_link_success'), "callback_method" => "get");
-        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => "https://13.234.232.150/razorpay/payment/payment-link-webhook", "callback_method" => "get");
+        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => route('payment.user_bill_payment_link_success'), "callback_method" => "get");
 
         $curl = curl_init();
 
