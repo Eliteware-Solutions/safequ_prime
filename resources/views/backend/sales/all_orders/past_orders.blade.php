@@ -326,9 +326,9 @@
 
                             try {
                                 document.execCommand("copy");
-                                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                                AIZ.plugins.notify('success', '{{ translate("Link copied to clipboard") }}');
                             } catch (err) {
-                                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                                AIZ.plugins.notify('danger', '{{ translate("Oops, unable to copy") }}');
                             }
                             $temp.remove();
                         }
@@ -341,9 +341,9 @@
 
                 try {
                     document.execCommand("copy");
-                    AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                    AIZ.plugins.notify('success', '{{ translate("Link copied to clipboard") }}');
                 } catch (err) {
-                    AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                    AIZ.plugins.notify('danger', '{{ translate("Oops, unable to copy") }}');
                 }
                 $temp.remove();
             }

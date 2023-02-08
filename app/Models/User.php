@@ -170,4 +170,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(User::class,'id','joined_community_id');
     }
+
+    public function unpaid_orders()
+    {
+        return $this->hasMany(Order::class)->where('payment_status' ,'unpaid');
+    }
 }

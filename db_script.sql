@@ -166,3 +166,10 @@ ALTER TABLE `archive_product_stocks` ADD COLUMN `is_best_selling` int(1) NULL DE
 ALTER TABLE `archive_orders` ADD COLUMN `razorpay_payment_link` varchar(500) NULL AFTER `replaced_order_id`;
 ALTER TABLE `users` ADD COLUMN `pending_bill_url` varchar(255) NULL AFTER `referral_key`;
 ALTER TABLE `users` ADD COLUMN `pending_url_amt` decimal(20, 3) NULL AFTER `pending_bill_url`;
+
+
+-- ----------------------------
+-- Dt: 8-02-23
+-- ----------------------------
+ALTER TABLE `order_details` MODIFY COLUMN `custom_price` decimal(20, 2) NULL DEFAULT NULL AFTER `updated_at`;
+ALTER TABLE `carts` ADD COLUMN `custom_price` decimal(10, 2) NULL DEFAULT NULL AFTER `quantity`;

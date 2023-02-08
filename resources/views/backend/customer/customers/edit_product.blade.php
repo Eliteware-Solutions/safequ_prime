@@ -4,17 +4,22 @@
     $disabled = '';
     $payment_paid = '';
     $payment_unpaid = '';
-    $type = $order_type == 'cart_order' ? 'cart' : '';
+    $type = ($order_type == 'cart_order') ? 'cart' : '';
 
-    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {$disabled = 'disabled';}
-    
-    if($order->payment_status == 'paid') $payment_paid = 'selected';
-    else $payment_unpaid = 'selected';
+    if ($order_type == 'cart_order' || $order->payment_status == 'unpaid') {
+        $disabled = 'disabled';
+    }
+
+    if ($order->payment_status == 'paid') {
+        $payment_paid = 'selected';
+    } else {
+        $payment_unpaid = 'selected';
+    }
 @endphp
 
 @section('content')
     <div class="aiz-titlebar text-left mt-2 mb-3">
-        <h5 class="mb-0 h6">{{ translate('Add New Order') }}</h5>
+        <h5 class="mb-0 h6">{{ $type == 'cart' ? translate('Edit Cart Item') : translate('Edit Order') }}</h5>
     </div>
 
     <div class="">
@@ -67,7 +72,7 @@
                                         placeholder="{{ translate('GP123456 etc..') }}" {{ $disabled }}>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row" id="owner_id">
+                            {{-- <div class="form-group row" id="owner_id">
                                 <label class="col-md-3 col-from-label">{{ translate('Community') }} <span
                                         class="text-danger">*</span></label>
                                 <div class="col-md-8">
@@ -80,7 +85,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> -->
+                            </div> --}}
 
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">
@@ -90,53 +95,88 @@
                                     <div class="qunatity-price">
 
                                         @if ($type)
-                                            <div class="row gutters-5">
+                                            <div class="row m-0 v-light-bg pt-3 mb-3">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <select class="form-control aiz-selectpicker" name="proudct"
-                                                            data-live-search="true" required
-                                                            onchange="loadProductUnit(this);">
-                                                            <option value="">Select Product</option>
-                                                            @php
-                                                                $qty = '';
-                                                                $unit = '';
-                                                            @endphp
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="form-group">
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="form-group">
+                                                    </div>
+                                                </div>
+                                                <div class="col-11 px-2">
+                                                    <div class="row m-0">
 
-                                                            @foreach ($active_products as $product)
-                                                                <option value="{{ $product->id }}"
-                                                                    data-unit_label="{{ $product->unit_label }}"
-                                                                    @if ($order->product_stock_id == $product->id) selected @endif>
+                                                        <div class="col-md-6 px-2">
+                                                            <div class="form-group">
+                                                                <select class="form-control aiz-selectpicker" name="proudct"
+                                                                    data-live-search="true" required
+                                                                    onchange="loadProductUnit(this);">
+                                                                    <option value="">Select Product</option>
                                                                     @php
-                                                                        $variation = '';
-                                                                        if ($product->product->variation) {
-                                                                            $variation = ' [' . $product->product->variation . ']';
-                                                                        }
+                                                                        $qty = '';
+                                                                        $unit = '';
                                                                     @endphp
-                                                                    {{ $product->product->name . $variation }}
-                                                                </option>
-                                                                @php
-                                                                    if ($order->product_stock_id == $product->id) {
-                                                                        $qty = $order->quantity;
-                                                                        $unit = $product->unit_label;
-                                                                    }
-                                                                @endphp
-                                                            @endforeach
-                                                        </select>
+
+                                                                    @foreach ($active_products as $product)
+                                                                        <option value="{{ $product->id }}"
+                                                                            data-unit_label="{{ $product->unit_label }}"
+                                                                            @if ($order->product_stock_id == $product->id) selected @endif>
+                                                                            @php
+                                                                                $variation = '';
+                                                                                if ($product->product->variation) {
+                                                                                    $variation = ' [' . $product->product->variation . ']';
+                                                                                }
+                                                                            @endphp
+                                                                            {{ $product->product->name . $variation }}
+                                                                        </option>
+                                                                        @php
+                                                                            if ($order->product_stock_id == $product->id) {
+                                                                                $qty = $order->quantity;
+                                                                                $unit = $product->unit_label;
+                                                                            }
+                                                                        @endphp
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 px-2">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control prod_qty"
+                                                                    value="{{ $qty }}"
+                                                                    placeholder="{{ translate('Qty') }}" name="prod_qty"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 px-2">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control prod_unit"
+                                                                    value="{{ $unit }}"
+                                                                    placeholder="{{ translate('Unit') }}"
+                                                                    name="price_per_unit">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3 px-2">
+                                                            <div class="form-group">
+                                                                <input type="number" step="any" min="0"
+                                                                    name="custom_price"
+                                                                    class="form-control custom_price pl-4"
+                                                                    placeholder="{{ translate('Custom Price') }}"
+                                                                    value="{{ trim($order->custom_price) != '' ? $order->custom_price : '' }}">
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control prod_qty"
-                                                            value="{{ $qty }}"
-                                                            placeholder="{{ translate('Qty') }}" name="prod_qty" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control prod_unit"
-                                                            value="{{ $unit }}"
-                                                            placeholder="{{ translate('Unit') }}" name="price_per_unit">
-                                                    </div>
+                                                <div class="col-1">
+                                                    <button type="button"
+                                                        class="mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger"
+                                                        data-toggle="remove-parent" data-parent=".row">
+                                                        <i class="las la-times"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         @else
@@ -201,7 +241,7 @@
                                                                 <div class="form-group">
                                                                     <input type="number" step="any" min="0"
                                                                         class="form-control custom_price pl-4"
-                                                                        value="{{ $custom_price != 0.00 ? $custom_price : '' }}"
+                                                                        value="{{ trim($custom_price) != '' ? $custom_price : '' }}"
                                                                         placeholder="{{ translate('Custom Price') }}"
                                                                         name="custom_price[]">
                                                                 </div>
@@ -236,10 +276,10 @@
                                                                 <select class="form-control aiz-selectpicker" name="proudct[]" data-live-search="true" required onchange="loadProductUnit(this);">
                                                                     <option value="">Select Product</option>
                                                                     @foreach ($active_products as $product)
-                                                                        <option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
+<option value="{{ $product->id }}" data-unit_label="{{ $product->unit_label }}">
                                                                             {{ $product->product->name . ' [' . $product->product->variation . ']' }}
                                                                         </option>
-                                                                    @endforeach
+@endforeach
                                                                 </select>
                                                             </div>
                                                         </div>

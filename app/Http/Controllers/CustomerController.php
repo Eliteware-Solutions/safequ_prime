@@ -26,22 +26,14 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
-        $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
+        $users = User::withSum('unpaid_orders', 'grand_total')->where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('unpaid_orders_sum_grand_total', 'desc');
         if ($request->has('search')) {
             $sort_search = $request->search;
             $users->where(function ($q) use ($sort_search) {
-                $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
+                $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%')->orWhere('phone', 'like', '%' . $sort_search . '%');
             });
         }
         $users = $users->paginate(15);
-
-        // TODO: Remove following loop and get pending bills of user while calling Users data by -> JOIN `orders` Table
-        $pending_bill = NULL;
-        foreach($users as $key => $val){
-            $pending_bill = Order::where(['user_id' => $users[$key]['id'], 'payment_status' => 'unpaid'])->get()->sum('grand_total');
-            $users[$key]['pending_bill'] = $pending_bill;
-        }
-
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
 
@@ -237,7 +229,9 @@ class CustomerController extends Controller
             $order = Order::where('id', $ord_id)->first();
             $order_details = $order->orderDetails;
         }
+
         $all_products = ProductStock::where('seller_id', 0)->get();
+
         $active_products = [];
         foreach ($all_products as $product) {
             $unit = '';
@@ -247,10 +241,13 @@ class CustomerController extends Controller
                 $unit = $product->product->min_qty . ' ' . $product->product->secondary_unit;
             }
             $unit = single_price($product->price) . ' / ' . $unit;
+
             $product->unit_label = $unit;
             $active_products[] = $product;
         }
+
         $order_type = $type;
+
         return view('backend.customer.customers.edit_product', compact('order_type', 'user', 'shop', 'order', 'order_details', 'active_products'));
     }
 
@@ -258,15 +255,15 @@ class CustomerController extends Controller
     {
         $qtyAvailable = true;
         $msg = '';
-//        $prod_qty = $request->prod_qty;
-//        foreach ($request->proudct as $key => $val) {
-//            $productStock = ProductStock::find($val);
-//            if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
-//                $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
-//                $qtyAvailable = false;
-//                break;
-//            }
-//        }
+        // $prod_qty = $request->prod_qty;
+        // foreach ($request->proudct as $key => $val) {
+        //     $productStock = ProductStock::find($val);
+        //     if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
+        //         $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
+        //         $qtyAvailable = false;
+        //         break;
+        //     }
+        // }
 
         if ($qtyAvailable == true) {
             if ($request->add_order)

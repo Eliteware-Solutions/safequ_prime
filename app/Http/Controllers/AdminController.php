@@ -25,12 +25,12 @@ class AdminController extends Controller
         $root_categories = Category::where('level', 0)->get();
         $from = date('01-m-Y');
         $to = date('t-m-Y');
-//        $cached_data = Cache::remember('cached_data', 3600, function () use ($to, $from, $root_categories) {
+        // $cached_data = Cache::remember('cached_data', 3600, function () use ($to, $from, $root_categories) {
         if ($request->date != null) {
             $from = explode(" to ", $request->date)[0];
             $to = explode(" to ", $request->date)[1];
         }
-//        dd($from,$to);
+
         $num_of_sale_data = null;
         $qty_data = null;
         foreach ($root_categories as $key => $category) {
@@ -78,8 +78,8 @@ class AdminController extends Controller
             }
         ])->withCount('customers')->get();
 
-//            return $item;
-//        });
+        //     return $item;
+        // });
         $cached_data = $item;
         return view('backend.dashboard', compact('root_categories', 'cached_data', 'from', 'to'));
     }

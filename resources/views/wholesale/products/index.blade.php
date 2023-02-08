@@ -1,7 +1,6 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <div class="row align-items-center">
             <div class="col-auto">
@@ -93,17 +92,11 @@
                         </th>
                         <!--<th data-breakpoints="lg">#</th>-->
                         <th>{{translate('Name')}}</th>
-                        @if($type != 'In House')
-                            <th data-breakpoints="lg">{{translate('Added By')}}</th>
-                        @endif
-                        <th data-breakpoints="sm">{{translate('Info')}}</th>
-                        <th data-breakpoints="md">{{translate('Total Stock')}}</th>
-                        <th data-breakpoints="lg">{{translate('Todays Deal')}}</th>
+                        <th data-breakpoints="sm">{{translate('Price')}}</th>
                         <th data-breakpoints="lg">{{translate('Published')}}</th>
                         @if(get_setting('product_approve_by_admin') == 1 && $type == 'Seller')
                             <th data-breakpoints="lg">{{translate('Approved')}}</th>
                         @endif
-                        <th data-breakpoints="lg">{{translate('Featured')}}</th>
                         <th data-breakpoints="sm" class="text-right">{{translate('Options')}}</th>
                     </tr>
                     </thead>
@@ -130,42 +123,7 @@
                                     </div>
                                 </div>
                             </td>
-                            @if($type != 'In House')
-                                <td>{{ $product->user->name }}</td>
-                            @endif
-                            <td>
-                                <strong>{{translate('Num of Sale')}}
-                                    :</strong> {{ $product->num_of_sale }} {{translate('times')}} </br>
-                                <strong>{{translate('Base Price')}}
-                                    :</strong> {{ single_price($product->unit_price) }} </br>
-                                <strong>{{translate('Rating')}}:</strong> {{ $product->rating }} </br>
-                            </td>
-                            <td>
-                                @php
-                                    $qty = 0;
-                                    if($product->variant_product) {
-                                        foreach ($product->stocks as $key => $stock) {
-                                            $qty += $stock->qty;
-                                            echo $stock->variant.' - '.$stock->qty.'<br>';
-                                        }
-                                    }
-                                    else {
-                                        //$qty = $product->current_stock;
-                                        $qty = optional($product->stocks->first())->qty;
-                                        echo $qty;
-                                    }
-                                @endphp
-                                @if($qty <= $product->low_stock_quantity)
-                                    <span class="badge badge-inline badge-danger">Low</span>
-                                @endif
-                            </td>
-                            <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_todays_deal(this)" value="{{ $product->id }}"
-                                           type="checkbox" <?php if ($product->todays_deal == 1) echo "checked"; ?> >
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
+                            <td>{{ single_price($product->unit_price) }}</td>
                             <td>
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     <input onchange="update_published(this)" value="{{ $product->id }}"
@@ -182,13 +140,6 @@
                                     </label>
                                 </td>
                             @endif
-                            <td>
-                                <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input onchange="update_featured(this)" value="{{ $product->id }}"
-                                           type="checkbox" <?php if ($product->featured == 1) echo "checked"; ?> >
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
                             <td class="text-right">
                             <!--                            <a class="btn btn-soft-success btn-icon btn-circle btn-sm"  href="{{ route('product', $product->slug) }}" target="_blank" title="{{ translate('View') }}">
                                 <i class="las la-eye"></i>
