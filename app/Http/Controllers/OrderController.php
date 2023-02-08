@@ -176,6 +176,7 @@ class OrderController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
+            CURLOPT_USERPWD => env('RAZOR_KEY').':'.env('RAZOR_SECRET'),
             CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -188,7 +189,6 @@ class OrderController extends Controller
             CURLOPT_SSL_VERIFYPEER => FALSE,
             CURLOPT_POSTFIELDS => json_encode($fields),
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
                 'Content-Type: application/json'
             ),
         ));
