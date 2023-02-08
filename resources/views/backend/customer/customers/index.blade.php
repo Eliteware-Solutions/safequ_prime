@@ -36,12 +36,13 @@
                     <div class="form-group mb-0">
                         <input type="text" class="form-control" id="search" name="search"
                                @isset($sort_search) value="{{ $sort_search }}"
-                               @endisset placeholder="{{ translate('Type email or name & Enter') }}">
+                               @endisset placeholder="{{ translate('Type email or name or phone no') }}">
                     </div>
                 </div>
 
                 <div class="col-auto">
                     <div class="form-group mb-0">
+                        <button type="submit" class="btn btn-primary">{{ translate('Filter') }}</button>
                         <button type="button" class="btn btn-primary" onclick="exportCustomerExcel()">{{ translate('Export') }}</button>
                     </div>
                 </div>
@@ -105,7 +106,7 @@
                                         {{ '--' }}
                                     @endif
                                 </td>
-                                <td>{{ single_price($user->pending_bill) }}</td>
+                                <td>{{ single_price($user->unpaid_orders_sum_grand_total) }}</td>
                                 <td class="text-center">
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                        href="{{route('customers.edit', ['id'=>$user->id] )}}"

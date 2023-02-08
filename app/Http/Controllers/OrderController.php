@@ -82,9 +82,8 @@ class OrderController extends Controller
     {
         $date = $request->date;
         $sort_search = null;
-        $delivery_status = null;
+        $delivery_status = 'pending';
         $payment_status = null;
-        $request->delivery_status = (trim($request->delivery_status) == '' ? 'pending' : $request->delivery_status);
 
         $orders = Order::orderBy('id', 'desc');
         if ($request->payment_status != 'unpaid') {
@@ -94,36 +93,90 @@ class OrderController extends Controller
         if ($request->has('search')) {
             $sort_search = $request->search;
             if (trim($sort_search) != '') {
-                $orders = $orders->where('code', 'like', '%' . $sort_search . '%');
+                $orders = $orders->where('code', 'like', '%' . $sort_search . '%')
+                    ->orWhereHas('user', function ($query) use ($sort_search) {
+                        $query->where('name', 'like', '%' . $sort_search . '%');
+                    });
             }
         }
-        if ($request->delivery_status != null) {
+
+        if (trim($request->delivery_status) != null && trim($request->delivery_status) != 'pending') {
             $orders = $orders->where('delivery_status', $request->delivery_status);
-            $delivery_status = $request->delivery_status;
+            $delivery_status = trim($request->delivery_status);
         }
         if ($request->payment_status != null) {
             $orders = $orders->where('payment_status', $request->payment_status)->where('added_by_admin', 1);
             $payment_status = $request->payment_status;
         }
         if ($date != null) {
-            $orders = $orders->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $date)[1])));
+            $orders = $orders->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
+        } else {
+            $date = date('01-m-Y') . ' to ' . date('t-m-Y');
+            $orders = Order::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->orderBy('id', 'desc');
         }
 
         $orders = $orders->paginate(15);
 
-        return view('backend.sales.all_orders.index', compact('orders', 'sort_search','payment_status', 'delivery_status', 'date'));
+        return view('backend.sales.all_orders.index', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
+    }
+
+    // Past All Orders
+    public function past_orders(Request $request)
+    {
+        $date = $request->date;
+        $sort_search = null;
+        $delivery_status = 'pending';
+        $payment_status = null;
+
+        $orders = Order::orderBy('id', 'desc');
+        if ($request->payment_status != 'unpaid') {
+            $orders = $orders->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
+        }
+
+        if ($request->has('search')) {
+            $sort_search = $request->search;
+            if (trim($sort_search) != '') {
+                $orders = $orders->where('code', 'like', '%' . $sort_search . '%')
+                    ->orWhereHas('user', function ($query) use ($sort_search) {
+                        $query->where('name', 'like', '%' . $sort_search . '%');
+                    });
+            }
+        }
+
+        if (trim($request->delivery_status) != null && trim($request->delivery_status) != 'pending') {
+            $orders = $orders->where('delivery_status', $request->delivery_status);
+            $delivery_status = trim($request->delivery_status);
+        }
+        if ($request->payment_status != null) {
+            $orders = $orders->where('payment_status', $request->payment_status)->where('added_by_admin', 1);
+            $payment_status = $request->payment_status;
+        }
+        if ($date != null) {
+            $orders = $orders->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
+        } else {
+            $d1 = date('d-m-Y', strtotime(date('Y-m-01') . ' -1 MONTH'));
+            $d2 = date('t-m-Y', strtotime(date('Y-m-d') . ' -1 MONTH'));
+
+            $date = $d1 . ' to ' . $d2;
+
+            $orders = Order::where('created_at', '>=', date('Y-m-d', strtotime($d1)))->where('created_at', '<=', date('Y-m-d', strtotime($d2)))->orderBy('id', 'desc');
+        }
+
+        $orders = $orders->paginate(15);
+
+        return view('backend.sales.all_orders.past_orders', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
     }
 
     public function order_payment_link(Request $request)
     {
         $result = array();
         $order = Order::findOrFail($request->id);
-        // $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
-        $fields = array('amount'=> floatval($order->grand_total) * 100, 'currency'=>'INR', "reference_id" => $order->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$order->user->name, 'email' => $order->user->email, 'contact'=>$order->user->phone), 'notify'=>array('sms'=>false, 'email'=>false), 'reminder_enable'=>true ,'notes'=>array('order_id' => $order->id, 'order_code' => $order->code), "callback_url" => "https://13.234.232.150/rozer/payment/link-payment-success", "callback_method" => "get");
+        $fields = array('amount' => floatval($order->grand_total) * 100, 'currency' => 'INR', "reference_id" => $order->id . '#' . rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name' => $order->user->name, 'email' => $order->user->email, 'contact' => $order->user->phone), 'reminder_enable' => true, 'notes' => array('order_id' => $order->id, 'order_code' => $order->code, 'payment_for' => 'order'), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
+            CURLOPT_USERPWD => env('RAZOR_KEY').':'.env('RAZOR_SECRET'),
             CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -136,7 +189,6 @@ class OrderController extends Controller
             CURLOPT_SSL_VERIFYPEER => FALSE,
             CURLOPT_POSTFIELDS => json_encode($fields),
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Basic cnpwX3Rlc3RfelBxcjl4SXJObTFPWUI6SVVkdHc5azRDeGJiUkNDd2xSRVU5QUVZ',
                 'Content-Type: application/json'
             ),
         ));
@@ -202,7 +254,7 @@ class OrderController extends Controller
         $date = $request->date;
         $sort_search = null;
 
-        $carts = Cart::orderBy('id', 'desc');
+        $carts = Cart::where('user_id', '>', 0)->orderBy('id', 'desc');
         if ($date != null) {
             $carts = $carts->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $date)[1])));
         }
@@ -220,7 +272,8 @@ class OrderController extends Controller
         $delivery_status = null;
         $sort_search = null;
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
-        $orders = Order::orderBy('id', 'desc')->where('seller_id', $admin_user_id);
+        $orders = Order::orderBy('id', 'desc')
+            ->where('seller_id', $admin_user_id);
 
         if ($request->payment_type != null) {
             $orders = $orders->where('payment_status', $request->payment_type);
@@ -308,7 +361,9 @@ class OrderController extends Controller
         $sort_search = null;
         $orders = Order::query();
         if (Auth::user()->user_type == 'staff' && Auth::user()->staff->pick_up_point != null) {
-            $orders->where('shipping_type', 'pickup_point')->where('pickup_point_id', Auth::user()->staff->pick_up_point->id)->orderBy('code', 'desc');
+            $orders->where('shipping_type', 'pickup_point')
+                ->where('pickup_point_id', Auth::user()->staff->pick_up_point->id)
+                ->orderBy('code', 'desc');
 
             if ($request->has('search')) {
                 $sort_search = $request->search;
@@ -479,7 +534,7 @@ class OrderController extends Controller
 
                 $order_detail = new OrderDetail;
                 $order_detail->order_id = $order->id;
-//                $order_detail->seller_id = $product_stock->seller->user_id;
+                //                $order_detail->seller_id = $product_stock->seller->user_id;
                 $order_detail->seller_id = Auth::user()->joined_community_id;
                 $order_detail->product_id = $product->id;
                 $order_detail->product_stock_id = $cartItem['product_stock_id'];
@@ -586,14 +641,16 @@ class OrderController extends Controller
             $product = $product_stock->product;
 
             $productPrice = $product_stock->price;
-            if (floatval($request->custom_price[$key]) <= 0) {
+
+            if (trim($request->custom_price[$key]) != '') {
+                $productPrice = $request->custom_price[$key];
+            } else {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                 if ($wholesalePrice) {
                     $productPrice = $wholesalePrice->price;
                 }
-            } else {
-                $productPrice = $request->custom_price[$key];
             }
+
             $subtotal += $productPrice * $prod_qty[$key];
 
             $product_stock->qty -= $prod_qty[$key];
@@ -674,41 +731,52 @@ class OrderController extends Controller
         foreach ($request->proudct as $key => $val) {
             $product_stock = ProductStock::find($val);
             $product = $product_stock->product;
+
             $productPrice = $product_stock->price;
-            if (floatval($request->custom_price[$key]) <= 0) {
+
+            if (trim($request->custom_price[$key]) != '') {
+                $productPrice = $request->custom_price[$key];
+            } else {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                 if ($wholesalePrice) {
                     $productPrice = $wholesalePrice->price;
                 }
-            } else {
-                $productPrice = $request->custom_price[$key];
             }
+
             $subtotal += $productPrice * $prod_qty[$key];
+
             $order_detail = new OrderDetail;
             $order_detail->order_id = $request->order_id;
             $order_detail->product_id = $product->id;
             $order_detail->seller_id = $request->owner_id;
             $order_detail->product_stock_id = $product_stock->id;
             $order_detail->price =  $productPrice * $prod_qty[$key];
+
             if (floatval($request->custom_price[$key]) > 0) {
                 $order_detail->custom_price = $request->custom_price[$key];
             }
+
             $order_detail->tax = $tax;
             $order_detail->shipping_cost = $shipping;
             $order_detail->quantity = $prod_qty[$key];
             $order_detail->payment_status = $request->payment_status;
+
             $shipping += $order_detail->shipping_cost;
+
             //End of storing shipping cost
             $order_detail->save();
             $product->num_of_sale += $prod_qty[$key];
             $product->save();
             $payment_details = '';
+
             if ($request->payment_status == 'paid') {
                 $payment_details = json_encode(array('id' => $request->transaction_id, 'method' => $request->payment_type, 'amount' => $productPrice * $prod_qty[$key]));
             }
+
             $order->payment_details = $payment_details;
             $order->grand_total = $subtotal + $tax + $shipping;
             $combined_order->grand_total = $order->grand_total;
+
             $order->save();
         }
 
@@ -914,7 +982,9 @@ class OrderController extends Controller
                 }
 
                 if (addon_is_activated('affiliate_system')) {
-                    if (($request->status == 'delivered' || $request->status == 'cancelled') && $orderDetail->product_referral_code) {
+                    if (($request->status == 'delivered' || $request->status == 'cancelled') &&
+                        $orderDetail->product_referral_code
+                    ) {
 
                         $no_of_delivered = 0;
                         $no_of_canceled = 0;

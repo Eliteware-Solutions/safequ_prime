@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use Session;
@@ -109,23 +111,62 @@ class RazorpayController extends Controller
         Log::error('Webhook Data Start');
         Log::error($request);
         Log::error('Webhook Data Ends');
+
         if ($request) {
             if ($request['event'] == 'payment_link.paid') {
                 if ($request['event'] && $request['payload']['payment']) {
                     $payment = $request['payload']['payment'];
-                    $order_id = $payment['entity']['notes']['order_id'];
-                    $order = Order::findOrFail($order_id);
-                    if ($order->payment_status != 'paid') {
-                        $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => $payment['entity']['base_amount'], 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
+                    $notes = $payment['entity']['notes'];
+                    if (!empty($notes)) {
+                        $payment_for = $payment['entity']['notes']['payment_for'];
+                        if ($payment_for == 'order') { // When Payment done from Order Link
+                            $order_id = $payment['entity']['notes']['order_id'];
+                            $order = Order::findOrFail($order_id);
+                            if ($order->payment_status != 'paid') {
+                                $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => $payment['entity']['base_amount'], 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
 
-                        $order->payment_status = 'paid';
-                        $order->payment_details = $payment_detalis;
-                        $order->save();
+                                $order->payment_status = 'paid';
+                                $order->payment_details = $payment_detalis;
+                                $order->save();
+
+                                OrderDetail::where('order_id', $order_id)->update([
+                                    'payment_status' => 'paid'
+                                ]);
+                            }
+                        } elseif ($payment_for == 'customer_pending_bill') { // When Payment done from Customer Pending Bill Link
+                            $user_id = $payment['entity']['notes']['user_id'];
+                            $user = User::findOrFail($user_id);
+
+                            if ($user) {
+                                $orders = Order::where(array('user_id' => $user_id, 'payment_status' => 'unpaid'))->get();
+                                foreach ($orders AS $order) {
+                                    $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => floatval($order->grand_total) * 100, 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
+
+                                    $order->payment_status = 'paid';
+                                    $order->payment_details = $payment_detalis;
+                                    $order->save();
+
+                                    OrderDetail::where('order_id', $order->id)->update([
+                                        'payment_status' => 'paid'
+                                    ]);
+                                }
+
+                                $user->pending_bill_url = null;
+                                $user->pending_url_amt = 0;
+                                $user->save();
+                            }
+                        }
                     }
                 }
             }
         }
 
-        return true;
+        return response()->json('success', 200);
+    }
+
+    public function user_bill_payment_link_success(Request $request)
+    {
+        $user = array();
+        return view('frontend.user_pending_bill_success', compact('user'));
     }
 }

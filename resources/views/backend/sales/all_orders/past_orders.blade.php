@@ -1,7 +1,6 @@
 @extends('backend.layouts.app')
 
 @section('content')
-
     <div class="card">
         <form class="" action="" id="sort_orders" method="GET">
             <div class="card-header row gutters-5">
@@ -327,9 +326,9 @@
 
                             try {
                                 document.execCommand("copy");
-                                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                                AIZ.plugins.notify('success', '{{ translate("Link copied to clipboard") }}');
                             } catch (err) {
-                                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                                AIZ.plugins.notify('danger', '{{ translate("Oops, unable to copy") }}');
                             }
                             $temp.remove();
                         }
@@ -342,9 +341,9 @@
 
                 try {
                     document.execCommand("copy");
-                    AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+                    AIZ.plugins.notify('success', '{{ translate("Link copied to clipboard") }}');
                 } catch (err) {
-                    AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+                    AIZ.plugins.notify('danger', '{{ translate("Oops, unable to copy") }}');
                 }
                 $temp.remove();
             }

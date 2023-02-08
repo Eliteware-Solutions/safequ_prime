@@ -589,7 +589,16 @@ class CartController extends Controller
 
             $price = $product_stock->price;
 
-            if ($product_stock->product->wholesale_product) {
+            // if ($product_stock->product->wholesale_product) {
+            //     $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
+            //     if ($wholesalePrice) {
+            //         $price = $wholesalePrice->price;
+            //     }
+            // }
+
+            if (trim($request->custom_price[$key]) != '') {
+                $price = $request->custom_price[$key];
+            } else {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                 if ($wholesalePrice) {
                     $price = $wholesalePrice->price;
@@ -627,6 +636,7 @@ class CartController extends Controller
 
             $data['quantity'] = $prod_qty[$key];
             $data['price'] = $price;
+            $data['custom_price'] = $price;
             $data['tax'] = $tax;
             $data['shipping_cost'] = 0;
             $data['shipping_type'] = 'home_delivery';
@@ -647,11 +657,15 @@ class CartController extends Controller
 
                             $cartItem['quantity'] += $prod_qty[$key];
 
-                            if ($cart_product->wholesale_product) {
+                            if (trim($request->custom_price[$key]) != '') {
+                                $price = $request->custom_price[$key];
+                                $cartItem['custom_price'] = $price;
+                            } else {
                                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty[$key])->where('max_qty', '>=', $prod_qty[$key])->first();
                                 if ($wholesalePrice) {
                                     $price = $wholesalePrice->price;
                                 }
+                                $cartItem['custom_price'] = NULL;
                             }
 
                             $cartItem['price'] = $price;
@@ -660,6 +674,7 @@ class CartController extends Controller
                         }
                     }
                 }
+
                 if (!$foundInCart) {
                     Cart::create($data);
                 }
@@ -682,6 +697,7 @@ class CartController extends Controller
 
         $str = '';
         $tax = 0;
+
         $prod_qty = intval($request->prod_qty);
 
         $product_stock = ProductStock::with('product')->findOrFail($request->proudct);
@@ -692,7 +708,9 @@ class CartController extends Controller
 
         $price = $product_stock->price;
 
-        if ($product_stock->product->wholesale_product) {
+        if (trim($request->custom_price) != '') {
+            $price = $request->custom_price;
+        } else {
             $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty)->where('max_qty', '>=', $prod_qty)->first();
             if ($wholesalePrice) {
                 $price = $wholesalePrice->price;
@@ -730,6 +748,7 @@ class CartController extends Controller
 
         $data['quantity'] = $prod_qty;
         $data['price'] = $price;
+        $data['custom_price'] = $price;
         $data['tax'] = $tax;
         $data['shipping_cost'] = 0;
         $data['shipping_type'] = 'home_delivery';
@@ -751,11 +770,15 @@ class CartController extends Controller
 
                         $cartItem['quantity'] = $prod_qty;
 
-                        if ($cart_product->wholesale_product) {
+                        if (trim($request->custom_price) != '') {
+                            $price = $request->custom_price;
+                            $cartItem['custom_price'] = $price;
+                        } else {
                             $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $prod_qty)->where('max_qty', '>=', $prod_qty)->first();
                             if ($wholesalePrice) {
                                 $price = $wholesalePrice->price;
                             }
+                            $cartItem['custom_price'] = NULL;
                         }
 
                         $cartItem['price'] = $price;

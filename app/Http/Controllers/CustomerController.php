@@ -26,23 +26,15 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
-        $users = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('created_at', 'desc');
+        $users = User::withSum('unpaid_orders', 'grand_total')->where('user_type', 'customer')->where('email_verified_at', '!=', null)->orderBy('unpaid_orders_sum_grand_total', 'desc');
         if ($request->has('search')) {
             $sort_search = $request->search;
             $users->where(function ($q) use ($sort_search) {
-                $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%');
+                $q->where('name', 'like', '%' . $sort_search . '%')->orWhere('email', 'like', '%' . $sort_search . '%')->orWhere('phone', 'like', '%' . $sort_search . '%');
             });
         }
 
         $users = $users->paginate(15);
-
-        // TODO: Remove following loop and get pending bills of user while calling Users data by -> JOIN `orders` Table
-        $pending_bill = NULL;
-        foreach($users as $key => $val){
-            $pending_bill = Order::where(['user_id' => $users[$key]['id'], 'payment_status' => 'unpaid'])->get()->sum('grand_total');
-            $users[$key]['pending_bill'] = $pending_bill;
-        }
-
         return view('backend.customer.customers.index', compact('users', 'sort_search'));
     }
 
@@ -194,7 +186,9 @@ class CustomerController extends Controller
             })->orderBy('created_at', 'desc')->paginate(10, ['*'], 'orders');
             $wallet_history = Wallet::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(10, ['*'], 'wallet');
 
-            return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history'));
+            $pending_bill = Order::where('payment_status', 'unpaid')->where('user_id', $user->id)->sum('grand_total');
+
+            return view('backend.customer.customers.details', compact('user', 'cart_orders', 'order_details', 'wallet_history', 'pending_bill'));
         } else {
             return back();
         }
@@ -236,7 +230,9 @@ class CustomerController extends Controller
             $order = Order::where('id', $ord_id)->first();
             $order_details = $order->orderDetails;
         }
+
         $all_products = ProductStock::where('seller_id', 0)->get();
+
         $active_products = [];
         foreach ($all_products as $product) {
             $unit = '';
@@ -246,10 +242,13 @@ class CustomerController extends Controller
                 $unit = $product->product->min_qty . ' ' . $product->product->secondary_unit;
             }
             $unit = single_price($product->price) . ' / ' . $unit;
+
             $product->unit_label = $unit;
             $active_products[] = $product;
         }
+
         $order_type = $type;
+
         return view('backend.customer.customers.edit_product', compact('order_type', 'user', 'shop', 'order', 'order_details', 'active_products'));
     }
 
@@ -257,15 +256,15 @@ class CustomerController extends Controller
     {
         $qtyAvailable = true;
         $msg = '';
-//        $prod_qty = $request->prod_qty;
-//        foreach ($request->proudct as $key => $val) {
-//            $productStock = ProductStock::find($val);
-//            if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
-//                $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
-//                $qtyAvailable = false;
-//                break;
-//            }
-//        }
+        // $prod_qty = $request->prod_qty;
+        // foreach ($request->proudct as $key => $val) {
+        //     $productStock = ProductStock::find($val);
+        //     if (floatval($prod_qty[$key]) > floatval($productStock->qty)) {
+        //         $msg = 'Available quantity for ' . $productStock->product->name . ' is less then required quantity';
+        //         $qtyAvailable = false;
+        //         break;
+        //     }
+        // }
 
         if ($qtyAvailable == true) {
             if ($request->add_order) (new OrderController)->save_order_from_backend($request);
@@ -399,5 +398,57 @@ class CustomerController extends Controller
     public function export(Request $request)
     {
         return Excel::download(new CustomersExport($request), 'customers.xlsx');
+    }
+
+    public function customer_bill_payment_link(Request $request)
+    {
+        $result = array();
+        $user = User::findOrFail($request->id);
+        $fields = array('amount'=> floatval($request->pending_bill) * 100, 'currency'=>'INR', "reference_id" => $user->id.'#'.rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name'=>$user->name, 'email' => $user->email, 'contact'=>$user->phone),  'reminder_enable'=>true,'notes'=>array('user_id' => $user->id, 'payment_for' => 'customer_pending_bill'), "callback_url" => route('payment.user_bill_payment_link_success'), "callback_method" => "get");
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_USERPWD => env('RAZOR_KEY').':'.env('RAZOR_SECRET'),
+            CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_VERIFYHOST => FALSE,
+            CURLOPT_SSL_VERIFYPEER => FALSE,
+            CURLOPT_POSTFIELDS => json_encode($fields),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $razorpay_result = json_decode($response);
+
+        if ($razorpay_result && isset($razorpay_result->status) && $razorpay_result->status == 'created') {
+            $payment_link = $razorpay_result->short_url;
+
+            $user->pending_bill_url = $payment_link;
+            $user->pending_url_amt = $request->pending_bill;
+            $user->save();
+
+            $result = array(
+                'status'  => 1,
+                'payment_link' => $payment_link
+            );
+        } else {
+            $result = array(
+                'status'  => 0,
+                'payment_link' => ''
+            );
+        }
+
+        return $result;
     }
 }

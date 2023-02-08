@@ -230,14 +230,14 @@
                                     @endif
                                 </td>
                                 @php
-                                    if($orderDetail->quantity * floatval($orderDetail->product->min_qty) < 1){
+                                    if(floatval($orderDetail->product->min_qty) < 1){
                                         $qty_unit =  (1000 * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->secondary_unit;
                                     } else {
                                         $qty_unit = ($orderDetail->quantity * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->unit;
                                     }
                                 @endphp
-                                <td class="text-center">{{ $qty_unit }}</td>
-                                <td class="text-right">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
+                                <td class="text-center">{{ $orderDetail->quantity }}</td>
+                                <td class="text-right">{{ single_price($orderDetail->price/$orderDetail->quantity) . ' / ' . $qty_unit }}</td>
                                 <td class="text-right">{{ single_price($orderDetail->price) }}</td>
                             </tr>
                         @endforeach
