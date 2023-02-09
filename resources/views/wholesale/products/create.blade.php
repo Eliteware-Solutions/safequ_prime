@@ -544,7 +544,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0 h6">{{translate('Todays Deal')}}</h5>
+                            <h5 class="mb-0 h6">{{translate('Flash Deal')}}</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group row">
@@ -559,7 +559,7 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card" style="display: none;">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{translate('Flash Deal')}}</h5>
                         </div>
