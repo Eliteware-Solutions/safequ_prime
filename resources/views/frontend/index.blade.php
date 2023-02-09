@@ -1,9 +1,13 @@
 @extends('frontend.layouts.app', ['new_header' => true, 'header_show' => false, 'header2' => false, 'footer' => false, 'new_footer' => true])
 
 @php
+    $contentJson = File::get(storage_path('frontend_json/content.json'));
+
+    // For Slider content
+    $sliderData = json_decode($contentJson, true)['banner'];
+
     // For Customer and Farmer Reviews
-    $json = File::get(storage_path('testimonials/reviews.json'));
-    $json_data = json_decode($json, true);
+    $reviewData = (json_decode($contentJson, true))['reviews'];
 @endphp
 
 @section('content')
@@ -333,12 +337,12 @@
 
                 <div class="owl-carousel owl-theme testimonials">
 
-                    @foreach ($json_data['customer_reviews'] as $rev)
+                    @foreach ($reviewData['customer_reviews'] as $rev)
                         <div class="item">
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
                                     <div class="usr-img mr-2">
-                                        <img src="{{ static_asset('assets/img/testimonials/' . $rev['image']) }}"
+                                        <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
                                             alt="Star">
                                     </div>
@@ -532,12 +536,12 @@
                 <h2 class="title text-center">Hear it from Our Farmers</h2>
 
                 <div class="owl-carousel owl-theme testimonials">
-                    @foreach ($json_data['farmer_reviews'] as $rev)
+                    @foreach ($reviewData['farmer_reviews'] as $rev)
                         <div class="item">
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
                                     <div class="usr-img mr-2">
-                                        <img src="{{ static_asset('assets/img/testimonials/' . $rev['image']) }}"
+                                        <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                             alt="User">
                                     </div>

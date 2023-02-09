@@ -1,0 +1,80 @@
+{
+    "banner": {
+        "slide1": {
+            "image": "hero-bg-2.webp",
+            "prd_name": "Strawberry",
+            "prd_id": "106",
+            "prd_stock_id": "106",
+            "cart_qty": "1"
+        }
+    },
+    "reviews": {
+        "farmer_reviews": {
+            "farmer1": {
+                "image": "karsandas.png",
+                "name": "Karsandas",
+                "farm": "Karsandas Farm",
+                "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
+                "rating": 4
+            },
+            "farmer2": {
+                "image": "karsandas.png",
+                "name": "Karsandas",
+                "farm": "Karsandas Farm",
+                "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
+                "rating": 2
+            },
+            "farmer3": {
+                "image": "karsandas.png",
+                "name": "Karsandas",
+                "farm": "Karsandas Farm",
+                "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
+                "rating": 5
+            },
+            "farmer4": {
+                "image": "karsandas.png",
+                "name": "Karsandas",
+                "farm": "Karsandas Farm",
+                "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
+                "rating": 3
+            },
+            "farmer5": {
+                "image": "karsandas.png",
+                "name": "Karsandas",
+                "farm": "Karsandas Farm",
+                "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
+                "rating": 1
+            }
+        },
+        "customer_reviews": {
+            "customer1": {
+                "image": "user-m.png",
+                "name": "NK",
+                "community": "Planet Godrej",
+                "review": "SafeQU gives me a business class experience in my grocery shopping.",
+                "rating": 5
+            },
+            "customer2": {
+                "image": "user-m.png",
+                "name": "SK",
+                "community": "Chaitanya Towers",
+                "review": "Love all your produce…. Avocados, Passion Fruits and Strawberries. Most of all your customer attention to detail. Thanks!",
+                "rating": 4
+            },
+            "customer3": {
+                "image": "user-f.png",
+                "name": "Tarana S.",
+                "community": "Lodha Park",
+                "review": "7 days in and my light pink roses are still fresh & beautiful. Thanks, SafeQU for sorting me out with my weekly flowers",
+                "rating": 4
+            },
+            "customer4": {
+                "image": "user-f.png",
+                "name": "Hema W.",
+                "community": "Lodha Park",
+                "review": "Thankyou <a href='https://www.instagram.com/safequ.india/' target='_blank'><ins class='primary-text fw600'>@safequ.india</ins></a> for introducing me to the brilliant farm fresh produce and the weekly salad subscription service. The Romaine Lettuce particularly felt like it had been picked from my back garden.",
+                "rating": 5
+            }
+        }
+    }
+}
