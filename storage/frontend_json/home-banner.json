@@ -1,0 +1,19 @@
+{
+    "slide1": {
+        "bg_image": "hero-bg-2.webp",
+        "prd_id": "14",
+        "prd_stock_id": "11632",
+        "prd_name": "Strawberry",
+        "prd_image": "hero-img-2.webp",
+        "metas": {
+            "meta1": {
+                "icon": "hero-icon-1.svg",
+                "text": "Great for Skin"
+            },
+            "meta2": {
+                "icon": "hero-icon-2.svg",
+                "text": "Improves Heart Health"
+            }
+        }
+    }
+}
