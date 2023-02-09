@@ -1,13 +1,21 @@
 @extends('frontend.layouts.app', ['new_header' => true, 'header_show' => false, 'header2' => false, 'footer' => false, 'new_footer' => true])
 
 @php
-    $contentJson = File::get(storage_path('frontend_json/content.json'));
 
     // For Slider content
-    $sliderData = json_decode($contentJson, true)['banner'];
+    $bannerJsn = File::get(storage_path('frontend_json/home-banner.json'));
+    $sliders = json_decode($bannerJsn, true);
 
-    // For Customer and Farmer Reviews
-    $reviewData = (json_decode($contentJson, true))['reviews'];
+    // For Customer Reviews
+    $customerReviewJson = File::get(storage_path('frontend_json/customer-reviews.json'));
+    $customer_reviews = json_decode($customerReviewJson, true);
+
+    // For Farmer Reviews
+    $farmerReviewJson = File::get(storage_path('frontend_json/farmer-reviews.json'));
+    $farmer_reviews = json_decode($farmerReviewJson, true);
+
+    $whatsAppNo = '917698383837';
+    $whatsAppMessage = 'Hey there, I want to create new community for my area.';
 @endphp
 
 @section('content')
@@ -20,33 +28,34 @@
                     <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
                         alt="SafeQU">
                 </a>
-                <a href="javascript:void(0);"
+                <a href="javascript:void(0);" id="detect-location"
                     class="detct-loc text-black fw600 mr-2 d-flex align-items-center justify-content-between mb-0">
                     Detect Location
                     <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable" alt="Down Arrow">
                 </a>
+                <a href="javascript:void(0);" id="header-location-name" class="detct-loc text-black fw600 mr-2 mb-0 display-none"></a>
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
-                <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
+                {{-- <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
                     <input type="text" id="nav-search-text" class="rounded-pill trnsn-300ms" value=""
                         placeholder="Search Here">
                     <img src="{{ static_asset('assets/img/new-design/search-icn.svg') }}" width="40" height="40"
                         class="injectable ml-1 rounded-circle trnsn-300ms" id="nav-search" alt="Search Icon">
-                </div>
+                </div> --}}
 
-                <ul class="nav-menu p-0 m-0 d-flex align-items-center">
+                <ul class="nav-menu p-0 m-0 ml-auto d-flex align-items-center">
                     <li><a href="/" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
                     <li><a href="{{ route('shop.visit') }}" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
-                    <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li>
-                    <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Community</a></li>
+                    {{-- <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li> --}}
+                    <li><a href="#communitiesSec" class="nav-link fw700 py-1 px-2 mr-2">Community</a></li>
                 </ul>
 
                 <div class="nav-icons d-flex align-items-center">
-                    <a href="#" aria-label="SafeQu" title="SafeQu">
+                    <a href="{{ route('user.login') }}" aria-label="Login" title="Login">
                         <img src="{{ static_asset('assets/img/new-design/user-icon-primary.svg') }}"
                             class="injectable ml-2 mr-2 rounded-circle trnsn-300ms" alt="User Icon">
                     </a>
-                    <a href="#" aria-label="SafeQu" title="SafeQu">
+                    <a href="{{ route('cart') }}" aria-label="Cart" title="Cart">
                         <img src="{{ static_asset('assets/img/new-design/btn-cart-primary.svg') }}"
                             class="injectable rounded-circle trnsn-300ms" alt="Cart Icon">
                     </a>
@@ -98,47 +107,45 @@
 
                     </div>
                 </div>
+                @foreach ($sliders as $sl)
+                    <div class="item p-0">
+                        <div class="d-flex carousel-item position-relative active py-5">
+                            <img src="{{ static_asset('assets/img/new-design/' . $sl['bg_image']) }}"
+                                class="banner b-rd-20" alt="Hero Image">
 
-                <div class="item p-0">
-                    <div class="d-flex carousel-item position-relative active py-5">
-                        <img src="{{ static_asset('assets/img/new-design/hero-bg-2.webp') }}" class="banner b-rd-20"
-                            alt="Hero Image">
+                            <div class="container">
+                                <div class="row position-relative align-items-center h-100">
+                                    <div class="col-lg-6">
+                                        <h1 class="text-white mb-4 pb-1">{{ $sl['prd_name'] }}</h1>
 
-                        <div class="container">
-                            <div class="row position-relative align-items-center h-100">
-                                <div class="col-lg-6">
-                                    <h1 class="text-white mb-4 pb-1">Strawberry</h1>
-
-                                    <div class="prd-desc d-flex mb-4">
-                                        <div class="d-flex align-items-center mr-md-4">
-                                            <img src="{{ static_asset('assets/img/new-design/hero-icon-1.svg') }}"
-                                                class="injectable" width="72" height="72" alt="Hero Icon">
-                                            <span class="text-white ml-3">Great for Skin</span>
+                                        <div class="prd-desc d-flex mb-4">
+                                            @foreach ($sl['metas'] as $meta)
+                                                <div class="d-flex align-items-center mr-md-4">
+                                                    <img src="{{ static_asset('assets/img/new-design/' . $meta['icon']) }}"
+                                                        class="injectable" width="72" height="72" alt="Hero Icon">
+                                                    <span class="text-white ml-3">{{ $meta['text'] }}</span>
+                                                </div>
+                                            @endforeach
                                         </div>
 
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ static_asset('assets/img/new-design/hero-icon-2.svg') }}"
-                                                class="injectable" width="72" height="72" alt="Hero Icon">
-                                            <span class="text-white ml-3">Improves Heart Health</span>
-                                        </div>
+                                        <button class="btn btn-fill-white mt-2"
+                                            onclick="addToCart({{ $sl['prd_id'] . ',' . $sl['prd_stock_id'] . ', 1' }});">
+                                            <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                                onload="SVGInject(this)" alt="Btn Cart">
+                                            Add to cart
+                                        </button>
                                     </div>
 
-                                    <button class="btn btn-fill-white mt-2">
-                                        <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                            onload="SVGInject(this)" alt="Btn Cart">
-                                        Add to cart
-                                    </button>
-                                </div>
-
-                                <div class="col-lg-5 offset-lg-1">
-                                    <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
-                                        class="crousel-img" width="569" height="406" alt="Hero Image">
+                                    <div class="col-lg-5 offset-lg-1">
+                                        <img src="{{ static_asset('assets/img/new-design/' . $sl['prd_image']) }}"
+                                            class="crousel-img" width="569" height="406" alt="Hero Image">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
+                @endforeach
 
             </div>
         </section>
@@ -182,6 +189,7 @@
         <section class="cust-fav pt-lg-5 py-4">
             <div class="container">
                 <h2 class="title text-center">Customer Favorites</h2>
+
                 <div class="owl-carousel owl-theme product-slider">
                     @foreach ($customer_favourites as $prd_val)
                         @php
@@ -216,12 +224,20 @@
                                         alt="{{ $prd_val->product->getTranslation('name') }}">
                                 </div>
                                 <div class="prd-content p-3 position-relative">
-                                    <span class="prd-tag text-white b-rd-5">Organic</span>
-                                    <p class="prd-loc mb-1 secondary-text">
-                                        {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
+                                    @if (explode(',', $prd_val->product->tags)[0] != '')
+                                        <span
+                                            class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->product->tags)[0] }}</span>
+                                    @endif
+                                    @if ($prd_val->product->manufacturer_location)
+                                        <p class="prd-loc mb-1 secondary-text">
+                                            {{ $prd_val->product->manufacturer_location }}</p>
+                                    @endif
                                     <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}</p>
-                                    <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
-                                    <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
+                                    @if (trim($prd_val->product->variation) != '')
+                                        <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->product->variation }}
+                                        </p>
+                                    @endif
+                                    <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
                                         {{ $qty_unit_main }}</p>
                                     <button class="btn secondary-btn-o"
                                         onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
@@ -251,7 +267,7 @@
                             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat neque velit nostrum error
                                 necessitatibus voluptates sit distinctio saepe quas!</p>
 
-                            <button class="btn btn-fill-black mb-3">Shop Now</button>
+                            <a href="{{ route('shop.visit') }}" class="btn btn-fill-black mb-3">Shop Now</a>
                         </div>
                     </div>
                     <div class="col-lg-5 offset-lg-1 py-2">
@@ -276,46 +292,48 @@
                             @foreach ($deals_of_the_day as $prd_val)
                                 @php
                                     $cart_qty = 0;
-                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                        $cart_qty = $cart[$prd_val->id]['qty'];
+                                    $product_total = 0;
+                                    $product_price = isset($prd_val->productStock) ? $prd_val->productStock->price : 0;
+                                    if (count($cart) > 0 && isset($prd_val->productStock) && isset($cart[$prd_val->productStock->id])) {
+                                        $cart_qty = $cart[$prd_val->productStock->id]['qty'];
+                                        $product_total = $cart[$prd_val->productStock->id]['total'];
+                                        $product_price = $cart[$prd_val->productStock->id]['price'];
                                     }
                                     $addCartQty = $cart_qty + 1;
 
-                                    $product_total = 0;
-                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                        $product_total = $cart[$prd_val->id]['total'];
-                                    }
-
-                                    $product_price = $prd_val->price;
-                                    if (count($cart) > 0 && isset($cart[$prd_val->id])) {
-                                        $product_price = $cart[$prd_val->id]['price'];
-                                    }
-
-                                    $qty_unit_main = $prd_val->product->unit;
-                                    if (floatval($prd_val->product->min_qty) < 1) {
-                                        $qty_unit_main = 1000 * floatval($prd_val->product->min_qty) . ' ' . $prd_val->product->secondary_unit;
+                                    $qty_unit_main = $prd_val->unit;
+                                    if (floatval($prd_val->min_qty) < 1) {
+                                        $qty_unit_main = 1000 * floatval($prd_val->min_qty) . ' ' . $prd_val->secondary_unit;
                                     }
                                 @endphp
                                 <div class="item">
                                     <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
                                         <div class="prd-img">
-                                            <img src="{{ uploaded_asset($prd_val->product->photos) }}"
-                                                data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
+                                            <img src="{{ uploaded_asset($prd_val->photos) }}"
+                                                data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
                                                 class="object-cover-center" width="250" height="250"
                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                alt="{{ $prd_val->product->getTranslation('name') }}">
+                                                alt="{{ $prd_val->getTranslation('name') }}">
                                         </div>
                                         <div class="prd-content p-3 position-relative">
-                                            <span class="prd-tag text-white b-rd-5">Organic</span>
-                                            <p class="prd-loc mb-1 secondary-text">
-                                                {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
-                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}
+                                            @if (explode(',', $prd_val->tags)[0] != '')
+                                                <span
+                                                    class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
+                                            @endif
+                                            @if ($prd_val->manufacturer_location)
+                                                <p class="prd-loc mb-1 secondary-text">
+                                                    {{ $prd_val->manufacturer_location }}</p>
+                                            @endif
+                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->name ?? '-' }}
                                             </p>
-                                            <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
-                                            <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
+                                            @if (trim($prd_val->variation) != '')
+                                                <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->variation }}
+                                                </p>
+                                            @endif
+                                            <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
                                                 {{ $qty_unit_main }}</p>
                                             <button class="btn secondary-btn-o"
-                                                onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
+                                                onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
                                                 <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                                     onload="SVGInject(this)" alt="Btn Cart">
                                                 Add to cart
@@ -337,7 +355,7 @@
 
                 <div class="owl-carousel owl-theme testimonials">
 
-                    @foreach ($reviewData['customer_reviews'] as $rev)
+                    @foreach ($customer_reviews as $rev)
                         <div class="item">
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
@@ -380,7 +398,7 @@
                                 role="tab" data-toggle="tab" class="m-2 rounded-lg">{{ $p_category->name }}</a>
                         @endforeach
                     </div>
-                    <div class="tab-content py-0">
+                    <div class="tab-content py-0 mb-3">
                         <div role="tabpanel" class="filter-carousel tab-pane active" id="all_prd">
                             <div class="owl-carousel owl-theme product-slider">
                                 @foreach ($our_full_range_of_products as $prd_val)
@@ -416,13 +434,21 @@
                                                     alt="{{ $prd_val->product->getTranslation('name') }}">
                                             </div>
                                             <div class="prd-content p-3 position-relative">
-                                                <span class="prd-tag text-white b-rd-5">Organic</span>
-                                                <p class="prd-loc mb-1 secondary-text">
-                                                    {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
+                                                @if (explode(',', $prd_val->product->tags)[0] != '')
+                                                    <span
+                                                        class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->product->tags)[0] }}</span>
+                                                @endif
+                                                @if ($prd_val->product->manufacturer_location)
+                                                    <p class="prd-loc mb-1 secondary-text">
+                                                        {{ $prd_val->product->manufacturer_location }}</p>
+                                                @endif
                                                 <p class="prd-name mb-1 fw700 text-black">
                                                     {{ $prd_val->product->name ?? '-' }}</p>
-                                                <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
-                                                <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
+                                                @if (trim($prd_val->product->variation) != '')
+                                                    <p class="prd-desc mb-1 light-text">Variants :
+                                                        {{ $prd_val->product->variation }}</p>
+                                                @endif
+                                                <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
                                                     {{ $qty_unit_main }}</p>
                                                 <button class="btn secondary-btn-o"
                                                     onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
@@ -474,13 +500,21 @@
                                                             alt="{{ $prd_val->product->getTranslation('name') }}">
                                                     </div>
                                                     <div class="prd-content p-3 position-relative">
-                                                        <span class="prd-tag text-white b-rd-5">Organic</span>
-                                                        <p class="prd-loc mb-1 secondary-text">
-                                                            {{ $prd_val->product->manufacturer_location ?? '-' }}</p>
+                                                        @if (explode(',', $prd_val->product->tags)[0] != '')
+                                                            <span
+                                                                class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->product->tags)[0] }}</span>
+                                                        @endif
+                                                        @if ($prd_val->product->manufacturer_location)
+                                                            <p class="prd-loc mb-1 secondary-text">
+                                                                {{ $prd_val->product->manufacturer_location }}</p>
+                                                        @endif
                                                         <p class="prd-name mb-1 fw700 text-black">
                                                             {{ $prd_val->product->name ?? '-' }}</p>
-                                                        <p class="prd-desc mb-1 light-text">Flavor : Sour</p>
-                                                        <p class="prd-pricing mb-2 fw700">&#8377; {!! single_price_web($product_price) !!} /
+                                                        @if (trim($prd_val->product->variation) != '')
+                                                            <p class="prd-desc mb-1 light-text">Variants :
+                                                                {{ $prd_val->product->variation }}</p>
+                                                        @endif
+                                                        <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
                                                             {{ $qty_unit_main }}</p>
                                                         <button class="btn secondary-btn-o"
                                                             onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
@@ -498,6 +532,10 @@
                                 @endif
                             </div>
                         @endforeach
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black mx-auto">View All</a>
                     </div>
                 </div>
             </section>
@@ -536,7 +574,7 @@
                 <h2 class="title text-center">Hear it from Our Farmers</h2>
 
                 <div class="owl-carousel owl-theme testimonials">
-                    @foreach ($reviewData['farmer_reviews'] as $rev)
+                    @foreach ($farmer_reviews as $rev)
                         <div class="item">
                             <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-center position-relative">
@@ -565,7 +603,7 @@
         </section>
 
         <!-- Communities -->
-        <section class="communities pt-lg-5 py-4">
+        <section class="communities pt-lg-5 py-4" id="communitiesSec">
             <div class="container">
                 <h2 class="title text-center mb-2">Our Most Popular Communities</h2>
                 <p class="sub-text mb-4 text-center mx-auto fw500">
@@ -576,13 +614,13 @@
                 <div class="owl-carousel owl-theme community-slider mb-3">
                     @foreach ($communities as $community)
                         <div class="item">
-                            <div class="community-card p-3 trnsn-300ms position-relative b-rd-10">
+                            <div class="community-card p-3 trnsn-300ms position-relative b-rd-10 w-100">
                                 <div class="cm-img b-rd-10 overflow-hide">
                                     @if (isset($community->user->avatar_original))
                                         <img src="{{ uploaded_asset($community->user->avatar_original) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
-                                            class="img-rounded" alt="{{ $community->name }}" width="200"
-                                            height="200">
+                                            class="img-rounded object-cover-center" alt="{{ $community->name }}"
+                                            width="200" height="200">
                                     @else
                                         <img src=""
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
@@ -617,7 +655,10 @@
                     setup in minutes.
                 </p>
 
-                <button class="btn btn-fill-black mx-auto d-block mb-4">Create Community</button>
+                <div class="text-center mb-4">
+                    <a href="https://api.whatsapp.com/send?phone={{ $whatsAppNo }}&text={{ $whatsAppMessage }}"
+                        target="_blank" class="btn btn-fill-black mx-auto">Create Community</a>
+                </div>
             </div>
         </section>
 
@@ -629,8 +670,8 @@
                         <h2 class="title">Rewards for Using App on <br> Continuous Basis</h2>
                     </div>
                     <div class="col-lg-6 text-center pt-2">
-                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598" height="357"
-                            class="injectable" alt="Rewards Image">
+                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598"
+                            height="357" class="injectable" alt="Rewards Image">
                     </div>
                 </div>
             </div>
@@ -656,7 +697,8 @@
                             <p class="text-white fw700">Lorem ipsum dolor sit amet, consectetur
                                 adipisicing elit. Architecto blanditiis perspiciatis aspernatur dolores enim earum libero,
                                 vero laudantium error nisi omnis, nesciunt, neque tempore!</p>
-                            <button class="btn btn-fill-white">Get in touch</button>
+                            <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="btn btn-fill-white">Get
+                                in touch</a>
                         </div>
                     </div>
                 </div>
@@ -789,7 +831,6 @@
                             <ul class="p-0 m-0">
                                 <li><a href="/">Facebook</a></li>
                                 <li><a href="/">Instagram</a></li>
-                                <li><a href="/">WhatsApp</a></li>
                             </ul>
                         </div>
                     </div>
@@ -802,7 +843,8 @@
     </footer>
 
     <div class="whats-app-icon">
-        <a href="#" class="d-block" area-lable="Contact Us" title="Contact Us">
+        <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="d-block" area-lable="Contact Us"
+            title="Contact Us">
             <img src="{{ static_asset('assets/img/new-design/whatsapp.svg') }}" class="injectable" width="40"
                 height="40" alt="WhatsApp">
         </a>
@@ -815,6 +857,13 @@
         SVGInject(document.querySelectorAll("img.injectable"));
 
         $(document).ready(function() {
+            $('a.nav-link').click(function() {
+                var target = $(this).attr('href');
+                $('html, body').animate({
+                    scrollTop: ($(target).offset().top - 110)
+                }, 10)
+            })
+
             $('a[data-toggle="tab"]').click(function() {
                 $('a[data-toggle="tab"]').removeClass('selected');
                 $(this).addClass('selected');
@@ -831,8 +880,8 @@
                 loop: true,
                 responsiveClass: true,
                 dots: false,
-                autoplay: true,
-                autoplayTimeout: 4500,
+                // autoplay: true,
+                // autoplayTimeout: 4500,
                 smartSpeed: 1500,
                 navText: [
                     "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
@@ -879,6 +928,7 @@
                 ...{
                     margin: 15,
                     nav: false,
+                    autoplay: false,
                     responsive: {
                         0: {
                             items: 1,
@@ -891,7 +941,6 @@
                         },
                         1200: {
                             items: 4,
-                            nav: true,
                         },
                     }
                 }
@@ -923,8 +972,8 @@
                 items: 1.15,
                 center: true,
                 dots: false,
-                autoplay: true,
-                autoplayTimeout: 7000,
+                // autoplay: true,
+                // autoplayTimeout: 7000,
                 smartSpeed: 2000,
                 responsive: {
                     0: {
@@ -938,12 +987,82 @@
 
             setTimeout(() => {
                 $(".our-range").css('height', document.getElementById('our-range').clientHeight);
+                // $(".prd-img").css('height', $(this).clientWidth);
+                var dealsImgHeight = $(".deals .prd-img:first").innerWidth();
+                var custFavImgHeight = $(".cust-fav .prd-img:first").innerWidth();
+                var ourRangeImgHeight = $(".our-range .prd-img:first").innerWidth();
+                var communityImgHeight = $(".communities .cm-img:first").innerWidth();
+
+                $(".deals .prd-img").each(function() {
+                    $(this).css('height', dealsImgHeight);
+                })
+                $(".cust-fav .prd-img").each(function() {
+                    $(this).css('height', custFavImgHeight);
+                })
+                $(".our-range .prd-img").each(function() {
+                    $(this).css('height', ourRangeImgHeight);
+                })
+                $(".communities .cm-img").each(function() {
+                    $(this).css('height', communityImgHeight);
+                })
+
+                $('.prd-content').each(function() {
+                    $(this).css('min-height', ($(this).parent().innerHeight() - ($(this).parent()
+                        .find('.prd-img').innerHeight())));
+                })
             }, 1000)
 
             $('.menu-toggle').click(function() {
                 $(this).toggleClass('active');
                 $('.collapsible').toggleClass('active');
             })
+
+            // Detect Location Starts
+            let locationButton = document.getElementById("detect-location");
+            let locationDiv = document.getElementById("header-location-name");
+
+            locationButton.addEventListener("click", () => {
+                //Geolocation APU is used to get geographical position of a user and is available inside the navigator object
+                if (navigator.geolocation) {
+                    //returns position(latitude and longitude) or error
+                    navigator.geolocation.getCurrentPosition(showLocation, checkError);
+                } else {
+                    //For old browser i.e IE
+                    AIZ.plugins.notify('danger',
+                        '{{ translate('The browser does not support geolocation') }}');
+                }
+            });
+
+            //Error Checks
+            const checkError = (error) => {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        AIZ.plugins.notify('danger', '{{ translate('Please allow access to location') }}');
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        //usually fired for firefox
+                        AIZ.plugins.notify('danger', '{{ translate('Location Information unavailable') }}');
+                        break;
+                    case error.TIMEOUT:
+                        AIZ.plugins.notify('danger',
+                            '{{ translate('The request to get user location timed out') }}');
+                }
+            };
+
+            const showLocation = async (position) => {
+                //We user the NOminatim API for getting actual addres from latitude and longitude
+                let response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+                );
+                //store response object
+                let data = await response.json();
+                locationDiv.innerText = `${data.address.city}`;
+                locationDiv.classList.remove('display-none');
+                locationButton.classList.remove('d-flex');
+                locationButton.classList.add('display-none');
+                // locationDiv.innerText = `${data.address.city}, ${data.address.country}`;
+            };
+            // Detect Location Ends
         })
 
         function confrimCommunityChange(url) {

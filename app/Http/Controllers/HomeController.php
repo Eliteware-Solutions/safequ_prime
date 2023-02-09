@@ -73,15 +73,15 @@ class HomeController extends Controller
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
 
-        $deals_of_the_day = array();
-        if ($flash_deal) {
-            foreach ($flash_deal->flash_deal_products as $deal_products) {
-                if ($deal_products->deal_products->productStock) {
-                    $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->productStock;
-                }
-            }
-        }
-
+        // $deals_of_the_day = array();
+        // if ($flash_deal) {
+        //     foreach ($flash_deal->flash_deal_products as $deal_products) {
+        //         if ($deal_products->deal_products->productStock) {
+        //             $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->productStock;
+        //         }
+        //     }
+        // }
+        $deals_of_the_day = Product::where('todays_deal', 1)->limit(4)->get();
 
         // $best_selling_products = array();
         $all_products = array();

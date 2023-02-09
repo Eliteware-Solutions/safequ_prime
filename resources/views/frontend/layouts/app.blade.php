@@ -75,7 +75,6 @@
     @endif
 
     {{-- <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}"> --}}
-
     <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
 
     @if (isset($new_header) && !$new_header)
@@ -222,8 +221,7 @@
                     </button>
                 </div>
             </div>
-        </div>
-    @endif
+        </div> @endif
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
@@ -274,7 +272,7 @@
                         if (data.status == 1) {
                             updateNavCart(data.cart_count);
                             AIZ.plugins.notify('success', '{{ translate('Added to Cart') }}');
-                            {{--                            window.location.replace("{{ route('cart') }}"); --}}
+                            {{-- window.location.replace("{{ route('cart') }}"); --}}
                         } else {
                             AIZ.plugins.notify('danger', '{{ translate('Something went wrong') }}');
                         }
