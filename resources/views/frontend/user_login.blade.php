@@ -16,6 +16,7 @@
 
                 <form method="POST" class="login-form pt-2 px-2" action="{{ route('register') }}">
                     @csrf
+                    <input type="hidden" name="community_id" id="community_id" value="{{ $community_id }}">
                     <div class="form-group phone-form-group mb-4">
                         <input type="tel" id="phone-code" required maxlength="10" minlength="10"
                             class="mb-4 form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"

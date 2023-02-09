@@ -48,6 +48,7 @@ Route::post('/currency', 'CurrencyController@changeCurrency')->name('currency.ch
 Route::get('/social-login/redirect/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
 Route::get('/social-login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
 Route::get('/users/login', 'HomeController@login')->name('user.login');
+Route::get('/community_user/login/{id}', 'HomeController@community_user_login')->name('community_user.login');
 Route::get('/users/registration', 'HomeController@registration')->name('user.registration');
 Route::get('/r/{key}', 'HomeController@referral_user_register')->name('referral.registration');
 //Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');

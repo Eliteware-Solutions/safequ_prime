@@ -141,7 +141,17 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.user_login');
+        $community_id = 0;
+        return view('frontend.user_login', compact('community_id'));
+    }
+
+    public function community_user_login($id)
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+        $community_id = $id;
+        return view('frontend.user_login', compact('community_id'));
     }
 
     public function registration(Request $request)

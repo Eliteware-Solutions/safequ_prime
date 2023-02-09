@@ -100,11 +100,15 @@ class RegisterController extends Controller
                     if (isset($data['referer_user_id']) && intval($data['referer_user_id']) > 0) {
                         $referer_user = User::where('id', $data['referer_user_id'])->first();
                         $joined_community_id = $referer_user->joined_community_id;
+                    }
 
-                        if ($joined_community_id > 0) {
-                            $shop = Shop::where('user_id', $joined_community_id)->first();
-                            session(['link' => route('shop.visit', $shop->slug)]);
-                        }
+                    if (isset($data['community_id']) && intval($data['community_id']) > 0) {
+                        $joined_community_id = $data['community_id'];
+                    }
+
+                    if ($joined_community_id > 0) {
+                        $shop = Shop::where('user_id', $joined_community_id)->first();
+                        session(['link' => route('shop.visit', $shop->slug)]);
                     }
 
                     $user = User::create([

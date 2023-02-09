@@ -603,7 +603,7 @@
                                             onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">
                                             Join Now</a>
                                     @else
-                                        <a href="{{ route('shop.visit', $community->slug) }}"
+                                        <a href="{{ route('community_user.login', $community->user_id) }}"
                                             class="btn secondary-btn-o">Join Now</a>
                                     @endif
                                 </div>
