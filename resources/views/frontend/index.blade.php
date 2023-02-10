@@ -1021,6 +1021,14 @@
             let locationButton = document.getElementById("detect-location");
             let locationDiv = document.getElementById("header-location-name");
 
+            navigator.permissions.query({name:'geolocation'}).then(function(result) {
+                // Will return ['granted', 'prompt', 'denied']
+                if (result.state == 'granted') {
+                    //returns position(latitude and longitude) or error
+                    navigator.geolocation.getCurrentPosition(showLocation, checkError);
+                }
+            });
+
             locationButton.addEventListener("click", () => {
                 //Geolocation APU is used to get geographical position of a user and is available inside the navigator object
                 if (navigator.geolocation) {
@@ -1028,8 +1036,7 @@
                     navigator.geolocation.getCurrentPosition(showLocation, checkError);
                 } else {
                     //For old browser i.e IE
-                    AIZ.plugins.notify('danger',
-                        '{{ translate('The browser does not support geolocation') }}');
+                    AIZ.plugins.notify('danger', '{{ translate('The browser does not support geolocation') }}');
                 }
             });
 
