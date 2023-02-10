@@ -18,7 +18,7 @@
     $recycleJson = File::get(storage_path('frontend_json/recycling.json'));
     $recyclePoints = json_decode($recycleJson, true);
 
-    $whatsAppNo = '917698383837';
+    $whatsAppNo = '917498107182';
     $whatsAppMessage = 'Hey there, I want to create new community for my area.';
 @endphp
 
