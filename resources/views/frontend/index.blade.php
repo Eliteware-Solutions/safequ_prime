@@ -28,7 +28,7 @@
     <header class="header">
         <nav class="d-flex align-items-center justify-content-between container">
             <div class="d-flex align-items-center fix-part">
-                <a href="/" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
+                <a href="{{ route('home') }}" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
                     <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
                         alt="SafeQU">
                 </a>
@@ -49,10 +49,10 @@
                 </div> --}}
 
                 <ul class="nav-menu ml-lg-auto mb-0 d-flex align-items-center">
-                    <li><a href="/" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
+                    <li><a href="{{ route('home') }}" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
                     <li><a href="{{ route('shop.visit') }}" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
                     {{-- <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li> --}}
-                    <li><a href="#communitiesSec" class="nav-link fw700 py-1 px-2 mr-2">Community</a></li>
+                    <li><a href="#communitiesSec" class="nav-link scrollTo fw700 py-1 px-2 mr-2">Community</a></li>
                 </ul>
 
                 <div class="nav-icons d-flex align-items-center">
@@ -808,35 +808,34 @@
                         <div class="col-md-3 col-6 py-3">
                             <p class="links-tag primary-text fw700"><span class="secondary-text">Quick </span> Links</p>
                             <ul class="p-0 m-0">
-                                <li><a href="/">Home</a></li>
-                                <li><a href="/">Products</a></li>
-                                <li><a href="/">Blogs</a></li>
-                                <li><a href="/">Community</a></li>
+                                <li><a href="{{ route('home') }}">Home</a></li>
+                                <li><a href="{{ route('shop.visit') }}">Products</a></li>
+                                <li><a href="#communitiesSec" class="scrollTo">Community</a></li>
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
                             <p class="links-tag primary-text fw700"><span class="secondary-text">Other </span> Links</p>
                             <ul class="p-0 m-0">
-                                <li><a href="/">My Account</a></li>
-                                <li><a href="/">Order History</a></li>
-                                <li><a href="/">Cart</a></li>
+                                <li><a href="{{ route('user.login') }}">My Account</a></li>
+                                <li><a href="{{ route('user.login') }}">Order History</a></li>
+                                <li><a href="{{ route('cart') }}">Cart</a></li>
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
                             <p class="links-tag primary-text fw700"><span class="secondary-text">Legal </span> Links</p>
                             <ul class="p-0 m-0">
-                                <li><a href="/">Privacy Policy</a></li>
-                                <li><a href="/">Terms & Conditions</a></li>
-                                <li><a href="/">Return Policy</a></li>
-                                <li><a href="/">Refund Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}" target="_blank">Privacy Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/terms-and-conditions-buyer.pdf') }}" target="_blank">Terms & Conditions</a></li>
+                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}" target="_blank">Return Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}" target="_blank">Refund Policy</a></li>
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
                             <p class="links-tag primary-text fw700"><span class="secondary-text">Social </span> Links
                             </p>
                             <ul class="p-0 m-0">
-                                <li><a href="/">Facebook</a></li>
-                                <li><a href="/">Instagram</a></li>
+                                <li><a href="https://m.facebook.com/safequ.in/" target="_blank">Facebook</a></li>
+                                <li><a href="https://www.instagram.com/safequ.india/" target="_blank">Instagram</a></li>
                             </ul>
                         </div>
                     </div>
@@ -863,7 +862,7 @@
         SVGInject(document.querySelectorAll("img.injectable"));
 
         $(document).ready(function() {
-            $('a.nav-link').click(function() {
+            $('a.scrollTo').click(function() {
                 var target = $(this).attr('href');
                 $('html, body').animate({
                     scrollTop: ($(target).offset().top - 110)
