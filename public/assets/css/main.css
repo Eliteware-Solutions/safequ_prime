@@ -3324,7 +3324,7 @@ a.safbtn {
     }
 
     .lodha_nestedtab ul#tabs li {
-        height: 53px;
+        margin-bottom: 0.75rem;
     }
 
     .tyke_subscription h1 span {
@@ -3754,7 +3754,14 @@ a.cartbtn {
 }
 
 /* ----------------nested tab with slider CSS ---------------- */
+.lodha_nestedtab ul#tabs {
+    justify-content: center;
+}
+
 .lodha_nestedtab ul#tabs li a {
+    display: inline-block;
+    min-width: 115px;
+    text-align: center;
     background: #F5F5F5;
     border-radius: 100px;
     font-style: normal;
@@ -3798,7 +3805,7 @@ h4.title-txt {
 }
 
 .lodha_nestedtab ul#tabs li {
-    margin: 0px 7px;
+    margin: 6px 5px;
 }
 
 .lodha_nestedtab .inertabs {
@@ -4149,195 +4156,6 @@ a.cartbtn {
     transition: unset;
 }
 
-/* ----------------nested tab with slider CSS ---------------- */
-.lodha_nestedtab ul#tabs li a {
-    background: #F5F5F5;
-    border-radius: 100px;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    color: #848484 !important;
-    padding: 8px 20px;
-    text-transform: capitalize;
-}
-
-.lodha_nestedtab ul#tabs li a.active {
-    background-color: #000000 !important;
-    color: #fff !important;
-}
-
-section.lodha_nestedtab {
-    width: 100%;
-}
-
-.hedtab {
-    display: flex;
-    justify-content: space-between;
-    background: #fff;
-    position: relative;
-    z-index: 99;
-    padding: 38px 40px;
-    box-shadow: 0px 16px 30px rgba(36, 46, 62, 0.06);
-    margin-top: -55px;
-    align-items: center
-}
-
-.lodha_nestedtab .nav-tabs {
-    border-bottom: 0px;
-}
-
-h4.title-txt {
-    font-size: 30px;
-    line-height: 36px;
-    margin-bottom: 0px;
-}
-
-.lodha_nestedtab ul#tabs li {
-    margin: 0px 7px;
-}
-
-.lodha_nestedtab .inertabs {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px 15px;
-}
-
-.lodha_nestedtab .viewbtns {
-    display: flex;
-    align-items: center;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #BEBEBE;
-}
-
-.dropbtn {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-}
-
-.dropbtn .short {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #BEBEBE;
-}
-
-.short {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #BEBEBE;
-}
-
-.lodha_nestedtab select {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    color: #848484;
-    background: #fff;
-    border-bottom: 1px solid #848484;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    -ms-border-radius: 0px;
-    -o-border-radius: 0px;
-}
-
-.lodha_nestedtab .tabcard-detail {
-    z-index: unset;
-    position: relative;
-}
-
-.lodha_nestedtab .tab_slider_card img.top_img {
-    max-width: 135px;
-    max-height: 135px;
-    width: 135px;
-    height: 135px;
-    margin: 0px auto;
-    text-align: center;
-    display: block;
-}
-
-.lodha_nestedtab .tab_slider_card img.cart {
-    max-width: unset;
-    max-height: unset;
-    width: unset;
-    height: unset;
-    /* margin: 0px auto; */
-}
-
-.lodha_nestedtab .tabcard-detail {
-    max-height: 226px;
-    min-height: 226px;
-}
-
-.truck-blk {
-    width: 18px !important;
-    height: 14px !important;
-}
-
-.dlever {
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    margin: 0px auto;
-    width: 100%;
-    left: 0;
-    right: 0;
-    border-top: 1px solid #E1E1E1;
-    padding: 5px;
-}
-
-.lodha_nestedtab .tab_slider_card:hover .dlever {
-    background: #FF6C31;
-    color: #fff;
-    border-radius: 0px 0px 10px 10px;
-    -webkit-border-radius: 0px 0px 10px 10px;
-    -moz-border-radius: 0px 0px 10px 10px;
-    -ms-border-radius: 0px 0px 10px 10px;
-    -o-border-radius: 0px 0px 10px 10px;
-}
-
-.lodha_nestedtab * {
-    transition: unset;
-    -webkit-transition: unset;
-    -moz-transition: unset;
-    -ms-transition: unset;
-    -o-transition: unset;
-}
-
-.whttruck {
-    display: none;
-}
-
-.blktruck {
-    display: block;
-}
-
-.lodha_nestedtab .tab_slider_card:hover .dlever .whttruck {
-    display: block;
-}
-
-.lodha_nestedtab .tab_slider_card:hover .dlever .blktruck {
-    display: none;
-}
-
-.cartbtn img.cart {
-    margin-right: 10px;
-}
-
 .lodha_nestedtab img {
     width: inherit;
 }
@@ -4454,12 +4272,12 @@ a.loadbtn {
 }
 
 .tab_horizontal_card img.top_img {
-    height: 135px;
-    width: 135px;
-    min-height: 135px;
-    min-width: 135px;
-    max-height: 135px;
-    max-width: 135px;
+    height: 130px;
+    width: 130px;
+    min-height: 130px;
+    min-width: 130px;
+    max-height: 130px;
+    max-width: 130px;
 }
 
 .tab_horizontal_card {
@@ -4752,7 +4570,8 @@ form.checkout-form .form-control:focus-visible {
     }
 
     .lodha_nestedtab ul#tabs li a {
-        padding: 8px 10px !important;
+        padding: 6px 12px !important;
+        font-size: 15px !important
     }
 
     header,

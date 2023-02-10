@@ -14,6 +14,10 @@
     $farmerReviewJson = File::get(storage_path('frontend_json/farmer-reviews.json'));
     $farmer_reviews = json_decode($farmerReviewJson, true);
 
+    // For Recycling points
+    $recycleJson = File::get(storage_path('frontend_json/recycling.json'));
+    $recyclePoints = json_decode($recycleJson, true);
+
     $whatsAppNo = '917698383837';
     $whatsAppMessage = 'Hey there, I want to create new community for my area.';
 @endphp
@@ -33,7 +37,8 @@
                     Detect Location
                     <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable" alt="Down Arrow">
                 </a>
-                <a href="javascript:void(0);" id="header-location-name" class="detct-loc text-black fw600 mr-2 mb-0 display-none"></a>
+                <a href="javascript:void(0);" id="header-location-name"
+                    class="detct-loc text-black fw600 mr-2 mb-0 display-none"></a>
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
                 {{-- <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
@@ -43,7 +48,7 @@
                         class="injectable ml-1 rounded-circle trnsn-300ms" id="nav-search" alt="Search Icon">
                 </div> --}}
 
-                <ul class="nav-menu p-0 m-0 ml-auto d-flex align-items-center">
+                <ul class="nav-menu ml-lg-auto mb-0 d-flex align-items-center">
                     <li><a href="/" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
                     <li><a href="{{ route('shop.visit') }}" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
                     {{-- <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li> --}}
@@ -558,9 +563,10 @@
                         </div>
                         <div class="col-lg-5 offset-lg-1 py-3">
                             <div class="d-flex justify-content-center flex-column h-100">
-                                <h2 class="title secondary-text">We F & V Certified Plastic Neutral</h2>
-                                <p class="large text-white">We F & V Certified Plastic Neutral Brand</p>
-                                <p class="large text-white">We will Recycle an equal amount of plastic Focused by us</p>
+                                <h2 class="title secondary-text">{{ $recyclePoints['title'] }}</h2>
+                                @foreach ($recyclePoints['points'] as $pt)
+                                    <p class="large text-white">{{ $pt }}</p>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -1017,11 +1023,17 @@
                 $('.collapsible').toggleClass('active');
             })
 
+            if ($(window).width() < 960) {
+                $('.nav-menu, .nav-icons').addClass('container');
+            }
+
             // Detect Location Starts
             let locationButton = document.getElementById("detect-location");
             let locationDiv = document.getElementById("header-location-name");
 
-            navigator.permissions.query({name:'geolocation'}).then(function(result) {
+            navigator.permissions.query({
+                name: 'geolocation'
+            }).then(function(result) {
                 // Will return ['granted', 'prompt', 'denied']
                 if (result.state == 'granted') {
                     //returns position(latitude and longitude) or error
@@ -1036,7 +1048,8 @@
                     navigator.geolocation.getCurrentPosition(showLocation, checkError);
                 } else {
                     //For old browser i.e IE
-                    AIZ.plugins.notify('danger', '{{ translate('The browser does not support geolocation') }}');
+                    AIZ.plugins.notify('danger',
+                        '{{ translate('The browser does not support geolocation') }}');
                 }
             });
 

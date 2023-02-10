@@ -53,7 +53,7 @@
                         <section class="lodha_nestedtab">
                             <div class="container">
                                 <!-- Tabs -->
-                                <div class="hedtab">
+                                <div class="hedtab mb-3">
                                     <div>
                                         <h4 class="fw700 title-txt ">Our
                                             <ins class="primary-color fw700">Products</ins>
@@ -61,245 +61,113 @@
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
                                         <li><a href="#" data-toggle="tab" data-filter="all"
-                                                class="filter-button active" onclick="filterCategory($(this))">All</a></li>
+                                                class="filter-button" onclick="filterCategory($(this))">All</a></li>
+                                        @php $i=0; @endphp
                                         @foreach ($categories as $key => $cat)
                                             <li>
                                                 <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                    class="filter-button" onclick="filterCategory($(this))">
+                                                    class="filter-button @if($i==0) active @endif" onclick="filterCategory($(this))">
                                                     {{ $cat['name'] }}
                                                 </a>
                                             </li>
+                                            @php $i++; @endphp
                                         @endforeach
                                     </ul>
                                     <!-- Tabs -->
                                 </div>
 
-                                <!-- Tab Content -->
-                                <div class="tab-content tab-content middlesec">
-                                    <!-- Repo -->
+                                @if (count($all_products) > 0)
+                                    <div class="row py-4">
+                                        @foreach ($all_products as $product)
+                                            @php
+                                                $cart_qty = 0;
+                                                if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                    $cart_qty = $cart[$product->id]['qty'];
+                                                }
+                                                $addCartQty = $cart_qty + 1;
 
-                                    <div class="tab-pane active" id="User">
-                                        <!-- Repo Tabs --->
-                                        <div class="inertabs">
-                                            <div class="dropbtn">
-                                                {{-- <div class="pr-2 short"> Sort by:</div>
-                                                <select class="form-control filter" id="product-type" name="product-type">
-                                                    <option value="1">Best Selling Products</option>
-                                                    <option value="2">Best Selling Products2</option>
-                                                    <option value="3">Best Selling Products3</option>
-                                                    <option value="4">Best Selling Products4</option>
-                                                    <option value="5">Best Selling Products5</option>
-                                                </select> --}}
-                                            </div>
+                                                $product_total = 0;
+                                                if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                    $product_total = $cart[$product->id]['total'];
+                                                }
 
-                                            <div>
-                                                <div class="inertabs">
-                                                    <div class="viewbtns">
-                                                        <div class="short">View by:</div>
+                                                $product_price = $product->price;
+                                                if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                    $product_price = $cart[$product->id]['price'];
+                                                }
+
+                                                $qty_unit_main = $product->product->unit;
+                                                if (floatval($product->product->min_qty) < 1) {
+                                                    $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
+                                                }
+                                            @endphp
+                                            <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} ">
+                                                <div class="tab_horizontal_card p-3 m-0">
+                                                    <div class="tab_hori_inr">
                                                         <div>
-                                                            <ul class="nav nav-tabs" id="repoTabs2">
-                                                                <li class="pl-2">
-                                                                    <a href="#repoInfo2" data-toggle="tab">
-                                                                        <img src="./public/assets/img/inrtab1dot.svg"
-                                                                            alt="dot1" class="tabdots1">
-                                                                    </a>
-                                                                </li>
-                                                                <li class="pl-2">
-                                                                    <a href="#repoStats2" data-toggle="tab">
-                                                                        <img src="./public/assets/img/inrtab2dot.svg"
-                                                                            alt="dot2" class="tabdots2">
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                                            <img src="{{ uploaded_asset($product->product->photos) }}"
+                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                                class="img-rounded top_img"
+                                                                alt="{{ $product->product->name }}">
                                                         </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @if (count($all_products) > 0)
-                                            <!-- first tab first-->
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="repoInfo2">
-                                                    <div class="row ">
-                                                        @foreach ($all_products as $product)
-                                                            @php
-                                                                $cart_qty = 0;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $cart_qty = $cart[$product->id]['qty'];
-                                                                }
-                                                                $addCartQty = $cart_qty + 1;
-
-                                                                $product_total = 0;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $product_total = $cart[$product->id]['total'];
-                                                                }
-
-                                                                $product_price = $product->price;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $product_price = $cart[$product->id]['price'];
-                                                                }
-
-                                                                $qty_unit_main = $product->product->unit;
-                                                                if (floatval($product->product->min_qty) < 1) {
-                                                                    $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                                                                }
-                                                            @endphp
-                                                            <div
-                                                                class="col-lg-3 col-md-6 alltabs filter {{ $product->product->category->slug }} ">
-                                                                <div class="tab_slider_card">
-                                                                    <div>
-                                                                        <div class="card-img mb-1">
-                                                                            <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                                                class="img-rounded top_img"
-                                                                                alt="{{ $product->product->name }}">
-                                                                        </div>
-                                                                        <div class="tabcard-detail">
-                                                                            <span>
-                                                                                {{ $product->product->manufacturer_location ? $product->product->manufacturer_location : '--' }}
-                                                                            </span>
-                                                                            <p class="titlecard">
-                                                                                {{ $product->product->name }} </p>
-                                                                            <p class="price">{!! single_price_web($product_price) !!} /
-                                                                                {{ $qty_unit_main }}</p>
-                                                                            <div class="cartbtn">
-                                                                                <img src="./public/assets/img/carts.svg"
-                                                                                    class="cart" alt="cart">
-                                                                                <a href="javacript:;" class="cartbtn"
-                                                                                    onclick="addToCart({{ $product->product->id }}, {{ $product->id }}, {{ $addCartQty }});">
-                                                                                    Add to Cart</a>
-                                                                            </div>
-
-                                                                            <div class="dlever">
-                                                                                <span class="d-inline-block pr-2">
-                                                                                    <img src="./public/assets/img/truck-blk.svg"
-                                                                                        class="truck-blk blktruck"
-                                                                                        alt="truck-blk">
-                                                                                    <img src="./public/assets/img/truck-wht.svg"
-                                                                                        class="truck-blk whttruck"
-                                                                                        alt="truck-blk">
-                                                                                </span>
-                                                                                {{ date('dS F', strtotime($product->purchase_end_date . '+' . intval($product->est_shipping_days) . ' days')) }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="  tab_horizontal_card_detail  ">
+                                                            @if ($product->product->manufacturer_location)
+                                                                <span>{{ $product->product->manufacturer_location }}</span>
+                                                            @endif
+                                                            <p class="titlecard">
+                                                                {{ $product->product->name }} </p>
+                                                            <p class="price">{!! single_price_web($product_price) !!} /
+                                                                {{ $qty_unit_main }}</p>
+                                                            <div class="cartbtn">
+                                                                <img src="./public/assets/img/carts.svg" class=" cart"
+                                                                    alt="cart">
+                                                                <a href="javacript:;" class="cartbtn"> Add
+                                                                    to Cart</a>
                                                             </div>
-                                                        @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="tab-pane" id="repoStats2">
-                                                    <!-- second tab second dot -->
-                                                    <div class="row ">
-                                                        @foreach ($all_products as $product)
-                                                            @php
-                                                                $cart_qty = 0;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $cart_qty = $cart[$product->id]['qty'];
-                                                                }
-                                                                $addCartQty = $cart_qty + 1;
-
-                                                                $product_total = 0;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $product_total = $cart[$product->id]['total'];
-                                                                }
-
-                                                                $product_price = $product->price;
-                                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                                    $product_price = $cart[$product->id]['price'];
-                                                                }
-
-                                                                $qty_unit_main = $product->product->unit;
-                                                                if (floatval($product->product->min_qty) < 1) {
-                                                                    $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                                                                }
-                                                            @endphp
-                                                            <div
-                                                                class="col-lg-6 filter {{ $product->product->category->slug }} ">
-                                                                <div class=" tab_horizontal_card">
-                                                                    <div class="tab_hori_inr">
-                                                                        <div>
-                                                                            <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                                                class="img-rounded top_img"
-                                                                                alt="{{ $product->product->name }}">
-                                                                        </div>
-                                                                        <div class="  tab_horizontal_card_detail  ">
-                                                                            <span>
-                                                                                {{ $product->product->manufacturer_location ? $product->product->manufacturer_location : '--' }}
-                                                                            </span>
-                                                                            <p class="titlecard">
-                                                                                {{ $product->product->name }} </p>
-                                                                            <p class="price">{!! single_price_web($product_price) !!} /
-                                                                                {{ $qty_unit_main }}</p>
-                                                                            <div class="cartbtn">
-                                                                                <img src="./public/assets/img/carts.svg"
-                                                                                    class=" cart" alt="cart">
-                                                                                <a href="javacript:;" class="cartbtn"> Add
-                                                                                    to Cart</a>
-                                                                            </div>
-
-                                                                            <div class="dleverdt">
-                                                                                <span class="d-inline-block pr-2">
-                                                                                    <img src="./public/assets/img/truck-blk.svg"
-                                                                                        class=" truck-blk "
-                                                                                        alt="truck-blk">
-                                                                                </span>
-                                                                                {{ date('dS F', strtotime($product->purchase_end_date . '+' . intval($product->est_shipping_days) . ' days')) }}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="countitem">
-                                                                        <div class="input-group w-auto counterinput">
-                                                                            <input type="button" value="-"
-                                                                                class="button-minus  icon-shape icon-sm lftcount"
-                                                                                data-field="quantity"
-                                                                                data-product_id="{{ $product->product->id }}"
-                                                                                data-product_stock_id="{{ $product->id }}"
-                                                                                onclick="decrementValue($(this))">
-                                                                            <input type="number" step="1"
-                                                                                min="0" max="10"
-                                                                                value="{{ $cart_qty }}"
-                                                                                name="quantity" id="quantity"
-                                                                                class="quantity-field border-0 text-center w-25">
-                                                                            <input type="button" value="+"
-                                                                                class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                                data-field="quantity"
-                                                                                data-product_id="{{ $product->product->id }}"
-                                                                                data-product_stock_id="{{ $product->id }}"
-                                                                                onclick="incrementValue($(this))">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        @endforeach
-
-                                                        <div class="col-md-12">
-                                                            <a href="#" class="loadbtn">
-                                                                <img src="./public/assets/img/Vector.png"
-                                                                    class="proces mr-2" alt="proces">
-                                                                Load More
-                                                            </a>
+                                                    <div class="countitem">
+                                                        <div class="input-group w-auto counterinput">
+                                                            <input type="button" value="-"
+                                                                class="button-minus  icon-shape icon-sm lftcount"
+                                                                data-field="quantity"
+                                                                data-product_id="{{ $product->product->id }}"
+                                                                data-product_stock_id="{{ $product->id }}"
+                                                                onclick="decrementValue($(this))">
+                                                            <input type="number" step="1" min="0"
+                                                                max="10" value="{{ $cart_qty }}" name="quantity"
+                                                                id="quantity"
+                                                                class="quantity-field border-0 text-center w-25">
+                                                            <input type="button" value="+"
+                                                                class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                                data-field="quantity"
+                                                                data-product_id="{{ $product->product->id }}"
+                                                                data-product_stock_id="{{ $product->id }}"
+                                                                onclick="incrementValue($(this))">
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="row pt-5" id="noProductFoundFilter" style="display: none;">
-                                                    <div class="col-lg-6 mx-auto">
-                                                        <img src="{{ static_asset('assets/img/product-not-found.jpg') }}"
-                                                            class="mw-100 mx-auto">
-                                                    </div>
-                                                </div>
                                             </div>
-                                        @endif
+                                        @endforeach
+
+                                        {{-- <div class="col-md-12">
+                                            <a href="#" class="loadbtn">
+                                                <img src="./public/assets/img/Vector.png"
+                                                    class="proces mr-2" alt="proces">
+                                                Load More
+                                            </a>
+                                        </div> --}}
                                     </div>
 
-                                </div>
+                                    <div class="row pt-5" id="noProductFoundFilter" style="display: none;">
+                                        <div class="col-lg-6 mx-auto">
+                                            <img src="{{ static_asset('assets/img/product-not-found.jpg') }}"
+                                                class="mw-100 mx-auto">
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </section>
                     @endif
@@ -349,21 +217,21 @@
 
 @section('script')
     <script>
-        var inner = $(".sticky-bottom");
-        var elementPosTop = inner.position().top;
-        var viewportHeight = $(window).height();
-        $(window).on('scroll', function() {
-            var scrollPos = $(window).scrollTop();
-            var elementFromTop = elementPosTop - scrollPos;
-            var bgcreheight = $('.middlesec').height();
-            bgcreheight = bgcreheight - 500;
+        // var inner = $(".sticky-bottom");
+        // var elementPosTop = inner.position().top;
+        // var viewportHeight = $(window).height();
+        // $(window).on('scroll', function() {
+        //     var scrollPos = $(window).scrollTop();
+        //     var elementFromTop = elementPosTop - scrollPos;
+        //     var bgcreheight = $('.middlesec').height();
+        //     bgcreheight = bgcreheight - 500;
 
-            if (bgcreheight >= scrollPos) {
-                inner.addClass("sticky2");
-            } else {
-                inner.removeClass("sticky2");
-            }
-        });
+        //     if (bgcreheight >= scrollPos) {
+        //         inner.addClass("sticky2");
+        //     } else {
+        //         inner.removeClass("sticky2");
+        //     }
+        // });
 
         let tmpCart = [];
 
@@ -482,23 +350,24 @@
             });*/
 
             // Sticky Bottom
-            var inner = $(".sticky-bottom");
-            var elementPosTop = inner.position().top;
-            var viewportHeight = $(window).height();
-            $(window).on('scroll', function() {
-                var scrollPos = $(window).scrollTop();
-                var elementFromTop = elementPosTop - scrollPos;
-                var bgcreheight = $('.middlesec').height();
-                bgcreheight = bgcreheight - 500;
+            // var inner = $(".sticky-bottom");
+            // var elementPosTop = inner.position().top;
+            // var viewportHeight = $(window).height();
+            // $(window).on('scroll', function() {
+            //     var scrollPos = $(window).scrollTop();
+            //     var elementFromTop = elementPosTop - scrollPos;
+            //     var bgcreheight = $('.middlesec').height();
+            //     bgcreheight = bgcreheight - 500;
 
-                if (bgcreheight >= scrollPos) {
-                    inner.addClass("sticky2");
-                } else {
-                    inner.removeClass("sticky2");
-                }
-            });
+            //     if (bgcreheight >= scrollPos) {
+            //         inner.addClass("sticky2");
+            //     } else {
+            //         inner.removeClass("sticky2");
+            //     }
+            // });
 
             // $("#tykeModal").modal('show');
+            $( ".active" ).click();
         });
 
         $(window).scroll(function() {
