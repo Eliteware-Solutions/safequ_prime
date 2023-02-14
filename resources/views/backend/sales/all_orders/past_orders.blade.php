@@ -119,8 +119,9 @@
                                     </div>
                                 </div>
                             </th>
+                            <th>{{ translate('Order Date') }}</th>
                             <th>{{ translate('Order Code') }}</th>
-                            <th data-breakpoints="md">{{ translate('Num. of Products') }}</th>
+                            <th data-breakpoints="md"># {{ translate('Products') }}</th>
                             <th data-breakpoints="md">{{ translate('Customer') }}</th>
                             <th data-breakpoints="md">{{ translate('Amount') }}</th>
                             <th data-breakpoints="md">{{ translate('Delivery Status') }}</th>
@@ -148,12 +149,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    {{ $order->code }} <br/> {{ date('d-m-Y', strtotime($order->created_at)) }}
-                                </td>
-                                <td>
-                                    {{ count($order->orderDetails) }}
-                                </td>
+                                <td>{{ date('d-m-Y', strtotime($order->created_at)) }}</td>
+                                <td>{{ $order->code }}</td>
+                                <td>{{ count($order->orderDetails) }}</td>
                                 <td>
                                     @if ($order->user != null)
                                         {{ $order->user->name }}
@@ -161,9 +159,7 @@
                                         Guest ({{ $order->guest_id }})
                                     @endif
                                 </td>
-                                <td>
-                                    {!! single_price($order->grand_total) !!}
-                                </td>
+                                <td>{!! single_price($order->grand_total) !!}</td>
                                 <td>
                                     @php
                                         $status = $order->delivery_status;
