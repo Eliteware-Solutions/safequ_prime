@@ -33,6 +33,7 @@ use App\Utility\NotificationUtility;
 use CoreComponentRepository;
 use App\Utility\SmsUtility;
 use Razorpay\Api\Api;
+use App\Models\PaymentWebhook;
 
 class OrderController extends Controller
 {
@@ -260,6 +261,35 @@ class OrderController extends Controller
         }
         $carts = $carts->paginate(15);
         return view('backend.sales.cart_orders.index', compact('carts', 'sort_search', 'date'));
+    }
+
+    public function orders_payments(Request $request)
+    {
+        $all_payments = PaymentWebhook::paginate(15);
+        $payments = array();
+
+        foreach ($all_payments AS $key => $val) {
+            if (trim($val->webhook_data) != '') {
+                $webhook_data = json_decode($val->webhook_data);
+                if (isset($webhook_data->payload->payment->entity)) {
+                    if (isset($webhook_data->payload->payment->entity) && !empty($webhook_data->payload->payment->entity)) {
+                        $entity = $webhook_data->payload->payment->entity;
+                        $payments[$key]['id'] = $val->id;
+                        $payments[$key]['created_at'] = $val->created_at;
+                        $payments[$key]['payment_id'] = $entity->id;
+                        $payments[$key]['amount'] = (floatval($entity->amount) > 0 ? floatval($entity->amount) / 100 : 0);
+                        $payments[$key]['status'] = $entity->status;
+                        $payments[$key]['method'] = $entity->method;
+                        $payments[$key]['description'] = $entity->description;
+                        $payments[$key]['email'] = $entity->email;
+                        $payments[$key]['contact'] = $entity->contact;
+                        $payments[$key]['notes'] = '';
+                    }
+                }
+            }
+        }
+
+        return view('backend.sales.all_orders.order_payments', compact('payments', 'all_payments'));
     }
 
     // Inhouse Orders

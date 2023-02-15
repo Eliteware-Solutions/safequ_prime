@@ -185,6 +185,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/unpaid_orders', 'OrderController@unpaid_orders')->name('unpaid_orders.list');
     Route::get('/cart_orders', 'OrderController@cart_orders')->name('cart_orders.list');
     Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
+    Route::get('/orders_payments', 'OrderController@orders_payments')->name('orders.payments');
 
     // Inhouse Orders
     Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');

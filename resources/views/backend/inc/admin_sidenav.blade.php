@@ -273,6 +273,11 @@
                                     <span class="aiz-side-nav-text">{{ translate('Cart Orders') }}</span>
                                 </a>
                             </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('orders.payments') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Order Payments') }}</span>
+                                </a>
+                            </li>
                         @endif
 
                         {{-- @if (Auth::user()->user_type == 'admin' || in_array('4', json_decode(Auth::user()->staff->role->permissions)))
