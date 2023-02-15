@@ -321,6 +321,8 @@ Route::get('razorpay/payment/user-bill-payment-link-success', 'RazorpayControlle
 
 Route::post('razorpay/payment/payment-link-webhook', 'RazorpayController@payment_link_webhook')->name('payment.payment_link_webhook');
 
+Route::post('razorpay/payment/web-payment-webhook', 'RazorpayController@web_payment_webhook')->name('payment.payment_link_webhook');
+
 Route::get('/paystack/payment/callback', 'PaystackController@handleGatewayCallback');
 
 Route::get('/vogue-pay', 'VoguePayController@showForm');

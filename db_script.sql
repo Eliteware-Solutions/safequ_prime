@@ -173,3 +173,21 @@ ALTER TABLE `users` ADD COLUMN `pending_url_amt` decimal(20, 3) NULL AFTER `pend
 -- ----------------------------
 ALTER TABLE `order_details` MODIFY COLUMN `custom_price` decimal(20, 2) NULL DEFAULT NULL AFTER `updated_at`;
 ALTER TABLE `carts` ADD COLUMN `custom_price` decimal(10, 2) NULL DEFAULT NULL AFTER `quantity`;
+
+
+-- ----------------------------
+-- Dt: 15-02-23 Table structure for payment_webhooks
+-- ----------------------------
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `payment_webhooks`;
+CREATE TABLE `payment_webhooks`  (
+         `id` int(11) NOT NULL AUTO_INCREMENT,
+         `type` enum('web','payment_link') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+         `webhook_data` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+         `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+         `updated_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+         PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
+
+SET FOREIGN_KEY_CHECKS = 1;

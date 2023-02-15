@@ -18,6 +18,8 @@ use App\Models\SellerPackage;
 use App\Http\Controllers\CustomerPackageController;
 use Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\PaymentWebhook;
+use Twilio\TwiML\Voice\Pay;
 
 class RazorpayController extends Controller
 {
@@ -108,9 +110,9 @@ class RazorpayController extends Controller
 
     public function payment_link_webhook(Request $request)
     {
-        Log::error('Webhook Data Start');
+        Log::error('Payment Link Webhook Data Start');
         Log::error($request);
-        Log::error('Webhook Data Ends');
+        Log::error('Payment Link Webhook Data Ends');
 
         if ($request) {
             if ($request['event'] == 'payment_link.paid') {
@@ -160,6 +162,27 @@ class RazorpayController extends Controller
                 }
             }
         }
+
+        return response()->json('success', 200);
+    }
+
+    public function web_payment_webhook(Request $request)
+    {
+        Log::error('Web Webhook Data Start');
+        Log::error($request);
+        Log::error('Web Webhook Data Ends');
+
+        $webhookData = array();
+        $webhookData['entity'] = $request['entity'];
+        $webhookData['event'] = $request['account_id'];
+        $webhookData['contains'] = $request['contains'];
+        $webhookData['payload'] = $request['payload'];
+        $webhookData['created_at'] = $request['created_at'];
+
+        $insertData = array();
+        $insertData['type'] = 'web';
+        $insertData['webhook_data'] = json_encode($webhookData);
+        PaymentWebhook::create($insertData);
 
         return response()->json('success', 200);
     }
