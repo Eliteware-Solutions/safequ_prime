@@ -191,3 +191,9 @@ CREATE TABLE `payment_webhooks`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- ----------------------------
+-- Dt: 16-02-23
+-- ----------------------------
+ALTER TABLE `payment_webhooks` ADD COLUMN `is_active` int(1) NULL DEFAULT 1 AFTER `updated_at`;

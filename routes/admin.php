@@ -186,6 +186,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/cart_orders', 'OrderController@cart_orders')->name('cart_orders.list');
     Route::get('/all_orders/{id}/show', 'OrderController@all_orders_show')->name('all_orders.show');
     Route::get('/orders_payments', 'OrderController@orders_payments')->name('orders.payments');
+    Route::get('/orders_payments/delete/{id}', 'OrderController@orders_payment_delete')->name('orders_payments.delete');
+    Route::post('/bulk-order-payment-delete', 'OrderController@bulk_order_payment_delete')->name('bulk-order-payment-delete');
 
     // Inhouse Orders
     Route::get('/inhouse-orders', 'OrderController@admin_orders')->name('inhouse_orders.index');

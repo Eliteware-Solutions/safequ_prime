@@ -265,7 +265,12 @@ class OrderController extends Controller
 
     public function orders_payments(Request $request)
     {
-        $all_payments = PaymentWebhook::paginate(15);
+        $date = $request->date;
+        $all_payments = PaymentWebhook::where('is_active', 1)->orderBy('id', 'desc');
+        if ($date != null) {
+            $all_payments = $all_payments->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
+        }
+        $all_payments = $all_payments->paginate(15);
         $payments = array();
 
         foreach ($all_payments AS $key => $val) {
@@ -279,7 +284,20 @@ class OrderController extends Controller
                         $payments[$key]['payment_id'] = $entity->id;
                         $payments[$key]['amount'] = (floatval($entity->amount) > 0 ? floatval($entity->amount) / 100 : 0);
                         $payments[$key]['status'] = $entity->status;
-                        $payments[$key]['method'] = $entity->method;
+                        if ($entity->method == "card" && isset($entity->card)) {
+                            $cardDetails = (trim($entity->card->name) != '' ? '<b>Name:</b> '.$entity->card->name.'</br>' : '');
+                            $cardDetails .= ($entity->card->last4 ? '<b>Last4:</b> '.$entity->card->last4.'</br>' : '');
+                            $cardDetails .= ($entity->card->network ? '<b>Network:</b> '.$entity->card->network.'</br>' : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $cardDetails;
+                        } elseif ($entity->method == "netbanking") {
+                            $bankDetails = (trim($entity->bank) != '' ? '<b>Name:</b> '.$entity->bank : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $bankDetails;
+                        } elseif ($entity->method == "upi") {
+                            $upiDetails = (trim($entity->vpa) != '' ? '<b>ID:</b> '.$entity->vpa : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $upiDetails;
+                        } else {
+                            $payments[$key]['method'] = $entity->method;
+                        }
                         $payments[$key]['description'] = $entity->description;
                         $payments[$key]['email'] = $entity->email;
                         $payments[$key]['contact'] = $entity->contact;
@@ -290,6 +308,30 @@ class OrderController extends Controller
         }
 
         return view('backend.sales.all_orders.order_payments', compact('payments', 'all_payments'));
+    }
+
+    public function orders_payment_delete($id)
+    {
+        $payment = PaymentWebhook::findOrFail($id);
+        if ($payment != null) {
+            $payment->is_active = 0;
+            $payment->save();
+            flash(translate('Order Payment has been deleted successfully'))->success();
+        } else {
+            flash(translate('Something went wrong'))->error();
+        }
+        return back();
+    }
+
+    public function bulk_order_payment_delete(Request $request)
+    {
+        if ($request->id) {
+            foreach ($request->id as $payment_id) {
+                $this->orders_payment_delete($payment_id);
+            }
+        }
+
+        return 1;
     }
 
     // Inhouse Orders
