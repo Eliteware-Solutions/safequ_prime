@@ -230,10 +230,12 @@
                                     @endif
                                 </td>
                                 @php
-                                    if(floatval($orderDetail->product->min_qty) < 1){
+                                    if($orderDetail->quantity * floatval($orderDetail->product->min_qty) < 1){
                                         $qty_unit =  (1000 * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->secondary_unit;
-                                    } else {
+                                    } elseif (floatval($orderDetail->product->min_qty) > 1) {
                                         $qty_unit = ($orderDetail->quantity * floatval($orderDetail->product->min_qty)) . ' ' . $orderDetail->product->unit;
+                                    } else {
+                                        $qty_unit = $orderDetail->product->unit;
                                     }
                                 @endphp
                                 <td class="text-center">{{ $orderDetail->quantity }}</td>
