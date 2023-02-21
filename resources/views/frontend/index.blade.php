@@ -312,7 +312,8 @@
                                     }
                                 @endphp
                                 <div class="item">
-                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
+                                        <div class="deal-type">Flat 20% Off</div>
                                         <div class="prd-img">
                                             <img src="{{ uploaded_asset($prd_val->photos) }}"
                                                 data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
@@ -335,6 +336,8 @@
                                                 <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->variation }}
                                                 </p>
                                             @endif
+                                            <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
+                                                {{ $qty_unit_main }}</s></p>
                                             <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
                                                 {{ $qty_unit_main }}</p>
                                             <button class="btn secondary-btn-o"
