@@ -3600,6 +3600,32 @@ a.safbtn {
     color: #000000;
 }
 
+.prd-disc-pricing {
+    font-size: 14px;
+    color: #aaaaaa;
+    font-style: italic;
+}
+
+.prd-disc-pricing s {
+    text-decoration: line-through;
+}
+
+.deal-type {
+    color: white;
+    position: absolute;
+    font-weight: 500;
+    letter-spacing: 1px;
+    top: 0;
+    right: 0;
+    line-height: 1 !important;
+    font-size: 13.5px;
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    background-color: var(--primary-color);
+    border-bottom-left-radius: 0.6rem;
+    box-shadow: 0 2px 3px #00000096;
+}
+
 .tabcard-detail {
     margin-top: -77px;
     background: #F5F5F5;
@@ -4165,9 +4191,10 @@ a.cartbtn {
     align-items: center;
     justify-content: space-between;
     background: #F5F5F5;
-    border-radius: 10px;
+    border-radius: 0.6rem;
     margin-bottom: 30px;
-    padding: 23px 20px
+    padding: 23px 20px;
+    overflow: hidden;
 }
 
 .tab_horizontal_card_detail span {
@@ -4272,6 +4299,8 @@ a.loadbtn {
 }
 
 .tab_horizontal_card img.top_img {
+    object-fit: cover;
+    object-position: center;
     height: 130px;
     width: 130px;
     min-height: 130px;
@@ -4296,8 +4325,9 @@ form.checkout-form .form-control {
     height: calc(1.5em + 1.15rem);
     color: #767676;
 }
+
 form.checkout-form .label-radio {
-  border: 1px solid #dddddd;
+    border: 1px solid #dddddd;
 }
 
 form.checkout-form .form-control:focus,

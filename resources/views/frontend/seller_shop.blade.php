@@ -60,13 +60,14 @@
                                         </h4>
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
-                                        <li><a href="#" data-toggle="tab" data-filter="all"
-                                                class="filter-button" onclick="filterCategory($(this))">All</a></li>
+                                        <li><a href="#" data-toggle="tab" data-filter="all" class="filter-button"
+                                                onclick="filterCategory($(this))">All</a></li>
                                         @php $i=0; @endphp
                                         @foreach ($categories as $key => $cat)
                                             <li>
                                                 <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                    class="filter-button @if($i==0) active @endif" onclick="filterCategory($(this))">
+                                                    class="filter-button @if ($i == 0) active @endif"
+                                                    onclick="filterCategory($(this))">
                                                     {{ $cat['name'] }}
                                                 </a>
                                             </li>
@@ -102,7 +103,10 @@
                                                 }
                                             @endphp
                                             <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} ">
-                                                <div class="tab_horizontal_card p-3 m-0">
+                                                <div class="tab_horizontal_card p-3 m-0 position-relative">
+                                                    @if ($product->product->todays_deal == 1)
+                                                        <div class="deal-type">Flat {{ $product->product->discount }}% Off</div>
+                                                    @endif
                                                     <div class="tab_hori_inr">
                                                         <div>
                                                             <img src="{{ uploaded_asset($product->product->photos) }}"
@@ -116,8 +120,18 @@
                                                             @endif
                                                             <p class="titlecard">
                                                                 {{ $product->product->name }} </p>
-                                                            <p class="price">{!! single_price_web($product_price) !!} /
-                                                                {{ $qty_unit_main }}</p>
+                                                            @if ($product->product->todays_deal == 1)
+                                                                <p class="prd-disc-pricing mb-1">
+                                                                    <s>{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</s>
+                                                                </p>
+                                                                <p class="price">
+                                                                    {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} /
+                                                                    {{ $qty_unit_main }}
+                                                                </p>
+                                                            @else
+                                                                <p class="price">{!! single_price_web($product_price) !!} /
+                                                                    {{ $qty_unit_main }}</p>
+                                                            @endif
                                                             <div class="cartbtn">
                                                                 <img src="./public/assets/img/carts.svg" class=" cart"
                                                                     alt="cart">
@@ -367,7 +381,7 @@
             // });
 
             // $("#tykeModal").modal('show');
-            $( ".active" ).click();
+            $(".active").click();
         });
 
         $(window).scroll(function() {
