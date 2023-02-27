@@ -83,7 +83,7 @@ class OrderController extends Controller
     {
         $date = $request->date;
         $sort_search = null;
-        $delivery_status = 'pending';
+        $delivery_status = null;
         $payment_status = null;
 
         $orders = Order::orderBy('id', 'desc');
@@ -126,7 +126,7 @@ class OrderController extends Controller
     {
         $date = $request->date;
         $sort_search = null;
-        $delivery_status = 'pending';
+        $delivery_status = null;
         $payment_status = null;
 
         $orders = Order::orderBy('id', 'desc');
