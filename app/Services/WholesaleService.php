@@ -27,6 +27,9 @@ class WholesaleService
             return back();
         }
 
+        $product->discount = NULL;
+        $product->discount_type = NULL;
+
         $product->name = $request->name;
         $added_by = $request->added_by;
         if (Auth::user()->user_type == 'seller') {
@@ -149,6 +152,8 @@ class WholesaleService
         }
         if ($request->has('todays_deal')) {
             $product->todays_deal = 1;
+            $product->discount = $request->deal_discount;
+            $product->discount_type = $request->discount_type;
         }
         $product->cash_on_delivery = 0;
         if ($request->cash_on_delivery) {
@@ -278,6 +283,8 @@ class WholesaleService
         $product->cash_on_delivery = 0;
         $product->featured = 0;
         $product->todays_deal = 0;
+        $product->discount = NULL;
+        $product->discount_type = NULL;
         $product->is_quantity_multiplied = 0;
         $product->manufacturer_location = $request->manufacturer_location;
         $product->wholesale_product = 1;
@@ -332,8 +339,8 @@ class WholesaleService
         $product->video_provider = $request->video_provider;
         $product->video_link = $request->video_link;
         $product->unit_price = $request->unit_price ?? 0;
-        $product->discount = $request->discount;
-        $product->discount_type = $request->discount_type;
+        // $product->discount = $request->discount;
+        // $product->discount_type = $request->discount_type;
 
         if ($request->date_range != null) {
             $date_var = explode(" to ", $request->date_range);
@@ -373,6 +380,8 @@ class WholesaleService
 
         if ($request->has('todays_deal')) {
             $product->todays_deal = 1;
+            $product->discount = $request->deal_discount;
+            $product->discount_type = $request->discount_type;
         }
 
         $product->meta_title = $request->meta_title;

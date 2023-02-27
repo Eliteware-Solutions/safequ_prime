@@ -616,11 +616,20 @@
                                         <label class="col-md-6 col-from-label">{{translate('Status')}}</label>
                                         <div class="col-md-6">
                                             <label class="aiz-switch aiz-switch-success mb-0">
-                                                <input type="checkbox" name="todays_deal" value="1"
+                                                <input type="checkbox" name="todays_deal" value="1" class="todays_deal"
                                                        @if($product->todays_deal == 1) checked @endif>
                                                 <span></span>
                                             </label>
                                         </div>
+                                    </div>
+                                    <div class="form-group mb-3 deal_discount_div" style="display: none;">
+                                        <label for="name">
+                                            {{translate('Discount')}} (%)
+                                        </label>
+                                        <input type="number" name="deal_discount"
+                                            value="{{$product->discount ? $product->discount : '1'}}"
+                                            min="1" step="1" class="form-control deal_discount">
+                                        <input type="hidden" name="discount_type" value="percent">
                                     </div>
                                 </div>
                             </div>
@@ -741,6 +750,26 @@
             $('.remove-files').on('click', function () {
                 $(this).parents(".col-md-4").remove();
             });
+
+            if($('input.todays_deal').is(':checked')) {
+                $('input.deal_discount').attr('required', true)
+                $('.deal_discount_div').slideDown();
+            }
+            else {
+                $('input.deal_discount').attr('required', false)
+                $('.deal_discount_div').slideUp();
+            }
+
+            $('input.todays_deal').on('change',function() {
+                if($(this).is(':checked')) {
+                    $('input.deal_discount').attr('required', true)
+                    $('.deal_discount_div').slideDown();
+                }
+                else {
+                    $('input.deal_discount').attr('required', false)
+                    $('.deal_discount_div').slideUp();
+                }
+            })
         });
 
         $("[name=shipping_type]").on("change", function () {

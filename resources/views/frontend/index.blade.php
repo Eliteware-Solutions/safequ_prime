@@ -312,7 +312,8 @@
                                     }
                                 @endphp
                                 <div class="item">
-                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
+                                        <div class="deal-type">Flat {{ $prd_val->discount }}% Off</div>
                                         <div class="prd-img">
                                             <img src="{{ uploaded_asset($prd_val->photos) }}"
                                                 data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
@@ -335,7 +336,10 @@
                                                 <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->variation }}
                                                 </p>
                                             @endif
-                                            <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
+                                            <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
+                                                    {{ $qty_unit_main }}</s></p>
+                                            <p class="prd-pricing mb-2 fw700">
+                                                {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
                                                 {{ $qty_unit_main }}</p>
                                             <button class="btn secondary-btn-o"
                                                 onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
@@ -824,10 +828,14 @@
                         <div class="col-md-3 col-6 py-3">
                             <p class="links-tag primary-text fw700"><span class="secondary-text">Legal </span> Links</p>
                             <ul class="p-0 m-0">
-                                <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}" target="_blank">Privacy Policy</a></li>
-                                <li><a href="{{ static_asset('assets/docs/terms-and-conditions-buyer.pdf') }}" target="_blank">Terms & Conditions</a></li>
-                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}" target="_blank">Return Policy</a></li>
-                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}" target="_blank">Refund Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}"
+                                        target="_blank">Privacy Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/terms-and-conditions-buyer.pdf') }}"
+                                        target="_blank">Terms & Conditions</a></li>
+                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}"
+                                        target="_blank">Return Policy</a></li>
+                                <li><a href="{{ static_asset('assets/docs/return-and-refund.pdf') }}"
+                                        target="_blank">Refund Policy</a></li>
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
