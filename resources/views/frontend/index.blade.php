@@ -794,9 +794,18 @@
                     <div class="row position-relative">
                         <div class="col-lg-7 col-md-8 mx-auto">
                             <h2 class="title text-white">Connect with Us <br> Eluciidaate Tech Pvt Ltd</h2>
-                            <p class="text-white fw600"></p>
-                            <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="btn btn-fill-white">Get
-                                in touch</a>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a href="mailto:customerservice@safequ.co" class="text-white d-flex align-items-center mr-4">
+                                    <img src="{{ static_asset('assets/img/new-design/email.png') }}"
+                                        class="mr-2" alt="Email Icon" width="35" height="35">
+                                    customerservice@safequ.co
+                                </a>
+                                <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="text-white d-flex align-items-center">
+                                    <img src="{{ static_asset('assets/img/new-design/whatsapp.png') }}"
+                                        class="mr-2" alt="Email Icon" width="35" height="35">
+                                    {{ $whatsAppNo }}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
