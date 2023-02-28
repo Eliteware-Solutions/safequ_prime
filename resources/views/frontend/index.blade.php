@@ -28,7 +28,8 @@
         <div class="container">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-start">
-                    <p class="offer-text tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the app.
+                    <p class="offer-text tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the
+                        app.
                         <span class="secondary-text fw500">Use Code: Safe2023</span>
                     </p>
                     <a href="#" class="btn btn-primary-fill">Download</a>
@@ -287,11 +288,13 @@
                         <div class="promise-card trnsn-300ms b-rd-10">
                             <div class="d-flex align-items-center pb-3">
                                 <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47" height="37" alt="Truck Icon">
+                                    <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
+                                        height="37" alt="Truck Icon">
                                 </div>
                                 <p class="title mb-0">Direct from Farms of Your Choice</p>
                             </div>
-                            <p class="mb-1">Love strawberries? Order them directly from a farm in Nashik or Mahabaleshwar. Your choice!</p>
+                            <p class="mb-1">Love strawberries? Order them directly from a farm in Nashik or
+                                Mahabaleshwar. Your choice!</p>
                         </div>
                     </div>
 
@@ -299,11 +302,13 @@
                         <div class="promise-card trnsn-300ms b-rd-10">
                             <div class="d-flex align-items-center pb-3">
                                 <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47" height="37" alt="Bucket Icon">
+                                    <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
+                                        height="37" alt="Bucket Icon">
                                 </div>
                                 <p class="title mb-0">Fresh, Like it's from Your Back Garden</p>
                             </div>
-                            <p class="mb-1">Order only what you need and get it fresh from the farm within 12hrs** of harvest! **For most products</p>
+                            <p class="mb-1">Order only what you need and get it fresh from the farm within 12hrs** of
+                                harvest! **For most products</p>
                         </div>
                     </div>
 
@@ -311,7 +316,8 @@
                         <div class="promise-card trnsn-300ms b-rd-10">
                             <div class="d-flex align-items-center pb-3">
                                 <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/flag.png') }}" width="47" height="37" alt="Flag Icon">
+                                    <img src="{{ static_asset('assets/img/new-design/flag.png') }}" width="47"
+                                        height="37" alt="Flag Icon">
                                 </div>
                                 <p class="title mb-0">Atmanirbhar India</p>
                             </div>
@@ -323,11 +329,13 @@
                         <div class="promise-card trnsn-300ms b-rd-10">
                             <div class="d-flex align-items-center pb-3">
                                 <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/money.png') }}" width="47" height="37" alt="Money Icon">
+                                    <img src="{{ static_asset('assets/img/new-design/money.png') }}" width="47"
+                                        height="37" alt="Money Icon">
                                 </div>
                                 <p class="title mb-0">Fair Pricing</p>
                             </div>
-                            <p class="mb-1">Without middlemen and a dynamic community model at play, the local farms are able to offer you fresh produce at lower prices compared to high street retailers.</p>
+                            <p class="mb-1">Without middlemen and a dynamic community model at play, the local farms are
+                                able to offer you fresh produce at lower prices compared to high street retailers.</p>
                         </div>
                     </div>
                 </div>
@@ -390,39 +398,42 @@
                                 <div class="item">
                                     <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
                                         <div class="deal-type">Flat {{ $prd_val->discount }}% Off</div>
-                                        <div class="prd-img">
-                                            <img src="{{ uploaded_asset($prd_val->photos) }}"
-                                                data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
-                                                class="object-cover-center" width="250" height="250"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                alt="{{ $prd_val->getTranslation('name') }}">
-                                        </div>
-                                        <div class="prd-content p-3 position-relative">
-                                            @if (explode(',', $prd_val->tags)[0] != '')
-                                                <span
-                                                    class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
-                                            @endif
-                                            @if ($prd_val->manufacturer_location)
-                                                <p class="prd-loc mb-1 secondary-text">
-                                                    {{ $prd_val->manufacturer_location }}</p>
-                                            @endif
-                                            <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
-                                            </p>
-                                            @if (trim($prd_val->variation) != '')
-                                                <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->variation }}
+                                        <div class="d-flex align-items-center justify-content-between flex-design">
+                                            <div class="prd-img">
+                                                <img src="{{ uploaded_asset($prd_val->photos) }}"
+                                                    data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
+                                                    class="object-cover-center" width="250" height="250"
+                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                    alt="{{ $prd_val->getTranslation('name') }}">
+                                            </div>
+                                            <div class="prd-content p-3 position-relative">
+                                                @if (explode(',', $prd_val->tags)[0] != '')
+                                                    <span
+                                                        class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
+                                                @endif
+                                                @if ($prd_val->manufacturer_location)
+                                                    <p class="prd-loc mb-1 secondary-text">
+                                                        {{ $prd_val->manufacturer_location }}</p>
+                                                @endif
+                                                <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
                                                 </p>
-                                            @endif
-                                            <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
-                                                    {{ $qty_unit_main }}</s></p>
-                                            <p class="prd-pricing mb-2 fw700">
-                                                {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
-                                                {{ $qty_unit_main }}</p>
-                                            <button class="btn secondary-btn"
-                                                onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
-                                                <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                                    onload="SVGInject(this)" alt="Btn Cart">
-                                                Add to cart
-                                            </button>
+                                                @if (trim($prd_val->variation) != '')
+                                                    <p class="prd-desc mb-1 light-text">Variants :
+                                                        {{ $prd_val->variation }}
+                                                    </p>
+                                                @endif
+                                                <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
+                                                        {{ $qty_unit_main }}</s></p>
+                                                <p class="prd-pricing mb-2 fw700">
+                                                    {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
+                                                    {{ $qty_unit_main }}</p>
+                                                <button class="btn secondary-btn"
+                                                    onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
+                                                    <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                                        onload="SVGInject(this)" alt="Btn Cart">
+                                                    Add to cart
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -758,8 +769,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 text-center pt-2">
-                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598" height="357"
-                            class="injectable" alt="Rewards Image">
+                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598"
+                            height="357" class="injectable" alt="Rewards Image">
                     </div>
                 </div>
             </div>
@@ -1036,7 +1047,7 @@
                             items: 3,
                         },
                         1200: {
-                            items: 4,
+                            items: 2,
                         },
                     }
                 }
