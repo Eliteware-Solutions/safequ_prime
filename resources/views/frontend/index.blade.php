@@ -24,6 +24,24 @@
 
 @section('content')
 
+    <div class="offer-top-bar">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-start">
+                    <p class="offer-text tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the
+                        app.
+                        <span class="secondary-text fw500">Use Code: Safe2023</span>
+                    </p>
+                    <a href="#" class="btn btn-primary-fill">Download</a>
+                </div>
+                <p class="tiny-text secondary-text mb-0">
+                    Honest <span class="slash"> | </span> Fresh Produce <span class="slash"> | </span> Delivered to your
+                    doorstep
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <header class="header">
         <nav class="d-flex align-items-center justify-content-between container">
@@ -33,12 +51,12 @@
                         alt="SafeQU">
                 </a>
                 <a href="javascript:void(0);" id="detect-location"
-                    class="detct-loc text-black fw600 mr-2 d-flex align-items-center justify-content-between mb-0">
+                    class="detct-loc text-black  mr-2 d-flex align-items-center justify-content-between mb-0">
                     Detect Location
                     <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable" alt="Down Arrow">
                 </a>
                 <a href="javascript:void(0);" id="header-location-name"
-                    class="detct-loc text-black fw600 mr-2 mb-0 display-none"></a>
+                    class="detct-loc text-black mr-2 mb-0 display-none"></a>
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
                 {{-- <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
@@ -49,10 +67,10 @@
                 </div> --}}
 
                 <ul class="nav-menu ml-lg-auto mb-0 d-flex align-items-center">
-                    <li><a href="{{ route('home') }}" class="nav-link fw700 active py-1 px-2 mr-2">Home</a></li>
-                    <li><a href="{{ route('shop.visit') }}" class="nav-link fw700 py-1 px-2 mr-2">Products</a></li>
-                    {{-- <li><a href="#" class="nav-link fw700 py-1 px-2 mr-2">Blogs</a></li> --}}
-                    <li><a href="#communitiesSec" class="nav-link scrollTo fw700 py-1 px-2 mr-2">Community</a></li>
+                    <li><a href="{{ route('home') }}" class="nav-link fw500 active py-1 px-2 mr-2">Home</a></li>
+                    <li><a href="{{ route('shop.visit') }}" class="nav-link fw500 py-1 px-2 mr-2">Products</a></li>
+                    {{-- <li><a href="#" class="nav-link fw500 py-1 px-2 mr-2">Blogs</a></li> --}}
+                    <li><a href="#communitiesSec" class="nav-link scrollTo fw500 py-1 px-2 mr-2">Community</a></li>
                 </ul>
 
                 <div class="nav-icons d-flex align-items-center">
@@ -90,16 +108,18 @@
                         <div class="container">
                             <div class="row position-relative align-items-center h-100">
                                 <div class="col-lg-6">
-                                    <p class="text-white hero-subtitle mb-1">Exotic Fruits</p>
+                                    <p class="text-white hero-subtitle fw600 mb-1">Farm Fresh Exotic</p>
 
                                     <h1 class="text-white mb-4 pb-1">30%* Cheaper</h1>
 
                                     <p class="text-white fw500 mb-4">Farm fresh produce like strawberries & avocados
-                                        delivered to
-                                        your doorstep, DIRECTLY from your choice of local farms serving your community. ~30%
-                                        cheaper than those expensive halls of food or baskets of nature.</p>
+                                        delivered to your doorstep, DIRECTLY from your choice of local farms serving your
+                                        community. ~30% cheaper than those expensive halls of food or baskets of nature.
+                                        <i class="fas smiley align-middle fa-smile" style="font-size: 1.5rem"></i>
+                                    </p>
 
-                                    <button class="btn btn-fill-white hover-primary">Join Your Community Now</button>
+                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary">Buy
+                                        Now</a>
                                 </div>
 
                                 <div class="col-lg-6">
@@ -159,30 +179,30 @@
         <section class="cat-grid py-4">
             <div class="container">
                 <div class="row py-md-3">
-                    <div class="col-md-4 py-2 px-lg-4">
+                    <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
-                            <p class="fw600 cat-name">Fresh <br> Vegetables</p>
+                            <p class="cat-name">Fresh Exotic <br> fruits (Indian)</p>
                             <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/vegs.png') }}" width="241"
-                                    height="120" alt="Vegetables">
+                                <img src="{{ static_asset('assets/img/new-design/mango.png') }}" width="241"
+                                    height="120" alt="Indian Fruits">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 py-2 px-lg-4">
+                    <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
-                            <p class="fw600 cat-name">Fresh <br> Fruits</p>
+                            <p class="cat-name">Fresh Exotic <br> fruits (Imported)</p>
                             <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/fruits.png') }}" width="212"
-                                    height="144" alt="Fruits">
+                                <img src="{{ static_asset('assets/img/new-design/grapse.png') }}" width="212"
+                                    height="144" alt="Imported Fruits">
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 py-2 px-lg-4">
+                    <div class="col-lg-4 col-md-6 mx-md-auto mx-lg-0 py-2 px-lg-4">
                         <div class="cat-card cat-3 px-xl-4 p-3 b-rd-10">
-                            <p class="fw600 cat-name">Fresh <br> Flowers</p>
+                            <p class="cat-name">Fresh Exotic <br> Vegetables</p>
                             <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/flowers.png') }}" width="171"
-                                    height="159" alt="Flowers">
+                                <img src="{{ static_asset('assets/img/new-design/veg.png') }}" width="171"
+                                    height="159" alt="Vegetables">
                             </div>
                         </div>
                     </div>
@@ -237,14 +257,14 @@
                                         <p class="prd-loc mb-1 secondary-text">
                                             {{ $prd_val->product->manufacturer_location }}</p>
                                     @endif
-                                    <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->product->name ?? '-' }}</p>
+                                    <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->product->name ?? '-' }}</p>
                                     @if (trim($prd_val->product->variation) != '')
                                         <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->product->variation }}
                                         </p>
                                     @endif
-                                    <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
+                                    <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                         {{ $qty_unit_main }}</p>
-                                    <button class="btn secondary-btn-o"
+                                    <button class="btn secondary-btn"
                                         onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                         <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                             onload="SVGInject(this)" alt="Btn Cart">
@@ -254,6 +274,70 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        </section>
+
+        <!-- SafeQu Promise -->
+        <section class="promise pt-lg-5 py-4">
+            <div class="container">
+                <h2 class="title text-center">Safe<span class="primary-text">Q</span>u Promise</h2>
+
+                <div class="row pb-2">
+                    <div class="col-md-6 col-lg-3 pb-2">
+                        <div class="promise-card trnsn-300ms b-rd-10">
+                            <div class="d-flex align-items-center pb-3">
+                                <div class="icon b-rd-50p mr-3">
+                                    <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
+                                        height="37" alt="Truck Icon">
+                                </div>
+                                <p class="title mb-0">Direct from Farms of Your Choice</p>
+                            </div>
+                            <p class="mb-1">Love strawberries? Order them directly from a farm in Nashik or
+                                Mahabaleshwar. Your choice!</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 pb-2">
+                        <div class="promise-card trnsn-300ms b-rd-10">
+                            <div class="d-flex align-items-center pb-3">
+                                <div class="icon b-rd-50p mr-3">
+                                    <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
+                                        height="37" alt="Bucket Icon">
+                                </div>
+                                <p class="title mb-0">Fresh, Like it's from Your Back Garden</p>
+                            </div>
+                            <p class="mb-1">Order only what you need and get it fresh from the farm within 12hrs** of
+                                harvest! **For most products</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 pb-2">
+                        <div class="promise-card trnsn-300ms b-rd-10">
+                            <div class="d-flex align-items-center pb-3">
+                                <div class="icon b-rd-50p mr-3">
+                                    <img src="{{ static_asset('assets/img/new-design/flag.png') }}" width="47"
+                                        height="37" alt="Flag Icon">
+                                </div>
+                                <p class="title mb-0">Atmanirbhar India</p>
+                            </div>
+                            <p class="mb-1">Support farmers across India by cutting out the middlemen.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 pb-2">
+                        <div class="promise-card trnsn-300ms b-rd-10">
+                            <div class="d-flex align-items-center pb-3">
+                                <div class="icon b-rd-50p mr-3">
+                                    <img src="{{ static_asset('assets/img/new-design/money.png') }}" width="47"
+                                        height="37" alt="Money Icon">
+                                </div>
+                                <p class="title mb-0">Fair Pricing</p>
+                            </div>
+                            <p class="mb-1">Without middlemen and a dynamic community model at play, the local farms are
+                                able to offer you fresh produce at lower prices compared to high street retailers.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -314,39 +398,42 @@
                                 <div class="item">
                                     <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
                                         <div class="deal-type">Flat {{ $prd_val->discount }}% Off</div>
-                                        <div class="prd-img">
-                                            <img src="{{ uploaded_asset($prd_val->photos) }}"
-                                                data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
-                                                class="object-cover-center" width="250" height="250"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                alt="{{ $prd_val->getTranslation('name') }}">
-                                        </div>
-                                        <div class="prd-content p-3 position-relative">
-                                            @if (explode(',', $prd_val->tags)[0] != '')
-                                                <span
-                                                    class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
-                                            @endif
-                                            @if ($prd_val->manufacturer_location)
-                                                <p class="prd-loc mb-1 secondary-text">
-                                                    {{ $prd_val->manufacturer_location }}</p>
-                                            @endif
-                                            <p class="prd-name mb-1 fw700 text-black">{{ $prd_val->name ?? '-' }}
-                                            </p>
-                                            @if (trim($prd_val->variation) != '')
-                                                <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->variation }}
+                                        <div class="d-flex align-items-center justify-content-between flex-design">
+                                            <div class="prd-img">
+                                                <img src="{{ uploaded_asset($prd_val->photos) }}"
+                                                    data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
+                                                    class="object-cover-center" width="250" height="250"
+                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                    alt="{{ $prd_val->getTranslation('name') }}">
+                                            </div>
+                                            <div class="prd-content p-3 position-relative">
+                                                @if (explode(',', $prd_val->tags)[0] != '')
+                                                    <span
+                                                        class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
+                                                @endif
+                                                @if ($prd_val->manufacturer_location)
+                                                    <p class="prd-loc mb-1 secondary-text">
+                                                        {{ $prd_val->manufacturer_location }}</p>
+                                                @endif
+                                                <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
                                                 </p>
-                                            @endif
-                                            <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
-                                                    {{ $qty_unit_main }}</s></p>
-                                            <p class="prd-pricing mb-2 fw700">
-                                                {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
-                                                {{ $qty_unit_main }}</p>
-                                            <button class="btn secondary-btn-o"
-                                                onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
-                                                <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                                    onload="SVGInject(this)" alt="Btn Cart">
-                                                Add to cart
-                                            </button>
+                                                @if (trim($prd_val->variation) != '')
+                                                    <p class="prd-desc mb-1 light-text">Variants :
+                                                        {{ $prd_val->variation }}
+                                                    </p>
+                                                @endif
+                                                <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
+                                                        {{ $qty_unit_main }}</s></p>
+                                                <p class="prd-pricing mb-2 fw700">
+                                                    {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
+                                                    {{ $qty_unit_main }}</p>
+                                                <button class="btn secondary-btn"
+                                                    onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
+                                                    <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                                        onload="SVGInject(this)" alt="Btn Cart">
+                                                    Add to cart
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -451,15 +538,15 @@
                                                     <p class="prd-loc mb-1 secondary-text">
                                                         {{ $prd_val->product->manufacturer_location }}</p>
                                                 @endif
-                                                <p class="prd-name mb-1 fw700 text-black">
+                                                <p class="prd-name mb-1 fw600 text-black">
                                                     {{ $prd_val->product->name ?? '-' }}</p>
                                                 @if (trim($prd_val->product->variation) != '')
                                                     <p class="prd-desc mb-1 light-text">Variants :
                                                         {{ $prd_val->product->variation }}</p>
                                                 @endif
-                                                <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
+                                                <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                                     {{ $qty_unit_main }}</p>
-                                                <button class="btn secondary-btn-o"
+                                                <button class="btn secondary-btn"
                                                     onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                     <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                                         onload="SVGInject(this)" alt="Btn Cart">
@@ -517,15 +604,15 @@
                                                             <p class="prd-loc mb-1 secondary-text">
                                                                 {{ $prd_val->product->manufacturer_location }}</p>
                                                         @endif
-                                                        <p class="prd-name mb-1 fw700 text-black">
+                                                        <p class="prd-name mb-1 fw600 text-black">
                                                             {{ $prd_val->product->name ?? '-' }}</p>
                                                         @if (trim($prd_val->product->variation) != '')
                                                             <p class="prd-desc mb-1 light-text">Variants :
                                                                 {{ $prd_val->product->variation }}</p>
                                                         @endif
-                                                        <p class="prd-pricing mb-2 fw700">{!! single_price_web($product_price) !!} /
+                                                        <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                                             {{ $qty_unit_main }}</p>
-                                                        <button class="btn secondary-btn-o"
+                                                        <button class="btn secondary-btn"
                                                             onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                             <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                                                 onload="SVGInject(this)" alt="Btn Cart">
@@ -613,7 +700,7 @@
         </section>
 
         <!-- Communities -->
-        <section class="communities pt-lg-5 py-4" id="communitiesSec">
+        {{-- <section class="communities pt-lg-5 py-4" id="communitiesSec">
             <div class="container">
                 <h2 class="title text-center mb-2">Our Most Popular Communities</h2>
                 <p class="sub-text mb-4 text-center mx-auto fw500">
@@ -644,15 +731,13 @@
                                         {{ $community->address }}
                                     </p>
                                     <p class="cm-title fw700">{{ $community->name }}</p>
-                                    @if (auth()->user() &&
-                                            intval(auth()->user()->joined_community_id) > 0 &&
-                                            auth()->user()->joined_community_id != $community->user_id)
-                                        <a href="javascript:void(0);" class="btn secondary-btn-o"
+                                    @if (auth()->user() && intval(auth()->user()->joined_community_id) > 0 && auth()->user()->joined_community_id != $community->user_id)
+                                        <a href="javascript:void(0);" class="btn secondary-btn"
                                             onclick="confrimCommunityChange('{{ route('shop.visit', $community->slug) }}');">
                                             Join Now</a>
                                     @else
                                         <a href="{{ route('community_user.login', $community->user_id) }}"
-                                            class="btn secondary-btn-o">Join Now</a>
+                                            class="btn secondary-btn">Join Now</a>
                                     @endif
                                 </div>
                             </div>
@@ -670,14 +755,18 @@
                         target="_blank" class="btn btn-fill-black mx-auto">Create Community</a>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Rewards -->
         <section class="rewards py-lg-5 py-4">
             <div class="container py-lg-5 py-2">
                 <div class="row">
                     <div class="col-lg-6">
-                        <h2 class="title">Rewards for Using App on <br> Continuous Basis</h2>
+                        <div class="rwd-ttl">
+                            <h3 class="title">Get <span class="secondary-text">flat 50%*</span> off up to
+                                Rs.100 on your first order on the app.</h3>
+                            <h3 class="title">Use Code: <span class="primary-bg text-white b-rd-10">safe2023</span></h3>
+                        </div>
                     </div>
                     <div class="col-lg-6 text-center pt-2">
                         <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598"
@@ -704,7 +793,7 @@
                     <div class="row position-relative">
                         <div class="col-lg-7 col-md-8 mx-auto">
                             <h2 class="title text-white">Need Any Help?</h2>
-                            <p class="text-white fw700">Lorem ipsum dolor sit amet, consectetur
+                            <p class="text-white fw600">Lorem ipsum dolor sit amet, consectetur
                                 adipisicing elit. Architecto blanditiis perspiciatis aspernatur dolores enim earum libero,
                                 vero laudantium error nisi omnis, nesciunt, neque tempore!</p>
                             <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="btn btn-fill-white">Get
@@ -802,7 +891,7 @@
                         <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260"
                             height="123" alt="SafeQu Logo">
                     </div>
-                    <p class="fw600 text-white">
+                    <p class="text-white">
                         Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati eveniet
                         adipisicing.
                     </p>
@@ -810,7 +899,7 @@
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw700"><span class="secondary-text">Quick </span> Links</p>
+                            <p class="links-tag primary-text fw600"><span class="secondary-text">Quick </span> Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="{{ route('shop.visit') }}">Products</a></li>
@@ -818,7 +907,7 @@
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw700"><span class="secondary-text">Other </span> Links</p>
+                            <p class="links-tag primary-text fw600"><span class="secondary-text">Other </span> Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('user.login') }}">My Account</a></li>
                                 <li><a href="{{ route('user.login') }}">Order History</a></li>
@@ -826,7 +915,7 @@
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw700"><span class="secondary-text">Legal </span> Links</p>
+                            <p class="links-tag primary-text fw600"><span class="secondary-text">Legal </span> Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}"
                                         target="_blank">Privacy Policy</a></li>
@@ -839,7 +928,7 @@
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw700"><span class="secondary-text">Social </span> Links
+                            <p class="links-tag primary-text fw600"><span class="secondary-text">Social </span> Links
                             </p>
                             <ul class="p-0 m-0">
                                 <li><a href="https://m.facebook.com/safequ.in/" target="_blank">Facebook</a></li>
@@ -876,6 +965,11 @@
                     scrollTop: ($(target).offset().top - 110)
                 }, 10)
             })
+
+            setInterval(() => {
+                $(".smiley").hasClass("fa-smile-wink") ? $(".smiley").removeClass("fa-smile-wink").addClass(
+                    "fa-smile") : $(".smiley").removeClass("fa-smile").addClass("fa-smile-wink");
+            }, 1000);
 
             $('a[data-toggle="tab"]').click(function() {
                 $('a[data-toggle="tab"]').removeClass('selected');
@@ -953,7 +1047,7 @@
                             items: 3,
                         },
                         1200: {
-                            items: 4,
+                            items: 2,
                         },
                     }
                 }
