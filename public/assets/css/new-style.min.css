@@ -482,7 +482,7 @@ footer .links-tag {
 }
 
 .footer-logo {
-    max-width: 120px;
+    max-width: 80px;
 }
 
 .copyright {
@@ -492,6 +492,15 @@ footer .links-tag {
 
 .copyright p {
     font-size: 0.85rem;
+}
+
+@media screen and (min-width: 487px) {
+    .get-in-touch .title {
+        text-align: center;
+    }
+    .get-in-touch .flex-div {
+        justify-content: center;
+    }
 }
 
 @media screen and (min-width: 503px) {
@@ -1233,10 +1242,6 @@ footer .links-tag {
     .communities p.sub-text {
         max-width: 768px;
     }
-
-    .footer-logo {
-        max-width: 150px;
-    }
 }
 
 @media screen and (min-width: 1400px) {
@@ -1324,10 +1329,6 @@ footer .links-tag {
 
     .communities p.sub-text {
         max-width: 860px;
-    }
-
-    .footer-logo {
-        max-width: 150px;
     }
 
     .whats-app-icon svg,
@@ -1456,10 +1457,6 @@ footer .links-tag {
 
     .communities p.sub-text {
         max-width: 1050px;
-    }
-
-    .footer-logo {
-        max-width: 180px;
     }
 
     .whats-app-icon svg,
