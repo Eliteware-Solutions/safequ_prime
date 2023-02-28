@@ -69,8 +69,8 @@
                 <ul class="nav-menu ml-lg-auto mb-0 d-flex align-items-center">
                     <li><a href="{{ route('home') }}" class="nav-link fw500 active py-1 px-2 mr-2">Home</a></li>
                     <li><a href="{{ route('shop.visit') }}" class="nav-link fw500 py-1 px-2 mr-2">Products</a></li>
-                    {{-- <li><a href="#" class="nav-link fw500 py-1 px-2 mr-2">Blogs</a></li> --}}
-                    <li><a href="#communitiesSec" class="nav-link scrollTo fw500 py-1 px-2 mr-2">Community</a></li>
+                    {{-- <li><a href="#" class="nav-link fw500 py-1 px-2 mr-2">Blogs</a></li>
+                    <li><a href="#communitiesSec" class="nav-link scrollTo fw500 py-1 px-2 mr-2">Community</a></li> --}}
                 </ul>
 
                 <div class="nav-icons d-flex align-items-center">
@@ -108,13 +108,14 @@
                         <div class="container">
                             <div class="row position-relative align-items-center h-100">
                                 <div class="col-lg-6">
-                                    <p class="text-white hero-subtitle fw600 mb-1">Farm Fresh Exotic</p>
+                                    <p class="text-white hero-subtitle fw600 mb-1">Farm Fresh Exotic Fruits and Vegetables
+                                    </p>
 
-                                    <h1 class="text-white mb-4 pb-1">30%* Cheaper</h1>
+                                    <h1 class="text-white mb-4 pb-1">30% Cheaper</h1>
 
-                                    <p class="text-white fw500 mb-4">Farm fresh produce like strawberries & avocados
-                                        delivered to your doorstep, DIRECTLY from your choice of local farms serving your
-                                        community. ~30% cheaper than those expensive halls of food or baskets of nature.
+                                    <p class="text-white fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
+                                        avocados & spinach delivered to your doorstep, DIRECTLY from your choice of local
+                                        farms. ~30% cheaper than those expensive halls of food or baskets of nature.
                                         <i class="fas smiley align-middle fa-smile" style="font-size: 1.5rem"></i>
                                     </p>
 
@@ -792,10 +793,8 @@
                 <div class="content b-rd-10 overflow-hide text-center">
                     <div class="row position-relative">
                         <div class="col-lg-7 col-md-8 mx-auto">
-                            <h2 class="title text-white">Need Any Help?</h2>
-                            <p class="text-white fw600">Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Architecto blanditiis perspiciatis aspernatur dolores enim earum libero,
-                                vero laudantium error nisi omnis, nesciunt, neque tempore!</p>
+                            <h2 class="title text-white">Connect with Us <br> Eluciidaate Tech Pvt Ltd</h2>
+                            <p class="text-white fw600"></p>
                             <a href="https://wa.me/{{ $whatsAppNo }}" target="_blank" class="btn btn-fill-white">Get
                                 in touch</a>
                         </div>
@@ -903,7 +902,7 @@
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="{{ route('shop.visit') }}">Products</a></li>
-                                <li><a href="#communitiesSec" class="scrollTo">Community</a></li>
+                                {{-- <li><a href="#communitiesSec" class="scrollTo">Community</a></li> --}}
                             </ul>
                         </div>
                         <div class="col-md-3 col-6 py-3">
