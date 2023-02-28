@@ -605,7 +605,7 @@ footer .links-tag {
     }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 991px) {
     .nav-logo {
         margin-right: 0.6rem !important
     }
@@ -616,10 +616,10 @@ footer .links-tag {
 
     .collapsible {
         position: fixed;
-        top: 76px;
+        top: 138px;
         right: -100%;
         width: 100vw !important;
-        min-height: calc(100vh - 76px);
+        min-height: calc(100vh - 138px);
         overflow-x: hidden;
         overflow-y: auto;
         flex-direction: column;
@@ -653,6 +653,19 @@ footer .links-tag {
         display: block;
         max-width: 2.75rem;
         cursor: pointer;
+    }
+}
+@media screen and (max-width: 575px) {
+    .collapsible {
+        top: 116px;
+        min-height: calc(100vh - 116px);
+    }
+}
+
+@media screen and (max-width: 502px) {
+    .collapsible {
+        top: 124px;
+        min-height: calc(100vh - 124px);
     }
 }
 
