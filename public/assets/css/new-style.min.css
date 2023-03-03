@@ -79,6 +79,10 @@ img.object-cover-center {
     overflow-y: hidden;
 }
 
+.d-inline-block {
+    display: inline-block;
+}
+
 .trnsn-300ms,
 a,
 .btn,
@@ -127,10 +131,20 @@ button,
     -o-border-radius: 2rem;
 }
 
-.secondary-btn-o {
-    color: var(--secondary-color);
-    background-color: transparent;
-    border: 1px solid var(--secondary-color);
+.primary-btn {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.primary-btn svg path {
+    fill: white;
+}
+
+.primary-btn:hover,
+.primary-btn:active,
+.primary-btn:focus-visible {
+    color: white;
+    background-color: #d25321;
 }
 
 .secondary-btn {
@@ -149,6 +163,12 @@ button,
     background-color: #6e8e49;
 }
 
+.secondary-btn-o {
+    color: var(--secondary-color);
+    background-color: transparent;
+    border: 1px solid var(--secondary-color);
+}
+
 .btn-fill-white {
     font-weight: 500;
     background-color: white;
@@ -158,6 +178,19 @@ button,
 
 .org-clr {
     color: var(--primary-color);
+}
+
+.btn.org-clr svg,
+.btn.org-clr img {
+    max-width: 1.125rem;
+}
+
+.btn.org-clr svg path {
+    fill: var(--primary-color);
+}
+
+.btn.org-clr:hover svg path {
+    fill: white;
 }
 
 .btn-fill-white:hover,
@@ -262,6 +295,12 @@ h1 {
     font-family: 'Pacifico', sans-serif;
 }
 
+.deal-title {
+    font-size: 4rem;
+    font-weight: 500;
+    font-family: 'Pacifico', sans-serif;
+}
+
 .title {
     margin-bottom: 1.3rem;
     font-weight: 700;
@@ -315,6 +354,10 @@ li,
     font-size: 0.95rem;
 }
 
+.small, small {
+    font-size: 85%;
+}
+
 ul,
 ol {
     list-style: none;
@@ -326,7 +369,7 @@ ol {
     left: 0;
     width: 100%;
     z-index: 99999;
-    background-color: #030100;
+    background-color: var(--default-color);
     padding: 0.65rem 0;
 }
 
@@ -345,6 +388,7 @@ ol {
     display: inline-block;
 }
 
+.tiny-text,
 .offer-top-bar .tiny-text {
     font-size: 14px;
 }
@@ -384,6 +428,12 @@ ol {
 
 @media screen and (max-width:575px) {
 
+    .tiny-text {
+        font-size: 12px;
+    }
+    nav .fix-part .tiny-text {
+        max-width: 175px;
+    }
     .offer-top-bar .tiny-text,
     .offer-top-bar .btn-primary-fill {
         font-size: 9px;
@@ -393,7 +443,7 @@ ol {
 header {
     padding: 0.5rem 0;
     background-color: white;
-    box-shadow: 0 0 18px #2e312b26;
+    box-shadow: 0 0 10px #2e312b26;
     position: fixed;
     top: 48px;
     left: 0;
@@ -402,7 +452,7 @@ header {
 }
 
 header .collapsible {
-    width: 78%;
+    width: 40%;
 }
 
 .nav-logo {
@@ -410,18 +460,20 @@ header .collapsible {
     max-width: 60px;
 }
 
-nav .detct-loc {
-    font-size: 0.825rem;
+.detct-loc {
     text-decoration: underline;
-    min-width: 120px;
+    min-width: 130px;
     line-height: 1.2;
-    color: var(--default-color);
 }
 
-nav .detct-loc svg,
-nav .detct-loc img {
-    max-width: 0.5rem;
-    margin-top: 0.2rem;
+.detct-loc svg,
+.detct-loc img {
+    max-width: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.detct-loc svg path {
+    fill: var(--primary-color);
 }
 
 nav .search-bar {
@@ -496,7 +548,7 @@ footer .links-tag {
 
 @media screen and (min-width: 487px) {
     .get-in-touch .title {
-        text-align: center;
+        text-align: center !important;
     }
     .get-in-touch .flex-div {
         justify-content: center;
@@ -535,8 +587,8 @@ footer .links-tag {
         top: 49px;
     }
 
-    nav .detct-loc svg,
-    nav .detct-loc img {
+    .detct-loc svg,
+    .detct-loc img {
         max-width: 0.55rem;
     }
 
@@ -566,13 +618,13 @@ footer .links-tag {
         max-width: 76px;
     }
 
-    nav .detct-loc {
+    .detct-loc {
         font-size: 0.925rem;
         min-width: 135px;
     }
 
-    nav .detct-loc svg,
-    nav .detct-loc img {
+    .detct-loc svg,
+    .detct-loc img {
         max-width: 0.55rem;
     }
 
@@ -599,18 +651,12 @@ footer .links-tag {
     }
 }
 
-@media screen and (min-width: 1920px) {
-    .nav-logo {
-        max-width: 96px;
-    }
-}
-
 @media screen and (max-width: 991px) {
     .nav-logo {
         margin-right: 0.6rem !important
     }
 
-    nav .detct-loc {
+    .detct-loc {
         margin: 0 !important;
     }
 
@@ -682,7 +728,11 @@ footer .links-tag {
 }
 
 .hero-sec {
-    padding-top: 165px;
+    padding-top: 139px;
+}
+
+.banner-location {
+    background-color: #f8faff;
 }
 
 .hero-sec .carousel-item {
@@ -772,8 +822,8 @@ footer .links-tag {
 .cat-card .cat-name {
     font-size: 1rem;
     margin-bottom: 0;
-    line-height: 1.2;
-    font-weight: 600;
+    line-height: 1.35;
+    font-weight: 700;
 }
 
 .cat-card .cat-img {
@@ -860,28 +910,14 @@ footer .links-tag {
     margin-bottom: 0.18rem;
 }
 
-.promise-card {
-    padding: 1rem;
-    background-color: white;
-}
-
-.promise-card:hover {
-    box-shadow: 0 6px 30px -5px #d9d9d9;
-}
-
 .promise .icon {
     width: 80px;
-    min-width: 80px;
     height: 80px;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #d5d5d5;
+    margin: 0 auto 1.25rem;
 }
 
 .promise p.title {
-    line-height: 1.3;
+    line-height: 1.5;
     font-size: 1.175rem;
 }
 
@@ -903,12 +939,31 @@ footer .links-tag {
 }
 
 .deals .content {
-    background-image: url(../img/new-design/recycle-bg.webp);
-    background-position: top;
+    background-image: url(../img/new-design/deals-bg.png);
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 100% 61%;
-    border-top-left-radius: 2rem;
-    border-top-right-radius: 2rem;
+}
+
+.deals .content .prd-details {
+    padding-left: 2rem;
+}
+
+.deals .deal-prd-img {
+    max-width: 420px;
+    margin-left: auto;
+}
+
+.deals .prd-benefit {
+    max-width: 190px;
+    position: absolute;
+    top: calc(50% - 65px);
+    left: 1rem;
+}
+
+.deals .prd-benefit svg,
+.deals .prd-benefit img {
+    max-width: 50px;
 }
 
 .deals .prd-card {
@@ -995,6 +1050,15 @@ footer .links-tag {
     .deals .prd-card img {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .cat-card .cat-name {
+        line-height: 1.5;
+    }
+    .cat-card .cat-name > br:first-child {
+        display: none;
     }
 }
 
@@ -1153,6 +1217,14 @@ footer .links-tag {
         width: 95px;
         height: 70px;
     }
+
+    .banner-location {
+        display: none;
+    }
+
+    .hero-sec {
+        padding-top: 165px;
+    }
 }
 
 @media screen and (min-width: 1200px) {
@@ -1211,9 +1283,9 @@ footer .links-tag {
         top: calc(50% - 0.75rem);
     }
 
-    .deals .content {
+    /* .deals .content {
         background-size: 100% 62%;
-    }
+    } */
 
     .likes {
         font-size: 0.9rem;
@@ -1247,6 +1319,7 @@ footer .links-tag {
         height: 80px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 150px;
@@ -1335,6 +1408,7 @@ footer .links-tag {
         height: 85px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 160px;
@@ -1353,7 +1427,7 @@ footer .links-tag {
 
 @media screen and (min-width: 1680px) {
     .hero-sec {
-        padding-top: 175px;
+        padding-top: 178px;
     }
 }
 
@@ -1408,10 +1482,6 @@ footer .links-tag {
         padding: 0.4rem 1.25rem 0.5rem;
     }
 
-    .hero-sec {
-        padding-top: 192px;
-    }
-
     .nav-arrow {
         width: 3rem;
         height: 3rem;
@@ -1427,9 +1497,9 @@ footer .links-tag {
         top: calc(50% - 0.6rem);
     }
 
-    .deals .content {
+    /* .deals .content {
         background-size: 100% 63%;
-    }
+    } */
 
     .likes {
         font-size: 1.15rem;
@@ -1463,6 +1533,7 @@ footer .links-tag {
         height: 120px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 185px;
@@ -1480,6 +1551,10 @@ footer .links-tag {
 }
 
 @media screen and (max-width: 991px) {
+
+    .top-bar-location {
+        display: none;
+    }
 
     .crousel-img,
     .about-img,
@@ -1520,7 +1595,7 @@ footer .links-tag {
     }
 
     .hero-sec {
-        padding-top: 145px;
+        padding-top: 117px;
     }
 
     h1 {
@@ -1538,6 +1613,12 @@ footer .links-tag {
 
     h3.title-large {
         font-size: 2.1rem;
+    }
+}
+
+@media screen and (max-width: 502px) {
+    .hero-sec {
+        padding-top: 124px;
     }
 }
 

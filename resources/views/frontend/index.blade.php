@@ -34,10 +34,19 @@
                     </p>
                     <a href="#" class="btn btn-primary-fill">Download</a>
                 </div>
-                <p class="tiny-text secondary-text mb-0">
-                    Honest <span class="slash"> | </span> Fresh Produce <span class="slash"> | </span> Delivered to your
-                    doorstep
-                </p>
+                <div class="top-bar-location">
+                    <a href="javascript:void(0);" id="detect-location"
+                        class="tiny-text secondary-text detct-loc d-flex align-items-center justify-content-between mb-0">
+                        Detect Location
+                        <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable"
+                            alt="Down Arrow">
+                    </a>
+                    <a href="javascript:void(0);" id="header-location-name"
+                        class="tiny-text secondary-text detct-loc display-none align-items-center justify-content-end mb-0">
+                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
+                            alt="Down Arrow">
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -50,13 +59,9 @@
                     <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
                         alt="SafeQU">
                 </a>
-                <a href="javascript:void(0);" id="detect-location"
-                    class="detct-loc text-black  mr-2 d-flex align-items-center justify-content-between mb-0">
-                    Detect Location
-                    <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable" alt="Down Arrow">
-                </a>
-                <a href="javascript:void(0);" id="header-location-name"
-                    class="detct-loc text-black mr-2 mb-0 display-none"></a>
+                <p class="tiny-text secondary-text mb-0">
+                    Honest, Fresh Produce. Delivered to your doorstep.
+                </p>
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
                 {{-- <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
@@ -97,6 +102,19 @@
 
         <!-- Hero Slider -->
         <section class="hero-sec">
+            <div class="banner-location py-3 mb-4 text-left">
+                <div class="container">
+                    <a href="javascript:void(0);" id="detect-location2"
+                        class="tiny-text secondary-text detct-loc d-block align-items-center mb-0 fw500 pl-2">
+                        Detect Location<img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}"
+                            class="injectable" alt="Down Arrow">
+                    </a>
+                    <a href="javascript:void(0);" id="header-location-name2"
+                        class="tiny-text secondary-text detct-loc display-none align-items-center mb-0 fw500">
+                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
+                            alt="Down Arrow"></a>
+                </div>
+            </div>
 
             <div class="owl-carousel owl-theme hero-slider">
                 <div class="item p-0">
@@ -148,7 +166,8 @@
                                             @foreach ($sl['metas'] as $meta)
                                                 <div class="d-flex align-items-center mr-md-4">
                                                     <img src="{{ static_asset('assets/img/new-design/' . $meta['icon']) }}"
-                                                        class="injectable" width="72" height="72" alt="Hero Icon">
+                                                        class="injectable" width="72" height="72"
+                                                        alt="Hero Icon">
                                                     <span class="text-white ml-3">{{ $meta['text'] }}</span>
                                                 </div>
                                             @endforeach
@@ -182,7 +201,8 @@
                 <div class="row py-md-3">
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh Exotic <br> fruits (Indian)</p>
+                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">(Indian)</span>
+                            </p>
                             <div class="cat-img text-right">
                                 <img src="{{ static_asset('assets/img/new-design/mango.png') }}" width="241"
                                     height="120" alt="Indian Fruits">
@@ -191,7 +211,8 @@
                     </div>
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh Exotic <br> fruits (Imported)</p>
+                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">
+                                    (Imported)</span></p>
                             <div class="cat-img text-right">
                                 <img src="{{ static_asset('assets/img/new-design/grapse.png') }}" width="212"
                                     height="144" alt="Imported Fruits">
@@ -265,7 +286,7 @@
                                     @endif
                                     <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                         {{ $qty_unit_main }}</p>
-                                    <button class="btn secondary-btn"
+                                    <button class="btn primary-btn"
                                         onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                         <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                             onload="SVGInject(this)" alt="Btn Cart">
@@ -280,71 +301,51 @@
         </section>
 
         <!-- SafeQu Promise -->
-        <section class="promise pt-lg-5 py-4">
+        <section class="promise py-lg-5 py-4 v-light-bg">
             <div class="container">
-                <h2 class="title text-center">Safe<span class="primary-text">Q</span>u Promise</h2>
+                <h2 class="title text-center mb-1"><span class="primary-text">Our</span> Promise</h2>
+                <p class="text-center mb-4">Finest quality, Fresh Exotic Produce from trusted farms of your choice.</p>
 
-                <div class="row pb-2">
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
-                                        height="37" alt="Truck Icon">
-                                </div>
-                                <p class="title mb-0">Direct from Farms of Your Choice</p>
-                            </div>
-                            <p class="mb-1">Love strawberries? Order them directly from a farm in Nashik or
-                                Mahabaleshwar. Your choice!</p>
+                <div class="row py-3">
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/fresh.png') }}" width="47"
+                                height="37" alt="Truck Icon">
                         </div>
+                        <p class="title mb-0">100% Fresh</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
-                                        height="37" alt="Bucket Icon">
-                                </div>
-                                <p class="title mb-0">Fresh, Like it's from Your Back Garden</p>
-                            </div>
-                            <p class="mb-1">Order only what you need and get it fresh from the farm within 12hrs** of
-                                harvest! **For most products</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
+                                height="37" alt="Bucket Icon">
                         </div>
+                        <p class="title mb-0">Direct from farm</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/flag.png') }}" width="47"
-                                        height="37" alt="Flag Icon">
-                                </div>
-                                <p class="title mb-0">Atmanirbhar India</p>
-                            </div>
-                            <p class="mb-1">Support farmers across India by cutting out the middlemen.</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/hand-picked.png') }}" width="47"
+                                height="37" alt="Flag Icon">
                         </div>
+                        <p class="title mb-0">Hand Picked</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/money.png') }}" width="47"
-                                        height="37" alt="Money Icon">
-                                </div>
-                                <p class="title mb-0">Fair Pricing</p>
-                            </div>
-                            <p class="mb-1">Without middlemen and a dynamic community model at play, the local farms are
-                                able to offer you fresh produce at lower prices compared to high street retailers.</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
+                                height="37" alt="Money Icon">
                         </div>
+                        <p class="title mb-0">Delivered in 24hrs*</p>
                     </div>
                 </div>
+
+                <p class="text-center mt-3 small">*Excludes imported fresh exotic produce</p>
             </div>
         </section>
 
         <!-- About -->
-        <section class="about pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="about pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 py-2">
@@ -370,14 +371,55 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Deals Of The Day -->
         @if ($deals_of_the_day)
             <section class="deals pt-lg-5 py-4">
                 <div class="container">
-                    <div class="content pt-lg-5 pt-4 overflow-hide">
-                        <h2 class="title text-center pt-2 text-white">Deals Of The Day</h2>
+                    <h2 class="title text-center pt-2">Deal Of The Day</h2>
+
+                    <div class="content py-md-5 py-4 b-rd-20">
+                        <div class="row m-0 py-md-3">
+                            <div class="col-md-5 offset-md-1 prd-details py-3">
+                                <div class="d-flex align-items-start pb-2 justify-content-center flex-column h-100">
+                                    <p class="small mb-2 p-1 px-2 bg-white d-inline-block b-rd-10">Imported from
+                                        Mahabaleshwar
+                                    </p>
+
+                                    <h2 class="deal-title text-white mb-3">Strawberry</h2>
+
+                                    <h5 class="qty-val fw700 text-white mb-4">- 500 gram pack</h5>
+
+                                    <button class="btn btn-fill-white org-clr hover-primary" onclick="">
+                                        <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                            onload="SVGInject(this)" alt="Btn Cart">
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 py-md-3 text-right position-relative">
+                                <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
+                                    class="deal-prd-img" width="731" height="557" alt="Strawberry">
+                                <div class="prd-benefit">
+                                    <div class="d-flex align-items-center pb-3 mb-3 justify-content-end">
+                                        <p class="text-white fw600 mr-3 mb-0">Great <br> for Skin</p>
+                                        <img src="{{ static_asset('assets/img/new-design/face.svg') }}"
+                                            class="injectable" width="72" height="72" alt="Icon">
+                                    </div>
+                                    <div class="d-flex align-items-center pb-2 justify-content-end">
+                                        <p class="text-white fw600 mr-3 mb-0">Improves <br> Heart Health</p>
+                                        <img src="{{ static_asset('assets/img/new-design/heart.svg') }}"
+                                            class="injectable" width="72" height="72" alt="Icon">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {{-- <div class="content pt-lg-5 pt-4 overflow-hide">
                         <div class="owl-carousel owl-theme product-slider2 mx-auto">
                             @foreach ($deals_of_the_day as $prd_val)
                                 @php
@@ -440,7 +482,7 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </section>
         @endif
@@ -770,8 +812,8 @@
                         </div>
                     </div>
                     <div class="col-lg-6 text-center pt-2">
-                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598"
-                            height="357" class="injectable" alt="Rewards Image">
+                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598" height="357"
+                            class="injectable" alt="Rewards Image">
                     </div>
                 </div>
             </div>
@@ -788,7 +830,7 @@
         </section> --}}
 
         <!-- Get In Touch -->
-        <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <div class="content b-rd-10 overflow-hide text-center">
                     <div class="row position-relative">
@@ -810,7 +852,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Change Community Modal Starts -->
         <div class="modal fade changeCommunityModal" id="changeCommunityModal" tabindex="-1"
@@ -1139,6 +1181,8 @@
             // Detect Location Starts
             let locationButton = document.getElementById("detect-location");
             let locationDiv = document.getElementById("header-location-name");
+            let locationButton2 = document.getElementById("detect-location2");
+            let locationDiv2 = document.getElementById("header-location-name2");
 
             navigator.permissions.query({
                 name: 'geolocation'
@@ -1185,10 +1229,18 @@
                 );
                 //store response object
                 let data = await response.json();
-                locationDiv.innerText = `${data.address.city}`;
+                // locationDiv.innerText = `${data.address.city}`;
+                locationDiv.append(`${data.address.city}`);
                 locationDiv.classList.remove('display-none');
+                locationDiv.classList.add('d-flex');
                 locationButton.classList.remove('d-flex');
                 locationButton.classList.add('display-none');
+
+                locationDiv2.append(`${data.address.city}, ${data.address.state}, ${data.address.country}`);
+                locationDiv2.classList.remove('display-none');
+                locationDiv2.classList.add('d-block');
+                locationButton2.classList.remove('d-block');
+                locationButton2.classList.add('display-none');
                 // locationDiv.innerText = `${data.address.city}, ${data.address.country}`;
             };
             // Detect Location Ends
