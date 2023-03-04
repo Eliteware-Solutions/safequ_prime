@@ -15,7 +15,7 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
 
     public function __construct($request)
     {
-        $this->delivery_status = (trim($request->delivery_status) == '' ? 'pending' : $request->delivery_status);
+        $this->delivery_status = $request->delivery_status;
         $this->payment_status = $request->payment_status;
         $this->filter_date = $request->filter_date;
         $this->search = $request->search;

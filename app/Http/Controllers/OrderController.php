@@ -33,6 +33,7 @@ use App\Utility\NotificationUtility;
 use CoreComponentRepository;
 use App\Utility\SmsUtility;
 use Razorpay\Api\Api;
+use App\Models\PaymentWebhook;
 
 class OrderController extends Controller
 {
@@ -82,7 +83,7 @@ class OrderController extends Controller
     {
         $date = $request->date;
         $sort_search = null;
-        $delivery_status = 'pending';
+        $delivery_status = null;
         $payment_status = null;
 
         $orders = Order::orderBy('id', 'desc');
@@ -125,7 +126,7 @@ class OrderController extends Controller
     {
         $date = $request->date;
         $sort_search = null;
-        $delivery_status = 'pending';
+        $delivery_status = null;
         $payment_status = null;
 
         $orders = Order::orderBy('id', 'desc');
@@ -170,8 +171,9 @@ class OrderController extends Controller
     public function order_payment_link(Request $request)
     {
         $result = array();
+        $this->send_wati_template_msg($request->id);
         $order = Order::findOrFail($request->id);
-        $fields = array('amount' => floatval($order->grand_total) * 100, 'currency' => 'INR', "reference_id" => $order->id . '#' . rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name' => $order->user->name, 'email' => $order->user->email, 'contact' => $order->user->phone), 'reminder_enable' => true, 'notes' => array('order_id' => $order->id, 'order_code' => $order->code, 'payment_for' => 'order'), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
+        $fields = array('amount' => intval(round(floatval($order->grand_total) * 100)), 'currency' => 'INR', "reference_id" => $order->id . '#' . rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name' => $order->user->name, 'email' => $order->user->email, 'contact' => $order->user->phone), 'reminder_enable' => true, 'notes' => array('order_id' => $order->id, 'order_code' => $order->code, 'payment_for' => 'order'), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
 
         $curl = curl_init();
 
@@ -218,6 +220,36 @@ class OrderController extends Controller
         return $result;
     }
 
+    public function send_wati_template_msg($id)
+    {
+        $order = Order::find($id);
+        if ($order) {
+
+            $bodyAry = array();
+            $bodyAry['template_name'] = 'shopify_default_ordershipment_tracking_url_v5';
+            $bodyAry['broadcast_name'] = 'shopify_default_ordershipment_tracking_url_v5';
+            $bodyAry['parameters'] = array(
+                array('name' => 'name', 'value' => $order->user->name),
+                array('name' => 'shop_name', 'value' => 'SafeQu'),
+                array('name' => 'order_status_url_partial_variable', 'value' => "https://s.wati.io/"),
+            );
+
+            $client = new \GuzzleHttp\Client();
+            $phone = str_replace('+', '', $order->user->phone);
+            $response = $client->request('POST', env('WATI_API_END_POINT').'/api/v1/sendTemplateMessage?whatsappNumber='.$phone, [
+                'verify' => false,
+                'body' => json_encode($bodyAry),
+                'headers' => [
+                    'Authorization' => env('WATI_API_TOKEN'),
+                    'content-type' => 'text/json',
+                ],
+            ]);
+
+            dd($response->getBody());
+
+        }
+    }
+
     public function all_orders_show($id)
     {
         $order = Order::findOrFail(decrypt($id));
@@ -260,6 +292,77 @@ class OrderController extends Controller
         }
         $carts = $carts->paginate(15);
         return view('backend.sales.cart_orders.index', compact('carts', 'sort_search', 'date'));
+    }
+
+    public function orders_payments(Request $request)
+    {
+        $date = $request->date;
+        $all_payments = PaymentWebhook::where('is_active', 1)->orderBy('id', 'desc');
+        if ($date != null) {
+            $all_payments = $all_payments->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
+        }
+        $all_payments = $all_payments->paginate(15);
+        $payments = array();
+
+        foreach ($all_payments AS $key => $val) {
+            if (trim($val->webhook_data) != '') {
+                $webhook_data = json_decode($val->webhook_data);
+                if (isset($webhook_data->payload->payment->entity)) {
+                    if (isset($webhook_data->payload->payment->entity) && !empty($webhook_data->payload->payment->entity)) {
+                        $entity = $webhook_data->payload->payment->entity;
+                        $payments[$key]['id'] = $val->id;
+                        $payments[$key]['created_at'] = $val->created_at;
+                        $payments[$key]['payment_id'] = $entity->id;
+                        $payments[$key]['amount'] = (floatval($entity->amount) > 0 ? floatval($entity->amount) / 100 : 0);
+                        $payments[$key]['status'] = $entity->status;
+                        if ($entity->method == "card" && isset($entity->card)) {
+                            $cardDetails = (trim($entity->card->name) != '' ? '<b>Name:</b> '.$entity->card->name.'</br>' : '');
+                            $cardDetails .= ($entity->card->last4 ? '<b>Last4:</b> '.$entity->card->last4.'</br>' : '');
+                            $cardDetails .= ($entity->card->network ? '<b>Network:</b> '.$entity->card->network.'</br>' : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $cardDetails;
+                        } elseif ($entity->method == "netbanking") {
+                            $bankDetails = (trim($entity->bank) != '' ? '<b>Name:</b> '.$entity->bank : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $bankDetails;
+                        } elseif ($entity->method == "upi") {
+                            $upiDetails = (trim($entity->vpa) != '' ? '<b>ID:</b> '.$entity->vpa : '');
+                            $payments[$key]['method'] = $entity->method . '</br>' . $upiDetails;
+                        } else {
+                            $payments[$key]['method'] = $entity->method;
+                        }
+                        $payments[$key]['description'] = $entity->description;
+                        $payments[$key]['email'] = $entity->email;
+                        $payments[$key]['contact'] = $entity->contact;
+                        $payments[$key]['notes'] = '';
+                    }
+                }
+            }
+        }
+
+        return view('backend.sales.all_orders.order_payments', compact('payments', 'all_payments'));
+    }
+
+    public function orders_payment_delete($id)
+    {
+        $payment = PaymentWebhook::findOrFail($id);
+        if ($payment != null) {
+            $payment->is_active = 0;
+            $payment->save();
+            flash(translate('Order Payment has been deleted successfully'))->success();
+        } else {
+            flash(translate('Something went wrong'))->error();
+        }
+        return back();
+    }
+
+    public function bulk_order_payment_delete(Request $request)
+    {
+        if ($request->id) {
+            foreach ($request->id as $payment_id) {
+                $this->orders_payment_delete($payment_id);
+            }
+        }
+
+        return 1;
     }
 
     // Inhouse Orders
