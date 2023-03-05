@@ -237,6 +237,10 @@ button,
     display: none;
 }
 
+.owl-theme .owl-nav.disabled+.owl-dots {
+    margin: -10px;
+}
+
 .nav-arrow {
     width: 2.5rem;
     height: 2.5rem;
@@ -295,12 +299,6 @@ h1 {
     font-family: 'Pacifico', sans-serif;
 }
 
-.deal-title {
-    font-size: 4rem;
-    font-weight: 500;
-    font-family: 'Pacifico', sans-serif;
-}
-
 .title {
     margin-bottom: 1.3rem;
     font-weight: 700;
@@ -354,7 +352,8 @@ li,
     font-size: 0.95rem;
 }
 
-.small, small {
+.small,
+small {
     font-size: 85%;
 }
 
@@ -431,9 +430,11 @@ ol {
     .tiny-text {
         font-size: 12px;
     }
+
     nav .fix-part .tiny-text {
         max-width: 175px;
     }
+
     .offer-top-bar .tiny-text,
     .offer-top-bar .btn-primary-fill {
         font-size: 9px;
@@ -516,20 +517,38 @@ nav .nav-menu .nav-link:hover {
 }
 
 footer {
-    padding-top: 10rem;
-    background-color: #000000;
+    padding-top: 2rem;
+    background-image: url(../img/new-design/footer-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #e15a25e3;
 }
 
 footer a {
     display: block;
     color: white;
-    font-weight: 400;
+    font-weight: 600;
     padding: 0.25rem 0.125rem;
     letter-spacing: 0.025rem;
     margin-bottom: 0.5rem;
 }
 
+footer a:hover {
+    color: var(--default-color);
+}
+
 footer .links-tag {
+    font-size: 1.15rem;
     letter-spacing: 0.03rem;
 }
 
@@ -539,7 +558,7 @@ footer .links-tag {
 
 .copyright {
     padding: 0.6rem 1.25rem;
-    background-color: var(--primary-color);
+    background-color: var(--default-color);
 }
 
 .copyright p {
@@ -550,6 +569,7 @@ footer .links-tag {
     .get-in-touch .title {
         text-align: center !important;
     }
+
     .get-in-touch .flex-div {
         justify-content: center;
     }
@@ -701,6 +721,7 @@ footer .links-tag {
         cursor: pointer;
     }
 }
+
 @media screen and (max-width: 575px) {
     .collapsible {
         top: 116px;
@@ -848,6 +869,15 @@ footer .links-tag {
     height: 100%
 }
 
+.hear-farmers .owl-item .item {
+    justify-content: center;
+}
+
+.hear-farmers .testimonials {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
 .prd-card,
 .feed-card,
 .quote-card,
@@ -856,9 +886,13 @@ footer .links-tag {
     border: 1px solid #dff0fa;
 }
 
+.quote-card {
+    width: 100%;
+    box-shadow: 0px 16px 28px #1e320824;
+}
+
 .prd-card:hover,
 .feed-card:hover,
-.quote-card:hover,
 .community-card:hover {
     box-shadow: 0px 16px 28px #1e320824;
 }
@@ -945,25 +979,30 @@ footer .links-tag {
     background-repeat: no-repeat;
 }
 
-.deals .content .prd-details {
-    padding-left: 2rem;
+.deal-title {
+    font-size: 3.15rem;
+    font-weight: 500;
+    font-family: 'Pacifico', sans-serif;
+}
+
+.deals .content .loc-tag {
+    font-size: 13px;
+}
+
+.deals .deal-img {
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .deals .deal-prd-img {
-    max-width: 420px;
-    margin-left: auto;
-}
-
-.deals .prd-benefit {
-    max-width: 190px;
-    position: absolute;
-    top: calc(50% - 65px);
-    left: 1rem;
+    width: 100%;
+    max-width: 260px;
+    margin: 1rem auto 0;
 }
 
 .deals .prd-benefit svg,
 .deals .prd-benefit img {
-    max-width: 50px;
+    max-width: 42px;
 }
 
 .deals .prd-card {
@@ -994,6 +1033,41 @@ footer .links-tag {
     height: 100%;
 }
 
+@media screen and (min-width: 401px) {
+    .deals .prd-benefit {
+        max-width: 190px;
+        position: absolute;
+        top: calc(50% - 65px);
+        left: 1rem;
+    }
+
+    .deals .deal-prd-img {
+        width: 75%;
+        max-width: 400px;
+        margin-left: auto;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    .deals .prd-benefit svg,
+    .deals .prd-benefit img {
+        max-width: 50px;
+    }
+
+    .deal-title {
+        font-size: 3.5rem;
+    }
+
+    .deals .content .loc-tag {
+        font-size: 14px;
+    }
+
+    .deals .content .prd-details {
+        padding-left: 2rem;
+    }
+}
+
 @media screen and (min-width: 1200px) and (max-width: 1679px) {
     .deals .prd-card .prd-img {
         width: 198px;
@@ -1018,6 +1092,10 @@ footer .links-tag {
 
     .deals .prd-card .prd-content {
         width: 280px;
+    }
+
+    .deal-title {
+        font-size: 4rem;
     }
 
     .deals .prd-card img {
@@ -1057,12 +1135,34 @@ footer .links-tag {
     .cat-card .cat-name {
         line-height: 1.5;
     }
-    .cat-card .cat-name > br:first-child {
+
+    .cat-card .cat-name>br:first-child {
         display: none;
     }
 }
 
-.quote-card::before {
+@media screen and (max-width: 400px) {
+    .deals .prd-benefit {
+        max-width: 160px;
+        margin: auto;
+    }
+}
+
+.hear-customers::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url(../img/new-design/smiley-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+}
+
+/* .quote-card::before {
     content: '';
     position: absolute;
     right: 1rem;
@@ -1073,9 +1173,11 @@ footer .links-tag {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-}
+} */
 
-.quote-card .usr-img {
+.quote-card .usr-img,
+.review-card .usr-img,
+.hear-customers .usr-img {
     max-width: 4rem;
     border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -1084,6 +1186,10 @@ footer .links-tag {
     -o-border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 3px 10px -4px #3e3e3e;
+}
+
+.hear-customers .usr-img {
+    max-width: 3.25rem;
 }
 
 .quote-card .usr-rate svg {
@@ -1096,6 +1202,34 @@ footer .links-tag {
     min-width: 80px;
     margin-left: auto;
     justify-content: flex-end;
+}
+
+.review-card .usr-rate svg {
+    max-width: 1.15rem;
+    margin-right: 0.125rem;
+    margin-bottom: 0.75rem;
+}
+
+.quote-card::before {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: -1.5rem;
+    width: 1.5rem;
+    height: 1rem;
+    background-color: #dff0fa;
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+
+.quote-card::after {
+    content: '';
+    position: absolute;
+    top: 1.044rem;
+    left: -1.3rem;
+    width: 1.3rem;
+    height: 0.9rem;
+    background-color: #ffffff;
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
 }
 
 .filters a {
@@ -1169,6 +1303,14 @@ footer .links-tag {
     margin-right: 0.25rem;
 }
 
+.feed-caption {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+}
+
 .likes {
     font-size: 13px;
 }
@@ -1198,6 +1340,12 @@ footer .links-tag {
 
 .get-in-touch .content>* {
     z-index: 2;
+}
+
+@media screen and (min-width: 768px) {
+    .hear-customers .usr-img {
+        max-width: 6rem;
+    }
 }
 
 @media screen and (min-width: 992px) {

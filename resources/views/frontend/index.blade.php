@@ -381,9 +381,9 @@
 
                     <div class="content py-md-5 py-4 b-rd-20">
                         <div class="row m-0 py-md-3">
-                            <div class="col-md-5 offset-md-1 prd-details py-3">
+                            <div class="col-lg-5 offset-md-1 prd-details py-3">
                                 <div class="d-flex align-items-start pb-2 justify-content-center flex-column h-100">
-                                    <p class="small mb-2 p-1 px-2 bg-white d-inline-block b-rd-10">Imported from
+                                    <p class="loc-tag mb-2 p-1 px-2 bg-white d-inline-block b-rd-10">Imported from
                                         Mahabaleshwar
                                     </p>
 
@@ -391,7 +391,8 @@
 
                                     <h5 class="qty-val fw700 text-white mb-4">- 500 gram pack</h5>
 
-                                    <button class="btn btn-fill-white org-clr hover-primary" onclick="">
+                                    <button class="btn btn-fill-white org-clr hover-primary"
+                                        onclick="addToCart(116, 15911, 1);">
                                         <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                             onload="SVGInject(this)" alt="Btn Cart">
                                         Buy Now
@@ -399,11 +400,11 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-5 py-md-3 text-right position-relative">
+                            <div class="col-lg-5 py-md-3 text-right position-relative deal-img">
                                 <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
                                     class="deal-prd-img" width="731" height="557" alt="Strawberry">
                                 <div class="prd-benefit">
-                                    <div class="d-flex align-items-center pb-3 mb-3 justify-content-end">
+                                    <div class="d-flex align-items-center pb-3 mb-md-3 justify-content-end">
                                         <p class="text-white fw600 mr-3 mb-0">Great <br> for Skin</p>
                                         <img src="{{ static_asset('assets/img/new-design/face.svg') }}"
                                             class="injectable" width="72" height="72" alt="Icon">
@@ -488,7 +489,7 @@
         @endif
 
         <!-- Hear from Customers -->
-        <section class="hear-customers pt-lg-5 py-4 v-light-bg">
+        <section class="hear-customers pt-lg-5 py-4 position-relative">
             <div class="container">
                 <h2 class="title text-center">Hear it from Our Customers</h2>
 
@@ -496,25 +497,29 @@
 
                     @foreach ($customer_reviews as $rev)
                         <div class="item">
-                            <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
-                                <div class="d-flex align-items-center position-relative">
-                                    <div class="usr-img mr-2">
+                            <div class="p-md-3 trnsn-300ms position-relative b-rd-10">
+                                <div class="d-flex align-items-start position-relative px-md-2 pr-2 h-100">
+                                    <div class="usr-img mt-4 mr-4">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
                                             alt="Star">
                                     </div>
-                                    <div class="usr-data">
-                                        <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
-                                        <p class="mb-0">{{ $rev['community'] }}</p>
-                                    </div>
-                                    <div class="usr-rate">
-                                        @for ($i = 1; $i <= $rev['rating']; $i++)
-                                            <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
-                                                onload="SVGInject(this)" alt="Star">
-                                        @endfor
+                                    <div class="quote-card p-3 b-rd-10 position-relative h-100">
+                                        <p class="position-relative">{!! $rev['review'] !!}</p>
+                                        <div class="d-flex align-items-center position-relative">
+                                            <div class="usr-data">
+                                                <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
+                                                <p class="mb-0">{{ $rev['community'] }}</p>
+                                            </div>
+                                            <div class="usr-rate">
+                                                @for ($i = 1; $i <= $rev['rating']; $i++)
+                                                    <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
+                                                        onload="SVGInject(this)" alt="Star">
+                                                @endfor
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="mb-1 mt-3 position-relative">{!! $rev['review'] !!}</p>
                             </div>
                         </div>
                     @endforeach
@@ -716,9 +721,17 @@
                 <div class="owl-carousel owl-theme testimonials">
                     @foreach ($farmer_reviews as $rev)
                         <div class="item">
-                            <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
-                                <div class="d-flex align-items-center position-relative">
-                                    <div class="usr-img mr-2">
+                            <div class="review-card p-3 trnsn-300ms position-relative b-rd-10">
+
+                                <div class="usr-rate d-flex justify-content-center">
+                                    @for ($i = 1; $i <= $rev['rating']; $i++)
+                                        <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
+                                            onload="SVGInject(this)" alt="Star">
+                                    @endfor
+                                </div>
+                                <p class="position-relative text-center">{!! $rev['review'] !!}</p>
+                                <div class="d-flex align-items-center justify-content-center position-relative pt-3">
+                                    <div class="usr-img mr-3">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                             alt="User">
@@ -727,14 +740,7 @@
                                         <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
                                         <p class="mb-0">{{ $rev['farm'] }}</p>
                                     </div>
-                                    <div class="usr-rate">
-                                        @for ($i = 1; $i <= $rev['rating']; $i++)
-                                            <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
-                                                onload="SVGInject(this)" alt="Star">
-                                        @endfor
-                                    </div>
                                 </div>
-                                <p class="mb-1 mt-3 position-relative">{!! $rev['review'] !!}</p>
                             </div>
                         </div>
                     @endforeach
@@ -820,14 +826,14 @@
         </section>
 
         <!-- Insta Feed -->
-        {{-- <section class="insta-feed pt-lg-5 py-4 v-light-bg">
+        <section class="insta-feed pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <h2 class="title text-center">Instagram Feeds</h2>
 
                 <div class="owl-carousel owl-theme insta-feed-slider" id="instafeed"></div>
 
             </div>
-        </section> --}}
+        </section>
 
         <!-- Get In Touch -->
         {{-- <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
@@ -933,39 +939,47 @@
 
     </main>
 
-    <footer>
+    <footer class="position-relative">
         <div class="container pb-lg-5 pb-4">
             <div class="row">
-                <div class="col-md-4 pt-3">
+                <div class="col-lg-3 col-md-4 pt-3">
                     <div class="footer-logo pb-3">
                         <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260"
                             height="123" alt="SafeQu Logo">
                     </div>
                     <p class="text-white">
-                        Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati eveniet
-                        adipisicing.
+                        Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati.
                     </p>
                 </div>
-                <div class="col-md-8">
+                <div class="col-lg-9 col-md-8">
                     <div class="row">
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Quick </span> Links</p>
+                        <div class="col-lg-4 col-sm-6 py-3">
+                            <p class="links-tag text-white fw600">Connect with Us</p>
+                            <ul class="p-0 m-0">
+                                <li><a href="#">Eluciidaate Tech Pvt Ltd</a></li>
+                                <li><a href="mailto:customerservice@safequ.co">customerservice@safequ.co</a></li>
+                                <li><a href="https://wa.me/{{ $whatsAppNo }}" class="scrollTo">{{ $whatsAppNo }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-md-5 offset-md-1 offset-lg-0 col-6 py-3">
+                            <p class="links-tag text-white fw600">Quick Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="{{ route('shop.visit') }}">Products</a></li>
                                 {{-- <li><a href="#communitiesSec" class="scrollTo">Community</a></li> --}}
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Other </span> Links</p>
+                        <div class="col-lg-3 col-6 py-3">
+                            <p class="links-tag text-white fw600">Other Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('user.login') }}">My Account</a></li>
                                 <li><a href="{{ route('user.login') }}">Order History</a></li>
                                 <li><a href="{{ route('cart') }}">Cart</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Legal </span> Links</p>
+                        <div class="col-lg-3 col-md-5 offset-md-1 offset-lg-0  col-sm-6 py-3">
+                            <p class="links-tag text-white fw600">Legal Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}"
                                         target="_blank">Privacy Policy</a></li>
@@ -977,20 +991,19 @@
                                         target="_blank">Refund Policy</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Social </span> Links
-                            </p>
+                        {{-- <div class="col-md-3 col-6 py-3">
+                            <p class="links-tag text-white fw700"></p>
                             <ul class="p-0 m-0">
                                 <li><a href="https://m.facebook.com/safequ.in/" target="_blank">Facebook</a></li>
                                 <li><a href="https://www.instagram.com/safequ.india/" target="_blank">Instagram</a></li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="copyright text-center">
-            <p class="text-white mb-0 fw700">Copyright &copy; 2022 SafeQu. All Rights Reserved.</p>
+        <div class="copyright text-center position-relative">
+            <p class="text-white mb-0 fw500">Copyright &copy; 2023 SafeQu. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -1103,21 +1116,35 @@
                 }
             })
 
-            $('.testimonials').owlCarousel({
+            $('.hear-customers .testimonials').owlCarousel({
                 ...carouselObj,
                 ...{
                     margin: 15,
-                    nav: false,
+                    dots: true,
                     responsive: {
                         0: {
                             items: 1,
                         },
                         767: {
                             items: 2,
-                        },
-                        1200: {
-                            items: 3,
                             nav: true,
+                            dots: false,
+                        },
+                    }
+                }
+            })
+
+            $('.hear-farmers .testimonials').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 10,
+                    items: 1,
+                    dots: true,
+                    center: true,
+                    responsive: {
+                        767: {
+                            nav: true,
+                            dots: false,
                         },
                     }
                 }
@@ -1149,6 +1176,7 @@
                 var custFavImgHeight = $(".cust-fav .prd-img:first").innerWidth();
                 var ourRangeImgHeight = $(".our-range .prd-img:first").innerWidth();
                 var communityImgHeight = $(".communities .cm-img:first").innerWidth();
+                var instaFeedImgHeight = $("#instafeed .feed-image:first").innerWidth();
 
                 $(".deals .prd-img").each(function() {
                     $(this).css('height', dealsImgHeight);
@@ -1161,6 +1189,9 @@
                 })
                 $(".communities .cm-img").each(function() {
                     $(this).css('height', communityImgHeight);
+                })
+                $("#instafeed .feed-image").each(function() {
+                    $(this).css('height', instaFeedImgHeight);
                 })
 
                 $('.prd-content').each(function() {
@@ -1244,6 +1275,67 @@
                 // locationDiv.innerText = `${data.address.city}, ${data.address.country}`;
             };
             // Detect Location Ends
+
+            // InstaFeed
+            $.ajax({
+                type: "GET",
+                url: 'https://feeds.behold.so/Uxbc9QWrdl5z39UXeMbD',
+                success: function(data) {
+
+                    $.each(data, function(key, val) {
+                        console.log(val);
+
+                        if (val['mediaType'] == "IMAGE"){
+                            var media = '<img src="' + val['mediaUrl'] +
+                                '" class="feed-image" alt="Insta Feed">';
+                        }
+                        else {
+                            var media = `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` + val['mediaUrl'] + `" type="video/mp4"> </video>`;
+                        }
+
+                        let html = `<div class="item">
+                            <div class="feed-card trnsn-300ms">
+                                <div class="feed-img">`+ media +`</div>
+                                <p class="pt-2 my-2 px-1 feed-caption">`+ val['caption'] +`</p>
+                            </div>
+                        </div>`;
+                        // <div class="likes d-flex align-items-center py-2 fw600 light-text">
+                        //     <img src="./assets/images/like.svg" onload="SVGInject(this)" alt="Like">
+                        //     16 likes
+                        // </div>
+                        $('#instafeed').append(html)
+                    });
+
+                    $(".insta-feed-slider").owlCarousel({
+                        ...carouselObj,
+                        margin: 30,
+                        nav: false,
+                        dots: true,
+                        responsive: {
+                            0: {
+                                items: 1
+                            },
+                            575: {
+                                items: 2
+                            },
+                            768: {
+                                items: 3,
+                                nav: true,
+                                dots: false
+                            },
+                            992: {
+                                items: 4
+                            },
+                            1200: {
+                                items: 4,
+                            },
+                            1440: {
+                                items: 5
+                            }
+                        }
+                    })
+                },
+            });
         })
 
         function confrimCommunityChange(url) {
