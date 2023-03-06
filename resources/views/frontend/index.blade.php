@@ -372,7 +372,7 @@
 
         <!-- Deals Of The Day -->
         @if ($deals_of_the_day)
-            <section class="deals pt-lg-5 py-4">
+            <section class="deals py-lg-5 py-4">
                 <div class="container">
                     <h2 class="title text-center pt-2">Deal Of The Day</h2>
 
@@ -612,7 +612,7 @@
                         @endforeach
                     </div>
 
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-2">
                         <a href="{{ route('shop.visit') }}" class="btn btn-fill-black d-inline-block mx-auto">View
                             All</a>
                     </div>
@@ -621,7 +621,7 @@
         @endif
 
         <!-- Recycling -->
-        <section class="recycling py-4">
+        <section class="recycling py-lg-5 py-4">
             <div class="container position-relative">
                 <div class="content b-rd-10">
                     <div class="bg-img b-rd-20 overflow-hide">
@@ -649,7 +649,7 @@
         </section>
 
         <!-- Hear from Farmers -->
-        <section class="hear-farmers pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="hear-farmers pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <h2 class="title text-center">Hear it from Our Farmers</h2>
 
@@ -681,7 +681,7 @@
                     @endforeach
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Communities -->
         {{-- <section class="communities pt-lg-5 py-4" id="communitiesSec">
@@ -742,7 +742,7 @@
         </section> --}}
 
         <!-- Rewards -->
-        <section class="rewards py-lg-5 py-4">
+        <section class="rewards py-lg-5 py-4 v-light-bg">
             <div class="container py-lg-5 py-2">
                 <div class="row">
                     <div class="col-lg-6">
@@ -761,7 +761,7 @@
         </section>
 
         <!-- Insta Feed -->
-        <section class="insta-feed pt-lg-5 py-4 v-light-bg">
+        <section class="insta-feed pt-lg-5 py-4">
             <div class="container">
                 <h2 class="title text-center">Instagram Feeds</h2>
 
