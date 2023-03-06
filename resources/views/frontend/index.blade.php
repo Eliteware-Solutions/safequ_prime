@@ -34,10 +34,19 @@
                     </p>
                     <a href="#" class="btn btn-primary-fill">Download</a>
                 </div>
-                <p class="tiny-text secondary-text mb-0">
-                    Honest <span class="slash"> | </span> Fresh Produce <span class="slash"> | </span> Delivered to your
-                    doorstep
-                </p>
+                <div class="top-bar-location">
+                    <a href="javascript:void(0);" id="detect-location"
+                        class="tiny-text secondary-text detct-loc d-flex align-items-center justify-content-between mb-0">
+                        Detect Location
+                        <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable"
+                            alt="Down Arrow">
+                    </a>
+                    <a href="javascript:void(0);" id="header-location-name"
+                        class="tiny-text secondary-text detct-loc display-none align-items-center justify-content-end mb-0">
+                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
+                            alt="Down Arrow">
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -50,13 +59,9 @@
                     <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
                         alt="SafeQU">
                 </a>
-                <a href="javascript:void(0);" id="detect-location"
-                    class="detct-loc text-black  mr-2 d-flex align-items-center justify-content-between mb-0">
-                    Detect Location
-                    <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable" alt="Down Arrow">
-                </a>
-                <a href="javascript:void(0);" id="header-location-name"
-                    class="detct-loc text-black mr-2 mb-0 display-none"></a>
+                <p class="tiny-text secondary-text mb-0">
+                    Honest, Fresh Produce. Delivered to your doorstep.
+                </p>
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
                 {{-- <div class="search-bar mx-auto d-flex align-items-center rounded-pill">
@@ -97,35 +102,43 @@
 
         <!-- Hero Slider -->
         <section class="hero-sec">
+            <div class="banner-location py-3 mb-4 text-left">
+                <div class="container">
+                    <a href="javascript:void(0);" id="detect-location2"
+                        class="tiny-text secondary-text detct-loc d-block align-items-center mb-0 fw500 pl-2">
+                        Detect Location<img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}"
+                            class="injectable" alt="Down Arrow">
+                    </a>
+                    <a href="javascript:void(0);" id="header-location-name2"
+                        class="tiny-text secondary-text detct-loc display-none align-items-center mb-0 fw500">
+                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
+                            alt="Down Arrow"></a>
+                </div>
+            </div>
 
             <div class="owl-carousel owl-theme hero-slider">
                 <div class="item p-0">
 
-                    <div class="d-flex carousel-item active position-relative py-5">
-                        <img src="{{ static_asset('assets/img/new-design/hero-bg-1.webp') }}" class="banner b-rd-20"
+                    <div class="d-flex carousel-item active position-relative py-5 fixed-hero-banner">
+                        <img src="{{ static_asset('assets/img/new-design/hero-bg-3.webp') }}" class="banner b-rd-20"
                             alt="Hero Image">
 
-                        <div class="container">
+                        <div class="container bg-sm-white position-relative b-rd-20">
                             <div class="row position-relative align-items-center h-100">
-                                <div class="col-lg-6">
-                                    <p class="text-white hero-subtitle fw600 mb-1">Farm Fresh Exotic Fruits and Vegetables
-                                    </p>
+                                <div class="col">
+                                    <h1 class="hero-title fw700 mb-2">Farm Fresh Exotic Fruits and Vegetables
+                                    </h1>
 
-                                    <h1 class="text-white mb-4 pb-1">30% Cheaper</h1>
+                                    <h2 class="hero-subtitle fw600 primary-text mb-2 pb-1">30% Cheaper</h2>
 
-                                    <p class="text-white fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
+                                    <p class="fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
                                         avocados & spinach delivered to your doorstep, DIRECTLY from your choice of local
                                         farms. ~30% cheaper than those expensive halls of food or baskets of nature.
-                                        <i class="fas smiley align-middle fa-smile" style="font-size: 1.5rem"></i>
+                                        <i class="fas smiley align-middle fa-smile primary-text" style="font-size: 1.5rem"></i>
                                     </p>
 
-                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary">Buy
+                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary py-2 px-4">Buy
                                         Now</a>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <img src="{{ static_asset('assets/img/new-design/hero-img-1.webp') }}"
-                                        class="crousel-img" width="731" height="557" alt="Hero Image">
                                 </div>
                             </div>
 
@@ -148,7 +161,8 @@
                                             @foreach ($sl['metas'] as $meta)
                                                 <div class="d-flex align-items-center mr-md-4">
                                                     <img src="{{ static_asset('assets/img/new-design/' . $meta['icon']) }}"
-                                                        class="injectable" width="72" height="72" alt="Hero Icon">
+                                                        class="injectable" width="72" height="72"
+                                                        alt="Hero Icon">
                                                     <span class="text-white ml-3">{{ $meta['text'] }}</span>
                                                 </div>
                                             @endforeach
@@ -182,7 +196,8 @@
                 <div class="row py-md-3">
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh Exotic <br> fruits (Indian)</p>
+                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">(Indian)</span>
+                            </p>
                             <div class="cat-img text-right">
                                 <img src="{{ static_asset('assets/img/new-design/mango.png') }}" width="241"
                                     height="120" alt="Indian Fruits">
@@ -191,7 +206,8 @@
                     </div>
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
                         <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh Exotic <br> fruits (Imported)</p>
+                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">
+                                    (Imported)</span></p>
                             <div class="cat-img text-right">
                                 <img src="{{ static_asset('assets/img/new-design/grapse.png') }}" width="212"
                                     height="144" alt="Imported Fruits">
@@ -265,7 +281,7 @@
                                     @endif
                                     <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                         {{ $qty_unit_main }}</p>
-                                    <button class="btn secondary-btn"
+                                    <button class="btn primary-btn"
                                         onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                         <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                             onload="SVGInject(this)" alt="Btn Cart">
@@ -280,71 +296,51 @@
         </section>
 
         <!-- SafeQu Promise -->
-        <section class="promise pt-lg-5 py-4">
+        <section class="promise py-lg-5 py-4 v-light-bg">
             <div class="container">
-                <h2 class="title text-center">Safe<span class="primary-text">Q</span>u Promise</h2>
+                <h2 class="title text-center mb-1"><span class="primary-text">Our</span> Promise</h2>
+                <p class="text-center mb-4">Finest quality, Fresh Exotic Produce from trusted farms of your choice.</p>
 
-                <div class="row pb-2">
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
-                                        height="37" alt="Truck Icon">
-                                </div>
-                                <p class="title mb-0">Direct from Farms of Your Choice</p>
-                            </div>
-                            <p class="mb-1">Love strawberries? Order them directly from a farm in Nashik or
-                                Mahabaleshwar. Your choice!</p>
+                <div class="row py-3">
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/fresh.png') }}" width="47"
+                                height="37" alt="Truck Icon">
                         </div>
+                        <p class="title mb-0">100% Fresh</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
-                                        height="37" alt="Bucket Icon">
-                                </div>
-                                <p class="title mb-0">Fresh, Like it's from Your Back Garden</p>
-                            </div>
-                            <p class="mb-1">Order only what you need and get it fresh from the farm within 12hrs** of
-                                harvest! **For most products</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
+                                height="37" alt="Bucket Icon">
                         </div>
+                        <p class="title mb-0">Direct from farm</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/flag.png') }}" width="47"
-                                        height="37" alt="Flag Icon">
-                                </div>
-                                <p class="title mb-0">Atmanirbhar India</p>
-                            </div>
-                            <p class="mb-1">Support farmers across India by cutting out the middlemen.</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/hand-picked.png') }}" width="47"
+                                height="37" alt="Flag Icon">
                         </div>
+                        <p class="title mb-0">Hand Picked</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2">
-                        <div class="promise-card trnsn-300ms b-rd-10">
-                            <div class="d-flex align-items-center pb-3">
-                                <div class="icon b-rd-50p mr-3">
-                                    <img src="{{ static_asset('assets/img/new-design/money.png') }}" width="47"
-                                        height="37" alt="Money Icon">
-                                </div>
-                                <p class="title mb-0">Fair Pricing</p>
-                            </div>
-                            <p class="mb-1">Without middlemen and a dynamic community model at play, the local farms are
-                                able to offer you fresh produce at lower prices compared to high street retailers.</p>
+                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                        <div class="icon">
+                            <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
+                                height="37" alt="Money Icon">
                         </div>
+                        <p class="title mb-0">Delivered in 24hrs*</p>
                     </div>
                 </div>
+
+                <p class="text-center mt-3 small">*Excludes imported fresh exotic produce</p>
             </div>
         </section>
 
         <!-- About -->
-        <section class="about pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="about pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 py-2">
@@ -370,14 +366,56 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Deals Of The Day -->
         @if ($deals_of_the_day)
             <section class="deals pt-lg-5 py-4">
                 <div class="container">
-                    <div class="content pt-lg-5 pt-4 overflow-hide">
-                        <h2 class="title text-center pt-2 text-white">Deals Of The Day</h2>
+                    <h2 class="title text-center pt-2">Deal Of The Day</h2>
+
+                    <div class="content py-md-5 py-4 b-rd-20">
+                        <div class="row m-0 py-md-3">
+                            <div class="col-lg-5 offset-md-1 prd-details py-3">
+                                <div class="d-flex align-items-start pb-2 justify-content-center flex-column h-100">
+                                    <p class="loc-tag mb-2 p-1 px-2 bg-white d-inline-block b-rd-10">Imported from
+                                        Mahabaleshwar
+                                    </p>
+
+                                    <h2 class="deal-title text-white mb-3">Strawberry</h2>
+
+                                    <h5 class="qty-val fw700 text-white mb-4">- 500 gram pack</h5>
+
+                                    <button class="btn btn-fill-white org-clr hover-primary"
+                                        onclick="addToCart(116, 15911, 1);">
+                                        <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                            onload="SVGInject(this)" alt="Btn Cart">
+                                        Buy Now
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5 py-md-3 text-right position-relative deal-img">
+                                <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
+                                    class="deal-prd-img" width="731" height="557" alt="Strawberry">
+                                <div class="prd-benefit">
+                                    <div class="d-flex align-items-center pb-3 mb-md-3 justify-content-end">
+                                        <p class="text-white fw600 mr-3 mb-0">Great <br> for Skin</p>
+                                        <img src="{{ static_asset('assets/img/new-design/face.svg') }}"
+                                            class="injectable" width="72" height="72" alt="Icon">
+                                    </div>
+                                    <div class="d-flex align-items-center pb-2 justify-content-end">
+                                        <p class="text-white fw600 mr-3 mb-0">Improves <br> Heart Health</p>
+                                        <img src="{{ static_asset('assets/img/new-design/heart.svg') }}"
+                                            class="injectable" width="72" height="72" alt="Icon">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {{-- <div class="content pt-lg-5 pt-4 overflow-hide">
                         <div class="owl-carousel owl-theme product-slider2 mx-auto">
                             @foreach ($deals_of_the_day as $prd_val)
                                 @php
@@ -440,13 +478,13 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </section>
         @endif
 
         <!-- Hear from Customers -->
-        <section class="hear-customers pt-lg-5 py-4 v-light-bg">
+        <section class="hear-customers pt-lg-5 py-4 position-relative">
             <div class="container">
                 <h2 class="title text-center">Hear it from Our Customers</h2>
 
@@ -454,25 +492,29 @@
 
                     @foreach ($customer_reviews as $rev)
                         <div class="item">
-                            <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
-                                <div class="d-flex align-items-center position-relative">
-                                    <div class="usr-img mr-2">
+                            <div class="p-md-3 trnsn-300ms position-relative b-rd-10">
+                                <div class="d-flex align-items-start position-relative px-md-2 pr-2 h-100">
+                                    <div class="usr-img mt-4 mr-4">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
                                             alt="Star">
                                     </div>
-                                    <div class="usr-data">
-                                        <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
-                                        <p class="mb-0">{{ $rev['community'] }}</p>
-                                    </div>
-                                    <div class="usr-rate">
-                                        @for ($i = 1; $i <= $rev['rating']; $i++)
-                                            <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
-                                                onload="SVGInject(this)" alt="Star">
-                                        @endfor
+                                    <div class="quote-card p-3 b-rd-10 position-relative h-100">
+                                        <p class="position-relative">{!! $rev['review'] !!}</p>
+                                        <div class="d-flex align-items-center position-relative">
+                                            <div class="usr-data">
+                                                <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
+                                                <p class="mb-0">{{ $rev['community'] }}</p>
+                                            </div>
+                                            <div class="usr-rate">
+                                                @for ($i = 1; $i <= $rev['rating']; $i++)
+                                                    <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
+                                                        onload="SVGInject(this)" alt="Star">
+                                                @endfor
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="mb-1 mt-3 position-relative">{!! $rev['review'] !!}</p>
                             </div>
                         </div>
                     @endforeach
@@ -632,7 +674,7 @@
                     </div>
 
                     <div class="text-center mb-4">
-                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black mx-auto">View All</a>
+                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black d-inline-block mx-auto">View All</a>
                     </div>
                 </div>
             </section>
@@ -674,9 +716,17 @@
                 <div class="owl-carousel owl-theme testimonials">
                     @foreach ($farmer_reviews as $rev)
                         <div class="item">
-                            <div class="quote-card p-3 trnsn-300ms position-relative b-rd-10">
-                                <div class="d-flex align-items-center position-relative">
-                                    <div class="usr-img mr-2">
+                            <div class="review-card p-3 trnsn-300ms position-relative b-rd-10">
+
+                                <div class="usr-rate d-flex justify-content-center">
+                                    @for ($i = 1; $i <= $rev['rating']; $i++)
+                                        <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
+                                            onload="SVGInject(this)" alt="Star">
+                                    @endfor
+                                </div>
+                                <p class="position-relative text-center">{!! $rev['review'] !!}</p>
+                                <div class="d-flex align-items-center justify-content-center position-relative pt-3">
+                                    <div class="usr-img mr-3">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                             alt="User">
@@ -685,14 +735,7 @@
                                         <h5 class="secondary-text mb-1">{{ $rev['name'] }}</h5>
                                         <p class="mb-0">{{ $rev['farm'] }}</p>
                                     </div>
-                                    <div class="usr-rate">
-                                        @for ($i = 1; $i <= $rev['rating']; $i++)
-                                            <img src="{{ static_asset('assets/img/new-design/star.svg') }}"
-                                                onload="SVGInject(this)" alt="Star">
-                                        @endfor
-                                    </div>
                                 </div>
-                                <p class="mb-1 mt-3 position-relative">{!! $rev['review'] !!}</p>
                             </div>
                         </div>
                     @endforeach
@@ -770,25 +813,25 @@
                         </div>
                     </div>
                     <div class="col-lg-6 text-center pt-2">
-                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598"
-                            height="357" class="injectable" alt="Rewards Image">
+                        <img src="{{ static_asset('assets/img/new-design/rewards.svg') }}" width="598" height="357"
+                            class="injectable" alt="Rewards Image">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Insta Feed -->
-        {{-- <section class="insta-feed pt-lg-5 py-4 v-light-bg">
+        <section class="insta-feed pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <h2 class="title text-center">Instagram Feeds</h2>
 
                 <div class="owl-carousel owl-theme insta-feed-slider" id="instafeed"></div>
 
             </div>
-        </section> --}}
+        </section>
 
         <!-- Get In Touch -->
-        <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
+        {{-- <section class="get-in-touch pt-lg-5 py-4 v-light-bg">
             <div class="container">
                 <div class="content b-rd-10 overflow-hide text-center">
                     <div class="row position-relative">
@@ -810,7 +853,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
 
         <!-- Change Community Modal Starts -->
         <div class="modal fade changeCommunityModal" id="changeCommunityModal" tabindex="-1"
@@ -891,39 +934,47 @@
 
     </main>
 
-    <footer>
+    <footer class="position-relative">
         <div class="container pb-lg-5 pb-4">
             <div class="row">
-                <div class="col-md-4 pt-3">
+                <div class="col-lg-3 col-md-4 pt-3">
                     <div class="footer-logo pb-3">
                         <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260"
                             height="123" alt="SafeQu Logo">
                     </div>
                     <p class="text-white">
-                        Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati eveniet
-                        adipisicing.
+                        Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati.
                     </p>
                 </div>
-                <div class="col-md-8">
+                <div class="col-lg-9 col-md-8">
                     <div class="row">
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Quick </span> Links</p>
+                        <div class="col-lg-4 col-sm-6 py-3">
+                            <p class="links-tag text-white fw600">Connect with Us</p>
+                            <ul class="p-0 m-0">
+                                <li><a href="#">Eluciidaate Tech Pvt Ltd</a></li>
+                                <li><a href="mailto:customerservice@safequ.co">customerservice@safequ.co</a></li>
+                                <li><a href="https://wa.me/{{ $whatsAppNo }}" class="scrollTo">{{ $whatsAppNo }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-md-5 offset-md-1 offset-lg-0 col-6 py-3">
+                            <p class="links-tag text-white fw600">Quick Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('home') }}">Home</a></li>
                                 <li><a href="{{ route('shop.visit') }}">Products</a></li>
                                 {{-- <li><a href="#communitiesSec" class="scrollTo">Community</a></li> --}}
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Other </span> Links</p>
+                        <div class="col-lg-3 col-6 py-3">
+                            <p class="links-tag text-white fw600">Other Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ route('user.login') }}">My Account</a></li>
                                 <li><a href="{{ route('user.login') }}">Order History</a></li>
                                 <li><a href="{{ route('cart') }}">Cart</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Legal </span> Links</p>
+                        <div class="col-lg-3 col-md-5 offset-md-1 offset-lg-0  col-sm-6 py-3">
+                            <p class="links-tag text-white fw600">Legal Links</p>
                             <ul class="p-0 m-0">
                                 <li><a href="{{ static_asset('assets/docs/privacy-policy.pdf') }}"
                                         target="_blank">Privacy Policy</a></li>
@@ -935,20 +986,19 @@
                                         target="_blank">Refund Policy</a></li>
                             </ul>
                         </div>
-                        <div class="col-md-3 col-6 py-3">
-                            <p class="links-tag primary-text fw600"><span class="secondary-text">Social </span> Links
-                            </p>
+                        {{-- <div class="col-md-3 col-6 py-3">
+                            <p class="links-tag text-white fw700"></p>
                             <ul class="p-0 m-0">
                                 <li><a href="https://m.facebook.com/safequ.in/" target="_blank">Facebook</a></li>
                                 <li><a href="https://www.instagram.com/safequ.india/" target="_blank">Instagram</a></li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="copyright text-center">
-            <p class="text-white mb-0 fw700">Copyright &copy; 2022 SafeQu. All Rights Reserved.</p>
+        <div class="copyright text-center position-relative">
+            <p class="text-white mb-0 fw500">Copyright &copy; 2023 SafeQu. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -1061,21 +1111,35 @@
                 }
             })
 
-            $('.testimonials').owlCarousel({
+            $('.hear-customers .testimonials').owlCarousel({
                 ...carouselObj,
                 ...{
                     margin: 15,
-                    nav: false,
+                    dots: true,
                     responsive: {
                         0: {
                             items: 1,
                         },
                         767: {
                             items: 2,
-                        },
-                        1200: {
-                            items: 3,
                             nav: true,
+                            dots: false,
+                        },
+                    }
+                }
+            })
+
+            $('.hear-farmers .testimonials').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 10,
+                    items: 1,
+                    dots: true,
+                    center: true,
+                    responsive: {
+                        767: {
+                            nav: true,
+                            dots: false,
                         },
                     }
                 }
@@ -1107,6 +1171,7 @@
                 var custFavImgHeight = $(".cust-fav .prd-img:first").innerWidth();
                 var ourRangeImgHeight = $(".our-range .prd-img:first").innerWidth();
                 var communityImgHeight = $(".communities .cm-img:first").innerWidth();
+                var instaFeedImgHeight = $("#instafeed .feed-image:first").innerWidth();
 
                 $(".deals .prd-img").each(function() {
                     $(this).css('height', dealsImgHeight);
@@ -1119,6 +1184,9 @@
                 })
                 $(".communities .cm-img").each(function() {
                     $(this).css('height', communityImgHeight);
+                })
+                $("#instafeed .feed-image").each(function() {
+                    $(this).css('height', instaFeedImgHeight);
                 })
 
                 $('.prd-content').each(function() {
@@ -1139,6 +1207,8 @@
             // Detect Location Starts
             let locationButton = document.getElementById("detect-location");
             let locationDiv = document.getElementById("header-location-name");
+            let locationButton2 = document.getElementById("detect-location2");
+            let locationDiv2 = document.getElementById("header-location-name2");
 
             navigator.permissions.query({
                 name: 'geolocation'
@@ -1185,13 +1255,82 @@
                 );
                 //store response object
                 let data = await response.json();
-                locationDiv.innerText = `${data.address.city}`;
+                // locationDiv.innerText = `${data.address.city}`;
+                locationDiv.append(`${data.address.city}`);
                 locationDiv.classList.remove('display-none');
+                locationDiv.classList.add('d-flex');
                 locationButton.classList.remove('d-flex');
                 locationButton.classList.add('display-none');
+
+                locationDiv2.append(`${data.address.city}, ${data.address.state}, ${data.address.country}`);
+                locationDiv2.classList.remove('display-none');
+                locationDiv2.classList.add('d-block');
+                locationButton2.classList.remove('d-block');
+                locationButton2.classList.add('display-none');
                 // locationDiv.innerText = `${data.address.city}, ${data.address.country}`;
             };
             // Detect Location Ends
+
+            // InstaFeed
+            $.ajax({
+                type: "GET",
+                url: 'https://feeds.behold.so/Uxbc9QWrdl5z39UXeMbD',
+                success: function(data) {
+
+                    $.each(data, function(key, val) {
+                        console.log(val);
+
+                        if (val['mediaType'] == "IMAGE"){
+                            var media = '<img src="' + val['mediaUrl'] +
+                                '" class="feed-image" alt="Insta Feed">';
+                        }
+                        else {
+                            var media = `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` + val['mediaUrl'] + `" type="video/mp4"> </video>`;
+                        }
+
+                        let html = `<div class="item">
+                            <div class="feed-card trnsn-300ms w-100">
+                                <div class="feed-img">`+ media +`</div>
+                                <p class="pt-2 my-2 px-1 feed-caption">`+ val['caption'] +`</p>
+                            </div>
+                        </div>`;
+                        // <div class="likes d-flex align-items-center py-2 fw600 light-text">
+                        //     <img src="./assets/images/like.svg" onload="SVGInject(this)" alt="Like">
+                        //     16 likes
+                        // </div>
+                        $('#instafeed').append(html)
+                    });
+
+                    $(".insta-feed-slider").owlCarousel({
+                        ...carouselObj,
+                        margin: 30,
+                        nav: false,
+                        dots: true,
+                        responsive: {
+                            0: {
+                                items: 1
+                            },
+                            575: {
+                                items: 2
+                            },
+                            768: {
+                                items: 3,
+                                nav: true,
+                                dots: false
+                            },
+                            992: {
+                                items: 4
+                            },
+                            1200: {
+                                items: 4,
+                            },
+                            1440: {
+                                items: 5
+                            }
+                        }
+                    })
+                },
+            });
         })
 
         function confrimCommunityChange(url) {

@@ -79,6 +79,10 @@ img.object-cover-center {
     overflow-y: hidden;
 }
 
+.d-inline-block {
+    display: inline-block;
+}
+
 .trnsn-300ms,
 a,
 .btn,
@@ -127,10 +131,20 @@ button,
     -o-border-radius: 2rem;
 }
 
-.secondary-btn-o {
-    color: var(--secondary-color);
-    background-color: transparent;
-    border: 1px solid var(--secondary-color);
+.primary-btn {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.primary-btn svg path {
+    fill: white;
+}
+
+.primary-btn:hover,
+.primary-btn:active,
+.primary-btn:focus-visible {
+    color: white;
+    background-color: #d25321;
 }
 
 .secondary-btn {
@@ -149,6 +163,12 @@ button,
     background-color: #6e8e49;
 }
 
+.secondary-btn-o {
+    color: var(--secondary-color);
+    background-color: transparent;
+    border: 1px solid var(--secondary-color);
+}
+
 .btn-fill-white {
     font-weight: 500;
     background-color: white;
@@ -158,6 +178,19 @@ button,
 
 .org-clr {
     color: var(--primary-color);
+}
+
+.btn.org-clr svg,
+.btn.org-clr img {
+    max-width: 1.125rem;
+}
+
+.btn.org-clr svg path {
+    fill: var(--primary-color);
+}
+
+.btn.org-clr:hover svg path {
+    fill: white;
 }
 
 .btn-fill-white:hover,
@@ -202,6 +235,10 @@ button,
 
 .display-none {
     display: none;
+}
+
+.owl-theme .owl-nav.disabled+.owl-dots {
+    margin: -10px;
 }
 
 .nav-arrow {
@@ -262,6 +299,15 @@ h1 {
     font-family: 'Pacifico', sans-serif;
 }
 
+.hero-title {
+    font-size: 1.5rem;
+    font-family: "Poppins", sans-serif;
+}
+
+.hero-subtitle {
+    font-size: 1.75rem;
+}
+
 .title {
     margin-bottom: 1.3rem;
     font-weight: 700;
@@ -315,6 +361,11 @@ li,
     font-size: 0.95rem;
 }
 
+.small,
+small {
+    font-size: 85%;
+}
+
 ul,
 ol {
     list-style: none;
@@ -326,7 +377,7 @@ ol {
     left: 0;
     width: 100%;
     z-index: 99999;
-    background-color: #030100;
+    background-color: var(--default-color);
     padding: 0.65rem 0;
 }
 
@@ -345,6 +396,7 @@ ol {
     display: inline-block;
 }
 
+.tiny-text,
 .offer-top-bar .tiny-text {
     font-size: 14px;
 }
@@ -384,6 +436,14 @@ ol {
 
 @media screen and (max-width:575px) {
 
+    .tiny-text {
+        font-size: 12px;
+    }
+
+    nav .fix-part .tiny-text {
+        max-width: 175px;
+    }
+
     .offer-top-bar .tiny-text,
     .offer-top-bar .btn-primary-fill {
         font-size: 9px;
@@ -393,7 +453,7 @@ ol {
 header {
     padding: 0.5rem 0;
     background-color: white;
-    box-shadow: 0 0 18px #2e312b26;
+    box-shadow: 0 0 10px #2e312b26;
     position: fixed;
     top: 48px;
     left: 0;
@@ -402,7 +462,7 @@ header {
 }
 
 header .collapsible {
-    width: 78%;
+    width: 40%;
 }
 
 .nav-logo {
@@ -410,18 +470,20 @@ header .collapsible {
     max-width: 60px;
 }
 
-nav .detct-loc {
-    font-size: 0.825rem;
+.detct-loc {
     text-decoration: underline;
-    min-width: 120px;
+    min-width: 130px;
     line-height: 1.2;
-    color: var(--default-color);
 }
 
-nav .detct-loc svg,
-nav .detct-loc img {
-    max-width: 0.5rem;
-    margin-top: 0.2rem;
+.detct-loc svg,
+.detct-loc img {
+    max-width: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.detct-loc svg path {
+    fill: var(--primary-color);
 }
 
 nav .search-bar {
@@ -464,20 +526,38 @@ nav .nav-menu .nav-link:hover {
 }
 
 footer {
-    padding-top: 10rem;
-    background-color: #000000;
+    padding-top: 2rem;
+    background-image: url(../img/new-design/footer-bg.webp);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #e15a25e3;
 }
 
 footer a {
     display: block;
     color: white;
-    font-weight: 400;
+    font-weight: 600;
     padding: 0.25rem 0.125rem;
     letter-spacing: 0.025rem;
     margin-bottom: 0.5rem;
 }
 
+footer a:hover {
+    color: var(--default-color);
+}
+
 footer .links-tag {
+    font-size: 1.15rem;
     letter-spacing: 0.03rem;
 }
 
@@ -487,7 +567,7 @@ footer .links-tag {
 
 .copyright {
     padding: 0.6rem 1.25rem;
-    background-color: var(--primary-color);
+    background-color: var(--default-color);
 }
 
 .copyright p {
@@ -496,8 +576,9 @@ footer .links-tag {
 
 @media screen and (min-width: 487px) {
     .get-in-touch .title {
-        text-align: center;
+        text-align: center !important;
     }
+
     .get-in-touch .flex-div {
         justify-content: center;
     }
@@ -535,8 +616,8 @@ footer .links-tag {
         top: 49px;
     }
 
-    nav .detct-loc svg,
-    nav .detct-loc img {
+    .detct-loc svg,
+    .detct-loc img {
         max-width: 0.55rem;
     }
 
@@ -566,13 +647,13 @@ footer .links-tag {
         max-width: 76px;
     }
 
-    nav .detct-loc {
+    .detct-loc {
         font-size: 0.925rem;
         min-width: 135px;
     }
 
-    nav .detct-loc svg,
-    nav .detct-loc img {
+    .detct-loc svg,
+    .detct-loc img {
         max-width: 0.55rem;
     }
 
@@ -599,18 +680,12 @@ footer .links-tag {
     }
 }
 
-@media screen and (min-width: 1920px) {
-    .nav-logo {
-        max-width: 96px;
-    }
-}
-
 @media screen and (max-width: 991px) {
     .nav-logo {
         margin-right: 0.6rem !important
     }
 
-    nav .detct-loc {
+    .detct-loc {
         margin: 0 !important;
     }
 
@@ -655,6 +730,7 @@ footer .links-tag {
         cursor: pointer;
     }
 }
+
 @media screen and (max-width: 575px) {
     .collapsible {
         top: 116px;
@@ -682,12 +758,16 @@ footer .links-tag {
 }
 
 .hero-sec {
-    padding-top: 165px;
+    padding-top: 139px;
+}
+
+.banner-location {
+    background-color: #f8faff;
 }
 
 .hero-sec .carousel-item {
     width: 100%;
-    padding: 0 50px;
+    padding: 0 40px;
 }
 
 .hero-sec .carousel-item img.banner {
@@ -708,10 +788,6 @@ footer .links-tag {
 .hero-sec .hover-primary:hover {
     background-color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
-}
-
-.hero-subtitle {
-    font-size: 1.5rem;
 }
 
 .hero-sec p {
@@ -772,8 +848,8 @@ footer .links-tag {
 .cat-card .cat-name {
     font-size: 1rem;
     margin-bottom: 0;
-    line-height: 1.2;
-    font-weight: 600;
+    line-height: 1.35;
+    font-weight: 700;
 }
 
 .cat-card .cat-img {
@@ -798,6 +874,15 @@ footer .links-tag {
     height: 100%
 }
 
+.hear-farmers .owl-item .item {
+    justify-content: center;
+}
+
+.hear-farmers .testimonials {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
 .prd-card,
 .feed-card,
 .quote-card,
@@ -806,9 +891,13 @@ footer .links-tag {
     border: 1px solid #dff0fa;
 }
 
+.quote-card {
+    width: 100%;
+    box-shadow: 0px 16px 28px #1e320824;
+}
+
 .prd-card:hover,
 .feed-card:hover,
-.quote-card:hover,
 .community-card:hover {
     box-shadow: 0px 16px 28px #1e320824;
 }
@@ -860,28 +949,14 @@ footer .links-tag {
     margin-bottom: 0.18rem;
 }
 
-.promise-card {
-    padding: 1rem;
-    background-color: white;
-}
-
-.promise-card:hover {
-    box-shadow: 0 6px 30px -5px #d9d9d9;
-}
-
 .promise .icon {
     width: 80px;
-    min-width: 80px;
     height: 80px;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #d5d5d5;
+    margin: 0 auto 1.25rem;
 }
 
 .promise p.title {
-    line-height: 1.3;
+    line-height: 1.5;
     font-size: 1.175rem;
 }
 
@@ -903,12 +978,36 @@ footer .links-tag {
 }
 
 .deals .content {
-    background-image: url(../img/new-design/recycle-bg.webp);
-    background-position: top;
+    background-image: url(../img/new-design/deals-bg.webp);
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    background-size: 100% 61%;
-    border-top-left-radius: 2rem;
-    border-top-right-radius: 2rem;
+}
+
+.deal-title {
+    font-size: 3.15rem;
+    font-weight: 500;
+    font-family: 'Pacifico', sans-serif;
+}
+
+.deals .content .loc-tag {
+    font-size: 13px;
+}
+
+.deals .deal-img {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.deals .deal-prd-img {
+    width: 100%;
+    max-width: 260px;
+    margin: 1rem auto 0;
+}
+
+.deals .prd-benefit svg,
+.deals .prd-benefit img {
+    max-width: 42px;
 }
 
 .deals .prd-card {
@@ -939,6 +1038,41 @@ footer .links-tag {
     height: 100%;
 }
 
+@media screen and (min-width: 401px) {
+    .deals .prd-benefit {
+        max-width: 190px;
+        position: absolute;
+        top: calc(50% - 65px);
+        left: 1rem;
+    }
+
+    .deals .deal-prd-img {
+        width: 75%;
+        max-width: 400px;
+        margin-left: auto;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    .deals .prd-benefit svg,
+    .deals .prd-benefit img {
+        max-width: 50px;
+    }
+
+    .deal-title {
+        font-size: 3.5rem;
+    }
+
+    .deals .content .loc-tag {
+        font-size: 14px;
+    }
+
+    .deals .content .prd-details {
+        padding-left: 2rem;
+    }
+}
+
 @media screen and (min-width: 1200px) and (max-width: 1679px) {
     .deals .prd-card .prd-img {
         width: 198px;
@@ -963,6 +1097,10 @@ footer .links-tag {
 
     .deals .prd-card .prd-content {
         width: 280px;
+    }
+
+    .deal-title {
+        font-size: 4rem;
     }
 
     .deals .prd-card img {
@@ -998,7 +1136,38 @@ footer .links-tag {
     }
 }
 
-.quote-card::before {
+@media screen and (max-width: 767px) {
+    .cat-card .cat-name {
+        line-height: 1.5;
+    }
+
+    .cat-card .cat-name>br:first-child {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .deals .prd-benefit {
+        max-width: 160px;
+        margin: auto;
+    }
+}
+
+.hear-customers::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url(../img/new-design/smiley-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+}
+
+/* .quote-card::before {
     content: '';
     position: absolute;
     right: 1rem;
@@ -1009,9 +1178,11 @@ footer .links-tag {
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-}
+} */
 
-.quote-card .usr-img {
+.quote-card .usr-img,
+.review-card .usr-img,
+.hear-customers .usr-img {
     max-width: 4rem;
     border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -1020,6 +1191,10 @@ footer .links-tag {
     -o-border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 3px 10px -4px #3e3e3e;
+}
+
+.hear-customers .usr-img {
+    max-width: 3.25rem;
 }
 
 .quote-card .usr-rate svg {
@@ -1032,6 +1207,34 @@ footer .links-tag {
     min-width: 80px;
     margin-left: auto;
     justify-content: flex-end;
+}
+
+.review-card .usr-rate svg {
+    max-width: 1.15rem;
+    margin-right: 0.125rem;
+    margin-bottom: 0.75rem;
+}
+
+.quote-card::before {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: -1.5rem;
+    width: 1.5rem;
+    height: 1rem;
+    background-color: #dff0fa;
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+}
+
+.quote-card::after {
+    content: '';
+    position: absolute;
+    top: 1.044rem;
+    left: -1.3rem;
+    width: 1.3rem;
+    height: 0.9rem;
+    background-color: #ffffff;
+    clip-path: polygon(100% 0, 0% 100%, 100% 100%);
 }
 
 .filters a {
@@ -1105,6 +1308,14 @@ footer .links-tag {
     margin-right: 0.25rem;
 }
 
+.feed-caption {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+}
+
 .likes {
     font-size: 13px;
 }
@@ -1136,7 +1347,21 @@ footer .links-tag {
     z-index: 2;
 }
 
+@media screen and (min-width: 768px) {
+    .hear-customers .usr-img {
+        max-width: 6rem;
+    }
+
+    .fixed-hero-banner .col {
+        max-width: 92%;
+    }
+}
+
 @media screen and (min-width: 992px) {
+    .fixed-hero-banner .col {
+        max-width: 524px;
+    }
+
     .rewards .rwd-ttl {
         height: 100%;
         display: flex;
@@ -1153,15 +1378,31 @@ footer .links-tag {
         width: 95px;
         height: 70px;
     }
+
+    .banner-location {
+        display: none;
+    }
+
+    .hero-sec {
+        padding-top: 165px;
+    }
 }
 
 @media screen and (min-width: 1200px) {
-    .hero-subtitle {
-        font-size: 1.75rem;
+    .fixed-hero-banner .col {
+        max-width: 610px;
     }
 
     h1 {
         font-size: 4.5rem;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2.15rem;
     }
 
     h2.title {
@@ -1211,9 +1452,9 @@ footer .links-tag {
         top: calc(50% - 0.75rem);
     }
 
-    .deals .content {
+    /* .deals .content {
         background-size: 100% 62%;
-    }
+    } */
 
     .likes {
         font-size: 0.9rem;
@@ -1247,6 +1488,7 @@ footer .links-tag {
         height: 80px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 150px;
@@ -1258,12 +1500,20 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 1400px) {
-    .hero-subtitle {
-        font-size: 2rem;
+    .fixed-hero-banner .col {
+        max-width: 740px;
     }
 
     h1 {
         font-size: 5rem;
+    }
+
+    .hero-title {
+        font-size: 2.15rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2.5rem;
     }
 
     h2.title {
@@ -1335,6 +1585,7 @@ footer .links-tag {
         height: 85px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 160px;
@@ -1353,17 +1604,26 @@ footer .links-tag {
 
 @media screen and (min-width: 1680px) {
     .hero-sec {
-        padding-top: 175px;
+        padding-top: 178px;
     }
 }
 
 @media screen and (min-width: 1920px) {
-    .hero-subtitle {
-        font-size: 2.25rem;
+
+    .fixed-hero-banner .col {
+        max-width: 935px;
     }
 
     h1 {
         font-size: 6rem;
+    }
+
+    .hero-title {
+        font-size: 2.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 3rem;
     }
 
     h2.title {
@@ -1408,10 +1668,6 @@ footer .links-tag {
         padding: 0.4rem 1.25rem 0.5rem;
     }
 
-    .hero-sec {
-        padding-top: 192px;
-    }
-
     .nav-arrow {
         width: 3rem;
         height: 3rem;
@@ -1427,9 +1683,9 @@ footer .links-tag {
         top: calc(50% - 0.6rem);
     }
 
-    .deals .content {
+    /* .deals .content {
         background-size: 100% 63%;
-    }
+    } */
 
     .likes {
         font-size: 1.15rem;
@@ -1463,6 +1719,7 @@ footer .links-tag {
         height: 120px;
     }
 
+    .prd-card .primary-btn,
     .prd-card .secondary-btn,
     .prd-card .secondary-btn-o {
         min-width: 185px;
@@ -1480,6 +1737,31 @@ footer .links-tag {
 }
 
 @media screen and (max-width: 991px) {
+
+    .bg-sm-white {
+        background-color: #ffffffe3;
+    }
+
+    .bg-sm-white .btn-fill-white {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .fixed-hero-banner .col {
+        margin: 0 auto;
+    }
+
+    .top-bar-location {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2rem;
+    }
 
     .crousel-img,
     .about-img,
@@ -1501,6 +1783,10 @@ footer .links-tag {
         text-align: center;
     }
 
+    .hero-sec .fixed-hero-banner {
+        text-align: left;
+    }
+
     .about .d-flex {
         align-items: center;
     }
@@ -1514,17 +1800,40 @@ footer .links-tag {
     }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 767px) {
+    .hero-title {
+        font-size: 1.65rem;
+    }
+
     .hero-subtitle {
-        font-size: 1.5rem;
+        font-size: 1.85rem;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .bg-sm-white {
+        /* text-align: center; */
+        max-width: calc(100% - 2rem);
+    }
+
+    .hero-sec .carousel-item {
+        padding: 0;
     }
 
     .hero-sec {
-        padding-top: 145px;
+        padding-top: 117px;
     }
 
     h1 {
         font-size: 3.15rem;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.85rem;
     }
 
     h2.title {
@@ -1541,10 +1850,13 @@ footer .links-tag {
     }
 }
 
-@media screen and (max-width: 400px) {
-    .hero-subtitle {
-        font-size: 1.25rem;
+@media screen and (max-width: 502px) {
+    .hero-sec {
+        padding-top: 124px;
     }
+}
+
+@media screen and (max-width: 400px) {
 
     h1 {
         font-size: 2.75rem;
