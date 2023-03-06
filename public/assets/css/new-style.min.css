@@ -299,6 +299,15 @@ h1 {
     font-family: 'Pacifico', sans-serif;
 }
 
+.hero-title {
+    font-size: 1.5rem;
+    font-family: "Poppins", sans-serif;
+}
+
+.hero-subtitle {
+    font-size: 1.75rem;
+}
+
 .title {
     margin-bottom: 1.3rem;
     font-weight: 700;
@@ -518,7 +527,7 @@ nav .nav-menu .nav-link:hover {
 
 footer {
     padding-top: 2rem;
-    background-image: url(../img/new-design/footer-bg.png);
+    background-image: url(../img/new-design/footer-bg.webp);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -758,7 +767,7 @@ footer .links-tag {
 
 .hero-sec .carousel-item {
     width: 100%;
-    padding: 0 50px;
+    padding: 0 40px;
 }
 
 .hero-sec .carousel-item img.banner {
@@ -779,10 +788,6 @@ footer .links-tag {
 .hero-sec .hover-primary:hover {
     background-color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
-}
-
-.hero-subtitle {
-    font-size: 1.5rem;
 }
 
 .hero-sec p {
@@ -973,7 +978,7 @@ footer .links-tag {
 }
 
 .deals .content {
-    background-image: url(../img/new-design/deals-bg.png);
+    background-image: url(../img/new-design/deals-bg.webp);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1346,9 +1351,17 @@ footer .links-tag {
     .hear-customers .usr-img {
         max-width: 6rem;
     }
+
+    .fixed-hero-banner .col {
+        max-width: 92%;
+    }
 }
 
 @media screen and (min-width: 992px) {
+    .fixed-hero-banner .col {
+        max-width: 524px;
+    }
+
     .rewards .rwd-ttl {
         height: 100%;
         display: flex;
@@ -1376,12 +1389,20 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 1200px) {
-    .hero-subtitle {
-        font-size: 1.75rem;
+    .fixed-hero-banner .col {
+        max-width: 610px;
     }
 
     h1 {
         font-size: 4.5rem;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2.15rem;
     }
 
     h2.title {
@@ -1479,12 +1500,20 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 1400px) {
-    .hero-subtitle {
-        font-size: 2rem;
+    .fixed-hero-banner .col {
+        max-width: 740px;
     }
 
     h1 {
         font-size: 5rem;
+    }
+
+    .hero-title {
+        font-size: 2.15rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2.5rem;
     }
 
     h2.title {
@@ -1580,12 +1609,21 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 1920px) {
-    .hero-subtitle {
-        font-size: 2.25rem;
+
+    .fixed-hero-banner .col {
+        max-width: 935px;
     }
 
     h1 {
         font-size: 6rem;
+    }
+
+    .hero-title {
+        font-size: 2.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 3rem;
     }
 
     h2.title {
@@ -1700,8 +1738,29 @@ footer .links-tag {
 
 @media screen and (max-width: 991px) {
 
+    .bg-sm-white {
+        background-color: #ffffffe3;
+    }
+
+    .bg-sm-white .btn-fill-white {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .fixed-hero-banner .col {
+        margin: 0 auto;
+    }
+
     .top-bar-location {
         display: none;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 2rem;
     }
 
     .crousel-img,
@@ -1724,6 +1783,10 @@ footer .links-tag {
         text-align: center;
     }
 
+    .hero-sec .fixed-hero-banner {
+        text-align: left;
+    }
+
     .about .d-flex {
         align-items: center;
     }
@@ -1737,9 +1800,24 @@ footer .links-tag {
     }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 767px) {
+    .hero-title {
+        font-size: 1.65rem;
+    }
+
     .hero-subtitle {
-        font-size: 1.5rem;
+        font-size: 1.85rem;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .bg-sm-white {
+        /* text-align: center; */
+        max-width: calc(100% - 2rem);
+    }
+
+    .hero-sec .carousel-item {
+        padding: 0;
     }
 
     .hero-sec {
@@ -1748,6 +1826,14 @@ footer .links-tag {
 
     h1 {
         font-size: 3.15rem;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.85rem;
     }
 
     h2.title {
@@ -1771,9 +1857,6 @@ footer .links-tag {
 }
 
 @media screen and (max-width: 400px) {
-    .hero-subtitle {
-        font-size: 1.25rem;
-    }
 
     h1 {
         font-size: 2.75rem;

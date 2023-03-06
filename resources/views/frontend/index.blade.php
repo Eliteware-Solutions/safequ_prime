@@ -119,31 +119,26 @@
             <div class="owl-carousel owl-theme hero-slider">
                 <div class="item p-0">
 
-                    <div class="d-flex carousel-item active position-relative py-5">
-                        <img src="{{ static_asset('assets/img/new-design/hero-bg-1.webp') }}" class="banner b-rd-20"
+                    <div class="d-flex carousel-item active position-relative py-5 fixed-hero-banner">
+                        <img src="{{ static_asset('assets/img/new-design/hero-bg-3.webp') }}" class="banner b-rd-20"
                             alt="Hero Image">
 
-                        <div class="container">
+                        <div class="container bg-sm-white position-relative b-rd-20">
                             <div class="row position-relative align-items-center h-100">
-                                <div class="col-lg-6">
-                                    <p class="text-white hero-subtitle fw600 mb-1">Farm Fresh Exotic Fruits and Vegetables
-                                    </p>
+                                <div class="col">
+                                    <h1 class="hero-title fw700 mb-2">Farm Fresh Exotic Fruits and Vegetables
+                                    </h1>
 
-                                    <h1 class="text-white mb-4 pb-1">30% Cheaper</h1>
+                                    <h2 class="hero-subtitle fw600 primary-text mb-2 pb-1">30% Cheaper</h2>
 
-                                    <p class="text-white fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
+                                    <p class="fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
                                         avocados & spinach delivered to your doorstep, DIRECTLY from your choice of local
                                         farms. ~30% cheaper than those expensive halls of food or baskets of nature.
-                                        <i class="fas smiley align-middle fa-smile" style="font-size: 1.5rem"></i>
+                                        <i class="fas smiley align-middle fa-smile primary-text" style="font-size: 1.5rem"></i>
                                     </p>
 
-                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary">Buy
+                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary py-2 px-4">Buy
                                         Now</a>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <img src="{{ static_asset('assets/img/new-design/hero-img-1.webp') }}"
-                                        class="crousel-img" width="731" height="557" alt="Hero Image">
                                 </div>
                             </div>
 
@@ -1294,7 +1289,7 @@
                         }
 
                         let html = `<div class="item">
-                            <div class="feed-card trnsn-300ms">
+                            <div class="feed-card trnsn-300ms w-100">
                                 <div class="feed-img">`+ media +`</div>
                                 <p class="pt-2 my-2 px-1 feed-caption">`+ val['caption'] +`</p>
                             </div>
