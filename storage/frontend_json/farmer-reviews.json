@@ -1,34 +1,34 @@
 {
     "farmer1": {
-        "image": "karsandas.png",
+        "image": "user-m.png",
         "name": "Karsandas",
         "farm": "Karsandas Farm",
         "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
         "rating": 4
     },
     "farmer2": {
-        "image": "karsandas.png",
+        "image": "user-m.png",
         "name": "Karsandas",
         "farm": "Karsandas Farm",
         "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
         "rating": 2
     },
     "farmer3": {
-        "image": "karsandas.png",
+        "image": "user-m.png",
         "name": "Karsandas",
         "farm": "Karsandas Farm",
         "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
         "rating": 5
     },
     "farmer4": {
-        "image": "karsandas.png",
+        "image": "user-m.png",
         "name": "Karsandas",
         "farm": "Karsandas Farm",
         "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
         "rating": 3
     },
     "farmer5": {
-        "image": "karsandas.png",
+        "image": "user-m.png",
         "name": "Karsandas",
         "farm": "Karsandas Farm",
         "review": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium eligendi eos dolores.",
