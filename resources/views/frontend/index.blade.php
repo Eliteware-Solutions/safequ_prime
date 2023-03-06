@@ -674,7 +674,7 @@
                     </div>
 
                     <div class="text-center mb-4">
-                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black mx-auto">View All</a>
+                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black d-inline-block mx-auto">View All</a>
                     </div>
                 </div>
             </section>
