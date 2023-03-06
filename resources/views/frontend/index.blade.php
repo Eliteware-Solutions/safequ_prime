@@ -28,9 +28,9 @@
         <div class="container">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-start">
-                    <p class="offer-text tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the
-                        app.
-                        <span class="secondary-text fw500">Use Code: Safe2023</span>
+                    <p class="offer-text fw500 tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the
+                        app. &nbsp;
+                        <span>Use Code: Safe2023</span>
                     </p>
                     <a href="#" class="btn btn-primary-fill">Download</a>
                 </div>
@@ -83,9 +83,10 @@
                         <img src="{{ static_asset('assets/img/new-design/user-icon-primary.svg') }}"
                             class="injectable ml-2 mr-2 rounded-circle trnsn-300ms" alt="User Icon">
                     </a>
-                    <a href="{{ route('cart') }}" aria-label="Cart" title="Cart">
+                    <a href="{{ route('cart') }}" aria-label="Cart" title="Cart" class="cart-icon-org position-relative">
                         <img src="{{ static_asset('assets/img/new-design/btn-cart-primary.svg') }}"
                             class="injectable rounded-circle trnsn-300ms" alt="Cart Icon">
+                        <span class="rounded-circle trnsn-300ms cart-item-count" style="display: none;"></span>
                     </a>
                 </div>
             </div>
@@ -134,10 +135,11 @@
                                     <p class="fw500 mb-4">Fresh exotic fruits and vegetables like strawberries,
                                         avocados & spinach delivered to your doorstep, DIRECTLY from your choice of local
                                         farms. ~30% cheaper than those expensive halls of food or baskets of nature.
-                                        <i class="fas smiley align-middle fa-smile primary-text" style="font-size: 1.5rem"></i>
+                                        <i class="fas smiley align-middle fa-smile primary-text"
+                                            style="font-size: 1.5rem"></i>
                                     </p>
 
-                                    <a href="#our-range" class="btn scrollTo btn-fill-white org-clr hover-primary py-2 px-4">Buy
+                                    <a href="#our-range" class="btn scrollTo primary-btn py-2 px-4">Buy
                                         Now</a>
                                 </div>
                             </div>
@@ -257,7 +259,7 @@
                             }
                         @endphp
                         <div class="item">
-                            <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                            <div class="prd-card b-rd-10 overflow-hide trnsn-300ms w-100">
                                 <div class="prd-img">
                                     <img src="{{ uploaded_asset($prd_val->product->photos) }}"
                                         data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
@@ -302,7 +304,7 @@
                 <p class="text-center mb-4">Finest quality, Fresh Exotic Produce from trusted farms of your choice.</p>
 
                 <div class="row py-3">
-                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                    <div class="col-md-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/fresh.png') }}" width="47"
                                 height="37" alt="Truck Icon">
@@ -310,7 +312,7 @@
                         <p class="title mb-0">100% Fresh</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                    <div class="col-md-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
                                 height="37" alt="Bucket Icon">
@@ -318,7 +320,7 @@
                         <p class="title mb-0">Direct from farm</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                    <div class="col-md-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/hand-picked.png') }}" width="47"
                                 height="37" alt="Flag Icon">
@@ -326,7 +328,7 @@
                         <p class="title mb-0">Hand Picked</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-2 text-center">
+                    <div class="col-md-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
                                 height="37" alt="Money Icon">
@@ -387,7 +389,7 @@
                                     <h5 class="qty-val fw700 text-white mb-4">- 500 gram pack</h5>
 
                                     <button class="btn btn-fill-white org-clr hover-primary"
-                                        onclick="addToCart(116, 15911, 1);">
+                                        onclick="addToCart(14, 48, 1);">
                                         <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                             onload="SVGInject(this)" alt="Btn Cart">
                                         Buy Now
@@ -414,71 +416,6 @@
 
                         </div>
                     </div>
-
-                    {{-- <div class="content pt-lg-5 pt-4 overflow-hide">
-                        <div class="owl-carousel owl-theme product-slider2 mx-auto">
-                            @foreach ($deals_of_the_day as $prd_val)
-                                @php
-                                    $cart_qty = 0;
-                                    $product_total = 0;
-                                    $product_price = isset($prd_val->productStock) ? $prd_val->productStock->price : 0;
-                                    if (count($cart) > 0 && isset($prd_val->productStock) && isset($cart[$prd_val->productStock->id])) {
-                                        $cart_qty = $cart[$prd_val->productStock->id]['qty'];
-                                        $product_total = $cart[$prd_val->productStock->id]['total'];
-                                        $product_price = $cart[$prd_val->productStock->id]['price'];
-                                    }
-                                    $addCartQty = $cart_qty + 1;
-
-                                    $qty_unit_main = $prd_val->unit;
-                                    if (floatval($prd_val->min_qty) < 1) {
-                                        $qty_unit_main = 1000 * floatval($prd_val->min_qty) . ' ' . $prd_val->secondary_unit;
-                                    }
-                                @endphp
-                                <div class="item">
-                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
-                                        <div class="deal-type">Flat {{ $prd_val->discount }}% Off</div>
-                                        <div class="d-flex align-items-center justify-content-between flex-design">
-                                            <div class="prd-img">
-                                                <img src="{{ uploaded_asset($prd_val->photos) }}"
-                                                    data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
-                                                    class="object-cover-center" width="250" height="250"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                    alt="{{ $prd_val->getTranslation('name') }}">
-                                            </div>
-                                            <div class="prd-content p-3 position-relative">
-                                                @if (explode(',', $prd_val->tags)[0] != '')
-                                                    <span
-                                                        class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
-                                                @endif
-                                                @if ($prd_val->manufacturer_location)
-                                                    <p class="prd-loc mb-1 secondary-text">
-                                                        {{ $prd_val->manufacturer_location }}</p>
-                                                @endif
-                                                <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
-                                                </p>
-                                                @if (trim($prd_val->variation) != '')
-                                                    <p class="prd-desc mb-1 light-text">Variants :
-                                                        {{ $prd_val->variation }}
-                                                    </p>
-                                                @endif
-                                                <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
-                                                        {{ $qty_unit_main }}</s></p>
-                                                <p class="prd-pricing mb-2 fw700">
-                                                    {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
-                                                    {{ $qty_unit_main }}</p>
-                                                <button class="btn secondary-btn"
-                                                    onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
-                                                    <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                                        onload="SVGInject(this)" alt="Btn Cart">
-                                                    Add to cart
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> --}}
                 </div>
             </section>
         @endif
@@ -494,7 +431,7 @@
                         <div class="item">
                             <div class="p-md-3 trnsn-300ms position-relative b-rd-10">
                                 <div class="d-flex align-items-start position-relative px-md-2 pr-2 h-100">
-                                    <div class="usr-img mt-4 mr-4">
+                                    <div class="usr-img mt-4 mr-4 rounded-circle">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
                                             alt="Star">
@@ -533,8 +470,10 @@
                         <a href="#all_prd" aria-controls="all" role="tab" data-toggle="tab"
                             class="selected m-2 rounded-lg">All</a>
                         @foreach ($parentCategories as $p_category)
-                            <a href="#category_{{ $p_category->id }}" aria-controls="category_{{ $p_category->id }}"
-                                role="tab" data-toggle="tab" class="m-2 rounded-lg">{{ $p_category->name }}</a>
+                            @if ($p_category->name != 'Flowers')
+                                <a href="#category_{{ $p_category->id }}" aria-controls="category_{{ $p_category->id }}"
+                                    role="tab" data-toggle="tab" class="m-2 rounded-lg">{{ $p_category->name }}</a>
+                            @endif
                         @endforeach
                     </div>
                     <div class="tab-content py-0 mb-3">
@@ -564,7 +503,7 @@
                                         }
                                     @endphp
                                     <div class="item">
-                                        <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                                        <div class="prd-card b-rd-10 overflow-hide trnsn-300ms w-100">
                                             <div class="prd-img">
                                                 <img src="{{ uploaded_asset($prd_val->product->photos) }}"
                                                     data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
@@ -589,7 +528,7 @@
                                                 @endif
                                                 <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                                     {{ $qty_unit_main }}</p>
-                                                <button class="btn secondary-btn"
+                                                <button class="btn primary-btn"
                                                     onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                     <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                                         onload="SVGInject(this)" alt="Btn Cart">
@@ -630,7 +569,7 @@
                                                 }
                                             @endphp
                                             <div class="item">
-                                                <div class="prd-card b-rd-10 overflow-hide trnsn-300ms">
+                                                <div class="prd-card b-rd-10 overflow-hide trnsn-300ms w-100">
                                                     <div class="prd-img">
                                                         <img src="{{ uploaded_asset($prd_val->product->photos) }}"
                                                             data-src="{{ uploaded_asset($prd_val->product->thumbnail_img) }}"
@@ -655,7 +594,7 @@
                                                         @endif
                                                         <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                                             {{ $qty_unit_main }}</p>
-                                                        <button class="btn secondary-btn"
+                                                        <button class="btn primary-btn"
                                                             onclick="addToCart({{ $prd_val->product->id }}, {{ $prd_val->id }}, {{ $addCartQty }});">
                                                             <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
                                                                 onload="SVGInject(this)" alt="Btn Cart">
@@ -674,7 +613,8 @@
                     </div>
 
                     <div class="text-center mb-4">
-                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black d-inline-block mx-auto">View All</a>
+                        <a href="{{ route('shop.visit') }}" class="btn btn-fill-black d-inline-block mx-auto">View
+                            All</a>
                     </div>
                 </div>
             </section>
@@ -726,7 +666,7 @@
                                 </div>
                                 <p class="position-relative text-center">{!! $rev['review'] !!}</p>
                                 <div class="d-flex align-items-center justify-content-center position-relative pt-3">
-                                    <div class="usr-img mr-3">
+                                    <div class="usr-img mr-3 rounded-circle">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/community-building.png') }}';"
                                             alt="User">
@@ -943,7 +883,7 @@
                             height="123" alt="SafeQu Logo">
                     </div>
                     <p class="text-white">
-                        Lorem ipsum dolor sit, amet consectetur elit. Quasi, non quam fugiat, aliquam obcaecati.
+                        Honest, Fresh Produce. <br /> Delivered to your doorstep.
                     </p>
                 </div>
                 <div class="col-lg-9 col-md-8">
@@ -1039,6 +979,11 @@
                 $(activeDiv).addClass('active');
 
                 $(".filter-carousel .owl-carousel").trigger('refresh.owl.carousel');
+
+                $('.prd-content').each(function() {
+                    $(this).css('min-height', ($(this).parent().innerHeight() - ($(this).parent()
+                        .find('.prd-img').innerHeight())));
+                })
             })
 
             let carouselObj = {
@@ -1058,11 +1003,12 @@
                 interval: 7000,
             })
 
-            $('.community-slider, .product-slider').owlCarousel({
+            $('.product-slider').owlCarousel({
                 ...carouselObj,
                 ...{
                     margin: 30,
                     nav: false,
+                    dots: true,
                     responsive: {
                         0: {
                             items: 1,
@@ -1079,35 +1025,14 @@
                         1200: {
                             items: 4,
                             nav: true,
+                            dots: false,
                         },
                         1440: {
                             items: 5,
                             nav: true,
+                            dots: false,
                         },
                     },
-                }
-            })
-
-            $('.product-slider2').owlCarousel({
-                ...carouselObj,
-                ...{
-                    margin: 15,
-                    nav: false,
-                    autoplay: false,
-                    responsive: {
-                        0: {
-                            items: 1,
-                        },
-                        767: {
-                            items: 2,
-                        },
-                        992: {
-                            items: 3,
-                        },
-                        1200: {
-                            items: 2,
-                        },
-                    }
                 }
             })
 
@@ -1134,6 +1059,7 @@
                 ...{
                     margin: 10,
                     items: 1,
+                    nav: false,
                     dots: true,
                     center: true,
                     responsive: {
@@ -1278,26 +1204,21 @@
                 success: function(data) {
 
                     $.each(data, function(key, val) {
-                        console.log(val);
-
-                        if (val['mediaType'] == "IMAGE"){
+                        if (val['mediaType'] == "IMAGE") {
                             var media = '<img src="' + val['mediaUrl'] +
                                 '" class="feed-image" alt="Insta Feed">';
-                        }
-                        else {
-                            var media = `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` + val['mediaUrl'] + `" type="video/mp4"> </video>`;
+                        } else {
+                            var media =
+                                `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` +
+                                val['mediaUrl'] + `" type="video/mp4"> </video>`;
                         }
 
                         let html = `<div class="item">
                             <div class="feed-card trnsn-300ms w-100">
-                                <div class="feed-img">`+ media +`</div>
-                                <p class="pt-2 my-2 px-1 feed-caption">`+ val['caption'] +`</p>
+                                <div class="feed-img">` + media + `</div>
+                                <p class="pt-2 my-2 px-1 feed-caption">` + val['caption'] + `</p>
                             </div>
                         </div>`;
-                        // <div class="likes d-flex align-items-center py-2 fw600 light-text">
-                        //     <img src="./assets/images/like.svg" onload="SVGInject(this)" alt="Like">
-                        //     16 likes
-                        // </div>
                         $('#instafeed').append(html)
                     });
 
@@ -1308,24 +1229,26 @@
                         dots: true,
                         responsive: {
                             0: {
-                                items: 1
+                                items: 1,
                             },
                             575: {
-                                items: 2
+                                items: 2,
                             },
                             768: {
                                 items: 3,
-                                nav: true,
-                                dots: false
                             },
                             992: {
                                 items: 4
                             },
                             1200: {
                                 items: 4,
+                                nav: true,
+                                dots: false,
                             },
                             1440: {
-                                items: 5
+                                items: 5,
+                                nav: true,
+                                dots: false,
                             }
                         }
                     })

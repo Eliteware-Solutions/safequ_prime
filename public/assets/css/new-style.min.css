@@ -378,17 +378,12 @@ ol {
     width: 100%;
     z-index: 99999;
     background-color: var(--default-color);
-    padding: 0.65rem 0;
-}
-
-.offer-top-bar .slash {
-    color: #a8a8a8;
+    padding: 0.8rem 0;
 }
 
 .offer-top-bar p {
-    font-weight: 300;
-    letter-spacing: 0.0325rem;
-    padding-right: 0.5rem;
+    letter-spacing: 0.04rem;
+    padding-right: 1rem;
 }
 
 .offer-top-bar p span.secondary-text {
@@ -398,11 +393,17 @@ ol {
 
 .tiny-text,
 .offer-top-bar .tiny-text {
-    font-size: 14px;
+    font-size: 1rem;
+}
+
+.offer-top-bar .tiny-text span {
+    font-size: 0.85rem;
+    min-width: 155px;
+    display: inline-block;
 }
 
 .offer-top-bar .btn-primary-fill {
-    font-size: 14px;
+    font-size: 0.92rem;
     min-width: max-content;
     padding: 0.15rem 0.75rem;
     font-weight: 500;
@@ -419,7 +420,7 @@ ol {
 
 @media screen and (min-width:992px) and (max-width:1200px) {
     .offer-top-bar .offer-text {
-        width: 360px;
+        width: 488px;
     }
 }
 
@@ -435,18 +436,26 @@ ol {
 }
 
 @media screen and (max-width:575px) {
-
-    .tiny-text {
-        font-size: 12px;
-    }
-
     nav .fix-part .tiny-text {
         max-width: 175px;
     }
 
+    .tiny-text,
     .offer-top-bar .tiny-text,
+    .offer-top-bar .tiny-text span {
+        font-size: 0.8rem;
+    }
+
+    .offer-top-bar .tiny-text span {
+        min-width: 139px
+    }
+
     .offer-top-bar .btn-primary-fill {
-        font-size: 9px;
+        font-size: 0.7rem;
+    }
+
+    .offer-top-bar p {
+        padding-right: 0.35rem;
     }
 }
 
@@ -455,7 +464,7 @@ header {
     background-color: white;
     box-shadow: 0 0 10px #2e312b26;
     position: fixed;
-    top: 48px;
+    top: 59px;
     left: 0;
     width: 100%;
     z-index: 9999;
@@ -472,8 +481,9 @@ header .collapsible {
 
 .detct-loc {
     text-decoration: underline;
-    min-width: 130px;
+    min-width: 160px;
     line-height: 1.2;
+    letter-spacing: 0.04rem;
 }
 
 .detct-loc svg,
@@ -523,6 +533,22 @@ nav .nav-menu .nav-link {
 nav .nav-menu .nav-link.active,
 nav .nav-menu .nav-link:hover {
     color: var(--primary-color);
+}
+
+nav .cart-icon-org span {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -0.75rem;
+    right: -0.75rem;
+    height: 1.6rem;
+    width: 1.6rem;
+    background: var(--secondary-color);
+    border: 2px solid white;
+    color: white;
+    font-size: 13px !important;
+    line-height: 1 !important;
 }
 
 footer {
@@ -584,15 +610,15 @@ footer .links-tag {
     }
 }
 
-@media screen and (min-width: 503px) {
+@media screen and (min-width: 402px) {
     header {
-        top: 41px;
+        top: 64px;
     }
 }
 
 @media screen and (min-width: 576px) {
     header {
-        top: 63px;
+        top: 74px;
     }
 }
 
@@ -613,7 +639,7 @@ footer .links-tag {
 
 @media screen and (min-width: 1200px) {
     header {
-        top: 49px;
+        top: 54px;
     }
 
     .detct-loc svg,
@@ -645,11 +671,6 @@ footer .links-tag {
 @media screen and (min-width: 1440px) {
     .nav-logo {
         max-width: 76px;
-    }
-
-    .detct-loc {
-        font-size: 0.925rem;
-        min-width: 135px;
     }
 
     .detct-loc svg,
@@ -758,7 +779,7 @@ footer .links-tag {
 }
 
 .hero-sec {
-    padding-top: 139px;
+    padding-top: 150px;
 }
 
 .banner-location {
@@ -952,12 +973,13 @@ footer .links-tag {
 .promise .icon {
     width: 80px;
     height: 80px;
-    margin: 0 auto 1.25rem;
+    margin: 0 auto 0.75rem;
 }
 
 .promise p.title {
     line-height: 1.5;
     font-size: 1.175rem;
+    padding-bottom: 0.75rem;
 }
 
 .about .about-img svg,
@@ -1184,11 +1206,6 @@ footer .links-tag {
 .review-card .usr-img,
 .hear-customers .usr-img {
     max-width: 4rem;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
     overflow: hidden;
     box-shadow: 0 3px 10px -4px #3e3e3e;
 }
@@ -1384,7 +1401,7 @@ footer .links-tag {
     }
 
     .hero-sec {
-        padding-top: 165px;
+        padding-top: 175px;
     }
 }
 
@@ -1429,7 +1446,7 @@ footer .links-tag {
     }
 
     .hero-sec {
-        padding-top: 155px;
+        padding-top: 170px;
     }
 
     .recycling p.large,
@@ -1549,7 +1566,7 @@ footer .links-tag {
     }
 
     .hero-sec {
-        padding-top: 165px;
+        padding-top: 175px;
     }
 
     .likes {
@@ -1604,7 +1621,7 @@ footer .links-tag {
 
 @media screen and (min-width: 1680px) {
     .hero-sec {
-        padding-top: 178px;
+        padding-top: 190px;
     }
 }
 
@@ -1821,7 +1838,7 @@ footer .links-tag {
     }
 
     .hero-sec {
-        padding-top: 117px;
+        padding-top: 140px;
     }
 
     h1 {
@@ -1850,12 +1867,6 @@ footer .links-tag {
     }
 }
 
-@media screen and (max-width: 502px) {
-    .hero-sec {
-        padding-top: 124px;
-    }
-}
-
 @media screen and (max-width: 400px) {
 
     h1 {
@@ -1873,6 +1884,16 @@ footer .links-tag {
 
     h3.title-large {
         font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 408px) {
+    header {
+        top: 84px;
+    }
+
+    .hero-sec {
+        padding-top: 159px;
     }
 }
 
@@ -1925,23 +1946,23 @@ footer .links-tag {
 .aiz-notify .close:before {
     content: "";
     position: absolute;
-    border-radius: 50%;
     background-color: #fff;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
     z-index: -1;
     opacity: 0;
-    -moz-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
+    border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
 }
 
 .aiz-notify .close:hover {
