@@ -372,13 +372,9 @@ ol {
 }
 
 .offer-top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 99999;
     background-color: var(--default-color);
     padding: 0.8rem 0;
+    margin-bottom: 0.7rem;
 }
 
 .offer-top-bar p {
@@ -460,14 +456,17 @@ ol {
 }
 
 header {
-    padding: 0.5rem 0;
+    padding: 0 0 0.7rem;
     background-color: white;
     box-shadow: 0 0 10px #2e312b26;
+    z-index: 9999;
+}
+
+header.fixedHeader {
     position: fixed;
-    top: 59px;
+    top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
 }
 
 header .collapsible {
@@ -610,18 +609,6 @@ footer .links-tag {
     }
 }
 
-@media screen and (min-width: 402px) {
-    header {
-        top: 64px;
-    }
-}
-
-@media screen and (min-width: 576px) {
-    header {
-        top: 74px;
-    }
-}
-
 @media screen and (min-width: 992px) {
     nav .search-bar input {
         font-size: 0.9rem;
@@ -638,9 +625,6 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 1200px) {
-    header {
-        top: 54px;
-    }
 
     .detct-loc svg,
     .detct-loc img {
@@ -776,10 +760,6 @@ footer .links-tag {
     .container {
         max-width: 1560px;
     }
-}
-
-.hero-sec {
-    padding-top: 150px;
 }
 
 .banner-location {
@@ -1375,6 +1355,11 @@ footer .links-tag {
 }
 
 @media screen and (min-width: 992px) {
+
+    .hero-sec {
+        padding-top: 30px;
+    }
+
     .fixed-hero-banner .col {
         max-width: 524px;
     }
@@ -1398,10 +1383,6 @@ footer .links-tag {
 
     .banner-location {
         display: none;
-    }
-
-    .hero-sec {
-        padding-top: 175px;
     }
 }
 
@@ -1443,10 +1424,6 @@ footer .links-tag {
     .sub-title,
     .hero-sec .prd-desc span {
         font-size: 0.925rem;
-    }
-
-    .hero-sec {
-        padding-top: 170px;
     }
 
     .recycling p.large,
@@ -1565,10 +1542,6 @@ footer .links-tag {
         padding: 0.4rem 1.15rem 0.385rem;
     }
 
-    .hero-sec {
-        padding-top: 175px;
-    }
-
     .likes {
         font-size: 0.95rem;
     }
@@ -1616,12 +1589,6 @@ footer .links-tag {
     .whats-app-icon img {
         width: 2.9rem;
         height: 2.9rem;
-    }
-}
-
-@media screen and (min-width: 1680px) {
-    .hero-sec {
-        padding-top: 190px;
     }
 }
 
@@ -1837,10 +1804,6 @@ footer .links-tag {
         padding: 0;
     }
 
-    .hero-sec {
-        padding-top: 140px;
-    }
-
     h1 {
         font-size: 3.15rem;
     }
@@ -1884,16 +1847,6 @@ footer .links-tag {
 
     h3.title-large {
         font-size: 1.6rem;
-    }
-}
-
-@media screen and (max-width: 408px) {
-    header {
-        top: 84px;
-    }
-
-    .hero-sec {
-        padding-top: 159px;
     }
 }
 

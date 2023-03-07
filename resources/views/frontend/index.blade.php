@@ -23,36 +23,35 @@
 @endphp
 
 @section('content')
-
-    <div class="offer-top-bar">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center justify-content-start">
-                    <p class="offer-text fw500 tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first order on the
-                        app. &nbsp;
-                        <span>Use Code: Safe2023</span>
-                    </p>
-                    <button class="btn btn-primary-fill" id="installPWA">Download</button>
-                </div>
-                <div class="top-bar-location">
-                    <a href="javascript:void(0);" id="detect-location"
-                        class="tiny-text secondary-text detct-loc d-flex align-items-center justify-content-between mb-0">
-                        Detect Location
-                        <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable"
-                            alt="Down Arrow">
-                    </a>
-                    <a href="javascript:void(0);" id="header-location-name"
-                        class="tiny-text secondary-text detct-loc display-none align-items-center justify-content-end mb-0">
-                        <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
-                            alt="Down Arrow">
-                    </a>
+    <!-- Navigation -->
+    <header class="header">
+        <div class="offer-top-bar">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center justify-content-start">
+                        <p class="offer-text fw500 tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first
+                            order
+                            on the app. &nbsp;
+                            <span>Use Code: Safe2023</span>
+                        </p>
+                        <button class="btn btn-primary-fill" id="installPWA" style="display: none">Download</button>
+                    </div>
+                    <div class="top-bar-location">
+                        <a href="javascript:void(0);" id="detect-location"
+                            class="tiny-text secondary-text detct-loc d-flex align-items-center justify-content-between mb-0">
+                            Detect Location
+                            <img src="{{ static_asset('assets/img/new-design/dwn-arw.svg') }}" class="injectable"
+                                alt="Down Arrow">
+                        </a>
+                        <a href="javascript:void(0);" id="header-location-name"
+                            class="tiny-text secondary-text detct-loc display-none align-items-center justify-content-end mb-0">
+                            <img src="{{ static_asset('assets/img/new-design/map-pin.svg') }}" class="injectable mr-2"
+                                alt="Down Arrow">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Navigation -->
-    <header class="header">
         <nav class="d-flex align-items-center justify-content-between container">
             <div class="d-flex align-items-center fix-part">
                 <a href="{{ route('home') }}" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
@@ -955,6 +954,30 @@
     <script>
         // ---- SVG Injector -  To convert IMG tag in SVG code. (Only for SVG images)
         SVGInject(document.querySelectorAll("img.injectable"));
+
+        $(window).scroll(function() {
+            let scroll = $(window).scrollTop();
+            let header = $("header");
+
+            if (scroll >= 0.1) {
+                header.addClass("fixedHeader");
+
+                if ($(window).width() > 991) {
+                    $('.hero-sec').css('padding-top', header.height() + 30)
+                } else {
+                    $('.hero-sec').css('padding-top', header.height())
+                }
+                //
+            } else {
+                header.removeClass("fixedHeader");
+
+                if ($(window).width() > 991) {
+                    $('.hero-sec').css('padding-top', '30px')
+                } else {
+                    $('.hero-sec').css('padding-top', 0)
+                }
+            }
+        });
 
         $(document).ready(function() {
             $('a.scrollTo').click(function() {
