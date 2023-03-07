@@ -32,7 +32,7 @@
                         app. &nbsp;
                         <span>Use Code: Safe2023</span>
                     </p>
-                    <a href="#" class="btn btn-primary-fill">Download</a>
+                    <button class="btn btn-primary-fill" id="installPWA">Download</button>
                 </div>
                 <div class="top-bar-location">
                     <a href="javascript:void(0);" id="detect-location"
