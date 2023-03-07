@@ -67,16 +67,19 @@
 
     function showInstallPromotion() {
         $('.pwaPopup').show();
+        $('.installPWABtn').show();
     }
 
     function hideInstallPromotion() {
         $('#pwaPopup').hide();
+        $('.installPWABtn').hide();
     }
 
     async function installEvent() {
         // Hide the app provided install promotion
         hideInstallPromotion();
         $('.pwaPopup').hide();
+        $('.installPWABtn').hide();
         // Show the install prompt
         deferredPrompt.prompt();
         // Wait for the user to respond to the prompt
