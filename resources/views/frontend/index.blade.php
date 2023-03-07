@@ -30,11 +30,10 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center justify-content-start">
                         <p class="offer-text fw500 tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first
-                            order
-                            on the app. &nbsp;
+                            order on the app. &nbsp;
                             <span>Use Code: Safe2023</span>
                         </p>
-                        <button class="btn btn-primary-fill" id="installPWA" style="display: none">Download</button>
+                        <button class="btn btn-primary-fill installPWABtn" id="installPWA" style="display: none">Download</button>
                     </div>
                     <div class="top-bar-location">
                         <a href="javascript:void(0);" id="detect-location"
@@ -948,6 +947,9 @@
                 height="40" alt="WhatsApp">
         </a>
     </div>
+
+    <!-- Hidden Field for PWA for temp solution to undefined error of id -->
+    <input type="hidden" id="installPWAMenu">
 @endsection
 
 @section('script')
