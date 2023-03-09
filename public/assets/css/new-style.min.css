@@ -287,22 +287,20 @@ button,
 .whats-app-icon,
 .fixed-cart {
     position: fixed;
-    bottom: 1.75rem;
-    right: 1.25rem;
+    bottom: 2rem;
+    right: 1.5rem;
     z-index: 999;
 }
 
 .whats-app-icon svg,
 .whats-app-icon img,
-.fixed-cart svg,
-.fixed-cart img {
+.fixed-cart {
     width: 2.5rem;
     height: 2.5rem;
 }
 
 .fixed-cart {
-    bottom: 5.15rem;
-    right: 1.15rem;
+    bottom: 5.5rem;
     box-shadow: 0 3px 10px -3px #393939;
 }
 
@@ -634,6 +632,10 @@ footer .links-tag {
     nav .nav-icons svg,
     nav .nav-icons img {
         width: 1.8rem;
+    }
+
+    .fixed-cart {
+        display: none !important;
     }
 }
 
