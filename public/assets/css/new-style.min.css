@@ -263,6 +263,10 @@ button,
     fill: #ffffff;
 }
 
+.owl-theme .owl-dots .owl-dot span {
+    margin: 5px 6px;
+}
+
 .owl-stage-outer {
     z-index: 1;
     padding: 0 2px;
@@ -280,17 +284,26 @@ button,
     justify-content: space-between;
 }
 
-.whats-app-icon {
+.whats-app-icon,
+.fixed-cart {
     position: fixed;
-    bottom: 2rem;
-    right: 1.5rem;
+    bottom: 1.75rem;
+    right: 1.25rem;
     z-index: 999;
 }
 
 .whats-app-icon svg,
-.whats-app-icon img {
+.whats-app-icon img,
+.fixed-cart svg,
+.fixed-cart img {
     width: 2.5rem;
     height: 2.5rem;
+}
+
+.fixed-cart {
+    bottom: 5.15rem;
+    right: 1.15rem;
+    box-shadow: 0 3px 10px -3px #393939;
 }
 
 h1 {
@@ -534,7 +547,7 @@ nav .nav-menu .nav-link:hover {
     color: var(--primary-color);
 }
 
-nav .cart-icon-org span {
+.cart-icon-org span {
     position: absolute;
     display: flex;
     align-items: center;
@@ -696,10 +709,9 @@ footer .links-tag {
 
     .collapsible {
         position: fixed;
-        top: 138px;
         right: -100%;
         width: 100vw !important;
-        min-height: calc(100vh - 138px);
+        z-index: 999;
         overflow-x: hidden;
         overflow-y: auto;
         flex-direction: column;
@@ -733,20 +745,6 @@ footer .links-tag {
         display: block;
         max-width: 2.75rem;
         cursor: pointer;
-    }
-}
-
-@media screen and (max-width: 575px) {
-    .collapsible {
-        top: 116px;
-        min-height: calc(100vh - 116px);
-    }
-}
-
-@media screen and (max-width: 502px) {
-    .collapsible {
-        top: 124px;
-        min-height: calc(100vh - 124px);
     }
 }
 
