@@ -72,26 +72,13 @@ class HomeController extends Controller
         $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->inRandomOrder()->limit(10)->get();
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
-
-        // $deals_of_the_day = array();
-        // if ($flash_deal) {
-        //     foreach ($flash_deal->flash_deal_products as $deal_products) {
-        //         if ($deal_products->deal_products->productStock) {
-        //             $deals_of_the_day[$deal_products->deal_products->id] = $deal_products->deal_products->productStock;
-        //         }
-        //     }
-        // }
         $deals_of_the_day = Product::where('todays_deal', 1)->limit(4)->get();
 
-        // $best_selling_products = array();
         $all_products = array();
         foreach ($parentCategories as $cat) {
-            // $best_selling_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
-            //     $query->where('parent_category_id', $cat->id);
-            // })->where('is_best_selling', 1)->where('seller_id', $local_shop_id)->inRandomOrder()->limit(8)->get();
             $all_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
                 $query->where('parent_category_id', $cat->id);
-            })->where('seller_id', 0)->inRandomOrder()->limit(10)->get();
+            })->where('seller_id', 0)->inRandomOrder()->limit(7)->get();
         }
 
         $our_full_range_of_products = array();

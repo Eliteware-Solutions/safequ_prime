@@ -64,13 +64,15 @@
                                                 onclick="filterCategory($(this))">All</a></li>
                                         @php $i=0; @endphp
                                         @foreach ($categories as $key => $cat)
-                                            <li>
-                                                <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                    class="filter-button @if ($i == 0) active @endif"
-                                                    onclick="filterCategory($(this))">
-                                                    {{ $cat['name'] }}
-                                                </a>
-                                            </li>
+                                            @if ($cat['name'] != 'Flowers')
+                                                <li>
+                                                    <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
+                                                        class="filter-button @if ($i == 0) active @endif"
+                                                        onclick="filterCategory($(this))">
+                                                        {{ $cat['name'] }}
+                                                    </a>
+                                                </li>
+                                            @endif
                                             @php $i++; @endphp
                                         @endforeach
                                     </ul>
@@ -80,90 +82,94 @@
                                 @if (count($all_products) > 0)
                                     <div class="row py-4">
                                         @foreach ($all_products as $product)
-                                            @php
-                                                $cart_qty = 0;
-                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                    $cart_qty = $cart[$product->id]['qty'];
-                                                }
-                                                $addCartQty = $cart_qty + 1;
+                                            @if ($product->product->category->slug != 'flowers')
+                                                @php
+                                                    $cart_qty = 0;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $cart_qty = $cart[$product->id]['qty'];
+                                                    }
+                                                    $addCartQty = $cart_qty + 1;
 
-                                                $product_total = 0;
-                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                    $product_total = $cart[$product->id]['total'];
-                                                }
+                                                    $product_total = 0;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $product_total = $cart[$product->id]['total'];
+                                                    }
 
-                                                $product_price = $product->price;
-                                                if (count($cart) > 0 && isset($cart[$product->id])) {
-                                                    $product_price = $cart[$product->id]['price'];
-                                                }
+                                                    $product_price = $product->price;
+                                                    if (count($cart) > 0 && isset($cart[$product->id])) {
+                                                        $product_price = $cart[$product->id]['price'];
+                                                    }
 
-                                                $qty_unit_main = $product->product->unit;
-                                                if (floatval($product->product->min_qty) < 1) {
-                                                    $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
-                                                }
-                                            @endphp
-                                            <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} ">
-                                                <div class="tab_horizontal_card p-3 m-0 position-relative">
-                                                    @if ($product->product->todays_deal == 1)
-                                                        <div class="deal-type">Flat {{ $product->product->discount }}% Off</div>
-                                                    @endif
-                                                    <div class="tab_hori_inr">
-                                                        <div>
-                                                            <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                                class="img-rounded top_img"
-                                                                alt="{{ $product->product->name }}">
+                                                    $qty_unit_main = $product->product->unit;
+                                                    if (floatval($product->product->min_qty) < 1) {
+                                                        $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
+                                                    }
+                                                @endphp
+                                                <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} ">
+                                                    <div class="tab_horizontal_card p-3 m-0 position-relative">
+                                                        @if ($product->product->todays_deal == 1)
+                                                            <div class="deal-type">Flat {{ $product->product->discount }}%
+                                                                Off</div>
+                                                        @endif
+                                                        <div class="tab_hori_inr">
+                                                            <div>
+                                                                <img src="{{ uploaded_asset($product->product->photos) }}"
+                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                                    class="img-rounded top_img"
+                                                                    alt="{{ $product->product->name }}">
+                                                            </div>
+                                                            <div class="  tab_horizontal_card_detail  ">
+                                                                @if ($product->product->manufacturer_location)
+                                                                    <span>{{ $product->product->manufacturer_location }}</span>
+                                                                @endif
+                                                                <p class="titlecard">
+                                                                    {{ $product->product->name }} </p>
+                                                                @if ($product->product->todays_deal == 1)
+                                                                    <p class="prd-disc-pricing mb-1">
+                                                                        <s>{!! single_price_web($product_price) !!} /
+                                                                            {{ $qty_unit_main }}</s>
+                                                                    </p>
+                                                                    <p class="price">
+                                                                        {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} /
+                                                                        {{ $qty_unit_main }}
+                                                                    </p>
+                                                                @else
+                                                                    <p class="price">{!! single_price_web($product_price) !!} /
+                                                                        {{ $qty_unit_main }}</p>
+                                                                @endif
+                                                                <div class="cartbtn">
+                                                                    <img src="./public/assets/img/carts.svg" class=" cart"
+                                                                        alt="cart">
+                                                                    <a href="javacript:;" class="cartbtn"> Add
+                                                                        to Cart</a>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="  tab_horizontal_card_detail  ">
-                                                            @if ($product->product->manufacturer_location)
-                                                                <span>{{ $product->product->manufacturer_location }}</span>
-                                                            @endif
-                                                            <p class="titlecard">
-                                                                {{ $product->product->name }} </p>
-                                                            @if ($product->product->todays_deal == 1)
-                                                                <p class="prd-disc-pricing mb-1">
-                                                                    <s>{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</s>
-                                                                </p>
-                                                                <p class="price">
-                                                                    {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} /
-                                                                    {{ $qty_unit_main }}
-                                                                </p>
-                                                            @else
-                                                                <p class="price">{!! single_price_web($product_price) !!} /
-                                                                    {{ $qty_unit_main }}</p>
-                                                            @endif
-                                                            <div class="cartbtn">
-                                                                <img src="./public/assets/img/carts.svg" class=" cart"
-                                                                    alt="cart">
-                                                                <a href="javacript:;" class="cartbtn"> Add
-                                                                    to Cart</a>
+
+                                                        <div class="countitem">
+                                                            <div class="input-group w-auto counterinput">
+                                                                <input type="button" value="-"
+                                                                    class="button-minus  icon-shape icon-sm lftcount"
+                                                                    data-field="quantity"
+                                                                    data-product_id="{{ $product->product->id }}"
+                                                                    data-product_stock_id="{{ $product->id }}"
+                                                                    onclick="decrementValue($(this))">
+                                                                <input type="number" step="1" min="0"
+                                                                    max="10" value="{{ $cart_qty }}"
+                                                                    name="quantity" id="quantity"
+                                                                    class="quantity-field border-0 text-center w-25">
+                                                                <input type="button" value="+"
+                                                                    class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                                    data-field="quantity"
+                                                                    data-product_id="{{ $product->product->id }}"
+                                                                    data-product_stock_id="{{ $product->id }}"
+                                                                    onclick="incrementValue($(this))">
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="countitem">
-                                                        <div class="input-group w-auto counterinput">
-                                                            <input type="button" value="-"
-                                                                class="button-minus  icon-shape icon-sm lftcount"
-                                                                data-field="quantity"
-                                                                data-product_id="{{ $product->product->id }}"
-                                                                data-product_stock_id="{{ $product->id }}"
-                                                                onclick="decrementValue($(this))">
-                                                            <input type="number" step="1" min="0"
-                                                                max="10" value="{{ $cart_qty }}" name="quantity"
-                                                                id="quantity"
-                                                                class="quantity-field border-0 text-center w-25">
-                                                            <input type="button" value="+"
-                                                                class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                data-field="quantity"
-                                                                data-product_id="{{ $product->product->id }}"
-                                                                data-product_stock_id="{{ $product->id }}"
-                                                                onclick="incrementValue($(this))">
-                                                        </div>
-                                                    </div>
                                                 </div>
-
-                                            </div>
+                                            @endif
                                         @endforeach
 
                                         {{-- <div class="col-md-12">
