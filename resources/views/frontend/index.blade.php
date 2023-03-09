@@ -760,7 +760,7 @@
     </div>
 
     <div class="fixed-cart b-rd-50p" style="display: none;">
-        <a href="{{ route('cart') }}" aria-label="Cart" title="Cart" class="cart-icon-org position-relative">
+        <a href="{{ route('cart') }}" aria-label="Cart" title="Cart" class="cart-icon-org position-relative d-block">
             <img src="{{ static_asset('assets/img/new-design/btn-cart-primary.svg') }}"
                 class="injectable rounded-circle trnsn-300ms" alt="Cart Icon">
             <span class="rounded-circle trnsn-300ms cart-item-count"></span>
