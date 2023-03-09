@@ -565,7 +565,7 @@ header.scrolled .bg-transparent {
 }
 
 .navbar-brand img {
-    max-width: 75px;
+    max-width: 70px;
 }
 
 header.scrolled .navbar-brand img {
@@ -4599,10 +4599,6 @@ form.checkout-form .form-control:focus-visible {
 }
 
 @media screen and (max-width: 991px) {
-    header .navbar-brand img {
-        max-width: 100px !important;
-    }
-
     .lodha_nestedtab ul#tabs li a {
         padding: 6px 12px !important;
         font-size: 15px !important
@@ -4767,5 +4763,37 @@ form.checkout-form .form-control:focus-visible {
     .tabslider li {
         margin: 0px 4px;
         margin-bottom: 20px;
+    }
+}
+
+nav .nav-icons svg,
+nav .nav-icons img {
+    width: 2.15rem;
+    cursor: pointer;
+}
+
+nav .nav-icons svg:hover {
+    box-shadow: 0 3px 10px -4px #3e3e3e;
+}
+
+.cart-icon-org span {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -0.75rem;
+    right: -0.75rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    background: #8db361;
+    border: 2px solid white;
+    color: white;
+    font-size: 0.785rem !important;
+    line-height: 1 !important;
+}
+
+@media screen and (min-width: 992px) {
+    .view-sm {
+        display: none !important;
     }
 }

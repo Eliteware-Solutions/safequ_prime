@@ -237,28 +237,36 @@
 
 @section('script')
     <script>
-        // var inner = $(".sticky-bottom");
-        // var elementPosTop = inner.position().top;
-        // var viewportHeight = $(window).height();
-        // $(window).on('scroll', function() {
-        //     var scrollPos = $(window).scrollTop();
-        //     var elementFromTop = elementPosTop - scrollPos;
-        //     var bgcreheight = $('.middlesec').height();
-        //     bgcreheight = bgcreheight - 500;
-
-        //     if (bgcreheight >= scrollPos) {
-        //         inner.addClass("sticky2");
-        //     } else {
-        //         inner.removeClass("sticky2");
-        //     }
-        // });
-
         let tmpCart = [];
 
         // Tooltip
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
         })
+
+        // $(window).scroll(function() {
+        //     let scroll = $(window).scrollTop();
+        //     let hedtab = $(".hedtab");
+
+        //     if (scroll == header) {
+        //         header.addClass("fixedHeader");
+
+        //         if ($(window).width() > 991) {
+        //             $('.hero-sec').css('padding-top', header.height() + 30)
+        //         } else {
+        //             $('.hero-sec').css('padding-top', header.height())
+        //         }
+        //         //
+        //     } else {
+        //         header.removeClass("fixedHeader");
+
+        //         if ($(window).width() > 991) {
+        //             $('.hero-sec').css('padding-top', '30px')
+        //         } else {
+        //             $('.hero-sec').css('padding-top', 0)
+        //         }
+        //     }
+        // });
 
         $(document).ready(function() {
             $('#noProductFoundFilter').hide();
@@ -334,59 +342,12 @@
                         $(this).css("opacity", "1");
                         (width <= 100) ? $(this).css("width", width + "%"): '';
                         $(this).text(progress + ' ' + unit);
-                        /*if (progressCnt <= progress) {
-                            $(this).text(progress + ' ' + unit);
-                        }*/
                     } else {
                         clearInterval(count);
                     }
                 }, 15);
             });
 
-            /*$(".filter-button").click(function() {
-                $('.filter-button').removeClass('active_filter');
-                $(this).addClass('active_filter');
-                let value = $(this).attr('data-filter');
-
-                if (value == "all") {
-                    $('.filter').show();
-                } else {
-                    $(".filter").not('.' + value).hide();
-                    $('.filter').filter('.' + value).show();
-                    if (document.querySelectorAll(".filter " + value).length == 0) {
-                        $('#noProductFoundFilter').show();
-                    } else {
-                        $('#noProductFoundFilter').hide();
-                    }
-                }
-            });*/
-
-            /*$('#repoStats2 .input-group').on('click', '.button-plus', function (e) {
-                incrementValue(e);
-            });*/
-
-            /*$('#repoStats2  .input-group').on('click', '.button-minus', function (e) {
-                decrementValue(e);
-            });*/
-
-            // Sticky Bottom
-            // var inner = $(".sticky-bottom");
-            // var elementPosTop = inner.position().top;
-            // var viewportHeight = $(window).height();
-            // $(window).on('scroll', function() {
-            //     var scrollPos = $(window).scrollTop();
-            //     var elementFromTop = elementPosTop - scrollPos;
-            //     var bgcreheight = $('.middlesec').height();
-            //     bgcreheight = bgcreheight - 500;
-
-            //     if (bgcreheight >= scrollPos) {
-            //         inner.addClass("sticky2");
-            //     } else {
-            //         inner.removeClass("sticky2");
-            //     }
-            // });
-
-            // $("#tykeModal").modal('show');
             $(".active").click();
         });
 
