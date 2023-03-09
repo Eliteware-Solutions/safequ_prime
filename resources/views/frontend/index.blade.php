@@ -425,7 +425,7 @@
 
         <!-- Our Full Range -->
         @if (count($our_full_range_of_products) > 0)
-            <section class="our-range pt-lg-5 py-4" id="our-range">
+            <section class="our-range py-lg-5 py-4" id="our-range">
                 <div class="container">
                     <h2 class="title text-center">Our Full Range</h2>
 
@@ -587,34 +587,6 @@
                 </div>
             </section>
         @endif
-
-        <!-- Recycling -->
-        <section class="recycling py-lg-5 py-4">
-            <div class="container position-relative">
-                <div class="content b-rd-10">
-                    <div class="bg-img b-rd-20 overflow-hide">
-                        <img src="{{ static_asset('assets/img/new-design/recycle-bg.webp') }}" width="1440"
-                            height="397" alt="Recycling Bg">
-                    </div>
-                    <div class="row position-relative py-3 py-lg-0">
-                        <div class="col-lg-4 offset-lg-1 py-3">
-                            <div class="recycle-img">
-                                <img src="{{ static_asset('assets/img/new-design/recycle-img.webp') }}" width="374"
-                                    height="366" alt="Recycling">
-                            </div>
-                        </div>
-                        <div class="col-lg-5 offset-lg-1 py-3">
-                            <div class="d-flex justify-content-center flex-column h-100">
-                                <h2 class="title secondary-text">{{ $recyclePoints['title'] }}</h2>
-                                @foreach ($recyclePoints['points'] as $pt)
-                                    <p class="large text-white">{{ $pt }}</p>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Rewards -->
         <section class="rewards py-lg-5 py-4 v-light-bg">
