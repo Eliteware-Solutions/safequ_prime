@@ -49,13 +49,13 @@ class CheckoutController extends Controller
                 } else {
                     $user = User::create([
                         'name' => $request->name,
-                        'address' => $request->address,
+                        'address' => $request->flat_no . ', ' . $request->address,
                         'email' => $request->email,
                         'email_verified_at' => date("Y-m-d H:i:s"),
                         'password' => Hash::make($request->email),
                         'phone' => '+91' . $request->phone,
                         'balance' => env('WELCOME_BONUS_AMOUNT'),
-                        'joined_community_id' => $request->community,
+                        'joined_community_id' => 0,
                     ]);
 
                     $user->referral_key = md5($user->id);

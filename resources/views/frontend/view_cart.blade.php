@@ -240,12 +240,14 @@
                                                 placeholder="Email">
                                         </div>
                                         <div class="col-md-6 p-2">
-                                            <select name="community" id="communityDropdown" class="form-control" required>
+                                            {{-- <select name="community" id="communityDropdown" class="form-control" required>
                                                 <option value="">Select Community</option>
                                                 @foreach ($shops as $val)
                                                     <option value="{{ $val->user_id }}">{{ $val->name }}</option>
                                                 @endforeach
-                                            </select>
+                                            </select> --}}
+                                            <input type="text" class="form-control" name="flat_no" id="flat_no"
+                                                placeholder="Flat No.">
                                         </div>
                                         <div class="col-md-12 p-2">
                                             <textarea name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>
