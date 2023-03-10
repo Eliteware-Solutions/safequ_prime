@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => true, 'new_footer' => false])
+@extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
 @if (isset($category_id))
     @php
@@ -37,7 +37,7 @@
 
 @section('content')
 
-    <main class="main-tag mt-0 promain">
+    <main class="main-tag promain">
         <div class="breadcrumbs high">
             <div class="container">
                 <h5 class="mb-0 fw700 text-white text-uppercase">{{ translate('Products') }}</h5>
@@ -80,7 +80,7 @@
                                 </div>
 
                                 @if (count($all_products) > 0)
-                                    <div class="row py-4">
+                                    <div class="row pb-4 onFx-pd" style="padding-top: 28px">
                                         @foreach ($all_products as $product)
                                             @if ($product->product->category->slug != 'flowers')
                                                 @php
@@ -351,8 +351,48 @@
             $(".active").click();
         });
 
-        $(window).scroll(function() {
-            if ($(this).scrollTop() > 50) {
+        var filterTabWidth = $('.hedtab').outerWidth();
+        var filterTabHeight = $('.hedtab').outerHeight();
+
+        $(document).scroll(function() {
+            let scroll = $(this).scrollTop();
+            let header = $("header");
+            let filterTab = $('.hedtab');
+
+            if (scroll >= 0.1) {
+                header.addClass("fixedHeader");
+                $('.main-tag').css('padding-top', header.height())
+
+            } else {
+                header.removeClass("fixedHeader");
+                $('.main-tag').css('padding-top', 0)
+            }
+
+
+            if (scroll >= 85) {
+                if (!filterTab.hasClass('fixed-div')) {
+                    filterTab.addClass('fixed-div')
+                    filterTab.css({
+                        top: 151,
+                        width: filterTabWidth
+                    })
+
+                    $('.onFx-pd').css('padding-top', (filterTabHeight - 15))
+                }
+                else{
+                    return false
+                }
+            } else {
+                filterTab.removeClass('fixed-div')
+                filterTab.css({
+                    top: 'inherit',
+                    width: "100%"
+                })
+                $('.onFx-pd').css('padding-top', 28)
+            }
+
+            // ---------------------------------------
+            if (scroll > 50) {
                 $('.srch-fltr-card').addClass('newClass');
             } else {
                 $('.srch-fltr-card').removeClass('newClass');
@@ -451,7 +491,8 @@
                         $('#total_' + productStockId).val(0);
                     }
                     $('#unit_display_' + productStockId).html('');
-                    $('#unit_display_' + productStockId).html(data.unit_price + ' / ' + $('#secondary_unit_' +
+                    $('#unit_display_' + productStockId).html(data.unit_price + ' / ' + $(
+                        '#secondary_unit_' +
                         productStockId).val());
 
                     calculateCheckOutTotal(qty, productId, productStockId);

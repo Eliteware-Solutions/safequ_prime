@@ -3,7 +3,7 @@
 @section('content')
     <main class="main-tag mt-0 cart-main-tag">
 
-        <div class="breadcrumbs">
+        <div class="breadcrumbs cart-bcr">
             <div class="container text-center pt-3">
                 <h4 class="mb-0 fw700 text-white text-uppercase">Cart Details</h4>
             </div>
@@ -374,6 +374,20 @@
         // Tooltip
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(document).scroll(function() {
+            let scroll = $(this).scrollTop();
+            let header = $("header");
+
+            if (scroll >= 0.1) {
+                header.addClass("fixedHeader");
+                $('.main-tag').css('padding-top', header.height())
+
+            } else {
+                header.removeClass("fixedHeader");
+                $('.main-tag').css('padding-top', 0)
+            }
         })
 
         $(document).ready(function() {
