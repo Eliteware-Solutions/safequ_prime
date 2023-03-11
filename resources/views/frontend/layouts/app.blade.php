@@ -231,17 +231,17 @@
         let header = document.getElementsByClassName("main-tag");
         let sticky = header.length > 0 ? header[0].offsetTop : '';
 
-        window.onscroll = function() {
-            myFunction()
-        };
+        // window.onscroll = function() {
+        //     myFunction()
+        // };
 
-        function myFunction() {
-            if (window.pageYOffset > sticky) {
-                $(".breadcrumbs").addClass("sticky");
-            } else {
-                $(".breadcrumbs").removeClass("sticky");
-            }
-        }
+        // function myFunction() {
+        //     if (window.pageYOffset > sticky) {
+        //         $(".breadcrumbs").addClass("sticky");
+        //     } else {
+        //         $(".breadcrumbs").removeClass("sticky");
+        //     }
+        // }
 
         function updateNavCart(count) {
             if (count > 0) {

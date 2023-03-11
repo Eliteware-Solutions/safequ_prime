@@ -555,12 +555,12 @@ header.fixedHeader.header2 {
     position: fixed;
 }
 
-header.fixedHeader.header2 ~ main.main-tag .breadcrumbs.sticky.cart-bcr {
+header.fixedHeader.header2~main.main-tag .breadcrumbs.sticky.cart-bcr {
     position: inherit !important;
     z-index: 990 !important;
 }
 
-header.fixedHeader.header2 ~ main.main-tag .breadcrumbs.sticky.cart-bcr + .content {
+header.fixedHeader.header2~main.main-tag .breadcrumbs.sticky.cart-bcr+.content {
     padding-top: 0;
 }
 
@@ -752,6 +752,7 @@ footer .footer-nav a {
     line-height: 18px !important;
     top: -12px;
 }
+
 main.main-tag {
     transition: none;
     -webkit-transition: none;
@@ -759,6 +760,7 @@ main.main-tag {
     -ms-transition: none;
     -o-transition: none;
 }
+
 main.main-tag-mt {
     margin-top: 73px;
 }
@@ -3839,9 +3841,10 @@ section.lodha_nestedtab {
     z-index: 99;
     padding: 38px 40px;
     box-shadow: 0px 16px 30px rgba(36, 46, 62, 0.06);
-    margin-top: -55px;
+    margin-top: -40px;
     align-items: center
 }
+
 .hedtab.fixed-div {
     position: fixed;
 }
@@ -4009,6 +4012,7 @@ h4.title-txt {
     .hedtab ul#tabs {
         padding-top: 15px;
     }
+
     .lodha_nestedtab ul#tabs li a {
         min-width: 90px;
         font-size: 0.875rem !important;
@@ -4027,6 +4031,14 @@ h4.title-txt {
 @media screen and (max-width: 767px) {
     .hedtab {
         padding: 18px 8px;
+    }
+
+    .trnsn-300-sm {
+        transition: all 0.3s ease-in-out;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
     }
 }
 
@@ -4655,7 +4667,6 @@ form.checkout-form .form-control:focus-visible {
 @media screen and (max-width: 991px) {
     .lodha_nestedtab ul#tabs li a {
         padding: 6px 12px !important;
-        font-size: 15px !important
     }
 
     header,
