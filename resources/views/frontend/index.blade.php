@@ -116,8 +116,8 @@
                         <img src="{{ static_asset('assets/img/new-design/hero-bg-3.webp') }}" class="banner b-rd-20"
                             alt="Hero Image">
 
-                        <div class="container bg-sm-white position-relative b-rd-20">
-                            <div class="row position-relative align-items-center h-100">
+                        <div class="container bg-sm-white position-relative b-rd-20 py-lg-5 py-3">
+                            <div class="row position-relative align-items-center h-100 py-lg-5 p-2">
                                 <div class="col">
                                     <h1 class="hero-title fw700 mb-2">Farm Fresh Exotic Fruits and Vegetables
                                     </h1>
@@ -141,7 +141,7 @@
 
                     </div>
                 </div>
-                @foreach ($sliders as $sl)
+                {{-- @foreach ($sliders as $sl)
                     <div class="item p-0">
                         <div class="d-flex carousel-item position-relative active py-5">
                             <img src="{{ static_asset('assets/img/new-design/' . $sl['bg_image']) }}"
@@ -180,7 +180,7 @@
 
                         </div>
                     </div>
-                @endforeach
+                @endforeach --}}
 
             </div>
         </section>
@@ -313,7 +313,7 @@
                     from trusted farms of your choice.</p>
 
                 <div class="row py-lg-4 py-3">
-                    <div class="col-md-6 col-lg-3 pb-3 text-center">
+                    <div class="col-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/fresh.png') }}" width="47"
                                 height="37" alt="Truck Icon">
@@ -321,7 +321,7 @@
                         <p class="title mb-0">100% Fresh</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-3 text-center">
+                    <div class="col-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/bucket.png') }}" width="47"
                                 height="37" alt="Bucket Icon">
@@ -329,7 +329,7 @@
                         <p class="title mb-0">Direct from farm</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-3 text-center">
+                    <div class="col-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/hand-picked.png') }}" width="47"
                                 height="37" alt="Flag Icon">
@@ -337,7 +337,7 @@
                         <p class="title mb-0">Hand Picked</p>
                     </div>
 
-                    <div class="col-md-6 col-lg-3 pb-3 text-center">
+                    <div class="col-6 col-lg-3 pb-3 text-center">
                         <div class="icon">
                             <img src="{{ static_asset('assets/img/new-design/truck.png') }}" width="47"
                                 height="37" alt="Money Icon">
@@ -346,7 +346,7 @@
                     </div>
                 </div>
 
-                <p class="text-center mt-lg-0 mt-3 mb-1 small">*Excludes imported fresh exotic produce</p>
+                <p class="text-center mt-lg-0 mt-md-3 mb-1 small">*Excludes imported fresh exotic produce</p>
             </div>
         </section>
 
@@ -409,9 +409,9 @@
 
                     @foreach ($customer_reviews as $rev)
                         <div class="item">
-                            <div class="p-md-3 trnsn-300ms position-relative b-rd-10">
-                                <div class="d-flex align-items-start position-relative px-md-2 pr-2 h-100">
-                                    <div class="usr-img mt-4 mr-4 rounded-circle">
+                            <div class="p-md-3 trnsn-300ms position-relative b-rd-10 px-2">
+                                <div class="user-quote d-flex align-items-start position-relative px-3 px-md-2 h-100">
+                                    <div class="usr-img mt-md-4 mr-md-4 mb-4 rounded-circle">
                                         <img src="{{ static_asset('assets/img/json_file_images/' . $rev['image']) }}"
                                             onerror="this.onerror=null;this.src='{{ static_asset('assets/img/user.png') }}';"
                                             alt="Star">
@@ -452,7 +452,7 @@
                         @foreach ($parentCategories as $p_category)
                             @if ($p_category->name != 'Flowers')
                                 <a href="#category_{{ $p_category->id }}" aria-controls="category_{{ $p_category->id }}"
-                                    role="tab" data-toggle="tab" class="m-2 rounded-lg">{{ $p_category->name }}</a>
+                                    role="tab" data-toggle="tab" class="m-md-2 my-2 mx-1 rounded-lg">{{ $p_category->name }}</a>
                             @endif
                         @endforeach
                     </div>
@@ -833,8 +833,6 @@
                 })
             })
 
-
-
             let carouselObj = {
                 loop: true,
                 responsiveClass: true,
@@ -860,7 +858,9 @@
                     dots: true,
                     responsive: {
                         0: {
-                            items: 1,
+                            center:true,
+                            items: 1.25,
+                            margin: 50,
                         },
                         575: {
                             items: 2,
@@ -893,7 +893,9 @@
                     dots: true,
                     responsive: {
                         0: {
-                            items: 1,
+                            center:true,
+                            items: 1.25,
+                            margin: 50,
                         },
                         575: {
                             items: 2,
@@ -923,7 +925,7 @@
                         0: {
                             items: 1,
                         },
-                        767: {
+                        992: {
                             items: 2,
                             nav: true,
                             dots: false,
@@ -950,26 +952,25 @@
             })
 
             $('.hero-slider').owlCarousel({
-                loop: true,
+                loop: false,
                 margin: 30,
-                items: 1.15,
+                items: 1.05,
                 center: true,
                 dots: false,
                 // autoplay: true,
                 // autoplayTimeout: 7000,
                 smartSpeed: 2000,
-                responsive: {
-                    0: {
-                        items: 1.05,
-                    },
-                    992: {
-                        items: 1.15,
-                    },
-                }
+                // responsive: {
+                //     0: {
+                //         items: 1.05,
+                //     },
+                //     992: {
+                //         items: 1.15,
+                //     },
+                // }
             })
 
             setTimeout(() => {
-                $(".our-range").css('height', document.getElementById('our-range').clientHeight);
                 // $(".prd-img").css('height', $(this).clientWidth);
                 var dealsImgHeight = $(".deals .prd-img:first").innerWidth();
                 var custFavImgHeight = $(".cust-fav .prd-img:first").innerWidth();
@@ -998,6 +999,11 @@
                         .find('.prd-img').innerHeight())));
                 })
             }, 1000)
+
+
+            setTimeout(() => {
+                $(".our-range").css('height', document.getElementById('our-range').clientHeight);
+            }, 1500)
 
             $('.menu-toggle').click(function() {
                 $(this).toggleClass('active');
