@@ -24,7 +24,7 @@
 
 @section('content')
     <!-- Navigation -->
-    <header class="header">
+    <header class="header new-ui">
         <div class="offer-top-bar">
             <div class="container">
                 <div class="d-flex align-items-center justify-content-between">
@@ -226,7 +226,7 @@
             <div class="container">
                 <h2 class="title text-center">Customer Favorites</h2>
 
-                <div class="owl-carousel owl-theme product-slider">
+                <div class="owl-carousel owl-theme">
                     @foreach ($customer_favourites as $prd_val)
                         @php
                             $cart_qty = 0;
@@ -748,14 +748,14 @@
         // ---- SVG Injector -  To convert IMG tag in SVG code. (Only for SVG images)
         SVGInject(document.querySelectorAll("img.injectable"));
 
-        $(window).scroll(function() {
-            let scroll = $(window).scrollTop();
+        $(document).scroll(function() {
+            let scroll = $(document).scrollTop();
             let header = $("header");
 
             if (scroll >= 0.1) {
                 header.addClass("fixedHeader");
 
-                if ($(window).width() > 991) {
+                if ($(document).width() > 991) {
                     $('.hero-sec').css('padding-top', header.height() + 30)
                 } else {
                     $('.hero-sec').css('padding-top', header.height())
@@ -764,7 +764,7 @@
             } else {
                 header.removeClass("fixedHeader");
 
-                if ($(window).width() > 991) {
+                if ($(document).width() > 991) {
                     $('.hero-sec').css('padding-top', '30px')
                 } else {
                     $('.hero-sec').css('padding-top', 0)
@@ -786,10 +786,10 @@
             }, 1000);
 
             setTimeout(() => {
-                if ($(window).width() < 992) {
-                    $('.collapsible').css({'top': $("header").outerHeight(), 'min-height' : $(window).height() - $("header").outerHeight()})
+                if ($(document).width() < 992) {
+                    $('.collapsible').css({'top': $("header").outerHeight(), 'min-height' : $(document).height() - $("header").outerHeight()})
                 }
-            }, 1000);
+            }, 500);
 
             $('a[data-toggle="tab"]').click(function() {
                 $('a[data-toggle="tab"]').removeClass('selected');
@@ -812,8 +812,8 @@
                 loop: true,
                 responsiveClass: true,
                 dots: false,
-                // autoplay: true,
-                // autoplayTimeout: 4500,
+                autoplay: true,
+                autoplayTimeout: 4500,
                 smartSpeed: 1500,
                 navText: [
                     "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
@@ -854,6 +854,35 @@
                             nav: true,
                             dots: false,
                         },
+                    },
+                }
+            })
+
+            $('.cust-fav .owl-carousel').owlCarousel({
+                ...carouselObj,
+                ...{
+                    margin: 30,
+                    nav: false,
+                    dots: true,
+                    responsive: {
+                        0: {
+                            items: 1,
+                        },
+                        575: {
+                            items: 2,
+                        },
+                        768: {
+                            items: 3,
+                        },
+                        992: {
+                            items: 4,
+                        },
+                        1360: {
+                            items: 5,
+                            nav: true,
+                            dots: false,
+                            autoplay: false
+                        }
                     },
                 }
             })
@@ -948,7 +977,7 @@
                 $('.collapsible').toggleClass('active');
             })
 
-            if ($(window).width() < 992) {
+            if ($(document).width() < 992) {
                 $('.nav-menu, .nav-icons').addClass('container');
             }
 
