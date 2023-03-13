@@ -965,7 +965,7 @@
                         loop: false,
                         margin: 10,
                         nav: false,
-                        dots: true
+                        dots: true,
                         autoplay: false,
                         responsive: {
                             0: {
