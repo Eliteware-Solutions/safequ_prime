@@ -72,7 +72,7 @@ class HomeController extends Controller
         $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->inRandomOrder()->limit(5)->get();
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
-        $deals_of_the_day = Product::where('todays_deal', 1)->limit(4)->get();
+        $deals_of_the_day = Product::where('todays_deal', 1)->limit(1)->get();
 
         $all_products = array();
         foreach ($parentCategories as $cat) {

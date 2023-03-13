@@ -354,7 +354,7 @@
         @if ($deals_of_the_day)
             <section class="deals py-lg-5 py-4">
                 <div class="container">
-                    <h2 class="title text-center pt-2">Deal Of The Day</h2>
+                    {{-- <h2 class="title text-center pt-2">Deal Of The Day</h2>
 
                     <div class="content py-md-5 py-4 b-rd-20">
                         <div class="row m-0 py-md-3">
@@ -394,6 +394,73 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div> --}}
+
+                    <div class="content pt-lg-5 pt-4 overflow-hide">
+                        <h2 class="title text-center text-white">Deal{{ count($deals_of_the_day) > 1 ? 's':'' }} Of The Day</h2>
+
+                        <div class="owl-carousel owl-theme product-slider2 mx-auto {{ count($deals_of_the_day) > 1 ? '':'scaleCard' }}">
+                            @foreach ($deals_of_the_day as $prd_val)
+                                @php
+                                    $cart_qty = 0;
+                                    $product_total = 0;
+                                    $product_price = isset($prd_val->productStock) ? $prd_val->productStock->price : 0;
+                                    if (count($cart) > 0 && isset($prd_val->productStock) && isset($cart[$prd_val->productStock->id])) {
+                                        $cart_qty = $cart[$prd_val->productStock->id]['qty'];
+                                        $product_total = $cart[$prd_val->productStock->id]['total'];
+                                        $product_price = $cart[$prd_val->productStock->id]['price'];
+                                    }
+                                    $addCartQty = $cart_qty + 1;
+
+                                    $qty_unit_main = $prd_val->unit;
+                                    if (floatval($prd_val->min_qty) < 1) {
+                                        $qty_unit_main = 1000 * floatval($prd_val->min_qty) . ' ' . $prd_val->secondary_unit;
+                                    }
+                                @endphp
+                                <div class="item px-2">
+                                    <div class="prd-card b-rd-10 overflow-hide trnsn-300ms position-relative">
+                                        <div class="deal-type">Flat {{ $prd_val->discount }}% Off</div>
+                                        <div class="d-flex align-items-center justify-content-between flex-design">
+                                            <div class="prd-img">
+                                                <img src="{{ uploaded_asset($prd_val->photos) }}"
+                                                    data-src="{{ uploaded_asset($prd_val->thumbnail_img) }}"
+                                                    class="object-cover-center" width="250" height="250"
+                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                    alt="{{ $prd_val->getTranslation('name') }}">
+                                            </div>
+                                            <div class="prd-content p-3 position-relative">
+                                                @if (explode(',', $prd_val->tags)[0] != '')
+                                                    <span
+                                                        class="prd-tag text-white b-rd-5">{{ explode(',', $prd_val->tags)[0] }}</span>
+                                                @endif
+                                                @if ($prd_val->manufacturer_location)
+                                                    <p class="prd-loc mb-1 secondary-text">
+                                                        {{ $prd_val->manufacturer_location }}</p>
+                                                @endif
+                                                <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
+                                                </p>
+                                                @if (trim($prd_val->variation) != '')
+                                                    <p class="prd-desc mb-1 light-text">Variants :
+                                                        {{ $prd_val->variation }}
+                                                    </p>
+                                                @endif
+                                                <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
+                                                        {{ $qty_unit_main }}</s></p>
+                                                <p class="prd-pricing mb-2 fw700">
+                                                    {!! single_price_web($product_price - round(($product_price * $prd_val->discount) / 100, 2)) !!} /
+                                                    {{ $qty_unit_main }}</p>
+                                                <button class="btn secondary-btn"
+                                                    onclick="addToCart({{ $prd_val->id }}, {{ $prd_val->productStock->id }}, {{ $addCartQty }});">
+                                                    <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
+                                                        onload="SVGInject(this)" alt="Btn Cart">
+                                                    Add to cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -452,7 +519,8 @@
                         @foreach ($parentCategories as $p_category)
                             @if ($p_category->name != 'Flowers')
                                 <a href="#category_{{ $p_category->id }}" aria-controls="category_{{ $p_category->id }}"
-                                    role="tab" data-toggle="tab" class="m-md-2 my-2 mx-1 rounded-lg">{{ $p_category->name }}</a>
+                                    role="tab" data-toggle="tab"
+                                    class="m-md-2 my-2 mx-1 rounded-lg">{{ $p_category->name }}</a>
                             @endif
                         @endforeach
                     </div>
@@ -805,7 +873,10 @@
 
             setTimeout(() => {
                 if ($(document).width() < 992) {
-                    $('.collapsible').css({'top': $("header").outerHeight(), 'min-height' : $(document).height() - $("header").outerHeight()})
+                    $('.collapsible').css({
+                        'top': $("header").outerHeight(),
+                        'min-height': $(document).height() - $("header").outerHeight()
+                    })
                 }
             }, 500);
 
@@ -815,8 +886,9 @@
 
                 var activeDiv = $(this).attr('href');
 
-                if($(this).data('target') !== "undefined"){
-                    $('a[data-toggle="tab"][aria-controls="'+ $(this).data('target') +'"]').addClass('selected')
+                if ($(this).data('target') !== "undefined") {
+                    $('a[data-toggle="tab"][aria-controls="' + $(this).data('target') + '"]').addClass(
+                        'selected')
 
                     activeDiv = '#' + $(this).data('target');
                 }
@@ -858,7 +930,7 @@
                     dots: true,
                     responsive: {
                         0: {
-                            center:true,
+                            center: true,
                             items: 1.25,
                             margin: 50,
                         },
@@ -885,6 +957,44 @@
                 }
             })
 
+
+            <?php if (count($deals_of_the_day) > 1){ ?>
+                $('.product-slider2').owlCarousel({
+                    ...carouselObj,
+                    ...{
+                        loop: false,
+                        margin: 10,
+                        nav: false,
+                        dots: true
+                        autoplay: false,
+                        responsive: {
+                            0: {
+                                items: 1,
+                                center: true
+                            },
+                            767: {
+                                items: 2,
+                                center: false,
+                                dots: false
+                            },
+                        }
+                    }
+                })
+            <?php  } else { ?>
+                $('.product-slider2').owlCarousel({
+                    ...carouselObj,
+                    ...{
+                        loop: false,
+                        margin: 10,
+                        nav: false,
+                        dots: false,
+                        autoplay: false,
+                        items: 1,
+                        center: true
+                    }
+                })
+            <?php  } ?>
+
             $('.cust-fav .owl-carousel').owlCarousel({
                 ...carouselObj,
                 ...{
@@ -893,7 +1003,7 @@
                     dots: true,
                     responsive: {
                         0: {
-                            center:true,
+                            center: true,
                             items: 1.25,
                             margin: 50,
                         },
