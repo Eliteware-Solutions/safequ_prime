@@ -53,7 +53,7 @@
                         <section class="lodha_nestedtab">
                             <div class="container">
                                 <!-- Tabs -->
-                                <div class="hedtab mb-3">
+                                <div class="hedtab mb-3 trnsn-300-sm">
                                     <div>
                                         <h4 class="fw700 title-txt ">Our
                                             <ins class="primary-color fw700">Products</ins>
@@ -244,30 +244,6 @@
             $('[data-toggle="tooltip"]').tooltip()
         })
 
-        // $(window).scroll(function() {
-        //     let scroll = $(window).scrollTop();
-        //     let hedtab = $(".hedtab");
-
-        //     if (scroll == header) {
-        //         header.addClass("fixedHeader");
-
-        //         if ($(window).width() > 991) {
-        //             $('.hero-sec').css('padding-top', header.height() + 30)
-        //         } else {
-        //             $('.hero-sec').css('padding-top', header.height())
-        //         }
-        //         //
-        //     } else {
-        //         header.removeClass("fixedHeader");
-
-        //         if ($(window).width() > 991) {
-        //             $('.hero-sec').css('padding-top', '30px')
-        //         } else {
-        //             $('.hero-sec').css('padding-top', 0)
-        //         }
-        //     }
-        // });
-
         $(document).ready(function() {
             $('#noProductFoundFilter').hide();
 
@@ -368,27 +344,51 @@
                 $('.main-tag').css('padding-top', 0)
             }
 
+            if ($(document).width() >= 768) {
+                if (scroll >= 102) {
+                    if (!filterTab.hasClass('fixed-div')) {
+                        filterTab.addClass('fixed-div')
+                        filterTab.css({
+                            top: 136,
+                            width: filterTabWidth
+                        })
 
-            if (scroll >= 85) {
-                if (!filterTab.hasClass('fixed-div')) {
-                    filterTab.addClass('fixed-div')
+                        $('.onFx-pd').css('padding-top', (filterTabHeight + 6))
+                    } else {
+                        return false
+                    }
+                } else {
+                    filterTab.removeClass('fixed-div')
                     filterTab.css({
-                        top: 151,
-                        width: filterTabWidth
+                        top: 'inherit',
+                        width: "100%"
                     })
-
-                    $('.onFx-pd').css('padding-top', (filterTabHeight - 15))
-                }
-                else{
-                    return false
+                    $('.onFx-pd').css('padding-top', 28)
                 }
             } else {
-                filterTab.removeClass('fixed-div')
-                filterTab.css({
-                    top: 'inherit',
-                    width: "100%"
-                })
-                $('.onFx-pd').css('padding-top', 28)
+                if (scroll >= 146) {
+                    if (!filterTab.hasClass('fixed-div')) {
+                        filterTab.addClass('fixed-div')
+                        filterTab.css({
+                            top: 90,
+                            width: "100%",
+                            left: 0
+                        })
+
+                        $('.onFx-pd').css('padding-top', (filterTabHeight + 4))
+
+                    } else {
+                        return false
+                    }
+                } else {
+                    filterTab.removeClass('fixed-div')
+                    filterTab.css({
+                        top: 'inherit',
+                        width: "100%",
+                        left: 'inherit'
+                    })
+                    $('.onFx-pd').css('padding-top', 28)
+                }
             }
 
             // ---------------------------------------

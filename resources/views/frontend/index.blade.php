@@ -52,6 +52,7 @@
                 </div>
             </div>
         </div>
+
         <nav class="d-flex align-items-center justify-content-between container">
             <div class="d-flex align-items-center fix-part">
                 <a href="{{ route('home') }}" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
@@ -189,33 +190,48 @@
             <div class="container">
                 <div class="row py-md-3">
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
-                        <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">(Indian)</span>
-                            </p>
-                            <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/mango.png') }}" width="241"
-                                    height="120" alt="Indian Fruits">
+                        <a href="#our-range" class="cat-grid-link scrollTo"
+                            data-target="category_{{ $parentCategories[0]->id }}"
+                            aria-controls="category_{{ $parentCategories[0]->id }}" role="tab" data-toggle="tab">
+                            <div class="cat-card cat-1 px-xl-4 p-3 b-rd-10">
+                                <p class="cat-name default-text">Fresh <br> Exotic fruits <br> <span
+                                        class="primary-text">(Indian)</span>
+                                </p>
+                                <div class="cat-img text-right">
+                                    <img src="{{ static_asset('assets/img/new-design/mango.png') }}" width="241"
+                                        height="120" alt="Indian Fruits">
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
+
                     <div class="col-lg-4 col-md-6 py-2 px-lg-4">
-                        <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh <br> Exotic fruits <br> <span class="primary-text">
-                                    (Imported)</span></p>
-                            <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/grapse.png') }}" width="212"
-                                    height="144" alt="Imported Fruits">
+                        <a href="#our-range" class="cat-grid-link scrollTo"
+                            data-target="category_{{ $parentCategories[0]->id }}"
+                            aria-controls="category_{{ $parentCategories[0]->id }}" role="tab" data-toggle="tab">
+                            <div class="cat-card cat-2 px-xl-4 p-3 b-rd-10">
+                                <p class="cat-name default-text">Fresh <br> Exotic fruits <br> <span class="primary-text">
+                                        (Imported)</span></p>
+                                <div class="cat-img text-right">
+                                    <img src="{{ static_asset('assets/img/new-design/grapse.png') }}" width="212"
+                                        height="144" alt="Imported Fruits">
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
+
                     <div class="col-lg-4 col-md-6 mx-md-auto mx-lg-0 py-2 px-lg-4">
-                        <div class="cat-card cat-3 px-xl-4 p-3 b-rd-10">
-                            <p class="cat-name">Fresh Exotic <br> Vegetables</p>
-                            <div class="cat-img text-right">
-                                <img src="{{ static_asset('assets/img/new-design/veg.png') }}" width="171"
-                                    height="159" alt="Vegetables">
+                        <a href="#our-range" class="cat-grid-link scrollTo"
+                            data-target="category_{{ $parentCategories[1]->id }}"
+                            aria-controls="category_{{ $parentCategories[1]->id }}" role="tab" data-toggle="tab">
+                            <div class="cat-card cat-3 px-xl-4 p-3 b-rd-10">
+                                <p class="cat-name default-text">Fresh Exotic <br> Vegetables</p>
+                                <div class="cat-img text-right">
+                                    <img src="{{ static_asset('assets/img/new-design/veg.png') }}" width="171"
+                                        height="159" alt="Vegetables">
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -293,7 +309,8 @@
         <section class="promise py-lg-5 py-4 v-light-bg">
             <div class="container">
                 <h2 class="title text-center mb-2"><span class="primary-text">Our</span> Promise</h2>
-                <p class="text-center mb-4"><span class="primary-text fw500">Finest quality, Fresh Exotic Produce </span> from trusted farms of your choice.</p>
+                <p class="text-center mb-4"><span class="primary-text fw500">Finest quality, Fresh Exotic Produce </span>
+                    from trusted farms of your choice.</p>
 
                 <div class="row py-lg-4 py-3">
                     <div class="col-md-6 col-lg-3 pb-3 text-center">
@@ -732,7 +749,8 @@
     </div>
 
     <div class="fixed-cart b-rd-50p" style="display: none;">
-        <a href="{{ route('cart') }}" aria-label="Cart" title="Cart" class="cart-icon-org position-relative d-block">
+        <a href="{{ route('cart') }}" aria-label="Cart" title="Cart"
+            class="cart-icon-org position-relative d-block">
             <img src="{{ static_asset('assets/img/new-design/btn-cart-primary.svg') }}"
                 class="injectable rounded-circle trnsn-300ms" alt="Cart Icon">
             <span class="rounded-circle trnsn-300ms cart-item-count"></span>
@@ -776,8 +794,8 @@
             $('a.scrollTo').click(function() {
                 var target = $(this).attr('href');
                 $('html, body').animate({
-                    scrollTop: ($(target).offset().top - ($("header").height() + 60))
-                }, 10)
+                    scrollTop: ($(target).offset().top - ($("header").height()))
+                }, 20)
             })
 
             setInterval(() => {
@@ -795,9 +813,16 @@
                 $('a[data-toggle="tab"]').removeClass('selected');
                 $(this).addClass('selected');
 
-                let activeDiv = $(this).attr('href');
+                var activeDiv = $(this).attr('href');
+
+                if($(this).data('target') !== "undefined"){
+                    $('a[data-toggle="tab"][aria-controls="'+ $(this).data('target') +'"]').addClass('selected')
+
+                    activeDiv = '#' + $(this).data('target');
+                }
 
                 $('.filter-carousel').removeClass('active');
+                console.log(activeDiv);
                 $(activeDiv).addClass('active');
 
                 $(".filter-carousel .owl-carousel").trigger('refresh.owl.carousel');
@@ -807,6 +832,8 @@
                         .find('.prd-img').innerHeight())));
                 })
             })
+
+
 
             let carouselObj = {
                 loop: true,

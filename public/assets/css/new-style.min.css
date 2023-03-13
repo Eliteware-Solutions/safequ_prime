@@ -47,6 +47,10 @@ img.object-cover-center {
     color: var(--secondary-color);
 }
 
+.default-text {
+    color: var(--default-color);
+}
+
 .light-text {
     color: var(--light-color);
 }
