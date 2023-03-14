@@ -89,6 +89,9 @@
                 <div class="col text-center text-md-left">
                     <address>
                         <strong class="text-main">{{ json_decode($order->shipping_address)->name }}</strong><br>
+                        @if (isset($order->user->user_community) && isset($order->user->user_community->name))
+                            {{ $order->user->user_community->name }}<br>
+                        @endif
                         {{ json_decode($order->shipping_address)->email }}<br>
                         {{ json_decode($order->shipping_address)->phone }}<br>
                         {{ json_decode($order->shipping_address)->address }}

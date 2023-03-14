@@ -97,6 +97,9 @@
 				@endphp
 				<tr><td class="strong small gry-color">{{ translate('Bill to') }}:</td></tr>
 				<tr><td class="strong">{{ ($shipping_address ? $shipping_address->name : '') }}</td></tr>
+                @if (isset($order->user->user_community) && isset($order->user->user_community->name))
+                    <tr><td class="strong">{{ $order->user->user_community->name }}</td></tr>
+                @endif
 				@if($shipping_address)
                     <tr><td class="gry-color small">{{ $shipping_address->address }}, {{ $shipping_address->city }}, {{ $shipping_address->postal_code }}, {{ $shipping_address->country }}</td></tr>
                     <tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email }}</td></tr>
