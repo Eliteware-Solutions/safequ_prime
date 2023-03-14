@@ -69,7 +69,10 @@ class HomeController extends Controller
         $parentCategories = Category::where('parent_id', 0)->get();
 
         $customer_favourites = array();
-        $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->inRandomOrder()->limit(5)->get();
+        $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->
+                                whereHas('product', function ($query) {
+                                    $query->where('published', 1);
+                                })->inRandomOrder()->limit(5)->get();
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
         $deals_of_the_day = Product::where('todays_deal', 1)->limit(2)->get();
@@ -77,7 +80,7 @@ class HomeController extends Controller
         $all_products = array();
         foreach ($parentCategories as $cat) {
             $all_products[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
-                $query->where('parent_category_id', $cat->id);
+                $query->where('parent_category_id', $cat->id)->where('published', 1);
             })->where('seller_id', 0)->inRandomOrder()->limit(7)->get();
         }
 
@@ -407,7 +410,7 @@ class HomeController extends Controller
         $categorizedProd = array();
         foreach ($parentCategories as $cat) {
             $categorizedProd[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
-                $query->where('parent_category_id', $cat->id);
+                $query->where('parent_category_id', $cat->id)->where('published', 1);
             })->where('seller_id', 0)->inRandomOrder()->limit(10)->get();
         }
 
