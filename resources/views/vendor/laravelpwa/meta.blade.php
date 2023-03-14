@@ -68,17 +68,11 @@
     function showInstallPromotion() {
         $('.pwaPopup').show();
         $('.installPWABtn').show();
-        if ($(document).width() < 992 && $('header.new-ui').length > 0) {
-            $('.collapsible').css({'top': $("header").outerHeight(), 'min-height' : $(document).height() - $("header").outerHeight()})
-        }
     }
 
     function hideInstallPromotion() {
         $('#pwaPopup').hide();
         $('.installPWABtn').hide();
-        if ($(document).width() < 992 && $('header.new-ui').length > 0) {
-            $('.collapsible').css({'top': $("header").outerHeight(), 'min-height' : $(document).height() - $("header").outerHeight()})
-        }
     }
 
     async function installEvent() {

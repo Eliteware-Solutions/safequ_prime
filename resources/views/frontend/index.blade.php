@@ -65,6 +65,25 @@
             </div>
             <div class="collapsible d-flex align-items-center justify-content-between trnsn-300ms">
 
+
+                <!-- For Mobile design -->
+                <div class="hidden-top-nav d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <a href="{{ route('home') }}" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
+                            <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
+                                alt="SafeQU">
+                        </a>
+                        <p class="tiny-text secondary-text mb-0">
+                            Honest, Fresh Produce. Delivered to your doorstep.
+                        </p>
+                    </div>
+
+                    <div class="menu-toggle">
+                        <img src="{{ static_asset('assets/img/new-design/menu.svg') }}" width="150" height="150"
+                            class="injectable" alt="Menu icon">
+                    </div>
+                </div>
+
                 <ul class="nav-menu ml-lg-auto mb-0 d-flex align-items-center">
                     <li><a href="{{ route('home') }}" class="nav-link fw500 active py-1 px-2 mr-2">Home</a></li>
                     <li><a href="{{ route('shop.visit') }}" class="nav-link fw500 py-1 px-2 mr-2">Products</a></li>
@@ -131,7 +150,7 @@
                                             style="font-size: 1.5rem"></i>
                                     </p>
 
-                                    <a href="#viewAllPrd" class="btn scrollTo primary-btn py-2 px-4">
+                                    <a href="#filters" class="btn scrollTo primary-btn py-2 px-4">
                                         Buy Now
                                     </a>
                                 </div>
@@ -286,7 +305,7 @@
                                     @endif
                                     <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->product->name ?? '-' }}</p>
                                     @if (trim($prd_val->product->variation) != '')
-                                        <p class="prd-desc mb-1 light-text">Variants : {{ $prd_val->product->variation }}
+                                        <p class="prd-desc mb-1 light-text">{{ $prd_val->product->variation }}
                                         </p>
                                     @endif
                                     <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
@@ -398,9 +417,11 @@
                     </div> --}}
 
                     <div class="content pt-lg-5 pt-4 overflow-hide">
-                        <h2 class="title text-center text-white">Deal{{ count($deals_of_the_day) > 1 ? 's':'' }} Of The Day</h2>
+                        <h2 class="title text-center text-white">Deal{{ count($deals_of_the_day) > 1 ? 's' : '' }} Of The
+                            Day</h2>
 
-                        <div class="owl-carousel owl-theme product-slider2 mx-auto {{ count($deals_of_the_day) > 1 ? '':'scaleCard' }}">
+                        <div
+                            class="owl-carousel owl-theme product-slider2 mx-auto {{ count($deals_of_the_day) > 1 ? '' : 'scaleCard' }}">
                             @foreach ($deals_of_the_day as $prd_val)
                                 @php
                                     $cart_qty = 0;
@@ -441,9 +462,7 @@
                                                 <p class="prd-name mb-1 fw600 text-black">{{ $prd_val->name ?? '-' }}
                                                 </p>
                                                 @if (trim($prd_val->variation) != '')
-                                                    <p class="prd-desc mb-1 light-text">Variants :
-                                                        {{ $prd_val->variation }}
-                                                    </p>
+                                                    <p class="prd-desc mb-1 light-text">{{ $prd_val->variation }}</p>
                                                 @endif
                                                 <p class="prd-disc-pricing mb-0 fw700"><s>{!! single_price_web($product_price) !!} /
                                                         {{ $qty_unit_main }}</s></p>
@@ -513,7 +532,7 @@
                 <div class="container">
                     <h2 class="title text-center">Our Full Range</h2>
 
-                    <div class="filters px-3 pb-4 d-flex flex-wrap align-items-center justify-content-center">
+                    <div class="filters px-3 pb-3 d-flex flex-wrap align-items-center justify-content-center">
                         <a href="#all_prd" aria-controls="all" role="tab" data-toggle="tab"
                             class="selected m-2 rounded-lg">All</a>
                         @foreach ($parentCategories as $p_category)
@@ -524,7 +543,7 @@
                             @endif
                         @endforeach
                     </div>
-                    <div class="tab-content py-0 mb-3">
+                    <div class="tab-content py-0 mb-1" id="filters">
                         <div role="tabpanel" class="filter-carousel tab-pane active" id="all_prd">
                             <div class="owl-carousel owl-theme product-slider">
                                 @foreach ($our_full_range_of_products as $prd_val)
@@ -571,8 +590,8 @@
                                                 <p class="prd-name mb-1 fw600 text-black">
                                                     {{ $prd_val->product->name ?? '-' }}</p>
                                                 @if (trim($prd_val->product->variation) != '')
-                                                    <p class="prd-desc mb-1 light-text">Variants :
-                                                        {{ $prd_val->product->variation }}</p>
+                                                    <p class="prd-desc mb-1 light-text">{{ $prd_val->product->variation }}
+                                                    </p>
                                                 @endif
                                                 <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!} /
                                                     {{ $qty_unit_main }}</p>
@@ -639,7 +658,7 @@
                                                             <p class="prd-name mb-1 fw600 text-black">
                                                                 {{ $prd_val->product->name ?? '-' }}</p>
                                                             @if (trim($prd_val->product->variation) != '')
-                                                                <p class="prd-desc mb-1 light-text">Variants :
+                                                                <p class="prd-desc mb-1 light-text">
                                                                     {{ $prd_val->product->variation }}</p>
                                                             @endif
                                                             <p class="prd-pricing mb-2 pt-1 fw700">{!! single_price_web($product_price) !!}
@@ -837,14 +856,20 @@
         $(document).scroll(function() {
             let scroll = $(document).scrollTop();
             let header = $("header");
+            let topBar = $(".offer-top-bar");
 
-            if (scroll >= 0.1) {
+            let scrollHeight = $(document).width() > 991 ? 0.1 : topBar.outerHeight();
+
+            if (scroll >= scrollHeight) {
                 header.addClass("fixedHeader");
+                if ($(document).width() < 992) {
+                    header.css('top', 0 - topBar.outerHeight())
+                }
 
                 if ($(document).width() > 991) {
-                    $('.hero-sec').css('padding-top', header.height() + 30)
+                    $('.hero-sec').css('padding-top', header.outerHeight() + 30)
                 } else {
-                    $('.hero-sec').css('padding-top', header.height())
+                    $('.hero-sec').css('padding-top', header.outerHeight())
                 }
                 //
             } else {
@@ -860,9 +885,11 @@
 
         $(document).ready(function() {
             $('a.scrollTo').click(function() {
-                var target = $(this).attr('href');
+                let target = $(this).attr('href');
+                let extraScroll = $(document).width() > 991 ? 75 : 8;
+
                 $('html, body').animate({
-                    scrollTop: ($(target).offset().top - ($("header").height()))
+                    scrollTop: ($(target).offset().top - ($("header").outerHeight() + extraScroll))
                 }, 20)
             })
 
@@ -870,15 +897,6 @@
                 $(".smiley").hasClass("fa-smile-wink") ? $(".smiley").removeClass("fa-smile-wink").addClass(
                     "fa-smile") : $(".smiley").removeClass("fa-smile").addClass("fa-smile-wink");
             }, 1000);
-
-            setTimeout(() => {
-                if ($(document).width() < 992) {
-                    $('.collapsible').css({
-                        'top': $("header").outerHeight(),
-                        'min-height': $(document).height() - $("header").outerHeight()
-                    })
-                }
-            }, 500);
 
             $('a[data-toggle="tab"]').click(function() {
                 $('a[data-toggle="tab"]').removeClass('selected');
@@ -959,40 +977,40 @@
 
 
             <?php if (count($deals_of_the_day) > 1){ ?>
-                $('.product-slider2').owlCarousel({
-                    ...carouselObj,
-                    ...{
-                        loop: false,
-                        margin: 10,
-                        nav: false,
-                        dots: true,
-                        autoplay: false,
-                        responsive: {
-                            0: {
-                                items: 1,
-                                center: true
-                            },
-                            767: {
-                                items: 2,
-                                center: false,
-                                dots: false
-                            },
-                        }
+            $('.product-slider2').owlCarousel({
+                ...carouselObj,
+                ...{
+                    loop: false,
+                    margin: 10,
+                    nav: false,
+                    dots: true,
+                    autoplay: false,
+                    responsive: {
+                        0: {
+                            items: 1,
+                            center: true
+                        },
+                        767: {
+                            items: 2,
+                            center: false,
+                            dots: false
+                        },
                     }
-                })
+                }
+            })
             <?php  } else { ?>
-                $('.product-slider2').owlCarousel({
-                    ...carouselObj,
-                    ...{
-                        loop: false,
-                        margin: 10,
-                        nav: false,
-                        dots: false,
-                        autoplay: false,
-                        items: 1,
-                        center: true
-                    }
-                })
+            $('.product-slider2').owlCarousel({
+                ...carouselObj,
+                ...{
+                    loop: false,
+                    margin: 10,
+                    nav: false,
+                    dots: false,
+                    autoplay: false,
+                    items: 1,
+                    center: true
+                }
+            })
             <?php  } ?>
 
             $('.cust-fav .owl-carousel').owlCarousel({

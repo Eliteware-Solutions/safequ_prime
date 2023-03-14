@@ -242,7 +242,7 @@ button,
 }
 
 .owl-theme .owl-nav.disabled+.owl-dots {
-    margin: -10px;
+    margin-top: -10px;
 }
 
 .nav-arrow {
@@ -268,7 +268,9 @@ button,
 }
 
 .owl-theme .owl-dots .owl-dot span {
-    margin: 5px 6px;
+    margin: 5px;
+    width: 7px;
+    height: 7px;
 }
 
 .owl-stage-outer {
@@ -388,7 +390,7 @@ ol {
 
 .offer-top-bar {
     background-color: var(--default-color);
-    padding: 0.8rem 0;
+    padding: 0.6rem 0;
     margin-bottom: 0.7rem;
 }
 
@@ -454,7 +456,7 @@ ol {
     .tiny-text,
     .offer-top-bar .tiny-text,
     .offer-top-bar .tiny-text span {
-        font-size: 0.8rem;
+        font-size: 0.775rem;
     }
 
     .offer-top-bar .tiny-text span {
@@ -479,7 +481,6 @@ header {
 
 header.fixedHeader {
     position: fixed;
-    top: 0;
     left: 0;
     width: 100%;
 }
@@ -489,8 +490,8 @@ header .collapsible {
 }
 
 .nav-logo {
-    min-width: 60px;
-    max-width: 60px;
+    min-width: 55px;
+    max-width: 55px;
 }
 
 .detct-loc {
@@ -641,6 +642,10 @@ footer .links-tag {
     .fixed-cart {
         display: none !important;
     }
+
+    .collapsible .hidden-top-nav {
+        display: none !important;
+    }
 }
 
 @media screen and (min-width: 1200px) {
@@ -715,8 +720,10 @@ footer .links-tag {
 
     .collapsible {
         position: fixed;
+        top: 0;
         right: -100%;
         width: 100vw !important;
+        height: 100vh !important;
         z-index: 999;
         overflow-x: hidden;
         overflow-y: auto;
@@ -742,6 +749,11 @@ footer .links-tag {
         padding: 0.35rem 0;
     }
 
+    .collapsible .hidden-top-nav {
+        padding: 0.7rem 0;
+        margin: 0 -0.175rem;
+    }
+
     nav .search-bar {
         max-width: 100%;
         margin: 0 0 1rem !important;
@@ -749,7 +761,7 @@ footer .links-tag {
 
     .menu-toggle {
         display: block;
-        max-width: 2.75rem;
+        max-width: 2.4rem;
         cursor: pointer;
     }
 }
@@ -873,7 +885,7 @@ footer .links-tag {
 }
 
 .owl-item .item {
-    padding: 1rem 0 2.5rem 0.05rem;
+    padding: 1rem 0 2rem 0.05rem;
     display: flex;
     flex: 1 0 auto;
     height: 100%
@@ -1894,7 +1906,7 @@ footer .links-tag {
 
     h2.title {
         font-size: 1.95rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
     }
 
     h3.title {
@@ -1903,6 +1915,10 @@ footer .links-tag {
 
     h3.title-large {
         font-size: 2.1rem;
+    }
+
+    .owl-item .item {
+        padding-top: 0.6rem;
     }
 }
 
@@ -1914,7 +1930,6 @@ footer .links-tag {
 
     h2.title {
         font-size: 1.75rem;
-        margin-bottom: 1.5rem;
     }
 
     h3.title {

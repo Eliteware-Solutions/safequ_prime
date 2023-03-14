@@ -60,14 +60,14 @@
                                         </h4>
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
-                                        <li><a href="#" data-toggle="tab" data-filter="all" class="filter-button"
+                                        <li><a href="#" data-toggle="tab" data-filter="all" class="filter-button active"
                                                 onclick="filterCategory($(this))">All</a></li>
                                         @php $i=0; @endphp
                                         @foreach ($categories as $key => $cat)
                                             @if ($cat['name'] != 'Flowers')
                                                 <li>
                                                     <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                        class="filter-button @if ($i == 0) active @endif"
+                                                        class="filter-button"
                                                         onclick="filterCategory($(this))">
                                                         {{ $cat['name'] }}
                                                     </a>
@@ -324,7 +324,7 @@
                 }, 15);
             });
 
-            $(".active").click();
+            // $(".active").click();
         });
 
         var filterTabWidth = $('.hedtab').outerWidth();
