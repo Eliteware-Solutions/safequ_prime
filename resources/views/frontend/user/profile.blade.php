@@ -41,10 +41,20 @@
                             <input type="email" name="email" id="email" value="{{ Auth::user()->email }}"
                                 required />
                         </div>
+
+                        @php
+                            $address = explode(',', Auth::user()->address);
+                        @endphp
+
                         <div class="form-group">
-                            <label for="address">Flat / House No.</label>
-                            <input type="text" name="address" id="address" value="{{ Auth::user()->address }}"
-                                required />
+                            <label for="flat_no">Flat / House No.</label>
+                            <input type="text" name="flat_no" id="flat_no" onkeypress="return restrictComma(event)"
+                                value="{{ trim($address[0]) }}" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" name="address" id="address"
+                                value="{{ implode(', ', array_slice($address, 1)) }}" required />
                         </div>
                         <button type="submit" class="btn primary-btn mt-4 btn-block">Save</button>
                     </form>
@@ -62,6 +72,14 @@
     function validate_name() {
         let element = document.getElementById('name');
         element.value = element.value.replace(/[^a-zA-Z\s@]+/, '');
+    }
+
+    function restrictComma(e) {
+        if (e.keyCode === 44) {
+            return false;
+        } else {
+            return true;
+        }
     }
 </script>
 @section('script')

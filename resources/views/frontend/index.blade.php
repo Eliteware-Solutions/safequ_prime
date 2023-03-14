@@ -29,9 +29,9 @@
             <div class="container">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center justify-content-start">
-                        <p class="offer-text fw500 tiny-text text-white mb-0">Get flat 50%* off up to Rs.100 on your first
-                            order on the app. &nbsp;
-                            <span>Use Code: Safe2023</span>
+                        <p class="offer-text fw500 tiny-text text-white mb-0">Get <b class="primary-text fw500">flat 50%*</b>
+                            off up to <b class="primary-text fw500">Rs.100</b> on your first order on the app. <span>Use
+                                Code: <b class="primary-text fw500">safe2023</b></span>
                         </p>
                         <button class="btn btn-primary-fill installPWABtn" id="installPWA"
                             style="display: none">Download</button>
@@ -70,8 +70,8 @@
                 <div class="hidden-top-nav d-flex align-items-center">
                     <div class="d-flex align-items-center">
                         <a href="{{ route('home') }}" class="nav-logo mr-3" aria-label="SafeQu" title="SafeQu">
-                            <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260" height="123"
-                                alt="SafeQU">
+                            <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" width="260"
+                                height="123" alt="SafeQU">
                         </a>
                         <p class="tiny-text secondary-text mb-0">
                             Honest, Fresh Produce. Delivered to your doorstep.
@@ -370,52 +370,9 @@
         </section>
 
         <!-- Deals Of The Day -->
-        @if ($deals_of_the_day)
+        @if (count($deals_of_the_day) > 0)
             <section class="deals py-lg-5 py-4">
                 <div class="container">
-                    {{-- <h2 class="title text-center pt-2">Deal Of The Day</h2>
-
-                    <div class="content py-md-5 py-4 b-rd-20">
-                        <div class="row m-0 py-md-3">
-                            <div class="col-lg-5 offset-md-1 prd-details py-3">
-                                <div class="d-flex align-items-start pb-2 justify-content-center flex-column h-100">
-                                    <p class="loc-tag mb-2 p-1 px-2 bg-white d-inline-block b-rd-10">Imported from
-                                        Mahabaleshwar
-                                    </p>
-
-                                    <h2 class="deal-title text-white mb-3">Strawberry</h2>
-
-                                    <h5 class="qty-val fw700 text-white mb-4">- 500 gram pack</h5>
-
-                                    <button class="btn btn-fill-white org-clr hover-primary"
-                                        onclick="addToCart(14, 48, 1);">
-                                        <img src="{{ static_asset('assets/img/new-design/btn-cart.svg') }}"
-                                            onload="SVGInject(this)" alt="Btn Cart">
-                                        Buy Now
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-5 py-md-3 text-right position-relative deal-img">
-                                <img src="{{ static_asset('assets/img/new-design/hero-img-2.webp') }}"
-                                    class="deal-prd-img" width="731" height="557" alt="Strawberry">
-                                <div class="prd-benefit">
-                                    <div class="d-flex align-items-center pb-3 mb-md-3 justify-content-end">
-                                        <p class="text-white fw600 mr-3 mb-0">Great <br> for Skin</p>
-                                        <img src="{{ static_asset('assets/img/new-design/face.svg') }}"
-                                            class="injectable" width="72" height="72" alt="Icon">
-                                    </div>
-                                    <div class="d-flex align-items-center pb-2 justify-content-end">
-                                        <p class="text-white fw600 mr-3 mb-0">Improves <br> Heart Health</p>
-                                        <img src="{{ static_asset('assets/img/new-design/heart.svg') }}"
-                                            class="injectable" width="72" height="72" alt="Icon">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> --}}
-
                     <div class="content pt-lg-5 pt-4 overflow-hide">
                         <h2 class="title text-center text-white">Deal{{ count($deals_of_the_day) > 1 ? 's' : '' }} Of The
                             Day</h2>
@@ -778,7 +735,8 @@
                             <ul class="p-0 m-0">
                                 <li><a href="#">Eluciidaate Tech Pvt Ltd</a></li>
                                 <li><a href="mailto:customerservice@safequ.co">customerservice@safequ.co</a></li>
-                                <li><a href="https://wa.me/{{ $whatsAppNo }}" class="scrollTo">{{ $whatsAppNo }}</a>
+                                <li><a href="https://wa.me/{{ $whatsAppNo }}"
+                                        class="scrollTo">{{ $whatsAppNo }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -1159,6 +1117,18 @@
             });
 
             locationButton.addEventListener("click", () => {
+                //Geolocation APU is used to get geographical position of a user and is available inside the navigator object
+                if (navigator.geolocation) {
+                    //returns position(latitude and longitude) or error
+                    navigator.geolocation.getCurrentPosition(showLocation, checkError);
+                } else {
+                    //For old browser i.e IE
+                    AIZ.plugins.notify('danger',
+                        '{{ translate('The browser does not support geolocation') }}');
+                }
+            });
+
+            locationButton2.addEventListener("click", () => {
                 //Geolocation APU is used to get geographical position of a user and is available inside the navigator object
                 if (navigator.geolocation) {
                     //returns position(latitude and longitude) or error

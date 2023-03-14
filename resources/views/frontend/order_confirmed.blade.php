@@ -37,9 +37,9 @@
                                             </div>
                                             <div class="pl-3">
                                                 <h6 class="fw700 mb-1">{{ $product->name }}</h6>
-                                                <p class="fw500 fsize13 body-txt mb-1">Variety: &nbsp; {{ $product->tags }}
+                                                <p class="fw500 fsize13 body-txt mb-1">Variety: &nbsp; {{ explode(",",$product->tags)[0] }}
                                                 </p>
-                                                <p class="fw500 fsize13 body-txt mb-0">Direct: &nbsp;
+                                                <p class="fw500 fsize13 body-txt mb-0">Farm Location: &nbsp;
                                                     {{ $product->manufacturer_location }}</p>
                                             </div>
                                         </div>
