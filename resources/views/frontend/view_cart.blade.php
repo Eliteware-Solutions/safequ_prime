@@ -29,7 +29,7 @@
                                         {{ $user_data->address . ' ' . $user_data->city . ' ' . $user_data->state . ' ' . $user_data->postal_code }}
                                     </label>
                                 </div>
-                            @else
+                            @elseif (auth()->user())
                                 <div class="text-center">
                                     <a href="{{ route('profile') }}">
                                         <button class="btn primary-btn btn-round py-1"> Add Address</button>
