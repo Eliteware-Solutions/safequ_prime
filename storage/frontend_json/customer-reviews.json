@@ -1,14 +1,14 @@
 {
     "customer1": {
-        "image": "user-m.png",
-        "name": "NK",
+        "image": "user-f.png",
+        "name": "Nisha",
         "community": "Planet Godrej",
         "review": "SafeQU gives me a business class experience in my grocery shopping.",
         "rating": 5
     },
     "customer2": {
-        "image": "user-m.png",
-        "name": "SK",
+        "image": "user-f.png",
+        "name": "Suchita",
         "community": "Chaitanya Towers",
         "review": "Love all your produce…. Avocados, Passion Fruits and Strawberries. Most of all your customer attention to detail. Thanks!",
         "rating": 4

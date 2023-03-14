@@ -909,9 +909,9 @@
                 loop: true,
                 responsiveClass: true,
                 dots: false,
-                autoplay: true,
-                autoplayTimeout: 4500,
-                smartSpeed: 1500,
+                // autoplay: true,
+                // autoplayTimeout: 4500,
+                // smartSpeed: 1500,
                 navText: [
                     "<img src='{{ static_asset('assets/img/new-design/left-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>",
                     "<img src='{{ static_asset('assets/img/new-design/right-arw-o.svg') }}' class='injectable nav-arrow' onload='SVGInject(this)' alt='Nav Btn'>"
