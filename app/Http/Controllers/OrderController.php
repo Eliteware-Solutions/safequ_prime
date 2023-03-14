@@ -171,7 +171,6 @@ class OrderController extends Controller
     public function order_payment_link(Request $request)
     {
         $result = array();
-        $this->send_wati_template_msg($request->id);
         $order = Order::findOrFail($request->id);
         $fields = array('amount' => intval(round(floatval($order->grand_total) * 100)), 'currency' => 'INR', "reference_id" => $order->id . '#' . rand(10000, 99999), 'description' => 'For SafeQu Order', 'customer' => array('name' => $order->user->name, 'email' => $order->user->email, 'contact' => $order->user->phone), 'reminder_enable' => true, 'notes' => array('order_id' => $order->id, 'order_code' => $order->code, 'payment_for' => 'order'), "callback_url" => route('payment.link_payment_success'), "callback_method" => "get");
 
@@ -218,36 +217,6 @@ class OrderController extends Controller
         }
 
         return $result;
-    }
-
-    public function send_wati_template_msg($id)
-    {
-        $order = Order::find($id);
-        if ($order) {
-
-            $bodyAry = array();
-            $bodyAry['template_name'] = 'shopify_default_ordershipment_tracking_url_v5';
-            $bodyAry['broadcast_name'] = 'shopify_default_ordershipment_tracking_url_v5';
-            $bodyAry['parameters'] = array(
-                array('name' => 'name', 'value' => $order->user->name),
-                array('name' => 'shop_name', 'value' => 'SafeQu'),
-                array('name' => 'order_status_url_partial_variable', 'value' => "https://s.wati.io/"),
-            );
-
-            $client = new \GuzzleHttp\Client();
-            $phone = str_replace('+', '', $order->user->phone);
-            $response = $client->request('POST', env('WATI_API_END_POINT').'/api/v1/sendTemplateMessage?whatsappNumber='.$phone, [
-                'verify' => false,
-                'body' => json_encode($bodyAry),
-                'headers' => [
-                    'Authorization' => env('WATI_API_TOKEN'),
-                    'content-type' => 'text/json',
-                ],
-            ]);
-
-            dd($response->getBody());
-
-        }
     }
 
     public function all_orders_show($id)
