@@ -476,15 +476,16 @@
             if (qty > 0) {
                 addToCart(productId, productStockId, qty);
             } else {
-                removeFromCart(cartId);
+                removeFromCart(cartId, productId, productStockId);
             }
         }
 
-        function removeFromCart(cartId) {
-            // e.preventDefault();
+        function removeFromCart(cartId, productId, productStockId) {
             $.post('{{ route('cart.removeFromCart') }}', {
                 _token: AIZ.data.csrf,
-                id: cartId
+                id: cartId,
+                product_id: productId,
+                product_stock_id: productStockId
             }, function(data) {
                 updateNavCart(data.cart_count);
                 // $('#cart_summary').html(data.cart_view);

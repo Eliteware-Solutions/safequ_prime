@@ -437,7 +437,9 @@
             e.preventDefault();
             $.post('{{ route('cart.removeFromCart') }}', {
                 _token: AIZ.data.csrf,
-                id: key
+                id: key,
+                product_id: 0,
+                product_stock_id: 0
             }, function(data) {
                 updateNavCart(data.cart_count);
                 $('#cart_summary').html(data.cart_view);

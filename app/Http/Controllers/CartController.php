@@ -449,7 +449,23 @@ class CartController extends Controller
     //removes from Cart
     public function removeFromCart(Request $request)
     {
-        Cart::destroy($request->id);
+        $cur_cart = Cart::where('id', $request->id)->first();
+        if ($cur_cart) {
+            Cart::destroy($request->id);
+        } elseif (isset($request->product_id) && isset($request->product_stock_id)) {
+            $cartData = array();
+            if (auth()->user() != null) {
+                $user_id = Auth::user()->id;
+                $cartData = Cart::where(['user_id' => $user_id, 'product_id' => $request->product_id, 'product_stock_id' => $request->product_stock_id])->first();
+            } else {
+                $temp_user_id = $request->session()->get('temp_user_id');
+                $cartData = Cart::where(['temp_user_id' => $temp_user_id, 'product_id' => $request->product_id, 'product_stock_id' => $request->product_stock_id])->first();
+            }
+            if ($cartData) {
+                Cart::destroy($cartData->id);
+            }
+        }
+
         $user_data = array();
         $shop = array();
         if (auth()->user() != null) {
