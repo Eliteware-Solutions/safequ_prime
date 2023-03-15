@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\WholesaleService;
 use Auth;
+use DB;
 
 class WholesaleProductController extends Controller
 {
@@ -24,7 +25,11 @@ class WholesaleProductController extends Controller
 
         // $products = Product::where('wholesale_product', 1)->orderBy('created_at', 'desc');
         // $products = Product::orderBy('created_at', 'desc');
-        $products = Product::orderBy('published', 'desc');
+        $products = Product::select(DB::raw('DISTINCT products.id'), 'published', 'todays_deal', 'is_best_selling', 'products.*')
+                    ->join('product_stocks', 'product_stocks.product_id', '=', 'products.id')
+                    ->orderBy('published', 'desc')
+                    ->orderBy('is_best_selling', 'desc')
+                    ->orderBy('todays_deal', 'desc');
 
         if ($request->has('user_id') && $request->user_id != null) {
             $products = $products->where('user_id', $request->user_id);
