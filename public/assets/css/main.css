@@ -2921,6 +2921,17 @@ input[type=checkbox]:checked+.check-box::before,
     background-color: transparent;
 }
 
+.tab_horizontal_card .countitem {
+    margin-left: 0.25rem;
+}
+
+@media screen and (min-width: 992px) {
+    .tab_horizontal_card .countitem {
+        min-width: 96px;
+        margin-left: 0.75rem;
+    }
+}
+
 .mobile_hr_card .lftcount,
 .tab_horizontal_card .lftcount {
     border-right: 1px solid #C4C4C4 !important;
@@ -4375,12 +4386,12 @@ a.loadbtn {
 .tab_horizontal_card img.top_img {
     object-fit: cover;
     object-position: center;
-    height: 130px;
-    width: 130px;
-    min-height: 130px;
-    min-width: 130px;
-    max-height: 130px;
-    max-width: 130px;
+    height: 110px;
+    width: 110px;
+    min-height: 110px;
+    min-width: 110px;
+    max-height: 110px;
+    max-width: 110px;
 }
 
 .tab_horizontal_card {

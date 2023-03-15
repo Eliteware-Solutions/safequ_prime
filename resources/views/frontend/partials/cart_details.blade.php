@@ -130,7 +130,7 @@
             <!-- Amount -->
                 <div class="row">
                     <div class="col-12 text-center">
-                        <a href="{{ route('shop.visit', session()->get('shop_slug')) }}" class="add_more_product_btn">+ Add More Products</a>
+                        <a href="{{ route('shop.visit') }}" class="add_more_product_btn">+ Add More Products</a>
                     </div>
                 </div>
                 <div class="payings py-4">
