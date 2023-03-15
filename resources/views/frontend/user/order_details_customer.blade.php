@@ -48,13 +48,16 @@
                             </p>
 
                             @if (json_decode($order->shipping_address))
+                                @php
+                                    $shipping_address = json_decode($order->shipping_address);
+                                    $city = trim($shipping_address->city) != '' ? ',<br />' . trim($shipping_address->city) : '';
+                                    $state = trim($shipping_address->state) != '' ? ', ' . trim($shipping_address->state) : '';
+                                    $country = trim($shipping_address->country) != '' ?  ',<br />' . trim($shipping_address->country) : '';
+                                    $postal_code = trim($shipping_address->postal_code) != '' ? ' - ' . trim($shipping_address->postal_code) : '';
+                                @endphp
                                 <p class="text-white fw600 mb-2">Delivery Address:</p>
                                 <p class="text-white address mb-0">
-                                    {{ json_decode($order->shipping_address)->address }},<br>
-                                    {{ json_decode($order->shipping_address)->city }},
-                                    {{ json_decode($order->shipping_address)->state }},<br>
-                                    {{ json_decode($order->shipping_address)->country }} -
-                                    {{ json_decode($order->shipping_address)->postal_code }}
+                                    {!! $shipping_address->address . $city . $state . $country . $postal_code !!}
                                 </p>
                             @endif
                         </div>

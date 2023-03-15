@@ -42,35 +42,35 @@
                                 </a>
                             </div>
 
-                            <!--                            <div class="py-1">
-                                        <a href="{{ route('invoice.download', $order->id) }}" class="fsize13">
-                                            <i class="fad fa-file-download text-primary"></i> &nbsp; Download invoice
-                                        </a>
-                                    </div>-->
+                            <!-- <div class="py-1">
+                                <a href="{{ route('invoice.download', $order->id) }}" class="fsize13">
+                                    <i class="fad fa-file-download text-primary"></i> &nbsp; Download invoice
+                                </a>
+                            </div>-->
 
                             <div class="delivery-status justify-content-between align-items-start pt-2">
 
                                 <table class="fsize11" width="100%">
                                     <th><b>#</b></th>
                                     <th><b>Product</b></th>
-                                    <th><b>Estimated Delivery Date</b></th>
+                                    {{-- <th><b>Estimated Delivery Date</b></th> --}}
                                     <tbody>
                                         @foreach ($order->orderDetails as $key => $detail)
-                                            @php
+                                            {{-- @php
                                                 if ($detail->is_archived == 1):
                                                     $deliveryDate = date('d M Y', strtotime($detail->archive_product_stock->purchase_end_date . '+' . intval($detail->archive_product_stock->est_shipping_days) . ' days'));
                                                 else:
                                                     $deliveryDate = date('d M Y', strtotime($detail->product_stock->purchase_end_date . '+' . intval($detail->product_stock->est_shipping_days) . ' days'));
                                                 endif;
-                                            @endphp
+                                            @endphp --}}
                                             <tr>
                                                 <td style="width:5%"> {{ ++$key }} </td>
                                                 <td style="width:55%"> {{ $detail->product->name }} </td>
                                                 <td style="width:40%">
                                                     @if ($detail->delivery_status == 'delivered')
                                                         {{ date('d M Y', strtotime($detail->updated_at)) . ' [Delivered]' }}
-                                                    @else
-                                                        {{ $deliveryDate }}
+                                                    {{-- @else
+                                                        {{ $deliveryDate }} --}}
                                                     @endif
                                                 </td>
                                             </tr>

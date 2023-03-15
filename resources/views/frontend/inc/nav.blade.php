@@ -76,7 +76,7 @@
                         @endauth
                     </ul>
                     @auth
-                        <div class="cart-icon pl-4">
+                        <div class="cart-icon pl-4 pr-3">
                             <a href="{{ route('all-notifications') }}">
                                 <i class="fad fa-bell-on fsize20"></i>
                                 @if (count(Auth::user()->unreadNotifications) > 0)
