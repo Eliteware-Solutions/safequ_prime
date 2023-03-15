@@ -48,12 +48,10 @@
                 <div class="collapse navbar-collapse disp-none-lg" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
                         @auth
-                            @if (session()->has('shop_slug'))
-                                <li class="nav-item">
-                                    <a class="nav-link"
-                                        href="{{ route('shop.visit', session()->get('shop_slug')) }}">Products</a>
-                                </li>
-                            @endif
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('shop.visit', session()->get('shop_slug')) }}">Products</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('profile') }}">Account</a>
                             </li>
@@ -147,11 +145,9 @@
 
             <ul class="side-nav-links bt-1 mb-0 py-2">
                 @auth
-                    @if (session()->has('shop_slug'))
-                        <a href="{{ route('shop.visit', session()->get('shop_slug')) }}">
-                            <li class="p-2 mb-2"><i class="fad fa-box-full"></i> Products</li>
-                        </a>
-                    @endif
+                    <a href="{{ route('shop.visit', session()->get('shop_slug')) }}">
+                        <li class="p-2 mb-2"><i class="fad fa-box-full"></i> Products</li>
+                    </a>
                     <a href="{{ route('purchase_history.index') }}">
                         <li class="p-2 mb-2"><i class="fad fa-bags-shopping"></i> My Orders</li>
                     </a>
