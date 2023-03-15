@@ -122,21 +122,12 @@
                                         </div>
                                     </div>
                                     <div class="pt-4 text-center">
-                                        @if ($user_data && intval($user_data->joined_community_id) > 0)
-                                            <a href="{{ route('shop.visit') }}">
-                                                <button class="btn primary-btn btn-round px-5">
-                                                    Continue Shopping &nbsp;&nbsp;
-                                                    <i class="fal fa-long-arrow-right text-white"></i>
-                                                </button>
-                                            </a>
-                                        @else
-                                            <a href="{{ route('home') }}">
-                                                <button class="btn primary-btn btn-round px-5">
-                                                    Continue Shopping &nbsp;&nbsp;
-                                                    <i class="fal fa-long-arrow-right text-white"></i>
-                                                </button>
-                                            </a>
-                                        @endif
+                                        <a href="{{ route('shop.visit') }}">
+                                            <button class="btn primary-btn btn-round px-5">
+                                                Continue Shopping &nbsp;&nbsp;
+                                                <i class="fal fa-long-arrow-right text-white"></i>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

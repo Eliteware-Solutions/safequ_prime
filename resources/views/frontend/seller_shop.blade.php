@@ -85,8 +85,10 @@
                                             @if ($product->product->category->slug != 'flowers')
                                                 @php
                                                     $cart_qty = 0;
+                                                    $cart_id = 0;
                                                     if (count($cart) > 0 && isset($cart[$product->id])) {
                                                         $cart_qty = $cart[$product->id]['qty'];
+                                                        $cart_id = $cart[$product->id]['cart_id'];
                                                     }
                                                     $addCartQty = $cart_qty + 1;
 
@@ -153,6 +155,7 @@
                                                                     data-field="quantity"
                                                                     data-product_id="{{ $product->product->id }}"
                                                                     data-product_stock_id="{{ $product->id }}"
+                                                                    data-cart_id="{{ $cart_id }}"
                                                                     onclick="decrementValue($(this))">
                                                                 <input type="number" step="1" min="0"
                                                                     max="10" value="{{ $cart_qty }}"
@@ -458,6 +461,7 @@
             let fieldName = $(obj).data('field');
             let productId = $(obj).data('product_id');
             let productStockId = $(obj).data('product_stock_id');
+            let cartId = $(obj).data('cart_id');
             let parent = $(obj).closest('div');
             let currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
             let qty = 0;
@@ -469,7 +473,23 @@
                 parent.find('input[name=' + fieldName + ']').val(0);
             }
 
-            addToCart(productId, productStockId, qty);
+            if (qty > 0) {
+                addToCart(productId, productStockId, qty);
+            } else {
+                removeFromCart(cartId);
+            }
+        }
+
+        function removeFromCart(cartId) {
+            // e.preventDefault();
+            $.post('{{ route('cart.removeFromCart') }}', {
+                _token: AIZ.data.csrf,
+                id: cartId
+            }, function(data) {
+                updateNavCart(data.cart_count);
+                // $('#cart_summary').html(data.cart_view);
+                AIZ.plugins.notify('success', "{{ translate('Item has been removed from cart') }}");
+            });
         }
 
         function getVariantPrice(qty, productId, productStockId) {

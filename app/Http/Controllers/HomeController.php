@@ -496,6 +496,7 @@ class HomeController extends Controller
             $cart_data = Cart::where('temp_user_id', session('temp_user_id'))->get();
         }
         foreach ($cart_data as $cart_val) {
+            $cart[$cart_val->product_stock_id]['cart_id'] = $cart_val->id;
             $cart[$cart_val->product_stock_id]['qty'] = $cart_val->quantity;
             $cart[$cart_val->product_stock_id]['product_id'] = $cart_val->product_id;
             $cart[$cart_val->product_stock_id]['product_stock_id'] = $cart_val->product_stock_id;
