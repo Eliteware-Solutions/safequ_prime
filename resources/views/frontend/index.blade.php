@@ -1180,62 +1180,71 @@
             // Detect Location Ends
 
             // InstaFeed
-            $.ajax({
-                type: "GET",
-                url: 'https://feeds.behold.so/Uxbc9QWrdl5z39UXeMbD',
-                success: function(data) {
+            $('.insta-feed').hide();
+            if($(location). attr("href") == 'https://safequ.in/') {
+                $.ajax({
+                    type: "GET",
+                    timeout: 8000,
+                    url: 'https://feeds.behold.so/Uxbc9QWrdl5z39UXeMbD',
+                    success: function(data) {
+                        $('.insta-feed').show()
 
-                    $.each(data, function(key, val) {
-                        if (val['mediaType'] == "IMAGE") {
-                            var media = '<img src="' + val['mediaUrl'] +
-                                '" class="feed-image" alt="Insta Feed">';
-                        } else {
-                            var media =
-                                `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` +
-                                val['mediaUrl'] + `" type="video/mp4"> </video>`;
-                        }
-
-                        let html = `<div class="item">
-                            <div class="feed-card trnsn-300ms w-100">
-                                <div class="feed-img">` + media + `</div>
-                                <p class="pt-2 my-2 px-1 feed-caption">` + val['caption'] + `</p>
-                            </div>
-                        </div>`;
-                        $('#instafeed').append(html)
-                    });
-
-                    $(".insta-feed-slider").owlCarousel({
-                        ...carouselObj,
-                        margin: 30,
-                        nav: false,
-                        dots: true,
-                        responsive: {
-                            0: {
-                                items: 1,
-                            },
-                            575: {
-                                items: 2,
-                            },
-                            768: {
-                                items: 3,
-                            },
-                            992: {
-                                items: 4
-                            },
-                            1200: {
-                                items: 4,
-                                nav: true,
-                                dots: false,
-                            },
-                            1440: {
-                                items: 5,
-                                nav: true,
-                                dots: false,
+                        $.each(data, function(key, val) {
+                            if (val['mediaType'] == "IMAGE") {
+                                var media = '<img src="' + val['mediaUrl'] +
+                                    '" class="feed-image" alt="Insta Feed">';
+                            } else {
+                                var media =
+                                    `<video width="100%" controls preload="auto" class="feed-image"> <source src= "` +
+                                    val['mediaUrl'] + `" type="video/mp4"> </video>`;
                             }
-                        }
-                    })
-                },
-            });
+
+                            let html = `<div class="item">
+                                <div class="feed-card trnsn-300ms w-100">
+                                    <div class="feed-img">` + media + `</div>
+                                    <p class="pt-2 my-2 px-1 feed-caption">` + val['caption'] + `</p>
+                                </div>
+                            </div>`;
+                            $('#instafeed').append(html)
+                        });
+
+                        $(".insta-feed-slider").owlCarousel({
+                            ...carouselObj,
+                            margin: 30,
+                            nav: false,
+                            dots: true,
+                            responsive: {
+                                0: {
+                                    items: 1,
+                                },
+                                575: {
+                                    items: 2,
+                                },
+                                768: {
+                                    items: 3,
+                                },
+                                992: {
+                                    items: 4
+                                },
+                                1200: {
+                                    items: 4,
+                                    nav: true,
+                                    dots: false,
+                                },
+                                1440: {
+                                    items: 5,
+                                    nav: true,
+                                    dots: false,
+                                }
+                            }
+                        })
+                    },
+                    error: function(data) {
+                        console.log('Insta Feed Error.');
+                        $('.insta-feed').hide()
+                    }
+                });
+            }
         })
 
         function confrimCommunityChange(url) {

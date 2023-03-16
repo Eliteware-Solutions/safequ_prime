@@ -29,7 +29,7 @@ class InvoiceController extends Controller
         }else{
             $direction = 'ltr';
             $text_align = 'left';
-            $not_text_align = 'right';            
+            $not_text_align = 'right';
         }
 
         if($currency_code == 'BDT' || $language_code == 'bd'){
@@ -54,7 +54,7 @@ class InvoiceController extends Controller
             // general for all
             $font_family = "'Roboto','sans-serif'";
         }
-        
+
         // $config = ['instanceConfigurator' => function($mpdf) {
         //     $mpdf->showImageErrors = true;
         // }];

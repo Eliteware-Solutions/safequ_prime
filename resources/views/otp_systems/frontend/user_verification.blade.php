@@ -7,7 +7,7 @@
 
                 <div class="logo-div pb-5">
                     <a href="{{ route('home') }}">
-                        <img src="{{ static_asset('assets/img/safequ-logo.png') }}" alt="SafeQu Logo">
+                        <img src="{{ static_asset('assets/img/new-design/safequ-logo.png') }}" alt="SafeQu Logo">
                     </a>
                 </div>
 
