@@ -95,6 +95,8 @@
                         <th>{{translate('Name')}}</th>
                         <th data-breakpoints="sm">{{translate('Price')}}</th>
                         <th data-breakpoints="lg">{{translate('Published')}}</th>
+                        <th data-breakpoints="lg">{{translate('Best Seller')}}</th>
+                        <th data-breakpoints="lg">{{translate('Deal Status')}}</th>
                         @if(get_setting('product_approve_by_admin') == 1 && $type == 'Seller')
                             <th data-breakpoints="lg">{{translate('Approved')}}</th>
                         @endif
@@ -131,6 +133,12 @@
                                            type="checkbox" <?php if ($product->published == 1) echo "checked"; ?> >
                                     <span class="slider round"></span>
                                 </label>
+                            </td>
+                            <td>
+                                <?= $product->is_best_selling == 1 ? 'Yes' : '--'; ?>
+                            </td>
+                            <td>
+                                <?= $product->todays_deal == 1 ? 'Yes' : '--'; ?>
                             </td>
                             @if(get_setting('product_approve_by_admin') == 1 && $type == 'Seller')
                                 <td>
@@ -197,6 +205,10 @@
             }
 
         });
+
+        function update_best_seller(el) {
+            console.log('BEst seller Function');
+        }
 
         function update_todays_deal(el) {
             if (el.checked) {
