@@ -411,7 +411,7 @@ class HomeController extends Controller
         foreach ($parentCategories as $cat) {
             $categorizedProd[$cat->id] = ProductStock::whereHas('product', function ($query) use ($cat) {
                 $query->where('parent_category_id', $cat->id)->where('published', 1);
-            })->where('seller_id', 0)->inRandomOrder()->limit(10)->get();
+            })->where('seller_id', 0)->inRandomOrder()->get();
         }
 
         $all_products = array();
