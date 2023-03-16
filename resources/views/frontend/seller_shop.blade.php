@@ -585,7 +585,8 @@
 
         function findProduct(text) {
             $('.searchCard').hide()
-            $('.searchText:contains("' + $(text).val() + '")').parent().show()
+            let searchText = $(text).val().toLowerCase()
+            $('.searchText:contains("' + searchText + '")').parent().show()
         }
     </script>
 
