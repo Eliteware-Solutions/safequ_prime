@@ -54,10 +54,11 @@
                             <div class="container">
                                 <!-- Tabs -->
                                 <div class="hedtab mb-3 trnsn-300-sm">
-                                    <div>
-                                        <h4 class="fw700 title-txt ">Our
+                                    <div class="search-lg">
+                                        {{-- <h4 class="fw700 title-txt ">Our
                                             <ins class="primary-color fw700">Products</ins>
-                                        </h4>
+                                        </h4> --}}
+                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.." class="form-control" onkeyup="findProduct(this)">
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
                                         <li><a href="#" data-toggle="tab" data-filter="all" class="filter-button active"
@@ -76,6 +77,9 @@
                                             @php $i++; @endphp
                                         @endforeach
                                     </ul>
+                                    <div class="search-sm pt-3">
+                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.." class="form-control" onkeyup="findProduct(this)">
+                                    </div>
                                     <!-- Tabs -->
                                 </div>
 
@@ -107,7 +111,8 @@
                                                         $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
                                                     }
                                                 @endphp
-                                                <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} ">
+                                                <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} searchCard">
+                                                    <div class="searchText" style="display: none">{{ strtolower($product->product->name) }}</div>
                                                     <div class="tab_horizontal_card p-3 m-0 position-relative">
                                                         @if ($product->product->todays_deal == 1)
                                                             <div class="deal-type">Flat {{ $product->product->discount }}%
@@ -576,6 +581,11 @@
                     }
                 });
             }
+        }
+
+        function findProduct(text) {
+            $('.searchCard').hide()
+            $('.searchText:contains("' + $(text).val() + '")').parent().show()
         }
     </script>
 

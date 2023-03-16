@@ -4013,6 +4013,12 @@ h4.title-txt {
     margin-right: 10px;
 }
 
+@media screen and (min-width: 992px) {
+    .search-sm {
+        display: none;
+    }
+}
+
 @media screen and (max-width: 991px) {
     .hedtab {
         padding: 25px 15px;
@@ -4021,11 +4027,19 @@ h4.title-txt {
     }
 
     .hedtab ul#tabs {
-        padding-top: 15px;
+        padding-top: 0;
+    }
+
+    .hedtab.fixed-div ul#tabs {
+        padding-top: 42px;
+    }
+
+    .search-lg {
+        display: none;
     }
 
     .lodha_nestedtab ul#tabs li a {
-        min-width: 90px;
+        min-width: 65px;
         font-size: 0.875rem !important;
         line-height: 1.3 !important;
         color: #848484 !important;
@@ -4050,12 +4064,6 @@ h4.title-txt {
         -moz-transition: all 0.3s ease-in-out;
         -ms-transition: all 0.3s ease-in-out;
         -o-transition: all 0.3s ease-in-out;
-    }
-}
-
-@media screen and (max-width: 380px) {
-    .lodha_nestedtab ul#tabs li a {
-        min-width: 65px;
     }
 }
 
@@ -4584,10 +4592,6 @@ form.checkout-form .form-control:focus-visible {
         min-height: calc(100vh - 212.45px);
     }
 
-    main.withOnlyHdr {
-        min-height: calc(100vh - 73.3px);
-    }
-
     .slider-content h1 {
         font-size: 1.98rem !important;
     }
@@ -4604,10 +4608,6 @@ form.checkout-form .form-control:focus-visible {
 
     main.withOnlyFtr {
         min-height: calc(100vh - 171.69px);
-    }
-
-    main.withOnlyHdr {
-        min-height: calc(100vh - 73.3px);
     }
 }
 
