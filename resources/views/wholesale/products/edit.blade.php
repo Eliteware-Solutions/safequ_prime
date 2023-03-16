@@ -84,7 +84,7 @@
                                 <label class="col-lg-3 col-from-label">{{translate('Minimum Purchase Qty')}}</label>
                                 <div class="col-lg-8">
                                     <input type="number" lang="en" class="form-control" name="min_qty"
-                                           value="{{$product->min_qty}}" min="0.1" step=".001" required>
+                                           value="{{$product->min_qty}}" min="0.001" step=".001" required>
                                 </div>
                             </div>
                             <div class="form-group row">

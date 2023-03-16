@@ -76,7 +76,7 @@
                                             class="text-danger">*</span></label>
                                 <div class="col-md-8">
                                     <input type="number" lang="en" class="form-control" name="min_qty" value="1"
-                                           min="0.1" step="0.001" required>
+                                           min="0.001" step="0.001" required>
                                 </div>
                             </div>
                             <div class="form-group row">
