@@ -2971,6 +2971,16 @@ input[type=checkbox]:checked+.check-box::before,
     color: #000;
 }
 
+.tab_horizontal_card .prdTag {
+    font-size: 13px;
+}
+
+@media screen and (max-width: 620px) {
+    .tab_horizontal_card .prdTag {
+        font-size: 12px;
+    }
+}
+
 p.fruite-location {
     font-size: 19px !important;
     line-height: 20.97px;
@@ -3093,9 +3103,9 @@ media query 991
         display: flex;
         align-items: center;
         justify-content: space-between;
-        max-width: 80px;
+        max-width: 88px;
         flex-wrap: nowrap;
-        min-width: 80px;
+        min-width: 88px;
     }
 
     .mobile_hr_card .icon-sm,
@@ -4038,6 +4048,12 @@ h4.title-txt {
         display: none;
     }
 
+    .search-sm {
+        width: 100%;
+        max-width: 350px;
+        padding: 0 0.75rem;
+    }
+
     .lodha_nestedtab ul#tabs li a {
         min-width: 65px;
         font-size: 0.875rem !important;
@@ -4526,6 +4542,10 @@ form.checkout-form .form-control:focus-visible {
     .services h6 {
         min-height: 48px;
     }
+
+    .search-lg {
+        min-width: 300px;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -4537,6 +4557,10 @@ form.checkout-form .form-control:focus-visible {
 
     .aiz-file-box-wrap {
         width: 16.66666%;
+    }
+
+    .search-lg {
+        min-width: 400px;
     }
 }
 

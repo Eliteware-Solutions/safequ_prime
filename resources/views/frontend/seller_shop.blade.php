@@ -144,34 +144,35 @@
                                                                     <p class="price">{!! single_price_web($product_price) !!} /
                                                                         {{ $qty_unit_main }}</p>
                                                                 @endif
-                                                                <div class="cartbtn">
-                                                                    <img src="./public/assets/img/carts.svg" class=" cart"
-                                                                        alt="cart">
-                                                                    <a href="javacript:;" class="cartbtn"> Add
-                                                                        to Cart</a>
-                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="countitem">
-                                                            <div class="input-group w-auto counterinput">
-                                                                <input type="button" value="-"
-                                                                    class="button-minus  icon-shape icon-sm lftcount"
-                                                                    data-field="quantity"
-                                                                    data-product_id="{{ $product->product->id }}"
-                                                                    data-product_stock_id="{{ $product->id }}"
-                                                                    data-cart_id="{{ $cart_id }}"
-                                                                    onclick="decrementValue($(this))">
-                                                                <input type="number" step="1" min="0"
-                                                                    max="10" value="{{ $cart_qty }}"
-                                                                    name="quantity" id="quantity"
-                                                                    class="quantity-field border-0 text-center w-25">
-                                                                <input type="button" value="+"
-                                                                    class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                    data-field="quantity"
-                                                                    data-product_id="{{ $product->product->id }}"
-                                                                    data-product_stock_id="{{ $product->id }}"
-                                                                    onclick="incrementValue($(this))">
+                                                        <div>
+                                                            @if (explode(',', $product->product->tags)[0] != '')
+                                                                <div class="prdTag pb-2 mb-1 text-right">
+                                                                    &#x2022; <i class="m-0">{{ explode(',', $product->product->tags)[0] }}</i>
+                                                                </div>
+                                                            @endif
+                                                            <div class="countitem">
+                                                                <div class="input-group w-auto counterinput">
+                                                                    <input type="button" value="-"
+                                                                        class="button-minus  icon-shape icon-sm lftcount"
+                                                                        data-field="quantity"
+                                                                        data-product_id="{{ $product->product->id }}"
+                                                                        data-product_stock_id="{{ $product->id }}"
+                                                                        data-cart_id="{{ $cart_id }}"
+                                                                        onclick="decrementValue($(this))">
+                                                                    <input type="number" step="1" min="0"
+                                                                        max="10" value="{{ $cart_qty }}"
+                                                                        name="quantity" id="quantity"
+                                                                        class="quantity-field border-0 text-center w-25">
+                                                                    <input type="button" value="+"
+                                                                        class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                                        data-field="quantity"
+                                                                        data-product_id="{{ $product->product->id }}"
+                                                                        data-product_stock_id="{{ $product->id }}"
+                                                                        onclick="incrementValue($(this))">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
