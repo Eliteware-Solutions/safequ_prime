@@ -180,6 +180,11 @@
                                             @endif
                                         @endforeach
 
+                                        <div class="col-lg-6 mx-auto noProductInSearch" style="display: none;">
+                                            <img src="{{ static_asset('assets/img/product-not-found.jpg') }}"
+                                                class="mw-100 mx-auto">
+                                        </div>
+
                                         {{-- <div class="col-md-12">
                                             <a href="#" class="loadbtn">
                                                 <img src="./public/assets/img/Vector.png"
@@ -585,8 +590,16 @@
 
         function findProduct(text) {
             $('.searchCard').hide()
+            $('.noProductInSearch').hide()
+
+            $('main').attr('style', 'min-height: ' + (window.innerHeight - $('footer').height()) + 'px !important')
+
             let searchText = $(text).val().toLowerCase()
             $('.searchText:contains("' + searchText + '")').parent().show()
+
+            if($('.searchText:contains("' + searchText + '")').length == 0) {
+                $('.noProductInSearch').show()
+            }
         }
     </script>
 
