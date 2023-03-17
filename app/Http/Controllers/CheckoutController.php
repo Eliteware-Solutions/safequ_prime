@@ -43,7 +43,8 @@ class CheckoutController extends Controller
     {
         if ($request->payment_option != null) {
             if (!Auth::check()) {
-                $user = User::where('phone', '+91'.$request->phone)->first();
+                $user = User::where('phone', '+91' . $request->phone)->first();
+
                 if ($user) {
                     $this->guard()->login($user);
                 } else {
@@ -77,7 +78,7 @@ class CheckoutController extends Controller
                 Cart::where('temp_user_id', session('temp_user_id'))
                     ->update([
                         'user_id' => $user->id,
-//                            'temp_user_id' => null
+                        // 'temp_user_id' => null
                     ]);
 
                 Session::forget('temp_user_id');
@@ -239,7 +240,7 @@ class CheckoutController extends Controller
     public function get_shipping_info(Request $request)
     {
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-//        if (Session::has('cart') && count(Session::get('cart')) > 0) {
+        //        if (Session::has('cart') && count(Session::get('cart')) > 0) {
         if ($carts && count($carts) > 0) {
             $categories = Category::all();
             return view('frontend.shipping_info', compact('categories', 'carts'));
@@ -303,16 +304,18 @@ class CheckoutController extends Controller
 
                     foreach (json_decode($cartItem['shipping_cost'], true) as $shipping_region => $val) {
                         if ($shipping_info['city'] == $shipping_region) {
-                            $cartItem['shipping_cost'] = (double)($val);
+                            $cartItem['shipping_cost'] = (float)($val);
                             break;
                         } else {
                             $cartItem['shipping_cost'] = 0;
                         }
                     }
                 } else {
-                    if (!$cartItem['shipping_cost'] ||
+                    if (
+                        !$cartItem['shipping_cost'] ||
                         $cartItem['shipping_cost'] == null ||
-                        $cartItem['shipping_cost'] == 'null') {
+                        $cartItem['shipping_cost'] == 'null'
+                    ) {
 
                         $cartItem['shipping_cost'] = 0;
                     }
@@ -320,11 +323,9 @@ class CheckoutController extends Controller
 
                 $shipping += $cartItem['shipping_cost'];
                 $cartItem->save();
-
             }
             $total = $subtotal + $tax + $shipping;
             return view('frontend.payment_select', compact('carts', 'shipping_info', 'total'));
-
         } else {
             flash(translate('Your Cart was empty'))->warning();
             return redirect()->route('home');
@@ -367,7 +368,6 @@ class CheckoutController extends Controller
                             } elseif ($coupon->discount_type == 'amount') {
                                 $coupon_discount = $coupon->discount;
                             }
-
                         } else {
                             $flag = false;
                             $response_message['response'] = 'warning';
@@ -416,7 +416,7 @@ class CheckoutController extends Controller
 
         $carts = Cart::where('user_id', Auth::user()->id)
             ->get();
-//        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
+        //        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
 
         $returnHTML = view('frontend.partials.cart_details', compact('coupon', 'carts', 'user_data'))->render();
         return response()->json(array('response_message' => $response_message, 'html' => $returnHTML));
@@ -437,7 +437,7 @@ class CheckoutController extends Controller
         $carts = Cart::where('user_id', Auth::user()->id)
             ->get();
 
-//        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
+        //        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
         $user_data = Auth::user();
         return view('frontend.partials.cart_details', compact('coupon', 'carts', 'user_data'));
     }

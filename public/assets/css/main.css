@@ -347,7 +347,7 @@ h6 {
 
 .fsize13,
 .xs-text {
-    font-size: 0.86rem !important;
+    font-size: 0.835rem !important;
 }
 
 .fsize14,
@@ -1340,34 +1340,62 @@ button.btn-before-none::before,
     padding-top: 0 !important;
     background: #fff;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    min-width: 80px;
+    width: 85px;
+    height: 85px;
     box-shadow: 0 0 15px -5px #aebfff;
 }
 
 .img-name .item-img img {
-    width: 56px;
-    height: 56px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     -o-object-fit: cover;
     object-fit: cover;
 }
 
-.crtord-itm-card .img-name .item-img {
+.thankyou-card .tab_horizontal_card .location {
+    display: flex;
+}
+
+.thankyou-card .tab_horizontal_card .location img {
+    width: 22px;
+    height: 22px;
+    margin-top: -0.225rem;
+    margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 520px) {
+    .img-name .item-img {
+        min-width: 75px;
+        min-height: 75px;
+        max-width: 75px;
+        height: 75px;
+    }
+
+    .img-name .item-img img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .thankyou-card .tab_horizontal_card h6 {
+        font-size: 0.92rem;
+    }
+}
+
+/* .crtord-itm-card .img-name .item-img {
     width: 60px;
     height: 60px;
     min-width: 60px;
     border-radius: 50%;
-}
+} */
 
-.crtord-itm-card .img-name .item-img img {
+/* .crtord-itm-card .img-name .item-img img {
     width: 42px;
     height: 42px;
     border-radius: 50%;
     -o-object-fit: cover;
     object-fit: cover;
-}
+} */
 
 .img-name-sm {
     display: flex;
@@ -1470,9 +1498,10 @@ button.btn-before-none::before,
 }
 
 .thankyou-card {
-    padding: 35px;
+    padding: 25px 20px;
     border-radius: 15px;
-    box-shadow: 0 0 15px -8px #b2c3ff;
+    /* box-shadow: 0 0 15px -8px #b2c3ff; */
+    border: 1px solid #ecf0ff;
 }
 
 #dropdownFilter {
@@ -4416,6 +4445,8 @@ a.loadbtn {
     min-width: 110px;
     max-height: 110px;
     max-width: 110px;
+    box-shadow: 2px 4px 10px -5px #c9c9c9;
+    border: 1px solid white;
 }
 
 .tab_horizontal_card {
@@ -4895,5 +4926,35 @@ nav .nav-icons svg:hover {
 @media screen and (min-width: 992px) {
     .view-sm {
         display: none !important;
+    }
+}
+
+p.tagStrip {
+    position: absolute;
+    background-color: red;
+    top: 1.4rem;
+    left: -2rem;
+    font-size: 0.775rem !important;
+    width: 100%;
+    max-width: 130px;
+    padding: 0.2rem 1.25rem;
+    text-align: center;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+}
+
+@media screen and (max-width: 575px) {
+
+    .deal-type,
+    p.tagStrip {
+        font-size: 11px !important;
+    }
+
+    p.tagStrip {
+        top: 1.2rem;
+        left: -2.3rem;
     }
 }

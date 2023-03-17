@@ -27,8 +27,15 @@
                                 @foreach ($order->orderDetails as $order_detail)
                                     @php
                                         $product = \App\Models\Product::find($order_detail->product_id);
+
+                                        if ($order_detail->quantity * floatval($order_detail->product->min_qty) < 1) {
+                                            $qty_unit = 1000 * floatval($order_detail->product->min_qty) . ' ' . $order_detail->product->secondary_unit;
+                                        } else {
+                                            $qty_unit = $order_detail->quantity * floatval($order_detail->product->min_qty) . ' ' . $order_detail->product->unit;
+                                        }
                                     @endphp
-                                    <div class="d-flex justify-content-between align-items-center pb-3">
+                                    <div
+                                        class="tab_horizontal_card mb-3 d-flex justify-content-between align-items-center py-3 pl-3 pr-2">
                                         <div class="img-name d-flex align-items-center">
                                             <div class="item-img text-center">
                                                 <img src="{{ uploaded_asset($product->photos) }}"
@@ -36,11 +43,18 @@
                                                     alt="{{ $product->name }}" />
                                             </div>
                                             <div class="pl-3">
-                                                <h6 class="fw700 mb-1">{{ $product->name }}</h6>
-                                                <p class="fw500 fsize13 body-txt mb-1">Variety: &nbsp; {{ explode(",",$product->tags)[0] }}
+                                                @if (trim($product->manufacturer_location) != '')
+                                                <p class="fw500 fsize13 body-txt mb-2 location">
+                                                    <img src="{{ static_asset('assets/img/new-design/farm.png') }}" width="32" height="32" alt="Farm Icon">
+                                                    {{ $product->manufacturer_location }}
                                                 </p>
-                                                <p class="fw500 fsize13 body-txt mb-0">Farm Location: &nbsp;
-                                                    {{ $product->manufacturer_location }}</p>
+                                                @endif
+
+                                                <h6 class="fw700 @if (trim($product->variation) != '') mb-0 @endif">{{ $product->name }}</h6>
+
+                                                @if (trim($product->variation) != '')
+                                                <p class="fw500 fsize12 body-txt mb-2">({{ $product->variation }})</p>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

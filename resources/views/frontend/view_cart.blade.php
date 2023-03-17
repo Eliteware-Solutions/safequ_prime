@@ -59,9 +59,9 @@
                                     $product->unit = floatval($product->min_qty) * 1000 . ' ' . $product->secondary_unit;
                                 }
                             @endphp
-                            <div class="crtord-itm-card mb-4 p-3">
+                            <div class="crtord-itm-card mb-4 py-3 px-2">
                                 <div class="img-name w-100">
-                                    <div class="p-0 mxw-85px">
+                                    <div class="p-0">
                                         <div class="item-img text-center">
                                             <img src="{{ uploaded_asset($product->photos) }}"
                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"

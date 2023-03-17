@@ -58,18 +58,18 @@
                                         {{-- <h4 class="fw700 title-txt ">Our
                                             <ins class="primary-color fw700">Products</ins>
                                         </h4> --}}
-                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.." class="form-control" onkeyup="findProduct(this)">
+                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.."
+                                            class="form-control" onkeyup="findProduct(this)">
                                     </div>
                                     <ul class="nav nav-tabs" id="tabs">
-                                        <li><a href="#" data-toggle="tab" data-filter="all" class="filter-button active"
-                                                onclick="filterCategory($(this))">All</a></li>
+                                        <li><a href="#" data-toggle="tab" data-filter="all"
+                                                class="filter-button active" onclick="filterCategory($(this))">All</a></li>
                                         @php $i=0; @endphp
                                         @foreach ($categories as $key => $cat)
                                             @if ($cat['name'] != 'Flowers')
                                                 <li>
                                                     <a href="#" data-toggle="tab" data-filter="{{ $cat['filter'] }}"
-                                                        class="filter-button"
-                                                        onclick="filterCategory($(this))">
+                                                        class="filter-button" onclick="filterCategory($(this))">
                                                         {{ $cat['name'] }}
                                                     </a>
                                                 </li>
@@ -78,7 +78,8 @@
                                         @endforeach
                                     </ul>
                                     <div class="search-sm pt-3">
-                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.." class="form-control" onkeyup="findProduct(this)">
+                                        <input type="text" name="searchProduct" id="searchProduct" placeholder="Search.."
+                                            class="form-control" onkeyup="findProduct(this)">
                                     </div>
                                     <!-- Tabs -->
                                 </div>
@@ -111,12 +112,15 @@
                                                         $qty_unit_main = 1000 * floatval($product->product->min_qty) . ' ' . $product->product->secondary_unit;
                                                     }
                                                 @endphp
-                                                <div class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} searchCard">
-                                                    <div class="searchText" style="display: none">{{ strtolower($product->product->name) }}</div>
+                                                <div
+                                                    class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} searchCard">
+                                                    <div class="searchText" style="display: none">
+                                                        {{ strtolower($product->product->name) }}</div>
                                                     <div class="tab_horizontal_card p-3 m-0 position-relative">
-                                                        @if ($product->product->todays_deal == 1)
-                                                            <div class="deal-type">Flat {{ $product->product->discount }}%
-                                                                Off</div>
+                                                        @if (explode(',', $product->product->tags)[0] != '')
+                                                            <div class="deal-type">
+                                                                {{ explode(',', $product->product->tags)[0] }}
+                                                            </div>
                                                         @endif
                                                         <div class="tab_hori_inr">
                                                             <div>
@@ -147,32 +151,31 @@
                                                             </div>
                                                         </div>
 
-                                                        <div>
-                                                            @if (explode(',', $product->product->tags)[0] != '')
-                                                                <div class="prdTag pb-2 mb-1 text-right">
-                                                                    &#x2022; <i class="m-0">{{ explode(',', $product->product->tags)[0] }}</i>
-                                                                </div>
-                                                            @endif
-                                                            <div class="countitem">
-                                                                <div class="input-group w-auto counterinput">
-                                                                    <input type="button" value="-"
-                                                                        class="button-minus  icon-shape icon-sm lftcount"
-                                                                        data-field="quantity"
-                                                                        data-product_id="{{ $product->product->id }}"
-                                                                        data-product_stock_id="{{ $product->id }}"
-                                                                        data-cart_id="{{ $cart_id }}"
-                                                                        onclick="decrementValue($(this))">
-                                                                    <input type="number" step="1" min="0"
-                                                                        max="10" value="{{ $cart_qty }}"
-                                                                        name="quantity" id="quantity"
-                                                                        class="quantity-field border-0 text-center w-25">
-                                                                    <input type="button" value="+"
-                                                                        class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                        data-field="quantity"
-                                                                        data-product_id="{{ $product->product->id }}"
-                                                                        data-product_stock_id="{{ $product->id }}"
-                                                                        onclick="incrementValue($(this))">
-                                                                </div>
+                                                        @if ($product->product->todays_deal == 1)
+                                                            <p class="tagStrip m-0 text-white fw500">
+                                                                Flat {{ $product->product->discount }}% Off
+                                                            </p>
+                                                        @endif
+
+                                                        <div class="countitem">
+                                                            <div class="input-group w-auto counterinput">
+                                                                <input type="button" value="-"
+                                                                    class="button-minus  icon-shape icon-sm lftcount"
+                                                                    data-field="quantity"
+                                                                    data-product_id="{{ $product->product->id }}"
+                                                                    data-product_stock_id="{{ $product->id }}"
+                                                                    data-cart_id="{{ $cart_id }}"
+                                                                    onclick="decrementValue($(this))">
+                                                                <input type="number" step="1" min="0"
+                                                                    max="10" value="{{ $cart_qty }}"
+                                                                    name="quantity" id="quantity"
+                                                                    class="quantity-field border-0 text-center w-25">
+                                                                <input type="button" value="+"
+                                                                    class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                                    data-field="quantity"
+                                                                    data-product_id="{{ $product->product->id }}"
+                                                                    data-product_stock_id="{{ $product->id }}"
+                                                                    onclick="incrementValue($(this))">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -598,7 +601,7 @@
             let searchText = $(text).val().toLowerCase()
             $('.searchText:contains("' + searchText + '")').parent().show()
 
-            if($('.searchText:contains("' + searchText + '")').length == 0) {
+            if ($('.searchText:contains("' + searchText + '")').length == 0) {
                 $('.noProductInSearch').show()
             }
         }

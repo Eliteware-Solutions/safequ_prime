@@ -177,7 +177,7 @@ class OrderController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_USERPWD => env('RAZOR_KEY').':'.env('RAZOR_SECRET'),
+            CURLOPT_USERPWD => env('RAZOR_KEY') . ':' . env('RAZOR_SECRET'),
             CURLOPT_URL => 'https://api.razorpay.com/v1/payment_links/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
@@ -273,7 +273,7 @@ class OrderController extends Controller
         $all_payments = $all_payments->paginate(15);
         $payments = array();
 
-        foreach ($all_payments AS $key => $val) {
+        foreach ($all_payments as $key => $val) {
             if (trim($val->webhook_data) != '') {
                 $webhook_data = json_decode($val->webhook_data);
                 if (isset($webhook_data->payload->payment->entity)) {
@@ -285,15 +285,15 @@ class OrderController extends Controller
                         $payments[$key]['amount'] = (floatval($entity->amount) > 0 ? floatval($entity->amount) / 100 : 0);
                         $payments[$key]['status'] = $entity->status;
                         if ($entity->method == "card" && isset($entity->card)) {
-                            $cardDetails = (trim($entity->card->name) != '' ? '<b>Name:</b> '.$entity->card->name.'</br>' : '');
-                            $cardDetails .= ($entity->card->last4 ? '<b>Last4:</b> '.$entity->card->last4.'</br>' : '');
-                            $cardDetails .= ($entity->card->network ? '<b>Network:</b> '.$entity->card->network.'</br>' : '');
+                            $cardDetails = (trim($entity->card->name) != '' ? '<b>Name:</b> ' . $entity->card->name . '</br>' : '');
+                            $cardDetails .= ($entity->card->last4 ? '<b>Last4:</b> ' . $entity->card->last4 . '</br>' : '');
+                            $cardDetails .= ($entity->card->network ? '<b>Network:</b> ' . $entity->card->network . '</br>' : '');
                             $payments[$key]['method'] = $entity->method . '</br>' . $cardDetails;
                         } elseif ($entity->method == "netbanking") {
-                            $bankDetails = (trim($entity->bank) != '' ? '<b>Name:</b> '.$entity->bank : '');
+                            $bankDetails = (trim($entity->bank) != '' ? '<b>Name:</b> ' . $entity->bank : '');
                             $payments[$key]['method'] = $entity->method . '</br>' . $bankDetails;
                         } elseif ($entity->method == "upi") {
-                            $upiDetails = (trim($entity->vpa) != '' ? '<b>ID:</b> '.$entity->vpa : '');
+                            $upiDetails = (trim($entity->vpa) != '' ? '<b>ID:</b> ' . $entity->vpa : '');
                             $payments[$key]['method'] = $entity->method . '</br>' . $upiDetails;
                         } else {
                             $payments[$key]['method'] = $entity->method;
@@ -538,11 +538,11 @@ class OrderController extends Controller
             $shippingAddress['name']        = Auth::user()->name;
             $shippingAddress['email']       = Auth::user()->email;
             $shippingAddress['address']     = Auth::user()->address;
-            $shippingAddress['country']     = Auth::user()->community->country;
-            $shippingAddress['state']       = Auth::user()->community->state;
-            $shippingAddress['city']        = Auth::user()->community->city;
-            $shippingAddress['postal_code'] = Auth::user()->community->postal_code;
-            $shippingAddress['phone']       = Auth::user()->community->phone;
+            $shippingAddress['phone']       = Auth::user()->phone;
+            $shippingAddress['country']     = (Auth::user()->community ? Auth::user()->community->country : '');
+            $shippingAddress['state']       = (Auth::user()->community ? Auth::user()->community->state : '');
+            $shippingAddress['city']        = (Auth::user()->community ? Auth::user()->community->city : '');
+            $shippingAddress['postal_code'] = (Auth::user()->community ? Auth::user()->community->postal_code : '');
         }
 
         $combined_order = new CombinedOrder;
