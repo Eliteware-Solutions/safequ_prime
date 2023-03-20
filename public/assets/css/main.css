@@ -4923,8 +4923,45 @@ nav .nav-icons svg:hover {
     line-height: 1 !important;
 }
 
+.fixed-cart {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0.9rem 0.75rem 0.7rem;
+    z-index: 200;
+    background-color: white;
+    box-shadow: 0 2px 12px 0px #d7d7d7;
+}
+
+.fixed-cart a {
+    padding: 0.5rem;
+    width: 100%;
+    background-color: var(--primary);
+    color: white !important;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.035rem;
+    border-radius: 0.25rem;
+    -webkit-border-radius: 0.25rem;
+    -moz-border-radius: 0.25rem;
+    -ms-border-radius: 0.25rem;
+    -o-border-radius: 0.25rem;
+}
+
+.fixed-cart a span{
+    color: white !important;
+    font-weight: 600;
+    font-size: 1.125rem;
+    letter-spacing: 0.035rem;
+}
+
 @media screen and (min-width: 992px) {
     .view-sm {
+        display: none !important;
+    }
+    .fixed-cart {
         display: none !important;
     }
 }

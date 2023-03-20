@@ -191,6 +191,7 @@ class CartController extends Controller
                         return array(
                             'status'        => 0,
                             'cart_count'    => count($carts),
+                            'cart_total'    => 0,
                             'modal_view'    => view('frontend.partials.auctionProductAlredayAddedCart')->render(),
                             'nav_cart_view' => view('frontend.partials.cart')->render(),
                         );
@@ -227,6 +228,7 @@ class CartController extends Controller
                         }
                     }
                 }
+
                 if (!$foundInCart) {
                     Cart::create($data);
                 }
@@ -241,15 +243,27 @@ class CartController extends Controller
                 $temp_user_id = $request->session()->get('temp_user_id');
                 $carts = Cart::where('temp_user_id', $temp_user_id)->get();
             }
-            calculateShippingCost($carts);
 
             $carts = $this->manageCartCoupon($carts);
+
+            $cartTotalAmount = 0;
+            foreach ($carts as $cartItem) {
+                $cartTotalAmount = $cartTotalAmount + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+            }
+
+            $product_shipping_cost = calculateShippingCost($carts);
+            $cartTotalAmount += $product_shipping_cost;
+
+            if ($carts && $carts->sum('discount') > 0) {
+                $cartTotalAmount -= $carts->sum('discount');
+            }
 
             return array(
                 'status'     => 1,
                 'cart_count' => count($carts),
-                //                'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
-                //                'nav_cart_view' => view('frontend.partials.cart')->render(),
+                'cart_total' => $cartTotalAmount,
+                // 'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
+                // 'nav_cart_view' => view('frontend.partials.cart')->render(),
             );
         } else {
             $price = $product->bids->max('amount');
@@ -288,6 +302,7 @@ class CartController extends Controller
             return array(
                 'status'        => 1,
                 'cart_count'    => count($carts),
+                'cart_total'    => 0,
                 'modal_view'    => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
                 'nav_cart_view' => view('frontend.partials.cart')->render(),
             );
@@ -588,12 +603,23 @@ class CartController extends Controller
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
         }
 
-        calculateShippingCost($carts);
+        $cartTotalAmount = 0;
+        foreach ($carts as $cartItem) {
+            $cartTotalAmount = $cartTotalAmount + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+        }
+
+        $product_shipping_cost = calculateShippingCost($carts);
+        $cartTotalAmount += $product_shipping_cost;
+
+        if ($carts && $carts->sum('discount') > 0) {
+            $cartTotalAmount -= $carts->sum('discount');
+        }
 
         $carts = $this->manageCartCoupon($carts);
 
         return array(
             'cart_count'    => count($carts),
+            'cart_total'    => $cartTotalAmount,
             'cart_view'     => view('frontend.partials.cart_details', compact('carts', 'user_data', 'shop'))->render(),
             'nav_cart_view' => view('frontend.partials.cart')->render(),
         );
@@ -693,8 +719,21 @@ class CartController extends Controller
             $cart_count = $carts->count();
         }
 
+        $cart_total = 0;
+        foreach ($carts as $cartItem) {
+            $cart_total = $cart_total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+        }
+
+        $product_shipping_cost = calculateShippingCost($carts);
+        $cart_total += $product_shipping_cost;
+
+        if ($carts && $carts->sum('discount') > 0) {
+            $cart_total -= $carts->sum('discount');
+        }
+
         return array(
-            'cart_count' => $cart_count
+            'cart_count' => $cart_count,
+            'cart_total' => $cart_total
         );
     }
 

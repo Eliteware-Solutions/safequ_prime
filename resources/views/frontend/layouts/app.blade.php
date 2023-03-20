@@ -243,9 +243,10 @@
         //     }
         // }
 
-        function updateNavCart(count) {
+        function updateNavCart(count, amount) {
             if (count > 0) {
                 $('.cart-item-count, .fixed-cart').show();
+                $('.fixed-cart.pay-now-btn a').empty().append('Pay &#8377; ' + amount);
                 $('.cart-item-count').html(count);
                 $("main.cart-main-tag").removeClass("withOnlyHdr");
             } else {
@@ -268,8 +269,9 @@
                         quantity: qty
                     },
                     success: function(data) {
+                        console.log(data);
                         if (data.status == 1) {
-                            updateNavCart(data.cart_count);
+                            updateNavCart(data.cart_count, data.cart_total);
                             AIZ.plugins.notify('success', '{{ translate('Added to Cart') }}');
                             {{-- window.location.replace("{{ route('cart') }}"); --}}
                         } else {
@@ -284,7 +286,7 @@
             $.post('{{ route('cart.cartCount') }}', {
                 _token: AIZ.data.csrf
             }, function(data) {
-                updateNavCart(data.cart_count);
+                updateNavCart(data.cart_count, data.cart_total);
             });
         }
 

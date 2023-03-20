@@ -248,6 +248,14 @@
             </div>
         </a>
 
+        <div class="fixed-cart pay-now-btn" style="display: none;">
+            <div class="container">
+                <a href="{{ route('cart') }}" aria-label="Cart" title="Cart" class="d-block">
+                    Pay <span class="fw-600">750 ₹</span>
+                </a>
+            </div>
+        </div>
+
     </main>
 
 @endsection
@@ -501,7 +509,7 @@
                 product_id: productId,
                 product_stock_id: productStockId
             }, function(data) {
-                updateNavCart(data.cart_count);
+                updateNavCart(data.cart_count, data.cart_total);
                 // $('#cart_summary').html(data.cart_view);
                 AIZ.plugins.notify('success', "{{ translate('Item has been removed from cart') }}");
             });
