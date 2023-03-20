@@ -59,6 +59,7 @@ class CheckoutController extends Controller
                     $user = User::create([
                         'name' => $request->name,
                         'address' => $request->flat_no . ', ' . $request->address,
+                        'city' => $request->city,
                         'email' => $request->email,
                         'email_verified_at' => date("Y-m-d H:i:s"),
                         'password' => Hash::make($request->email),
