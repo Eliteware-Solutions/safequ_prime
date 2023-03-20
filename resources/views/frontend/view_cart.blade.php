@@ -162,7 +162,8 @@
                                 </h5>
                             </div>
 
-                            @if (Auth::check() && get_setting('coupon_system') == 1)
+{{--                            @if (Auth::check() && get_setting('coupon_system') == 1)--}}
+                            @if (get_setting('coupon_system') == 1)
                                 @if ($carts[0]['discount'] > 0)
                                     <div class="mb-3">
                                         <form class="" id="remove-coupon-form" enctype="multipart/form-data">
@@ -205,6 +206,10 @@
                                     @csrf
                                     @if (count($carts) > 0)
                                         <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                                    @endif
+
+                                    @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
+                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
                                     @endif
                                     <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
                                         options

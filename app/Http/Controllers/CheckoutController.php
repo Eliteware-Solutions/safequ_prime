@@ -46,6 +46,14 @@ class CheckoutController extends Controller
                 $user = User::where('phone', '+91' . $request->phone)->first();
 
                 if ($user) {
+                    if (isset($request->hdn_coupon_code)) {
+                        $coupon = Coupon::where('code', $request->hdn_coupon_code)->first();
+                        $coupon_usage = CouponUsage::where('coupon_id', $coupon->id)->where('user_id', $user->id)->first();
+                        if ($coupon_usage) {
+                            flash(translate('You already used this coupon!'))->warning();
+                            return back();
+                        }
+                    }
                     $this->guard()->login($user);
                 } else {
                     $user = User::create([
@@ -339,13 +347,31 @@ class CheckoutController extends Controller
         $user_data = Auth::user();
         if ($coupon != null) {
             if (strtotime(date('d-m-Y')) >= $coupon->start_date && strtotime(date('d-m-Y')) <= $coupon->end_date) {
-                if (CouponUsage::where('user_id', Auth::user()->id)->where('coupon_id', $coupon->id)->first() == null) {
+                $useCoupon = false;
+                if (Auth::user()) {
+                    $userCouponUsage = CouponUsage::where('user_id', Auth::user()->id)->where('coupon_id', $coupon->id)->first();
+                    if ($userCouponUsage == null) {
+                        $useCoupon = true;
+                    }
+                } else {
+                    if ($request->session()->get('temp_user_id')) {
+                        $useCoupon = true;
+                    }
+                }
+                if ($useCoupon) {
                     $flag = true;
                     $coupon_details = json_decode($coupon->details);
 
-                    $carts = Cart::where('user_id', Auth::user()->id)
-                        ->where('owner_id', $request->owner_id)
-                        ->get();
+                    $carts = array();
+                    if (Auth::user()) {
+                        $carts = Cart::where('user_id', Auth::user()->id)
+                            ->where('owner_id', $request->owner_id)
+                            ->get();
+                    } elseif ($request->session()->get('temp_user_id')) {
+                        $carts = Cart::where('temp_user_id', $request->session()->get('temp_user_id'))
+                            ->where('owner_id', $request->owner_id)
+                            ->get();
+                    }
 
                     $coupon_discount = 0;
                     if ($coupon->type == 'cart_base') {
@@ -388,7 +414,13 @@ class CheckoutController extends Controller
                     }
 
                     if ($flag) {
-                        Cart::where('user_id', Auth::user()->id)
+                        $where = array();
+                        if (Auth::user()) {
+                            $where = array('user_id' => Auth::user()->id);
+                        } elseif($request->session()->get('temp_user_id')) {
+                            $where = array('temp_user_id' => $request->session()->get('temp_user_id'));
+                        }
+                        Cart::where($where)
                             ->where('owner_id', $request->owner_id)
                             ->update(
                                 [
@@ -414,8 +446,14 @@ class CheckoutController extends Controller
             $response_message['message'] = translate('Invalid coupon!');
         }
 
-        $carts = Cart::where('user_id', Auth::user()->id)
-            ->get();
+        $carts = array();
+        if (Auth::user()) {
+            $carts = Cart::where('user_id', Auth::user()->id)
+                ->get();
+        } elseif ($request->session()->get('temp_user_id')) {
+            $carts = Cart::where('temp_user_id', $request->session()->get('temp_user_id'))
+                ->get();
+        }
         //        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
 
         $returnHTML = view('frontend.partials.cart_details', compact('coupon', 'carts', 'user_data'))->render();
@@ -424,7 +462,13 @@ class CheckoutController extends Controller
 
     public function remove_coupon_code(Request $request)
     {
-        Cart::where('user_id', Auth::user()->id)
+        $where = array();
+        if (Auth::user()) {
+            $where = array('user_id' => Auth::user()->id);
+        } elseif($request->session()->get('temp_user_id')) {
+            $where = array('temp_user_id' => $request->session()->get('temp_user_id'));
+        }
+        Cart::where($where)
             ->update(
                 [
                     'discount'       => 0.00,
@@ -434,8 +478,13 @@ class CheckoutController extends Controller
             );
 
         $coupon = Coupon::where('code', $request->code)->first();
-        $carts = Cart::where('user_id', Auth::user()->id)
-            ->get();
+        if (Auth::user()) {
+            $carts = Cart::where('user_id', Auth::user()->id)
+                ->get();
+        } elseif ($request->session()->get('temp_user_id')) {
+            $carts = Cart::where('temp_user_id', $request->session()->get('temp_user_id'))
+                ->get();
+        }
 
         //        $shipping_info = Address::where('id', $carts[0]['address_id'])->first();
         $user_data = Auth::user();
