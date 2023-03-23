@@ -52,7 +52,7 @@ class AdminController extends Controller
         $item['num_of_sale_data'] = $num_of_sale_data;
         $item['qty_data'] = $qty_data;
 
-        $item['total_customers'] = User::where('user_type', 'customer')->where('email_verified_at', '!=', null)->count();
+        $item['total_customers'] = User::where('user_type', 'customer')->count();
 
         $item['total_orders'] = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
             $query->where('payment_status', 'paid')->orWhere(function ($query) {
