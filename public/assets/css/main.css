@@ -1362,6 +1362,17 @@ button.btn-before-none::before,
     height: 22px;
     margin-top: -0.225rem;
     margin-right: 0.5rem;
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
+}
+
+.lodha_nestedtab .tab_hori_inr .tab_horizontal_card_detail p.location img {
+    width: 22px;
+    height: 22px;
+    margin-top: -0.65rem;
+    margin-right: 0.5rem;
+    filter: grayscale(1);
+    -webkit-filter: grayscale(1);
 }
 
 @media screen and (max-width: 520px) {
