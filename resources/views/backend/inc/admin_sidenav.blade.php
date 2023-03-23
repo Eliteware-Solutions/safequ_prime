@@ -503,14 +503,14 @@
                             <span class="aiz-side-nav-arrow"></span>
                         </a>
                         <ul class="aiz-side-nav-list level-2">
-                            <!--                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('in_house_sale_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['in_house_sale_report.index']) }}">
-                                    <span class="aiz-side-nav-text">{{ translate('In House Product Sale') }}</span>
-                                </a>
-                            </li>-->
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('idle-users.report') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Idle Customers') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('best-sale-products.report') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Best Selling Products') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
@@ -519,6 +519,16 @@
                                     <span class="aiz-side-nav-text">{{ translate('Seller Products Sale') }}</span>
                                 </a>
                             </li>
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('wallet-history.index') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Wallet Recharge History') }}</span>
+                                </a>
+                            </li>
+                        <!--                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('in_house_sale_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['in_house_sale_report.index']) }}">
+                                    <span class="aiz-side-nav-text">{{ translate('In House Product Sale') }}</span>
+                                </a>
+                            </li>-->
                             <!--                            <li class="aiz-side-nav-item">
                                 <a href="{{ route('stock_report.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['stock_report.index']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Products Stock') }}</span>
@@ -539,11 +549,6 @@
                                     <span class="aiz-side-nav-text">{{ translate('Commission History') }}</span>
                                 </a>
                             </li>-->
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('wallet-history.index') }}" class="aiz-side-nav-link">
-                                    <span class="aiz-side-nav-text">{{ translate('Wallet Recharge History') }}</span>
-                                </a>
-                            </li>
                         </ul>
                     </li>
                 @endif

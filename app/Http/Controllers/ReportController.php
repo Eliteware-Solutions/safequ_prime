@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\IdleCustomersExport;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CommissionHistory;
@@ -80,6 +81,23 @@ class ReportController extends Controller
     public function idle_users_export(Request $request)
     {
         return Excel::download(new IdleCustomersExport($request), 'idle_users.xlsx');
+    }
+
+    public function best_sale_products(Request $request)
+    {
+        $search = null;
+        $from_date = date('d-m-Y', strtotime(' -90 days'));
+        $to_date = date('d-m-Y');
+
+        if ($request->filter_date != null) {
+            $req_date = explode('to', $request->filter_date);
+            $from_date = date('d-m-Y', strtotime($req_date[0]));
+            $to_date = date('d-m-Y', strtotime($req_date[1]));
+        }
+
+        $order_details = OrderDetail::whereRaw(" DATE_FORMAT(order_details.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(order_details.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")->orderBy('order_count', 'desc');
+
+        $order_details = $order_details->paginate(20);
     }
 
     public function wish_report(Request $request)
