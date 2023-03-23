@@ -218,6 +218,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/wish_report', 'ReportController@wish_report')->name('wish_report.index');
     Route::get('/user_search_report', 'ReportController@user_search_report')->name('user_search_report.index');
     Route::get('/wallet-history', 'ReportController@wallet_transaction_history')->name('wallet-history.index');
+    Route::get('/idle-users-report', 'ReportController@idle_users_report')->name('idle-users.report');
+    Route::get('/idle-users-export', 'ReportController@idle_users_export')->name('idle_users.excel');
 
     //Blog Section
     Route::resource('blog-category', 'BlogCategoryController');

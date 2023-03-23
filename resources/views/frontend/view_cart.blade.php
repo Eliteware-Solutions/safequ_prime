@@ -162,7 +162,8 @@
                                 </h5>
                             </div>
 
-                            @if (Auth::check() && get_setting('coupon_system') == 1)
+{{--                            @if (Auth::check() && get_setting('coupon_system') == 1)--}}
+                            @if (get_setting('coupon_system') == 1)
                                 @if ($carts[0]['discount'] > 0)
                                     <div class="mb-3">
                                         <form class="" id="remove-coupon-form" enctype="multipart/form-data">
@@ -206,6 +207,10 @@
                                     @if (count($carts) > 0)
                                         <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                                     @endif
+
+                                    @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
+                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
+                                    @endif
                                     <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
                                         options
                                         to confirm your farm fresh order:</p>
@@ -224,19 +229,18 @@
                                                     autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="col-md-6 p-2">
+                                        <div class="col-md-4 p-2">
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="Email">
                                         </div>
-                                        <div class="col-md-6 p-2">
-                                            {{-- <select name="community" id="communityDropdown" class="form-control" required>
-                                                <option value="">Select Community</option>
-                                                @foreach ($shops as $val)
-                                                    <option value="{{ $val->user_id }}">{{ $val->name }}</option>
-                                                @endforeach
-                                            </select> --}}
+                                        <div class="col-md-4 p-2">
                                             <input type="text" class="form-control" name="flat_no" id="flat_no"
                                                 placeholder="Flat No.">
+                                        </div>
+                                        <div class="col-md-4 p-2">
+                                            <select name="city" id="city" class="form-control" required>
+                                                <option value="Mumbai">Mumbai</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-12 p-2">
                                             <textarea name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>

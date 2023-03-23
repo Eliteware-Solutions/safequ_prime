@@ -153,7 +153,7 @@
                     </h5>
                 </div>
 
-                @if (Auth::check() && get_setting('coupon_system') == 1)
+                @if (get_setting('coupon_system') == 1)
                     @if ($carts[0]['discount'] > 0)
                         <div class="mb-3">
                             <form class="" id="remove-coupon-form" enctype="multipart/form-data">
@@ -188,88 +188,154 @@
                     @endif
                 @endif
 
-                <form action="{{ route('payment.checkout') }}" class="form-default" role="form" method="POST"
-                      id="checkout-form">
-                    @csrf
+                <!-- Checkout Form -->
+                @if (!Auth::user())
+                    <form action="{{ route('payment.checkout') }}" role="form" class="checkout-form pb-5"
+                          id="checkout-form" method="POST">
+                        @csrf
+                        @if (count($carts) > 0)
+                            <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
+                        @endif
 
-                    @if(count($carts) > 0)
-                        <input type="hidden" name="owner_id" value="{{  $carts[0]['owner_id'] }}">
-                @endif
+                        @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
+                            <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
+                        @endif
+                        <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
+                            options
+                            to confirm your farm fresh order:</p>
 
-                <!-- Payment Method -->
-                    <div class="pay-method pb-3">
-
-                        @if(Auth::user())
-                            <p class="fsize12">Complete your payment easily using the below options to
-                                confirm your farm fresh order:</p>
-                            @if ($total > Auth::user()->balance)
-                                <div class="delivery-addr p-3 flex-astart-jstart mb-3">
-                                    <input type="checkbox" name="partial_payment" id="partial_payment"
-                                           class="mr-2"
-                                           @if(Auth::user()->balance == 0) disabled @else checked @endif/>
-                                    <span class="check-box"></span>
-
-                                    <label for="partial_payment" class="body-txt mb-0">
-                                                    <span class="align-middle body-txt">Use SafeQu balance <ins
-                                                                class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
-                                    </label>
+                        <div class="row">
+                            <div class="col-md-6 p-2">
+                                <input type="text" class="form-control" name="name" id="name"
+                                       placeholder="Full Name">
+                            </div>
+                            <div class="col-md-6 p-2">
+                                <div class="phone-form-group">
+                                    <input type="tel" id="phone-code" required maxlength="10"
+                                           minlength="10"
+                                           class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                           value="{{ old('phone') }}" placeholder="" name="phone"
+                                           autocomplete="off">
                                 </div>
-                                <input type="hidden" id="payable_amount"
-                                       value='{!! single_price_web($total - Auth::user()->balance) !!}'>
-                            @else
-                                <div class="other-gatewy p-3 mb-3">
-                                    <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
-                                        <input type="radio" id="pay-option2" name="payment_option" value="wallet"
-                                               tabindex="1" checked/>
-                                        <span class="align-middle body-txt">
-                                        SafeQu balance
-                                    </span>
-                                        <br>
-                                        <span class="align-middle body-txt cart_wallet_bal">
-                                        Available
-                                        <ins
-                                                class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins>
-                                        for Payment
-                                    </span>
-                                    </label>
-                                </div>
-                            @endif
-
-                            <div class="other-gatewy p-3 mb-3">
-                                <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
-                                    <input type="radio" id="pay-option1" name="payment_option" tabindex="1"
-                                           value="razorpay"
-                                           @if($total > Auth::user()->balance) checked @endif />
+                            </div>
+                            <div class="col-md-4 p-2">
+                                <input type="email" class="form-control" name="email" id="email"
+                                       placeholder="Email">
+                            </div>
+                            <div class="col-md-4 p-2">
+                                <input type="text" class="form-control" name="flat_no" id="flat_no"
+                                       placeholder="Flat No.">
+                            </div>
+                            <div class="col-md-4 p-2">
+                                <select name="city" id="city" class="form-control" required>
+                                    <option value="Mumbai">Mumbai</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 p-2">
+                                <textarea name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>
+                            </div>
+                            <div class="col-md-12 p-2">
+                                <label for="pay-option1" class="label-radio m-0 p-3 d-block">
+                                    <input type="radio" id="pay-option1" name="payment_option"
+                                           tabindex="1" value="razorpay" checked />
                                     <span class="align-middle body-txt">
-                                        PayTM / G-Pay / UPI / Net Banking
-                                    </span>
+                                                    PayTM / G-Pay / UPI / Net Banking
+                                                </span>
                                 </label>
                             </div>
+
+                            <div class="col-md-12 mt-4 p-2">
+                                <button type="button" class="btn primary-btn btn-block"
+                                        onclick="submitOrder(this)"
+                                        @if (count($carts) == 0) disabled @endif>Place Your Order
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+
+                @if(Auth::user())
+                    <form action="{{ route('payment.checkout') }}" class="form-default" role="form" method="POST"
+                          id="checkout-form">
+                        @csrf
+
+                        @if(count($carts) > 0)
+                            <input type="hidden" name="owner_id" value="{{  $carts[0]['owner_id'] }}">
                         @endif
-                    </div>
 
-                    <div class="p-3 pay-btn bt-1 flex-acenter-jbtw">
-                        <div class="total">
-                            <p class="fsize15 mb-1 body-txt">Total:</p>
-                            <h5 class="mb-0">
-                                <span class="fw500 h5" id="total_amount">{!! single_price_web($total) !!}</span>
-                                &nbsp;
-                            </h5>
-                        </div>
-                        <div>
-                            @if ($user_data && $user_data->address == '')
-                                <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
-                                   title="Please complete your profile before attempting to make payment">
-                                    <i class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
-                                </a>
-                            @endif
-                            <button id="btn_pay_now" class="btn primary-btn btn-round py-1" onclick="submitOrder(this)"
-                                    @if(count($carts) == 0 || ($user_data && $user_data->address == '')) disabled @endif >Pay Now
-                            </button>
-                        </div>
-                    </div>
+                        <!-- Payment Method -->
+                        <div class="pay-method pb-3">
 
-                </form>
+                                <p class="fsize12">Complete your payment easily using the below options to
+                                    confirm your farm fresh order:</p>
+                                @if ($total > Auth::user()->balance)
+                                    <div class="delivery-addr p-3 flex-astart-jstart mb-3">
+                                        <input type="checkbox" name="partial_payment" id="partial_payment"
+                                               class="mr-2"
+                                               @if(Auth::user()->balance == 0) disabled @else checked @endif/>
+                                        <span class="check-box"></span>
+
+                                        <label for="partial_payment" class="body-txt mb-0">
+                                                        <span class="align-middle body-txt">Use SafeQu balance <ins
+                                                                    class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" id="payable_amount"
+                                           value='{!! single_price_web($total - Auth::user()->balance) !!}'>
+                                @else
+                                    <div class="other-gatewy p-3 mb-3">
+                                        <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
+                                            <input type="radio" id="pay-option2" name="payment_option" value="wallet"
+                                                   tabindex="1" checked/>
+                                            <span class="align-middle body-txt">
+                                            SafeQu balance
+                                        </span>
+                                            <br>
+                                            <span class="align-middle body-txt cart_wallet_bal">
+                                            Available
+                                            <ins
+                                                    class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins>
+                                            for Payment
+                                        </span>
+                                        </label>
+                                    </div>
+                                @endif
+
+                                <div class="other-gatewy p-3 mb-3">
+                                    <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
+                                        <input type="radio" id="pay-option1" name="payment_option" tabindex="1"
+                                               value="razorpay"
+                                               @if($total > Auth::user()->balance) checked @endif />
+                                        <span class="align-middle body-txt">
+                                            PayTM / G-Pay / UPI / Net Banking
+                                        </span>
+                                    </label>
+                                </div>
+                        </div>
+
+                        <div class="p-3 pay-btn bt-1 flex-acenter-jbtw">
+                            <div class="total">
+                                <p class="fsize15 mb-1 body-txt">Total:</p>
+                                <h5 class="mb-0">
+                                    <span class="fw500 h5" id="total_amount">{!! single_price_web($total) !!}</span>
+                                    &nbsp;
+                                </h5>
+                            </div>
+                            <div>
+                                @if ($user_data && $user_data->address == '')
+                                    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
+                                       title="Please complete your profile before attempting to make payment">
+                                        <i class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
+                                    </a>
+                                @endif
+                                <button id="btn_pay_now" class="btn primary-btn btn-round py-1" onclick="submitOrder(this)"
+                                        @if(count($carts) == 0 || ($user_data && $user_data->address == '')) disabled @endif >Pay Now
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                @endif
             @endif
         </div>
     </div>
@@ -309,6 +375,41 @@
                 $('#cart_summary').html('');
                 $('#cart_summary').html(data.cart_view);
                 // $('#btn_pay_now').removeAttr('disabled');
+            });
+        }
+
+        if ($("#phone-code").length) {
+            var countryData = window.intlTelInputGlobals.getCountryData(),
+                input = document.querySelector("#phone-code");
+
+            for (var i = 0; i < countryData.length; i++) {
+                var country = countryData[i];
+                if (country.iso2 == 'bd') {
+                    country.dialCode = '88';
+                }
+            }
+
+            var iti = intlTelInput(input, {
+                separateDialCode: true,
+                utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
+                onlyCountries: ['in'],
+                customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+                    // if (selectedCountryData.iso2 == 'bd') {
+                    return "81234 56789";
+                    // }
+                    return selectedCountryPlaceholder;
+                }
+            });
+
+            var country = iti.getSelectedCountryData();
+            $('input[name=country_code]').val(country.dialCode);
+
+            input.addEventListener("countrychange", function(e) {
+                // var currentMask = e.currentTarget.placeholder;
+
+                var country = iti.getSelectedCountryData();
+                $('input[name=country_code]').val(country.dialCode);
+
             });
         }
     });
