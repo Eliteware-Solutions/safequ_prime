@@ -175,4 +175,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Order::class)->where('payment_status' ,'unpaid');
     }
+
+    public function last_order()
+    {
+        return $this->hasOne(Order::class)->orderBy('created_at', 'desc');
+    }
 }
