@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BestSaleProductsExport;
 use App\Models\IdleCustomersExport;
+use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\RegularCustomersExport;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CommissionHistory;
@@ -123,6 +125,47 @@ class ReportController extends Controller
     public function best_sale_products_export(Request $request)
     {
         return Excel::download(new BestSaleProductsExport($request), 'best_sale_products.xlsx');
+    }
+
+    public function regular_users_report(Request $request)
+    {
+        $search = null;
+        $order_by_count = 'desc';
+        $from_date = date('d-m-Y', strtotime(' -90 days'));
+        $to_date = date('d-m-Y');
+
+        if ($request->filter_date != null) {
+            $req_date = explode('to', $request->filter_date);
+            $from_date = date('d-m-Y', strtotime($req_date[0]));
+            $to_date = date('d-m-Y', strtotime($req_date[1]));
+        }
+
+        if ($request->order_by_count != null) {
+            $order_by_count = $request->order_by_count;
+        }
+
+        $orders = Order::select(DB::raw('COUNT(orders.id) as total_orders'), 'users.name as user_name', 'users.phone', 'users.email', 'users.address', 'orders.*')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' ")
+            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")
+            ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
+            ->groupBy('orders.user_id')
+            ->orderBy('total_orders', $order_by_count);
+
+        if ($request->search != null) {
+            $search = $request->search;
+            $orders = $orders->where('users.name', 'like', '%' . $request->search . '%')
+                            ->orWhere('users.phone', 'like', '%' . $request->search . '%')
+                            ->orWhere('users.email', 'like', '%' . $request->search . '%');
+        }
+
+        $orders = $orders->paginate(20);
+        return view('backend.reports.regular_customers_report', compact('orders', 'from_date', 'to_date', 'search', 'order_by_count'));
+    }
+
+    public function regular_users_export(Request $request)
+    {
+        return Excel::download(new RegularCustomersExport($request), 'regular_customers.xlsx');
     }
 
     public function wish_report(Request $request)
