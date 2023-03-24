@@ -72,7 +72,7 @@
                         </tbody>
                     </table>
                     <div class="aiz-pagination mt-4">
-                        {{ $users->links() }}
+                        {{ $users->appends(request()->input())->links() }}
                     </div>
                 </div>
             </div>

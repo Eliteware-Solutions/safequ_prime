@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BestSaleProductsExport;
 use App\Models\IdleCustomersExport;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Models\Search;
 use Auth;
 use Excel;
+use DB;
 
 class ReportController extends Controller
 {
@@ -86,6 +88,7 @@ class ReportController extends Controller
     public function best_sale_products(Request $request)
     {
         $search = null;
+        $order_by_count = 'desc';
         $from_date = date('d-m-Y', strtotime(' -90 days'));
         $to_date = date('d-m-Y');
 
@@ -95,9 +98,31 @@ class ReportController extends Controller
             $to_date = date('d-m-Y', strtotime($req_date[1]));
         }
 
-        $order_details = OrderDetail::whereRaw(" DATE_FORMAT(order_details.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(order_details.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")->orderBy('order_count', 'desc');
+        if ($request->order_by_count != null) {
+            $order_by_count = $request->order_by_count;
+        }
+
+        $order_details = OrderDetail::select(DB::raw('COUNT(order_details.product_id) as order_count'), DB::raw('SUM(quantity) as total_qty'), 'products.name as product_name', 'products.thumbnail_img', 'order_details.*')
+                            ->join('orders', 'orders.id', '=', 'order_details.order_id')
+                            ->join('products', 'products.id', '=', 'order_details.product_id')
+                            ->whereRaw(" DATE_FORMAT(order_details.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' ")
+                            ->whereRaw(" DATE_FORMAT(order_details.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")
+                            ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
+                            ->groupBy('order_details.product_id')
+                            ->orderBy('order_count', $order_by_count);
+
+        if ($request->search != null) {
+            $search = $request->search;
+            $order_details = $order_details->where('products.name', 'like', '%' . $request->search . '%');
+        }
 
         $order_details = $order_details->paginate(20);
+        return view('backend.reports.best_sale_products_report', compact('order_details', 'from_date', 'to_date', 'search', 'order_by_count'));
+    }
+
+    public function best_sale_products_export(Request $request)
+    {
+        return Excel::download(new BestSaleProductsExport($request), 'best_sale_products.xlsx');
     }
 
     public function wish_report(Request $request)

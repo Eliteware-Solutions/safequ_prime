@@ -221,6 +221,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/idle-users-report', 'ReportController@idle_users_report')->name('idle-users.report');
     Route::get('/idle-users-export', 'ReportController@idle_users_export')->name('idle_users.excel');
     Route::get('/best-sale-products', 'ReportController@best_sale_products')->name('best-sale-products.report');
+    Route::get('/best-sale-products-export', 'ReportController@best_sale_products_export')->name('best-sale-products.excel');
 
     //Blog Section
     Route::resource('blog-category', 'BlogCategoryController');
