@@ -40,7 +40,7 @@
     <main class="main-tag promain">
         <div class="breadcrumbs high">
             <div class="container">
-                <h5 class="mb-0 fw700 text-white text-uppercase">{{ translate('Products') }}</h5>
+                <h5 class="mb-0 fw700 text-white text-uppercase">{{ translate('Our weekly harvest') }}</h5>
             </div>
         </div>
         <div class="content  bgcream-product ">
@@ -131,7 +131,12 @@
                                                             </div>
                                                             <div class="  tab_horizontal_card_detail  ">
                                                                 @if ($product->product->manufacturer_location)
-                                                                    <span>{{ $product->product->manufacturer_location }}</span>
+                                                                    <p class="fw500 fsize13 body-txt mb-2 location">
+                                                                        <img src="{{ static_asset('assets/img/new-design/farm.png') }}"
+                                                                            class="mr-2" width="26" height="26"
+                                                                            alt="Farm Icon">
+                                                                        {{ $product->product->manufacturer_location }}
+                                                                    </p>
                                                                 @endif
                                                                 <p class="titlecard">
                                                                     {{ $product->product->name }} </p>
