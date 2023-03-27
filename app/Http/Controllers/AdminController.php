@@ -81,7 +81,9 @@ class AdminController extends Controller
         //     return $item;
         // });
         $cached_data = $item;
-        return view('backend.dashboard', compact('root_categories', 'cached_data', 'from', 'to'));
+        $cur_year = date('Y');
+
+        return view('backend.dashboard', compact('root_categories', 'cached_data', 'from', 'to', 'cur_year'));
     }
 
     function clearCache(Request $request)

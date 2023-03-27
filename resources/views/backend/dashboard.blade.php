@@ -172,6 +172,36 @@
         </div>
     @endif
 
+    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
+        <div class="row gutters-10">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="col-md-4">
+                            <h6 class="mb-0 fs-14">Test Line Chart</h6>
+                        </div>
+                        <div class="col-md-8">
+                            <select id="sales_line_chart_year" class="from-control aiz-selectpicker" name="sales_line_chart_year">
+                                <option value="{{ date("Y", strtotime("-3 year")) }}">{{ date("Y", strtotime("-3 year")) }}</option>
+                                <option value="{{ date("Y", strtotime("-2 year")) }}">{{ date("Y", strtotime("-2 year")) }}</option>
+                                <option value="{{ date("Y", strtotime("-1 year")) }}">{{ date("Y", strtotime("-1 year")) }}</option>
+                                <option value="{{ date("Y") }}" @if($cur_year == date("Y")) selected @endif > {{ date("Y") }}</option>
+                            </select>
+                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
+                                <option value="month">Monthly</option>
+                                <option value="week">Weekly</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" onclick="filterSalesLineChart()"> Filter </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="sales_line_chart" class="w-100" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             <h6 class="mb-0">{{ translate('Top 12 Products') }}</h6>
@@ -277,6 +307,72 @@
                 }
             }
         });
+
+        initSalesLineChart();
+
+        function filterSalesLineChart() {
+            AIZ.plugins.chart('#sales_line_chart', {
+                type: 'line',
+                data: {
+                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    datasets:[{
+                        label: '{{ translate('Test Line Chart') }}',
+                        data: [5,6,7,2,8,2,6],
+                        backgroundColor: 'transparent',
+                        borderColor: "#4f7dff",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Line Chart'
+                        }
+                    }
+                },
+            });
+        }
+
+        function initSalesLineChart() {
+            AIZ.plugins.chart('#sales_line_chart', {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets:[{
+                        label: '{{ translate('Test Line Chart') }}',
+                        data: [5,6,7,2,8,2,6,5,4,9,6,3],
+                        backgroundColor: 'transparent',
+                        borderColor: "#fd3995",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Line Chart'
+                        }
+                    }
+                },
+            });
+        }
 
         $('#filter_date').on('apply.daterangepicker', function (ev, picker) {
             $('form#dashboard_filter').submit();
