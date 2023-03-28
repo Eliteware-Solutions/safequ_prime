@@ -63,7 +63,7 @@
                         <tbody>
                         @foreach ($orders as $key => $order)
                             <tr>
-                                <td>{{ $key+1 }}</td>
+                                <td>{{ ($key+1) + ($orders->currentPage() - 1)*$orders->perPage() }}</td>
                                 <td>{{ $order->user_name }}</td>
                                 <td>{{ $order->phone }}</td>
                                 <td>{{ $order->email }}</td>

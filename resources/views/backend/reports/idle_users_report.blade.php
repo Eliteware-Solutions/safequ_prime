@@ -56,7 +56,7 @@
                         <tbody>
                         @foreach ($users as $key => $user)
                             <tr>
-                                <td>{{ $key+1 }}</td>
+                                <td>{{ ($key+1) + ($users->currentPage() - 1)*$users->perPage() }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ $user->email }}</td>
