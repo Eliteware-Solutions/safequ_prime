@@ -150,7 +150,8 @@ class ReportController extends Controller
             ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")
             ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
             ->groupBy('orders.user_id')
-            ->orderBy('total_orders', $order_by_count);
+            ->orderBy('total_orders', $order_by_count)
+            ->orderBy('users.name', 'asc');
 
         if ($request->search != null) {
             $search = $request->search;
