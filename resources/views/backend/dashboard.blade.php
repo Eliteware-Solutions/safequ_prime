@@ -195,7 +195,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="sales_line_chart" class="w-100" height="400"></canvas>
+                        <canvas id="sales_monthly_line_chart" class="w-100" height="400"></canvas>
+                        <canvas id="sales_weekly_line_chart" class="w-100" height="400"></canvas>
                     </div>
                 </div>
             </div>
@@ -308,70 +309,59 @@
             }
         });
 
-        initSalesLineChart();
+        filterSalesLineChart();
 
         function filterSalesLineChart() {
-            AIZ.plugins.chart('#sales_line_chart', {
-                type: 'line',
-                data: {
-                    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                    datasets:[{
-                        label: '{{ translate('Test Line Chart') }}',
-                        data: [5,6,7,2,8,2,6],
-                        backgroundColor: 'transparent',
-                        borderColor: "#4f7dff",
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    elements: {
-                        line: {
-                            tension: 0
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Line Chart'
-                        }
-                    }
-                },
+            let chartId = 'sales_monthly_line_chart';
+            $('#sales_monthly_line_chart').hide();
+            $('#sales_weekly_line_chart').hide();
+            if ($('#sales_line_chart_type').val() == 'month') {
+                $('#sales_monthly_line_chart').show();
+            } else {
+                chartId = 'sales_weekly_line_chart';
+                $('#sales_weekly_line_chart').show();
+            }
+
+            $.ajax({
+                type:"POST",
+                url: '{{ route('admin.sales_line_chart') }}',
+                data: {year: $('#sales_line_chart_year').val(), chart_type: $('#sales_line_chart_type').val(), _token: AIZ.data.csrf},
+                success: function(data){
+                    initSalesLineChart(chartId, data.data);
+                }
             });
         }
 
-        function initSalesLineChart() {
-            AIZ.plugins.chart('#sales_line_chart', {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets:[{
-                        label: '{{ translate('Test Line Chart') }}',
-                        data: [5,6,7,2,8,2,6,5,4,9,6,3],
-                        backgroundColor: 'transparent',
-                        borderColor: "#fd3995",
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    elements: {
-                        line: {
-                            tension: 0
+        function initSalesLineChart(chartId, data) {
+            if (data) {
+                AIZ.plugins.chart('#'+chartId, {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        elements: {
+                            line: {
+                                tension: 0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        tooltips: {
+                            callbacks: {
+                                title: function (t, d) {
+                                    return 'Sales: ' + d.datasets[0]['extraData'][t[0].index];
+                                },
+                                label: function (t, d) {
+                                    return '';
+                                }
+                            }
                         }
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Line Chart'
-                        }
-                    }
-                },
-            });
+                });
+            }
         }
 
         $('#filter_date').on('apply.daterangepicker', function (ev, picker) {

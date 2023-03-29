@@ -11,6 +11,7 @@ use App\Models\Product;
 use Artisan;
 use Cache;
 use CoreComponentRepository;
+use DB;
 
 class AdminController extends Controller
 {
@@ -81,6 +82,7 @@ class AdminController extends Controller
         //     return $item;
         // });
         $cached_data = $item;
+
         $cur_year = date('Y');
 
         return view('backend.dashboard', compact('root_categories', 'cached_data', 'from', 'to', 'cur_year'));
@@ -91,5 +93,58 @@ class AdminController extends Controller
         Artisan::call('cache:clear');
         flash(translate('Cache cleared successfully'))->success();
         return back();
+    }
+
+    public function sales_line_chart(Request $request)
+    {
+        $cur_year = $request->year;
+        $chart_type = $request->chart_type;
+        $totalSalesAmountAry = array();
+        $totalSalesAmountPriceAry = array();
+        $labels = array();
+        if ($chart_type == 'month') {
+            $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+            for ($month = 1; $month <= 12; $month++) {
+                $sales_total_amount = 0;
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month ")->first();
+                if (floatval($sales_chart_data->total_discount) > 0) {
+                    $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
+                } else {
+                    $sales_total_amount = floatval($sales_chart_data->total_amt);
+                }
+                $totalSalesAmountAry[] = $sales_total_amount;
+                $totalSalesAmountPriceAry[] = single_price($sales_total_amount);
+            }
+        } else { // Last 7 days data
+            for ($i = 7; $i > 0; $i--) {
+                $date = date('Y-m-d', strtotime("-$i days"));
+                $labels[] = date('d-m-Y', strtotime("-$i days"));
+                $sales_total_amount = 0;
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" DATE(orders.created_at) = '$date' ")->first();
+
+                if (floatval($sales_chart_data->total_discount) > 0) {
+                    $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
+                } else {
+                    $sales_total_amount = floatval($sales_chart_data->total_amt);
+                }
+                $totalSalesAmountAry[] = $sales_total_amount;
+                $totalSalesAmountPriceAry[] = single_price($sales_total_amount);
+            }
+        }
+
+        $sales_order_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Sales Order',
+                    'backgroundColor' => 'transparent',
+                    'borderColor'     => '#4f7dff',
+                    'data'            => $totalSalesAmountAry,
+                    'extraData'       => $totalSalesAmountPriceAry,
+                ],
+            ],
+        ];
+
+        return response()->json(array('data' => $sales_order_chart));
     }
 }
