@@ -174,24 +174,26 @@
 
     @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
         <div class="row gutters-10">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <div class="col-md-4">
-                            <h6 class="mb-0 fs-14">Sales Chart</h6>
-                        </div>
-                        <div class="col-md-8">
-                            <select id="sales_line_chart_year" class="from-control aiz-selectpicker" name="sales_line_chart_year">
-                                <option value="{{ date("Y", strtotime("-3 year")) }}">{{ date("Y", strtotime("-3 year")) }}</option>
-                                <option value="{{ date("Y", strtotime("-2 year")) }}">{{ date("Y", strtotime("-2 year")) }}</option>
-                                <option value="{{ date("Y", strtotime("-1 year")) }}">{{ date("Y", strtotime("-1 year")) }}</option>
-                                <option value="{{ date("Y") }}" @if($cur_year == date("Y")) selected @endif > {{ date("Y") }}</option>
-                            </select>
-                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
-                                <option value="month">Monthly</option>
-                                <option value="week">Weekly</option>
-                            </select>
-                            <button type="button" class="btn btn-primary" onclick="filterSalesLineChart()"> Filter </button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h6 class="mb-2 fs-14">Sales Chart</h6>
+                            </div>
+                            <div class="col-md-12">
+                                <select id="sales_line_chart_year" class="from-control aiz-selectpicker" name="sales_line_chart_year">
+                                    <option value="{{ date("Y", strtotime("-3 year")) }}">{{ date("Y", strtotime("-3 year")) }}</option>
+                                    <option value="{{ date("Y", strtotime("-2 year")) }}">{{ date("Y", strtotime("-2 year")) }}</option>
+                                    <option value="{{ date("Y", strtotime("-1 year")) }}">{{ date("Y", strtotime("-1 year")) }}</option>
+                                    <option value="{{ date("Y") }}" @if($cur_year == date("Y")) selected @endif > {{ date("Y") }}</option>
+                                </select>
+                                <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
+                                    <option value="month">Monthly</option>
+                                    <option value="week">Weekly</option>
+                                </select>
+                                <button type="button" class="btn btn-primary" onclick="filterSalesLineChart()"> Filter </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -200,29 +202,26 @@
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
-
-    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
-        <div class="row gutters-10">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <div class="col-md-4">
-                            <h6 class="mb-0 fs-14">Customer Acquisition</h6>
-                        </div>
-                        <div class="col-md-8">
-                            <select id="customer_bar_chart_year" class="from-control aiz-selectpicker" name="customer_bar_chart_year">
-                                <option value="{{ date("Y", strtotime("-3 year")) }}">{{ date("Y", strtotime("-3 year")) }}</option>
-                                <option value="{{ date("Y", strtotime("-2 year")) }}">{{ date("Y", strtotime("-2 year")) }}</option>
-                                <option value="{{ date("Y", strtotime("-1 year")) }}">{{ date("Y", strtotime("-1 year")) }}</option>
-                                <option value="{{ date("Y") }}" @if($cur_year == date("Y")) selected @endif > {{ date("Y") }}</option>
-                            </select>
-<!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
-                                <option value="month">Monthly</option>
-                                <option value="week">Weekly</option>
-                            </select>-->
-                            <button type="button" class="btn btn-primary" onclick="filterCustomerStackBarChart()"> Filter </button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h6 class="mb-2 fs-14">Customer Acquisition</h6>
+                            </div>
+                            <div class="col-md-12 text-right">
+                                <select id="customer_bar_chart_year" class="from-control aiz-selectpicker" name="customer_bar_chart_year">
+                                    <option value="{{ date("Y", strtotime("-3 year")) }}">{{ date("Y", strtotime("-3 year")) }}</option>
+                                    <option value="{{ date("Y", strtotime("-2 year")) }}">{{ date("Y", strtotime("-2 year")) }}</option>
+                                    <option value="{{ date("Y", strtotime("-1 year")) }}">{{ date("Y", strtotime("-1 year")) }}</option>
+                                    <option value="{{ date("Y") }}" @if($cur_year == date("Y")) selected @endif > {{ date("Y") }}</option>
+                                </select>
+                                <!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
+                                                                <option value="month">Monthly</option>
+                                                                <option value="week">Weekly</option>
+                                                            </select>-->
+                                <button type="button" class="btn btn-primary" onclick="filterCustomerStackBarChart()"> Filter </button>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -232,6 +231,7 @@
             </div>
         </div>
     @endif
+
 
     <div class="card">
         <div class="card-header">
@@ -368,7 +368,7 @@
             $.ajax({
                 type:"POST",
                 url: '{{ route('admin.customer_bar_chart') }}',
-                data: {year: $('#sales_line_chart_year').val(), chart_type: $('#sales_line_chart_type').val(), _token: AIZ.data.csrf},
+                data: {year: $('#customer_bar_chart_year').val(), chart_type: 'month', _token: AIZ.data.csrf},
                 success: function(data){
                     initCustomerStackBarChart('user_monthly_bar_chart', data.data);
                 }
