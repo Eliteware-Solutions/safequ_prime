@@ -147,4 +147,49 @@ class AdminController extends Controller
 
         return response()->json(array('data' => $sales_order_chart));
     }
+
+    public function customer_bar_chart(Request $request)
+    {
+        $year = $request->year;
+        $chart_type = $request->chart_type;
+        $totalUsersAry = array();
+        $totalNewUsersAry = array();
+        $labels = array();
+        if ($chart_type == 'month') {
+            $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+            for ($month = 1; $month <= 12; $month++) {
+                $month_last_date = date("$year-$month-t");
+
+                $total_users_data = User::select(DB::raw('COUNT(id) as total_users'))->whereRaw(" user_type = 'customer' AND banned = 0 AND DATE(users.created_at) <= '$month_last_date'")->first();
+                $totalUsersAry[] = intval($total_users_data->total_users);
+
+                $total_new_users_data = User::select(DB::raw('COUNT(id) as total_new_users'))->whereRaw(" user_type = 'customer' AND banned = 0 AND YEAR(users.created_at) = $year AND MONTH(users.created_at) = $month ")->first();
+                $totalNewUsersAry[] = intval($total_new_users_data->total_new_users);
+            }
+        } else {
+
+        }
+
+        $users_bar_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Total Customers',
+                    'backgroundColor' => '#4f7dff',
+                    'borderColor'     => '#4f7dff',
+                    'data'            => $totalUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'New Customers',
+                    'backgroundColor' => '#c53da9',
+                    'borderColor'     => '#c53da9',
+                    'data'            => $totalNewUsersAry,
+                    'stack'           => 'Stack 0',
+                ]
+            ],
+        ];
+
+        return response()->json(array('data' => $users_bar_chart));
+    }
 }
