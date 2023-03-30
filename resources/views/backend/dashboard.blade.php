@@ -387,6 +387,13 @@
                                 position: 'top',
                             }
                         },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
                         tooltips: {
                             callbacks: {
                                 title: function (t, d) {
@@ -436,7 +443,12 @@
                             },
                             y: {
                                 stacked: true
-                            }
+                            },
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
                         }
                     },
                 });
