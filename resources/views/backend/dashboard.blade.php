@@ -122,7 +122,7 @@
                                         if ($community_data->orders->sum('grand_total') > 0 && $community_data->orders->count() > 0) {
                                             $aov = floatval($community_data->orders->sum('grand_total') / $community_data->orders->count());
                                         }
-                                        
+
                                         $pendingDel = $community_data->orders->count() - $community_data->delivered_orders->count();
                                     @endphp
                                     <tr>
@@ -385,6 +385,7 @@
                     type: 'line',
                     data: data,
                     options: {
+                        maintainAspectRatio: false,
                         responsive: true,
                         elements: {
                             line: {
@@ -443,6 +444,7 @@
                     type: 'bar',
                     data: data,
                     options: {
+                        maintainAspectRatio: false,
                         responsive: true,
                         plugins: {
                             title: {
