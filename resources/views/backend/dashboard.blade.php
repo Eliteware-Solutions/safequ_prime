@@ -159,21 +159,6 @@
 
     @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
         <div class="row gutters-10">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h6 class="mb-0 fs-14">{{ translate('Category wise product sale') }}</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="graph-1" class="w-100" height="500"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
-        <div class="row gutters-10">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
@@ -197,8 +182,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="sales_monthly_line_chart" class="w-100" height="400"></canvas>
-                        <canvas id="sales_weekly_line_chart" class="w-100" height="400"></canvas>
+                        <canvas id="sales_line_chart" class="w-100" height="350"></canvas>
                     </div>
                 </div>
             </div>
@@ -225,13 +209,27 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="user_monthly_bar_chart" class="w-100" height="400"></canvas>
+                        <canvas id="user_monthly_bar_chart" class="w-100" height="350"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     @endif
 
+    @if(Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
+        <div class="row gutters-10">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0 fs-14">{{ translate('Category wise product sale') }}</h6>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="graph-1" class="w-100" height="500"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="card">
         <div class="card-header">
@@ -346,16 +344,7 @@
         filterCustomerStackBarChart();
 
         function filterSalesLineChart() {
-            let chartId = 'sales_monthly_line_chart';
-            $('#sales_monthly_line_chart').hide();
-            $('#sales_weekly_line_chart').hide();
-            if ($('#sales_line_chart_type').val() == 'month') {
-                $('#sales_monthly_line_chart').show();
-            } else {
-                chartId = 'sales_weekly_line_chart';
-                $('#sales_weekly_line_chart').show();
-            }
-
+            let chartId = 'sales_line_chart';
             $.ajax({
                 type:"POST",
                 url: '{{ route('admin.sales_line_chart') }}',
