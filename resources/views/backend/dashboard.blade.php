@@ -275,6 +275,8 @@
 @endsection
 @section('script')
     <script type="text/javascript">
+        let salesOrderLineChart, customerStackBarChart;
+
         AIZ.plugins.chart('#graph-1', {
             type: 'bar',
             data: {
@@ -364,20 +366,13 @@
             });
         }
 
-        function filterCustomerStackBarChart() {
-            $.ajax({
-                type:"POST",
-                url: '{{ route('admin.customer_bar_chart') }}',
-                data: {year: $('#customer_bar_chart_year').val(), chart_type: 'month', _token: AIZ.data.csrf},
-                success: function(data){
-                    initCustomerStackBarChart('user_monthly_bar_chart', data.data);
-                }
-            });
-        }
-
         function initSalesLineChart(chartId, data) {
             if (data) {
-                AIZ.plugins.chart('#'+chartId, {
+                if (typeof (salesOrderLineChart) !== 'undefined') {
+                    salesOrderLineChart.destroy();
+                }
+
+                salesOrderLineChart = new Chart($('#'+chartId), {
                     type: 'line',
                     data: data,
                     options: {
@@ -407,9 +402,24 @@
             }
         }
 
+        function filterCustomerStackBarChart() {
+            $.ajax({
+                type:"POST",
+                url: '{{ route('admin.customer_bar_chart') }}',
+                data: {year: $('#customer_bar_chart_year').val(), chart_type: 'month', _token: AIZ.data.csrf},
+                success: function(data){
+                    initCustomerStackBarChart('user_monthly_bar_chart', data.data);
+                }
+            });
+        }
+
         function initCustomerStackBarChart(chartId, data) {
             if (data) {
-                AIZ.plugins.chart('#'+chartId, {
+                if (typeof (customerStackBarChart) !== 'undefined') {
+                    customerStackBarChart.destroy();
+                }
+
+                customerStackBarChart = new Chart($('#'+chartId), {
                     type: 'bar',
                     data: data,
                     options: {
