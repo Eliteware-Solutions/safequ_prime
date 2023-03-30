@@ -1,1 +1,15 @@
-/*your custom css goes here*/
+/* Chart CSS */
+.chart-card .card-header {
+    display: block;
+}
+.chart-card .btn {
+    padding: 0.45rem 0.5rem 0.45rem 1rem;
+}
+.chart-card .btn.filter-btn {
+    padding: 0.45rem 1.5rem;
+}
+
+.chart-card .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+    max-width: 120px;
+}
