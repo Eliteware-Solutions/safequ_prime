@@ -192,7 +192,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="sales_line_chart" class="w-100" height="350"></canvas>
+                        <canvas id="sales_line_chart" height="350"></canvas>
                     </div>
                 </div>
             </div>
@@ -226,7 +226,41 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="user_monthly_bar_chart" class="w-100" height="350"></canvas>
+                        <canvas id="user_monthly_bar_chart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Order Acquisition</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="order_acquisition_bar_year" class="from-control aiz-selectpicker"
+                                        name="order_acquisition_bar_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
+                                                                    <option value="month">Monthly</option>
+                                                                    <option value="week">Weekly</option>
+                                                                </select>-->
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrderAcqStackBarChart()"> Filter </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="order_acq_monthly_bar_chart" height="300"></canvas>
                     </div>
                 </div>
             </div>
@@ -289,7 +323,7 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        let salesOrderLineChart, customerStackBarChart;
+        let salesOrderLineChart, customerStackBarChart, customerOrderStackBarChart;
 
         AIZ.plugins.chart('#graph-1', {
             type: 'bar',
@@ -358,6 +392,8 @@
         filterSalesLineChart();
 
         filterCustomerStackBarChart();
+
+        filterOrderAcqStackBarChart();
 
         function filterSalesLineChart() {
             let chartId = 'sales_line_chart';
@@ -462,6 +498,61 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero: true
+                                }
+                            }]
+                        }
+                    },
+                });
+            }
+        }
+
+        function filterOrderAcqStackBarChart()
+        {
+            let chartId = 'order_acq_monthly_bar_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.order_acq_bar_chart') }}',
+                data: {
+                    year: $('#order_acquisition_bar_year').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrderAcqStackBarChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrderAcqStackBarChart(chartId, data) {
+            if (data) {
+                if (typeof(customerOrderStackBarChart) !== 'undefined') {
+                    customerOrderStackBarChart.destroy();
+                }
+
+                customerOrderStackBarChart = new Chart($('#' + chartId), {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
+                        },
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            },
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
                                 }
                             }]
                         }

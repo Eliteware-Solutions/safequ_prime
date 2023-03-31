@@ -18,6 +18,7 @@ Route::get('/update/step2', 'UpdateController@step2')->name('update.step2');
 Route::get('/admin', 'AdminController@admin_dashboard')->name('admin.dashboard')->middleware(['auth', 'admin']);
 Route::post('/sales-line-chart', 'AdminController@sales_line_chart')->name('admin.sales_line_chart')->middleware(['auth', 'admin']);
 Route::post('/customer-bar-chart', 'AdminController@customer_bar_chart')->name('admin.customer_bar_chart')->middleware(['auth', 'admin']);
+Route::post('/order-aqc-bar-chart', 'AdminController@order_acq_bar_chart')->name('admin.order_acq_bar_chart')->middleware(['auth', 'admin']);
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function() {
     //Update Routes
 

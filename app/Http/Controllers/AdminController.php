@@ -219,4 +219,79 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
 
         return response()->json(array('data' => $users_bar_chart));
     }
+
+    public function order_acq_bar_chart(Request $request)
+    {
+        $year = $request->year;
+        $totalUsersAry = array();
+        $totalNewUsersAry = array();
+        $totalRepeatUsersAry = array();
+        $totalUsersAry = array();
+        $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+
+        for ($month = 1; $month <= 12; $month++) {
+            if ($month < 10) {
+                $month = 0 . $month;
+            }
+            $loop_month = date("$year-$month");
+            $month_start_date = date("$year-$month-01");
+            $month_last_date = date("Y-m-t", strtotime($loop_month));
+            $prev_month_first_date = date("Y-m-01", strtotime($loop_month . ' -1 month'));
+            $prev_month_last_date = date("Y-m-t", strtotime($loop_month . ' -1 month'));
+
+            if (strtotime($loop_month) <= strtotime(date('Y-m'))) {
+                $total_customers = 0;
+                $repeat_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) >= '$prev_month_first_date' AND DATE(orders.created_at) <= '$prev_month_last_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GROUP BY orders.user_id) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $totalRepeatUsersAry[] = $repeat_user_order_data->count();
+                $total_customers += $repeat_user_order_data->count();
+
+                $new_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id NOT IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) <= '$prev_month_last_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GROUP BY orders.user_id) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $totalNewUsersAry[] = $new_user_order_data->count();
+                $total_customers += $new_user_order_data->count();
+
+                $totalUsersAry[] = $total_customers;
+            } else {
+                $totalNewUsersAry[] = 0;
+                $totalRepeatUsersAry[] = 0;
+                $totalUsersAry[] = 0;
+            }
+        }
+
+        $order_acq_bar_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Repeat Customers',
+                    'backgroundColor' => '#cb8bdf',
+                    'borderColor'     => '#cb8bdf',
+                    'data'            => $totalRepeatUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'New Customers',
+                    'backgroundColor' => '#4f4baa',
+                    'borderColor'     => '#4f4baa',
+                    'data'            => $totalNewUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Total Customers',
+                    'backgroundColor' => '#f90437',
+                    'borderColor'     => '#f90437',
+                    'data'            => $totalUsersAry,
+                    'stack'           => 'Stack 1',
+                ]
+            ],
+        ];
+
+        return response()->json(array('data' => $order_acq_bar_chart));
+    }
 }
