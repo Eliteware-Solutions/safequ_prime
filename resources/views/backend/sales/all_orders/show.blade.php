@@ -424,7 +424,7 @@
                     order_id: order_id,
                     status: status,
                     form_type: 'ajax',
-                    status: added_by_admin
+                    added_by_admin: added_by_admin
                 }, function (data) {
                     AIZ.plugins.notify('success', '{{ translate('Payment status has been updated') }}');
                 });
