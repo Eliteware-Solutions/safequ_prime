@@ -195,22 +195,22 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
             'datasets' => [
                 [
                     'label'           => 'Total Customers',
-                    'backgroundColor' => '#4f7dff',
-                    'borderColor'     => '#4f7dff',
+                    'backgroundColor' => '#044c78',
+                    'borderColor'     => '#044c78',
                     'data'            => $totalUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'New Customers',
-                    'backgroundColor' => '#c53da9',
-                    'borderColor'     => '#c53da9',
+                    'backgroundColor' => '#47a6c0',
+                    'borderColor'     => '#47a6c0',
                     'data'            => $totalNewUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'Repeat Customers',
-                    'backgroundColor' => '#009f51',
-                    'borderColor'     => '#009f51',
+                    'backgroundColor' => '#feac54',
+                    'borderColor'     => '#feac54',
                     'data'            => $totalRepeatUsersAry,
                     'stack'           => 'Stack 0',
                 ]
@@ -270,22 +270,22 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
             'datasets' => [
                 [
                     'label'           => 'Repeat Customers',
-                    'backgroundColor' => '#cb8bdf',
-                    'borderColor'     => '#cb8bdf',
+                    'backgroundColor' => '#4bb3dc',
+                    'borderColor'     => '#4bb3dc',
                     'data'            => $totalRepeatUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'New Customers',
-                    'backgroundColor' => '#4f4baa',
-                    'borderColor'     => '#4f4baa',
+                    'backgroundColor' => '#e37674',
+                    'borderColor'     => '#e37674',
                     'data'            => $totalNewUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'Total Customers',
-                    'backgroundColor' => '#f90437',
-                    'borderColor'     => '#f90437',
+                    'backgroundColor' => '#4ab0aa',
+                    'borderColor'     => '#4ab0aa',
                     'data'            => $totalUsersAry,
                     'stack'           => 'Stack 1',
                 ]
