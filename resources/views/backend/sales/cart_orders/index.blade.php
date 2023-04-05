@@ -53,7 +53,7 @@
                             <td>
                                 {{ date('d-m-Y', strtotime($order->created_at)) }}
                             </td>
-                            <td>{{ $order->user->name }}</td>
+                            <td>{{ (isset($order->user) && isset($order->user->name) ? $order->user->name : '') }}</td>
                             <td>{{ $sellerName }}</td>
                             <td>{{ (isset($order->product) ? $order->product->name : '--') }}</td>
                             <td>{{ $order->quantity }}</td>
