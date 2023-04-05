@@ -30,7 +30,16 @@
                                        @endisset placeholder="{{ translate('Type & Enter') }}">
                             </div>
                         </div>
-                        <div class="col-md-2"></div>
+                        <div class="col-lg-2 mb-2 mb-md-0">
+                            <select class="form-control aiz-selectpicker" name="order_by_users" id="order_by_users">
+                                <option value="" @if ($order_by_users == '') selected @endif>
+                                    {{ translate('None') }}</option>
+                                <option value="desc" @if ($order_by_users == 'desc') selected @endif>
+                                    {{ translate('High - Low') }}</option>
+                                <option value="asc" @if ($order_by_users == 'asc') selected @endif>
+                                    {{ translate('Low - High') }}</option>
+                            </select>
+                        </div>
                         <div class="col-md-3">
                             <button class="btn btn-md btn-primary" type="submit">
                                 {{ translate('Filter') }}
@@ -86,9 +95,11 @@
         function exportExcelIdleCustomers() {
             let filter_date = $('#filter_date').val();
             let search = $('#search').val();
-            let url = "{{ route('idle_users.excel', ':filter_date:search') }}";
+            let order_by_users = $('#order_by_users').val();
+            let url = "{{ route('idle_users.excel', ':filter_date:search:order_by_users') }}";
             url = url.replace(':filter_date', '&filter_date=' + filter_date);
             url = url.replace(':search', '&search=' + search);
+            url = url.replace(':order_by_users', '&order_by_users=' + order_by_users);
 
             window.location.href = url;
         }

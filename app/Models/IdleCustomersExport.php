@@ -9,15 +9,17 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use DB;
 
 class IdleCustomersExport implements FromCollection, WithMapping, WithHeadings
 {
-    public $filter_date, $search;
+    public $filter_date, $search, $order_by_users;
 
     public function __construct($request)
     {
         $this->filter_date = $request->filter_date;
         $this->search = $request->search;
+        $this->order_by_users = $request->order_by_users;
     }
 
     public function collection()
@@ -32,7 +34,18 @@ class IdleCustomersExport implements FromCollection, WithMapping, WithHeadings
             $to_date = date('d-m-Y', strtotime($req_date[1]));
         }
 
-        $users = User::whereRaw(" user_type='customer' AND users.id NOT IN (SELECT orders.user_id FROM `orders` WHERE DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' GROUP BY orders.user_id) ")->orderBy('users.name', 'asc');
+        $users = User::select(DB::raw('(SELECT orders.created_at FROM orders WHERE orders.user_id = users.id ORDER BY orders.created_at desc LIMIT 1) as last_order_date'), 'users.*')
+                    ->whereRaw(" user_type='customer' AND users.id NOT IN (SELECT orders.user_id FROM `orders` WHERE DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' GROUP BY orders.user_id) ");
+
+        if (trim($this->order_by_users) != '') {
+            if ($this->order_by_users == 'desc') {
+                $users = $users->orderBy('last_order_date', 'desc');
+            } else {
+                $users = $users->orderByRaw("COALESCE(last_order_date, 'zz') asc");
+            }
+        } else {
+            $users = $users->orderBy('users.name', 'asc');
+        }
 
         if ($this->search != null) {
             $users = $users

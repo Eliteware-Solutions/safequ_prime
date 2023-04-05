@@ -49,9 +49,7 @@ class RegularCustomersExport implements FromCollection, WithMapping, WithHeading
             ->orderBy('total_orders', $order_by_count);
 
         if ($this->search != null) {
-            $orders = $orders->where('users.name', 'like', '%' . $this->search . '%')
-                ->orWhere('users.phone', 'like', '%' . $this->search . '%')
-                ->orWhere('users.email', 'like', '%' . $this->search . '%');
+            $orders = $orders->whereRaw(" (users.name LIKE '%".$this->search."%' OR users.phone LIKE '%".$this->search."%' OR users.email LIKE '%".$this->search."%') ");
         }
 
         return $orders->get();
