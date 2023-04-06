@@ -15,6 +15,7 @@ use App\Models\Order;
 use App\Models\Cart;
 use Excel;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {

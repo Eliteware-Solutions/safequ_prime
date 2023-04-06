@@ -47,6 +47,33 @@ class CartController extends Controller
         return view('frontend.view_cart', compact('carts', 'user_data', 'shops'));
     }
 
+    public function userOrderCart($id)
+    {
+        if ($id) {
+            $decode_data = base64_decode($id);
+            $decode_data_ary = explode('#', $decode_data);
+            if (isset($decode_data_ary[1]) && !empty($decode_data_ary[1])) {
+                $decode_data_ary2 = explode('$', $decode_data_ary[1]);
+                if (isset($decode_data_ary2[0]) && intval($decode_data_ary2[0]) > 0) {
+                    $user_id = $decode_data_ary2[0];
+                    $user = User::where(['id' => $user_id, 'user_type' => 'customer'])->first();
+                    if ($user) {
+                        auth()->login($user, true);
+                        return redirect()->route('cart');
+                    } else {
+                        return redirect()->route('user.login');
+                    }
+                } else {
+                    return redirect()->route('user.login');
+                }
+            } else {
+                return redirect()->route('user.login');
+            }
+        } else {
+            return redirect()->route('user.login');
+        }
+    }
+
     public function showCartModal(Request $request)
     {
         $product = Product::find($request->id);

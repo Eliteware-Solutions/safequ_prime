@@ -39,6 +39,7 @@
                         <th>{{translate('Product')}}</th>
                         <th>{{translate('Quantity')}}</th>
                         <th>{{translate('Price')}}</th>
+                        <th>{{translate('Options')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,6 +59,16 @@
                             <td>{{ (isset($order->product) ? $order->product->name : '--') }}</td>
                             <td>{{ $order->quantity }}</td>
                             <td>{{ single_price($totalPrice) }}</td>
+                            <td class="text-center">
+                                @if($order->user)
+                                    <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="javascript:void(0)"
+                                       onclick="copyUserOrderCartDataUrl(this)"
+                                       data-url="{{ route('cart.userOrder', base64_encode(Str::random(3).'#'.$order->user->id.'$'.Str::random(3))) }}"
+                                       title="{{ translate('Payment Link') }}">
+                                        <i class="las la-eye"></i>
+                                    </a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -75,4 +86,23 @@
 
 @section('modal')
     @include('modals.delete_modal')
+@endsection
+
+
+@section('script')
+    <script type="text/javascript">
+        function copyUserOrderCartDataUrl(e) {
+            let url = $(e).data('url');
+            let $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(url).select();
+            try {
+                document.execCommand("copy");
+                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+            } catch (err) {
+                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+            }
+            $temp.remove();
+        }
+    </script>
 @endsection
