@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="row gutters-10">
+        <div class="row gutters-10" style="display: none;">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -188,6 +188,8 @@
                                 </select>
                                 <button type="button" class="btn btn-primary filter-btn"
                                     onclick="filterSalesLineChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportSalesLineChart()"> Export </button>
                             </div>
                         </div>
                     </div>
@@ -334,7 +336,7 @@
     @endif
 
     @if (Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
-        <div class="row gutters-10">
+        <div class="row gutters-10" style="display: none;">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -348,7 +350,7 @@
         </div>
     @endif
 
-    <div class="card">
+    <div class="card" style="display: none;">
         <div class="card-header">
             <h6 class="mb-0">{{ translate('Top 12 Products') }}</h6>
         </div>
@@ -742,6 +744,16 @@
                     },
                 });
             }
+        }
+
+        function exportSalesLineChart() {
+            let year = $('#sales_line_chart_year').val();
+            let chart_type = $('#sales_line_chart_type').val();
+            let url = "{{ route('sales_line_chart.excel', ':year:chart_type') }}";
+            url = url.replace(':year', '&year=' + year);
+            url = url.replace(':chart_type', '&chart_type=' + chart_type);
+
+            window.location.href = url;
         }
 
         $('#filter_date').on('apply.daterangepicker', function(ev, picker) {

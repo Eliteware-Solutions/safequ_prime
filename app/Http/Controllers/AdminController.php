@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\SalesLineChartExport;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Artisan;
 use Cache;
 use CoreComponentRepository;
 use DB;
+use Excel;
 
 class AdminController extends Controller
 {
@@ -401,4 +403,10 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
 
         return response()->json(array('data' => $order_break_bar_chart));
     }
+
+    public function sales_line_chart_export(Request $request)
+    {
+        return Excel::download(new SalesLineChartExport($request), 'sales_line_chart.xlsx');
+    }
+
 }
