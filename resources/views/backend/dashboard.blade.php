@@ -264,6 +264,72 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Orders Chart</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="orders_line_chart_year" class="from-control aiz-selectpicker"
+                                        name="orders_line_chart_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <select id="orders_line_chart_type" class="from-control aiz-selectpicker"
+                                        name="orders_line_chart_type">
+                                    <option value="month">Monthly</option>
+                                    <option value="week">Weekly</option>
+                                </select>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrdersLineChart()"> Filter </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="orders_line_chart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Order Details Chart</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="order_break_bar_year" class="from-control aiz-selectpicker"
+                                        name="order_break_bar_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrderBreakBarChart()"> Filter </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="order_break_monthly_bar_chart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+
         </div>
     @endif
 
@@ -395,6 +461,10 @@
 
         filterOrderAcqStackBarChart();
 
+        filterOrdersLineChart();
+
+        filterOrderBreakBarChart();
+
         function filterSalesLineChart() {
             let chartId = 'sales_line_chart';
             $.ajax({
@@ -506,8 +576,7 @@
             }
         }
 
-        function filterOrderAcqStackBarChart()
-        {
+        function filterOrderAcqStackBarChart() {
             let chartId = 'order_acq_monthly_bar_chart';
             $.ajax({
                 type: "POST",
@@ -529,6 +598,120 @@
                 }
 
                 customerOrderStackBarChart = new Chart($('#' + chartId), {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
+                        },
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            },
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }]
+                        }
+                    },
+                });
+            }
+        }
+
+        function filterOrdersLineChart() {
+            let chartId = 'orders_line_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.orders_line_chart') }}',
+                data: {
+                    year: $('#orders_line_chart_year').val(),
+                    chart_type: $('#orders_line_chart_type').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrdersLineChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrdersLineChart(chartId, data) {
+            if (data) {
+                if (typeof(totalOrdersLineChart) !== 'undefined') {
+                    totalOrdersLineChart.destroy();
+                }
+
+                totalOrdersLineChart = new Chart($('#' + chartId), {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        elements: {
+                            line: {
+                                tension: 0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }/*,
+                        tooltips: {
+                            callbacks: {
+                                title: function(t, d) {
+                                    return 'Sales: ' + d.datasets[0]['extraData'][t[0].index];
+                                },
+                                label: function(t, d) {
+                                    return '';
+                                }
+                            }
+                        }*/
+                    },
+                });
+            }
+        }
+
+        function filterOrderBreakBarChart() {
+            let chartId = 'order_break_monthly_bar_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.order_break_bar_chart') }}',
+                data: {
+                    year: $('#order_break_bar_year').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrderBreakBarChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrderBreakBarChart(chartId, data) {
+            if (data) {
+                if (typeof(orderBreakStackBarChart) !== 'undefined') {
+                    orderBreakStackBarChart.destroy();
+                }
+
+                orderBreakStackBarChart = new Chart($('#' + chartId), {
                     type: 'bar',
                     data: data,
                     options: {

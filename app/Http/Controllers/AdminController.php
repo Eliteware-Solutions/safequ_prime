@@ -294,4 +294,111 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
 
         return response()->json(array('data' => $order_acq_bar_chart));
     }
+
+    public function orders_line_chart(Request $request)
+    {
+        $cur_year = $request->year;
+        $chart_type = $request->chart_type;
+        $totalOrdersAry = array();
+        $labels = array();
+        if ($chart_type == 'month') {
+            $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+            for ($month = 1; $month <= 12; $month++) {
+                $total_orders_data = Order::select(DB::raw('count(orders.id) as total_orders'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
+                $totalOrdersAry[] = $total_orders_data->total_orders;
+            }
+        } else { // Last 7 days data
+            for ($i = 7; $i > 0; $i--) {
+                $date = date('Y-m-d', strtotime("-$i days"));
+                $labels[] = date('d-m-Y', strtotime("-$i days"));
+                $total_orders_data = Order::select(DB::raw('count(orders.id) as total_orders'))->whereRaw(" DATE(orders.created_at) = '$date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
+
+                $totalOrdersAry[] = $total_orders_data->total_orders;
+            }
+        }
+
+        $total_order_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Total Order',
+                    'backgroundColor' => 'transparent',
+                    'borderColor'     => '#ff6361',
+                    'data'            => $totalOrdersAry,
+                ],
+            ],
+        ];
+
+        return response()->json(array('data' => $total_order_chart));
+    }
+
+    public function order_break_bar_chart(Request $request)
+    {
+        $year = $request->year;
+        $totalUserOrdersAry = array();
+        $totalAdminOrdersAry = array();
+        $totalOrdersAry = array();
+        $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+
+        for ($month = 1; $month <= 12; $month++) {
+            if ($month < 10) {
+                $month = 0 . $month;
+            }
+            $loop_month = date("$year-$month");
+            $month_start_date = date("$year-$month-01");
+            $month_last_date = date("Y-m-t", strtotime($loop_month));
+            $prev_month_first_date = date("Y-m-01", strtotime($loop_month . ' -1 month'));
+            $prev_month_last_date = date("Y-m-t", strtotime($loop_month . ' -1 month'));
+
+            if (strtotime($loop_month) <= strtotime(date('Y-m'))) {
+                $total_orders = 0;
+                $admin_orders_data = Order::select(DB::raw('count(orders.id) as total_admin_orders'))
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND added_by_admin = 1 ")
+                    ->first();
+                $totalAdminOrdersAry[] = $admin_orders_data->total_admin_orders;
+                $total_orders += $admin_orders_data->total_admin_orders;
+
+                $users_order_data = Order::select(DB::raw('count(orders.id) as total_admin_orders'))
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND payment_status = 'paid' AND added_by_admin = 0 ")
+                    ->first();
+                $totalUserOrdersAry[] = $users_order_data->total_admin_orders;
+                $total_orders += $users_order_data->total_admin_orders;
+
+                $totalOrdersAry[] = $total_orders;
+            } else {
+                $totalUserOrdersAry[] = 0;
+                $totalAdminOrdersAry[] = 0;
+                $totalOrdersAry[] = 0;
+            }
+        }
+
+        $order_break_bar_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Admin Orders',
+                    'backgroundColor' => '#bc5090',
+                    'borderColor'     => '#bc5090',
+                    'data'            => $totalAdminOrdersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'App Orders',
+                    'backgroundColor' => '#58508d',
+                    'borderColor'     => '#58508d',
+                    'data'            => $totalUserOrdersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Total Orders',
+                    'backgroundColor' => '#ff7c43',
+                    'borderColor'     => '#ff7c43',
+                    'data'            => $totalOrdersAry,
+                    'stack'           => 'Stack 1',
+                ]
+            ],
+        ];
+
+        return response()->json(array('data' => $order_break_bar_chart));
+    }
 }
