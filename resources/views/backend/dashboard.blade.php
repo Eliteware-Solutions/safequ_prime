@@ -218,12 +218,10 @@
                                     <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
                                         {{ date('Y') }}</option>
                                 </select>
-                                <!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
-                                                                    <option value="month">Monthly</option>
-                                                                    <option value="week">Weekly</option>
-                                                                </select>-->
                                 <button type="button" class="btn btn-primary filter-btn"
                                     onclick="filterCustomerStackBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportCustomerStackBarChart()"> Export </button>
                             </div>
                         </div>
                     </div>
@@ -252,12 +250,10 @@
                                     <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
                                         {{ date('Y') }}</option>
                                 </select>
-                                <!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
-                                                                    <option value="month">Monthly</option>
-                                                                    <option value="week">Weekly</option>
-                                                                </select>-->
                                 <button type="button" class="btn btn-primary filter-btn"
                                         onclick="filterOrderAcqStackBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrderAcqStackBarChart()"> Export </button>
                             </div>
                         </div>
                     </div>
@@ -293,6 +289,9 @@
                                 </select>
                                 <button type="button" class="btn btn-primary filter-btn"
                                         onclick="filterOrdersLineChart()"> Filter </button>
+
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrdersLineChart()"> Export </button>
                             </div>
                         </div>
                     </div>
@@ -323,6 +322,8 @@
                                 </select>
                                 <button type="button" class="btn btn-primary filter-btn"
                                         onclick="filterOrderBreakBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrderBreakBarChart()"> Export </button>
                             </div>
                         </div>
                     </div>
@@ -752,6 +753,40 @@
             let url = "{{ route('sales_line_chart.excel', ':year:chart_type') }}";
             url = url.replace(':year', '&year=' + year);
             url = url.replace(':chart_type', '&chart_type=' + chart_type);
+
+            window.location.href = url;
+        }
+
+        function exportOrdersLineChart() {
+            let year = $('#orders_line_chart_year').val();
+            let chart_type = $('#orders_line_chart_type').val();
+            let url = "{{ route('order_line_chart.excel', ':year:chart_type') }}";
+            url = url.replace(':year', '&year=' + year);
+            url = url.replace(':chart_type', '&chart_type=' + chart_type);
+
+            window.location.href = url;
+        }
+
+        function exportCustomerStackBarChart() {
+            let year = $('#customer_bar_chart_year').val();
+            let url = "{{ route('customer_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
+
+            window.location.href = url;
+        }
+
+        function exportOrderAcqStackBarChart() {
+            let year = $('#order_acquisition_bar_year').val();
+            let url = "{{ route('order_acq_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
+
+            window.location.href = url;
+        }
+
+        function exportOrderBreakBarChart() {
+            let year = $('#order_break_bar_year').val();
+            let url = "{{ route('order_break_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
 
             window.location.href = url;
         }

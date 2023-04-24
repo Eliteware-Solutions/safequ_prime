@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerStackBarChartExport;
 use App\Models\Order;
+use App\Models\OrderAcqStackBarChartExport;
+use App\Models\OrderBreakStackBarChartExport;
+use App\Models\OrdersLineChartExport;
 use App\Models\SalesLineChartExport;
 use App\Models\Shop;
 use App\Models\User;
@@ -188,8 +192,6 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
                     $totalRepeatUsersAry[] = 0;
                 }
             }
-        } else { // For weekly
-
         }
 
         $users_bar_chart = [
@@ -407,6 +409,26 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
     public function sales_line_chart_export(Request $request)
     {
         return Excel::download(new SalesLineChartExport($request), 'sales_line_chart.xlsx');
+    }
+
+    public function order_line_chart_export(Request $request)
+    {
+        return Excel::download(new OrdersLineChartExport($request), 'orders_line_chart.xlsx');
+    }
+
+    public function customer_bar_chart_export(Request $request)
+    {
+        return Excel::download(new CustomerStackBarChartExport($request), 'customer_bar_chart.xlsx');
+    }
+
+    public function order_acq_bar_chart_export(Request $request)
+    {
+        return Excel::download(new OrderAcqStackBarChartExport($request), 'order_acq_bar_chart.xlsx');
+    }
+
+    public function order_break_bar_chart_export(Request $request)
+    {
+        return Excel::download(new OrderBreakStackBarChartExport($request), 'order_break_bar_chart.xlsx');
     }
 
 }

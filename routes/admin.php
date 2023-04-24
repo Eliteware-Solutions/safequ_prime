@@ -22,6 +22,10 @@ Route::post('/order-aqc-bar-chart', 'AdminController@order_acq_bar_chart')->name
 Route::post('/orders-line-chart', 'AdminController@orders_line_chart')->name('admin.orders_line_chart')->middleware(['auth', 'admin']);
 Route::post('/order-break-bar-chart', 'AdminController@order_break_bar_chart')->name('admin.order_break_bar_chart')->middleware(['auth', 'admin']);
 Route::get('/sales-line-chart-export', 'AdminController@sales_line_chart_export')->name('sales_line_chart.excel');
+Route::get('/orders-line-chart-export', 'AdminController@order_line_chart_export')->name('order_line_chart.excel');
+Route::get('/customer-bar-chart-export', 'AdminController@customer_bar_chart_export')->name('customer_bar_chart.excel');
+Route::get('/order-qcq-bar-chart-export', 'AdminController@order_acq_bar_chart_export')->name('order_acq_bar_chart.excel');
+Route::get('/order-break-bar-chart-export', 'AdminController@order_break_bar_chart_export')->name('order_break_bar_chart.excel');
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function() {
     //Update Routes
 
