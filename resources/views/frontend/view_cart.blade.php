@@ -138,22 +138,26 @@
                             <!-- Amount -->
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <a href="{{ route('shop.visit') }}"
-                                        class="add_more_product_btn">+ Add More Products</a>
+                                    <a href="{{ route('shop.visit') }}" class="add_more_product_btn">+ Add More
+                                        Products</a>
                                 </div>
                             </div>
                             <div class="payings py-4">
+                                @if ($shipping > 0)
+                                    @php
+                                        $shipSubtotal = $total - $shipping;
+                                    @endphp
+                                    <small>
+                                        <i class="fw500">
+                                            <sup>**</sup>Add products wort h {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!} to avail free delivery
+                                        </i>
+                                    </small>
+                                @endif
                                 <hr class="b-1">
                                 @if ($shipping > 0)
                                     <h6>
                                         <ins class="fw500">Shipping cost :</ins>
                                         <ins class="fw500 text-right"> {!! single_price_web($shipping) !!} </ins>
-                                    </h6>
-                                    <h6>
-                                        @php
-                                            $shipSubtotal = $total - $shipping
-                                        @endphp
-                                        <ins class="fw500">Add products worth {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!} to avail free delivery</ins>
                                     </h6>
                                     <h6>
                                         <ins class="fw500">Sub cost :</ins>
@@ -172,13 +176,13 @@
                                             - {!! single_price_web($carts->sum('discount')) !!} </ins>
                                     </h6>
                                 @endif
-                                <h5>
+                                <h5 class="mb-1">
                                     <ins class="fw700">Total :</ins>
                                     <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total) !!} </ins>
                                 </h5>
                             </div>
 
-{{--                            @if (Auth::check() && get_setting('coupon_system') == 1)--}}
+                            {{--                            @if (Auth::check() && get_setting('coupon_system') == 1) --}}
                             @if (get_setting('coupon_system') == 1)
                                 @if ($carts[0]['discount'] > 0)
                                     <div class="mb-3">
@@ -225,7 +229,8 @@
                                     @endif
 
                                     @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
-                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
+                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code"
+                                            value="{{ $carts[0]['coupon_code'] }}">
                                     @endif
                                     <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
                                         options
