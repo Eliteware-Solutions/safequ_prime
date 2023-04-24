@@ -197,3 +197,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Dt: 16-02-23
 -- ----------------------------
 ALTER TABLE `payment_webhooks` ADD COLUMN `is_active` int(1) NULL DEFAULT 1 AFTER `updated_at`;
+
+
+-- ----------------------------
+-- Dt: 24-04-23
+-- ----------------------------
+INSERT INTO `safequ_prime`.`business_settings` (`type`, `value`, `lang`, `created_at`, `updated_at`) VALUES ('ship_cost_min_price', '299', NULL, '2023-04-24 15:38:10', '2023-04-24 17:49:31');

@@ -44,6 +44,7 @@
                         @php
                             $total = 0;
                             $shipping = 0;
+                            $shipSubtotal = 0;
                         @endphp
                         @foreach ($carts as $key => $cartItem)
                             @php
@@ -147,6 +148,21 @@
                                     <h6>
                                         <ins class="fw500">Shipping cost :</ins>
                                         <ins class="fw500 text-right"> {!! single_price_web($shipping) !!} </ins>
+                                    </h6>
+                                    <h6>
+                                        @php
+                                            $shipSubtotal = $total - $shipping
+                                        @endphp
+                                        <ins class="fw500">Add products worth {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!} to avail free delivery</ins>
+                                    </h6>
+                                    <h6>
+                                        <ins class="fw500">Sub cost :</ins>
+                                        <ins class="fw500 text-right"> {!! single_price_web($shipSubtotal) !!} </ins>
+                                    </h6>
+                                @else
+                                    <h6>
+                                        <ins class="fw500">Shipping cost :</ins>
+                                        <ins class="fw500 text-right"> FREE </ins>
                                     </h6>
                                 @endif
                                 @if ($carts->sum('discount') > 0)

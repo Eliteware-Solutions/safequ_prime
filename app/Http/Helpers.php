@@ -560,7 +560,16 @@ function getShippingCost($carts, $index)
     }
 
     if (get_setting('shipping_type') == 'flat_rate') {
-        return get_setting('flat_rate_shipping_cost') / count($carts);
+        $total_cart_amt = 0;
+        foreach ($carts AS $cart) {
+            $total_cart_amt += floatval($cart->price * $cart->quantity) - floatval($cart->discount);
+        }
+
+        if ($total_cart_amt < floatval(get_setting('ship_cost_min_price'))) {
+            return get_setting('flat_rate_shipping_cost') / count($carts);
+        } else {
+            return 0;
+        }
     } elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
         if ($product->added_by == 'admin') {
             return get_setting('shipping_cost_admin') / count($admin_products);
