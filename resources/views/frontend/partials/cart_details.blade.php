@@ -132,7 +132,7 @@
                         <small>
                             <i class="fw500">
                                 <sup>**</sup>Add products worth
-                                {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!}
+                                <span class="blinking">{!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!}</span>
                                 to avail free delivery
                             </i>
                         </small>

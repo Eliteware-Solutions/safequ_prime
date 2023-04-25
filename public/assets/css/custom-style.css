@@ -13,3 +13,25 @@
     width: 100%;
     max-width: 120px;
 }
+
+
+span.blinking,
+span.blinking * {
+    font-weight: 600;
+    animation: color-change 1s linear infinite;
+    -webkit-animation: color-change 1s linear infinite;
+}
+
+@keyframes color-change {
+    0% {
+        color: var(--default-color);
+    }
+
+    30% {
+        color: var(--primary-color);
+    }
+
+    100% {
+        color: var(--primary-color);
+    }
+}
