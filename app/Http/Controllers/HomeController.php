@@ -264,7 +264,8 @@ class HomeController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->address = $request->flat_no . ', ' . $request->address;
+        // $user->address = $request->flat_no . ', ' . $request->address;
+        $user->address = $request->address;
         //        $user->city = $request->city;
         //        $user->state = $request->state;
         //        $user->country = $request->country;

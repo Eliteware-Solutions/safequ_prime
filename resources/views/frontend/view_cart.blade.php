@@ -149,7 +149,7 @@
                                     @endphp
                                     <small>
                                         <i class="fw500">
-                                            <sup>**</sup>Add products wort h {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!} to avail free delivery
+                                            <sup>**</sup>Add products worth {!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!} to avail free delivery
                                         </i>
                                     </small>
                                 @endif
@@ -250,15 +250,15 @@
                                                     autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="col-md-4 p-2">
+                                        <div class="col-md-6 p-2">
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="Email">
                                         </div>
-                                        <div class="col-md-4 p-2">
+                                        {{-- <div class="col-md-4 p-2">
                                             <input type="text" class="form-control" name="flat_no" id="flat_no"
                                                 placeholder="Flat No.">
-                                        </div>
-                                        <div class="col-md-4 p-2">
+                                        </div> --}}
+                                        <div class="col-md-6 p-2">
                                             <select name="city" id="city" class="form-control" required>
                                                 <option value="Mumbai">Mumbai</option>
                                             </select>
