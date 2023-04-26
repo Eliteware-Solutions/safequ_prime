@@ -87,7 +87,7 @@
                                 @if (count($all_products) > 0)
                                     <div class="row pb-4 onFx-pd" style="padding-top: 28px">
                                         @foreach ($all_products as $product)
-                                            @if ($product->product->category->slug != 'flowers')
+                                            @if ($product->product->parent_category->slug != 'flowers')
                                                 @php
                                                     $cart_qty = 0;
                                                     $cart_id = 0;
@@ -131,7 +131,7 @@
                                                             </div>
                                                             <div class="  tab_horizontal_card_detail  ">
                                                                 @if ($product->product->manufacturer_location)
-                                                                    <p class="fw500 fsize13 body-txt mb-2 location">
+                                                                    <p class="fw500 fsize13 body-txt mb-1 location">
                                                                         <img src="{{ static_asset('assets/img/new-design/farm.png') }}"
                                                                             class="mr-2" width="26" height="26"
                                                                             alt="Farm Icon">
@@ -145,14 +145,20 @@
                                                                         <s>{!! single_price_web($product_price) !!} /
                                                                             {{ $qty_unit_main }}</s>
                                                                     </p>
-                                                                    <p class="price">
+                                                                    <p class="price mb-1">
                                                                         {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} /
                                                                         {{ $qty_unit_main }}
                                                                     </p>
                                                                 @else
-                                                                    <p class="price">{!! single_price_web($product_price) !!} /
+                                                                    <p class="price mb-1">{!! single_price_web($product_price) !!} /
                                                                         {{ $qty_unit_main }}</p>
                                                                 @endif
+                                                                <p class="fw500 fsize12 body-txt mb-1 primary-color ls-1">
+                                                                    <img src="{{ static_asset('assets/img/new-design/delivery.png') }}"
+                                                                        class="mr-1" width="26" height="26"
+                                                                        alt="Delivery Icon">
+                                                                    {{ $product->delivery }}
+                                                                </p>
                                                             </div>
                                                         </div>
 

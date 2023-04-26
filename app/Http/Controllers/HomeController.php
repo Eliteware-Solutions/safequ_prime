@@ -69,10 +69,9 @@ class HomeController extends Controller
         $parentCategories = Category::where('parent_id', 0)->get();
 
         $customer_favourites = array();
-        $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->
-                                whereHas('product', function ($query) {
-                                    $query->where('published', 1);
-                                })->inRandomOrder()->limit(5)->get();
+        $customer_favourites = ProductStock::where(['is_best_selling' => 1, 'seller_id' => 0])->whereHas('product', function ($query) {
+            $query->where('published', 1);
+        })->inRandomOrder()->limit(5)->get();
 
         $flash_deal = FlashDeal::where('end_date', '>', strtotime(date('d-m-Y H:i:s')))->where('status', 1)->first();
         $deals_of_the_day = Product::where('todays_deal', 1)->limit(2)->get();
@@ -418,6 +417,7 @@ class HomeController extends Controller
         $all_products = array();
         foreach ($categorizedProd as $prd) {
             foreach ($prd as $val) {
+                $val['delivery'] = $this->get_delivery_day($val->product->parent_category->slug);
                 $all_products[] = $val;
             }
         }
@@ -433,6 +433,34 @@ class HomeController extends Controller
         }
 
         return view('frontend.seller_shop', compact('categories', 'all_products', 'categorizedProd', 'cart', 'checkout_total'));
+    }
+
+    // Get Products Delivery Day
+    public function get_delivery_day($category)
+    {
+        if ($category == 'fruit') {
+            if (date('D') == 'Sun') {
+                return "Will be delivered tomorrow";
+            }
+
+            if (date('His') < '130000') {
+                return "Will be delivered today";
+            } else {
+                if (date('D') != 'Sat') {
+                    return "Will be delivered tomorrow";
+                } else {
+                    return "Will be delivered on Monday";
+                }
+            }
+        } else if ($category == 'vegetables') {
+            if (date('wHis') < '2130000') {
+                return "Will be delivered on Wednesday";
+            } else if (date('wHis') < '5130000') {
+                return "Will be delivered on Saturday";
+            } else {
+                return "Will be delivered on Wednesday";
+            }
+        }
     }
 
     // public function shop($slug)

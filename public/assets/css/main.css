@@ -27,7 +27,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    line-height: 1.3 !important;
+    line-height: 1.4;
     font-weight: 400;
     transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
@@ -37,7 +37,7 @@
 }
 
 .primary-color {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 .primary-color-dark {
@@ -461,6 +461,10 @@ li {
 
 .z-index--1 {
     z-index: -1;
+}
+
+.ls-1 {
+    letter-spacing: 0.02rem;
 }
 
 .modal.fade.show {
@@ -4360,8 +4364,7 @@ a.cartbtn {
 
 .tab_horizontal_card_detail p.titlecard {
     font-weight: 700;
-    font-size: 16px !important;
-    line-height: 20px !important;
+    font-size: 14px !important;
     text-align: left;
     margin-bottom: 8px;
     color: #000000;
@@ -4615,11 +4618,7 @@ form.checkout-form .form-control:focus-visible {
 }
 
 /* ----------- Media Queries ----------- */
-@media screen and (max-width: 360px) {
-    .item-card .card-top {
-        padding: 0 9px;
-    }
-
+@media screen and (max-width: 499px) {
     .crtord-itm-card .d-flex {
         flex-direction: column;
         align-items: flex-start;
@@ -4627,16 +4626,15 @@ form.checkout-form .form-control:focus-visible {
     }
 
     .crtord-itm-card .action {
+        padding-top: 0.5rem;
         justify-content: space-between;
         width: 100%;
     }
+}
 
-    .crtord-itm-card .item-count {
-        margin-top: 12px;
-    }
-
-    .crtord-itm-card .action h6 {
-        margin-top: 11px;
+@media screen and (max-width: 360px) {
+    .item-card .card-top {
+        padding: 0 9px;
     }
 
     .transactions {
@@ -4701,8 +4699,7 @@ form.checkout-form .form-control:focus-visible {
 
 @media (min-width: 768px) and (max-width: 991px) {
     .tab_horizontal_card_detail p.titlecard {
-        font-size: 22px !important;
-        line-height: 24px !important;
+        font-size: 20px !important;
     }
 }
 
@@ -4961,7 +4958,7 @@ nav .nav-icons svg:hover {
     -o-border-radius: 0.25rem;
 }
 
-.fixed-cart a span{
+.fixed-cart a span {
     color: white !important;
     font-weight: 600;
     font-size: 1.125rem;
@@ -4972,6 +4969,7 @@ nav .nav-icons svg:hover {
     .view-sm {
         display: none !important;
     }
+
     .fixed-cart {
         display: none !important;
     }

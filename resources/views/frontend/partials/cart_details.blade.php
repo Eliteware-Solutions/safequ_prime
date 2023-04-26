@@ -61,6 +61,9 @@
                                     <i class="body-txt fsize12">&nbsp; <br class="sm" />
                                         ({!! single_price_web($cartItem['price']) !!} / {{ $product->unit }})
                                     </i>
+                                    <i class="fw500 body-txt fsize12 primary-color ls-1">&nbsp; <br class="sm" />
+                                        {{ $cartItem->delivery }}
+                                    </i>
                                 </p>
                                 <div class="action">
                                     <div class="item-count flex-acenter-jbtw">

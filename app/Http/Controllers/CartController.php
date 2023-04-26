@@ -42,9 +42,41 @@ class CartController extends Controller
             $carts = ($temp_user_id != null) ? Cart::where('temp_user_id', $temp_user_id)->get() : [];
         }
 
+        foreach($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
+
         $shops = Shop::get();
 
         return view('frontend.view_cart', compact('carts', 'user_data', 'shops'));
+    }
+
+    // Get Products Delivery Day
+    public function get_delivery_day($category)
+    {
+        if ($category == 'fruit') {
+            if (date('D') == 'Sun') {
+                return "Will be delivered tomorrow";
+            }
+
+            if (date('His') < '130000') {
+                return "Will be delivered today";
+            } else {
+                if (date('D') != 'Sat') {
+                    return "Will be delivered tomorrow";
+                } else {
+                    return "Will be delivered on Monday";
+                }
+            }
+        } else if ($category == 'vegetables') {
+            if (date('wHis') < '2130000') {
+                return "Will be delivered on Wednesday";
+            } else if (date('wHis') < '5130000') {
+                return "Will be delivered on Saturday";
+            } else {
+                return "Will be delivered on Wednesday";
+            }
+        }
     }
 
     public function userOrderCart($id)
@@ -644,6 +676,10 @@ class CartController extends Controller
 
         $carts = $this->manageCartCoupon($carts);
 
+        foreach($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
+
         return array(
             'cart_count'    => count($carts),
             'cart_total'    => $cartTotalAmount,
@@ -726,6 +762,10 @@ class CartController extends Controller
         calculateShippingCost($carts);
 
         $carts = $this->manageCartCoupon($carts);
+
+        foreach($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
 
         return array(
             'cart_count'    => count($carts),
