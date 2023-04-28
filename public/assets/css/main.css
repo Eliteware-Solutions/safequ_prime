@@ -347,17 +347,17 @@ h6 {
 
 .fsize13,
 .xs-text {
-    font-size: 0.835rem !important;
+    font-size: 13px !important;
 }
 
 .fsize14,
 .sm-text {
-    font-size: 0.89rem !important;
+    font-size: 0.14px !important;
 }
 
 .fsize15,
 .normal-text {
-    font-size: 0.94rem !important;
+    font-size: 15px !important;
 }
 
 .fsize16,
@@ -1370,11 +1370,11 @@ button.btn-before-none::before,
     -webkit-filter: grayscale(1);
 }
 
-.lodha_nestedtab .tab_hori_inr .tab_horizontal_card_detail p.location img {
-    width: 22px;
-    height: 22px;
-    margin-top: -0.65rem;
-    margin-right: 0.5rem;
+.tab_horizontal_card .content p.location img {
+    width: 18px;
+    height: 18px;
+    margin-top: -0.475rem;
+    margin-right: 0.375rem;
     filter: grayscale(1);
     -webkit-filter: grayscale(1);
 }
@@ -2954,15 +2954,14 @@ input[type=checkbox]:checked+.check-box::before,
     vertical-align: middle;
 }
 
-.mobile_hr_card .icon-sm,
 .tab_horizontal_card .icon-sm {
     width: 2rem;
     height: 2rem;
 }
 
-.mobile_hr_card .countitem input,
 .tab_horizontal_card .countitem input {
     background-color: transparent;
+    margin-top: 3px;
 }
 
 .tab_horizontal_card .countitem {
@@ -2976,29 +2975,28 @@ input[type=checkbox]:checked+.check-box::before,
     }
 }
 
-.mobile_hr_card .lftcount,
-.tab_horizontal_card .lftcount {
-    border-right: 1px solid #C4C4C4 !important;
-    border-left: 0px !important;
-    border-top: 0px !important;
-    border-bottom: 0px !important;
-}
-
-.mobile_hr_card .rgtcount,
+.tab_horizontal_card .lftcount,
 .tab_horizontal_card .rgtcount {
-    border-left: 1px solid #C4C4C4 !important;
-    border-right: 0px !important;
-    border-top: 0px !important;
-    border-bottom: 0px !important;
+    border: 0;
+    font-weight: 600;
+    color: var(--primary) !important;
+    background-color: transparent;
+    line-height: 1;
+    padding: 8px;
+    font-size: 1.125rem !important;
 }
 
-.mobile_hr_card .input-group.counterinput,
 .tab_horizontal_card .input-group.counterinput {
-    border: 1px solid #C4C4C4 !important;
+    border: 1px solid var(--primary-color) !important;
     max-width: 100px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 3rem;
+    -webkit-border-radius: 3rem;
+    -moz-border-radius: 3rem;
+    -ms-border-radius: 3rem;
+    -o-border-radius: 3rem;
 }
 
 .mobile_hr_card input[type=number]::-webkit-inner-spin-button,
@@ -3152,10 +3150,11 @@ media query 991
         min-width: 88px;
     }
 
-    .mobile_hr_card .icon-sm,
-    .tab_horizontal_card .icon-sm {
-        width: 25px;
-        height: 25px;
+    .tab_horizontal_card .lftcount,
+    .tab_horizontal_card .rgtcount {
+        padding: 0;
+        padding-top: 2px;
+        font-size: 1rem !important;
     }
 
     .mobile_hr_card input.quantity-field {
@@ -3378,6 +3377,67 @@ a.safbtn {
     max-width: 110px;
 }
 
+
+.tab_horizontal_card {
+    display: flex;
+    align-items: center;
+    background: #F5F5F5;
+    border-radius: 0.6rem;
+    padding: 22px 20px 20px 16px;
+    overflow: hidden;
+}
+
+.tab_horizontal_card .content span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: block;
+    text-align: left;
+    color: #898989;
+}
+
+.tab_horizontal_card .content p.titlecard {
+    font-weight: 600;
+    font-size: 13px !important;
+    text-align: left;
+    margin-bottom: 3px;
+    color: #000000;
+}
+
+.tab_horizontal_card .content p.price {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #000000;
+    margin-bottom: 0px;
+    text-align: left;
+}
+
+.tab_horizontal_card .content .pricing {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pricing .w-inherit {
+    width: inherit;
+}
+
+.tab_horizontal_card img.top_img {
+    object-fit: cover;
+    object-position: center;
+    height: 110px;
+    width: 110px;
+    min-height: 110px;
+    min-width: 110px;
+    box-shadow: 2px 3px 10px -4px #d0d0d0;
+    border: 1px solid white;
+}
+
 @media (max-width: 1199.98px) {
     .safeq-lg .modal-content {
         background-size: cover;
@@ -3509,7 +3569,7 @@ a.safbtn {
     }
 
     .tab_horizontal_card {
-        padding: 20px 10px !important;
+        padding: 28px 10px 11px;
     }
 
     .tab-content .col-lg-6 {
@@ -4339,47 +4399,6 @@ a.cartbtn {
     width: inherit;
 }
 
-.tab_horizontal_card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #F5F5F5;
-    border-radius: 0.6rem;
-    margin-bottom: 30px;
-    padding: 23px 20px;
-    overflow: hidden;
-}
-
-.tab_horizontal_card_detail span {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px !important;
-    line-height: 20px !important;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    display: block;
-    text-align: left;
-    color: #898989;
-}
-
-.tab_horizontal_card_detail p.titlecard {
-    font-weight: 700;
-    font-size: 14px !important;
-    text-align: left;
-    margin-bottom: 8px;
-    color: #000000;
-}
-
-.tab_horizontal_card_detail p.price {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 20px;
-    color: #000000;
-    margin-bottom: 0px;
-    text-align: left;
-}
-
 .tab_horizontal_card_detail .dleverdt {
     font-style: normal;
     font-weight: 400;
@@ -4448,27 +4467,6 @@ a.loadbtn {
     text-align: center;
     padding: 10px;
     margin-bottom: 15px;
-}
-
-.tab_horizontal_card img.top_img {
-    object-fit: cover;
-    object-position: center;
-    height: 110px;
-    width: 110px;
-    min-height: 110px;
-    min-width: 110px;
-    max-height: 110px;
-    max-width: 110px;
-    box-shadow: 2px 4px 10px -5px #c9c9c9;
-    border: 1px solid white;
-}
-
-.tab_horizontal_card {
-    position: relative;
-}
-
-.tab_horizontal_card_detailmobile_hr_card {
-    padding-left: 20px;
 }
 
 
@@ -4825,12 +4823,10 @@ form.checkout-form .form-control:focus-visible {
     }
 
     .tab_horizontal_card img.top_img {
-        min-width: 45px !important;
-        max-width: 45px !important;
-        border-radius: 50% !important;
-        height: 45px !important;
-        min-height: 45px !important;
-        max-height: 45px !important;
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        min-height: 70px;
     }
 
     .tab_horizontal_card_detail span {

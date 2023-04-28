@@ -86,6 +86,7 @@
 
                                 @if (count($all_products) > 0)
                                     <div class="row pb-4 onFx-pd" style="padding-top: 28px">
+
                                         @foreach ($all_products as $product)
                                             @if ($product->product->parent_category->slug != 'flowers')
                                                 @php
@@ -113,54 +114,16 @@
                                                     }
                                                 @endphp
                                                 <div
-                                                    class="col-lg-6 filter pb-4 {{ $product->product->category->slug }} searchCard">
+                                                    class="col-lg-6 col-md-9 px-0 px-md-2 px-lg-3 mx-auto filter pb-3 searchCard {{ $product->product->category->slug }}">
                                                     <div class="searchText" style="display: none">
-                                                        {{ strtolower($product->product->name) }}</div>
-                                                    <div class="tab_horizontal_card p-3 m-0 position-relative">
+                                                        {{ strtolower($product->product->name) }}
+                                                    </div>
+                                                    <div class="tab_horizontal_card position-relative">
                                                         @if (explode(',', $product->product->tags)[0] != '')
                                                             <div class="deal-type">
                                                                 {{ explode(',', $product->product->tags)[0] }}
                                                             </div>
                                                         @endif
-                                                        <div class="tab_hori_inr">
-                                                            <div>
-                                                                <img src="{{ uploaded_asset($product->product->photos) }}"
-                                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                                    class="img-rounded top_img"
-                                                                    alt="{{ $product->product->name }}">
-                                                            </div>
-                                                            <div class="  tab_horizontal_card_detail  ">
-                                                                @if ($product->product->manufacturer_location)
-                                                                    <p class="fw500 fsize13 body-txt mb-1 location">
-                                                                        <img src="{{ static_asset('assets/img/new-design/farm.png') }}"
-                                                                            class="mr-2" width="26" height="26"
-                                                                            alt="Farm Icon">
-                                                                        {{ $product->product->manufacturer_location }}
-                                                                    </p>
-                                                                @endif
-                                                                <p class="titlecard">
-                                                                    {{ $product->product->name }} </p>
-                                                                @if ($product->product->todays_deal == 1)
-                                                                    <p class="prd-disc-pricing mb-1">
-                                                                        <s>{!! single_price_web($product_price) !!} /
-                                                                            {{ $qty_unit_main }}</s>
-                                                                    </p>
-                                                                    <p class="price mb-1">
-                                                                        {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} /
-                                                                        {{ $qty_unit_main }}
-                                                                    </p>
-                                                                @else
-                                                                    <p class="price mb-1">{!! single_price_web($product_price) !!} /
-                                                                        {{ $qty_unit_main }}</p>
-                                                                @endif
-                                                                <p class="fw500 fsize12 body-txt mb-1 primary-color ls-1">
-                                                                    <img src="{{ static_asset('assets/img/new-design/delivery.png') }}"
-                                                                        class="mr-1" width="26" height="26"
-                                                                        alt="Delivery Icon">
-                                                                    {{ $product->delivery }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
 
                                                         @if ($product->product->todays_deal == 1)
                                                             <p class="tagStrip m-0 text-white fw500">
@@ -168,29 +131,64 @@
                                                             </p>
                                                         @endif
 
-                                                        <div class="countitem">
-                                                            <div class="input-group w-auto counterinput">
-                                                                <input type="button" value="-"
-                                                                    class="button-minus  icon-shape icon-sm lftcount"
-                                                                    data-field="quantity"
-                                                                    data-product_id="{{ $product->product->id }}"
-                                                                    data-product_stock_id="{{ $product->id }}"
-                                                                    data-cart_id="{{ $cart_id }}"
-                                                                    onclick="decrementValue($(this))">
-                                                                <input type="number" step="1" min="0"
-                                                                    max="10" value="{{ $cart_qty }}"
-                                                                    name="quantity" id="quantity"
-                                                                    class="quantity-field border-0 text-center w-25">
-                                                                <input type="button" value="+"
-                                                                    class="button-plus icon-shape icon-sm lh-0 rgtcount"
-                                                                    data-field="quantity"
-                                                                    data-product_id="{{ $product->product->id }}"
-                                                                    data-product_stock_id="{{ $product->id }}"
-                                                                    onclick="incrementValue($(this))">
+                                                        <img src="{{ uploaded_asset($product->product->photos) }}"
+                                                            class="img-rounded top_img"
+                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                            loading="lazy" alt="{{ $product->product->name }}">
+
+                                                        <div class="content ml-3 w-100">
+                                                            @if ($product->product->manufacturer_location)
+                                                                <p class="fw500 fsize13 body-txt mb-1 location">
+                                                                    <img src="{{ static_asset('assets/img/new-design/farm.png') }}"
+                                                                        width="26" height="26" loading="lazy"
+                                                                        alt="Farm Icon">
+                                                                    {{ $product->product->manufacturer_location }}
+                                                                </p>
+                                                            @endif
+                                                            <p class="titlecard">{{ $product->product->name }}</p>
+                                                            @if ($product->product->todays_deal == 1)
+                                                                <p class="prd-disc-pricing mb-1">
+                                                                    <s>{!! single_price_web($product_price) !!} / {{ $qty_unit_main }}</s>
+                                                                </p>
+                                                                <p class="price mb-1">
+                                                                    {!! single_price_web($product_price - round(($product_price * $product->product->discount) / 100, 2)) !!} / {{ $qty_unit_main }}
+                                                                </p>
+                                                            @else
+                                                                <p class="price mb-1">{!! single_price_web($product_price) !!} /
+                                                                    {{ $qty_unit_main }}</p>
+                                                            @endif
+                                                            <div class="pricing">
+                                                                <div class="data">
+                                                                    <p
+                                                                        class="fw500 fsize12 body-txt mb-1 primary-color ls-1">
+                                                                        {{ $product->delivery }}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="countitem">
+                                                                    <div class="input-group w-auto counterinput">
+                                                                        <button type="button"
+                                                                            class="button-minus icon-shape icon-sm lftcount"
+                                                                            data-field="quantity"
+                                                                            data-product_id="{{ $product->product->id }}"
+                                                                            data-product_stock_id="{{ $product->id }}"
+                                                                            data-cart_id="{{ $cart_id }}"
+                                                                            onclick="decrementValue($(this))">-</button>
+                                                                        <input type="number" step="1" min="0"
+                                                                            max="10" value="{{ $cart_qty }}"
+                                                                            name="quantity" id="quantity"
+                                                                            class="quantity-field border-0 text-center w-25">
+                                                                        <button type="button"
+                                                                            class="button-plus icon-shape icon-sm lh-0 rgtcount"
+                                                                            data-field="quantity"
+                                                                            data-product_id="{{ $product->product->id }}"
+                                                                            data-product_stock_id="{{ $product->id }}"
+                                                                            onclick="incrementValue($(this))">+</button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
+                                                    </div>
                                                 </div>
                                             @endif
                                         @endforeach
@@ -504,6 +502,7 @@
                 parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
             } else {
                 parent.find('input[name=' + fieldName + ']').val(0);
+                $()
             }
 
             if (qty > 0) {
