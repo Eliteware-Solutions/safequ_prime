@@ -56,14 +56,14 @@ class CartController extends Controller
     {
         if ($category == 'fruit') {
             if (date('D') == 'Sun') {
-                return "Delivery tomorrow";
+                return "Deliver's Tomorrow";
             }
 
             if (date('His') < '130000') {
                 return "Delivery today";
             } else {
                 if (date('D') != 'Sat') {
-                    return "Delivery tomorrow";
+                    return "Deliver's Tomorrow";
                 } else {
                     return "Delivery on Monday";
                 }
