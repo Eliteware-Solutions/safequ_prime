@@ -440,25 +440,25 @@ class HomeController extends Controller
     {
         if ($category == 'fruit') {
             if (date('D') == 'Sun') {
-                return "Will be delivered tomorrow";
+                return "Delivery tomorrow";
             }
 
             if (date('His') < '130000') {
-                return "Will be delivered today";
+                return "Delivery today";
             } else {
                 if (date('D') != 'Sat') {
-                    return "Will be delivered tomorrow";
+                    return "Delivery tomorrow";
                 } else {
-                    return "Will be delivered on Monday";
+                    return "Delivery on Monday";
                 }
             }
         } else if ($category == 'vegetables') {
             if (date('wHis') < '2130000') {
-                return "Will be delivered on Wednesday";
+                return "Delivery on Wednesday";
             } else if (date('wHis') < '5130000') {
-                return "Will be delivered on Saturday";
+                return "Delivery on Saturday";
             } else {
-                return "Will be delivered on Wednesday";
+                return "Delivery on Wednesday";
             }
         }
     }
