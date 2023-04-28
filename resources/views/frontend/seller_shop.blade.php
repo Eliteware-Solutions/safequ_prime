@@ -158,7 +158,7 @@
                                                                     {{ $qty_unit_main }}</p>
                                                             @endif
                                                             <div class="pricing">
-                                                                <div class="data mr-2">
+                                                                <div class="data mr-1">
                                                                     <p
                                                                         class="fw500 fsize11 body-txt mb-1 primary-color ls-1">
                                                                         {{ $product->delivery }}

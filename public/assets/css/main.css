@@ -3157,6 +3157,10 @@ media query 991
         font-size: 1rem !important;
     }
 
+    .tab_horizontal_card .countitem input {
+        margin-top: 2px;
+    }
+
     .mobile_hr_card input.quantity-field {
         font-size: 14px;
     }
