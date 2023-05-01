@@ -67,11 +67,19 @@ class AdminController extends Controller
             });
         })->count();
 
-        $item['total_sales'] = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
-            $query->where('payment_status', 'paid')->orWhere(function ($query) {
-                $query->where('added_by_admin', 1)->where('payment_status', 'unpaid');
+        $grand_total = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
+            $query->where('added_by_admin', '1')->orWhere(function ($query) {
+                $query->where('added_by_admin', 0)->where('payment_status', 'paid');
             });
         })->sum('grand_total');
+
+        $total_discount = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
+            $query->where('added_by_admin', '1')->orWhere(function ($query) {
+                $query->where('added_by_admin', 0)->where('payment_status', 'paid');
+            });
+        })->sum('coupon_discount');
+
+        $item['total_sales'] = $grand_total - $total_discount;
 
         $item['total_pending_payment'] = Order::where('payment_status', 'unpaid')->where('added_by_admin', 1)->whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->sum('grand_total');
 
