@@ -42,19 +42,16 @@
                                 required />
                         </div>
 
-                        @php
-                            $address = explode(',', Auth::user()->address);
-                        @endphp
-
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="flat_no">Flat / House No.</label>
                             <input type="text" name="flat_no" id="flat_no" onkeypress="return restrictComma(event)"
-                                value="{{ trim($address[0]) }}" required />
-                        </div>
+                                value="" required />
+                        </div> --}}
+
                         <div class="form-group">
                             <label for="address">Address</label>
                             <input type="text" name="address" id="address"
-                                value="{{ implode(', ', array_slice($address, 1)) }}" required />
+                                value="{{ Auth::user()->address }}" required />
                         </div>
                         <button type="submit" class="btn primary-btn mt-4 btn-block">Save</button>
                     </form>
