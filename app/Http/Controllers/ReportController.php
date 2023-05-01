@@ -159,8 +159,8 @@ class ReportController extends Controller
 
         $orders = Order::select(DB::raw('COUNT(orders.id) as total_orders'), 'users.name as user_name', 'users.phone', 'users.email', 'users.address', 'orders.*')
             ->join('users', 'users.id', '=', 'orders.user_id')
-            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' ")
-            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")
+            ->whereRaw(" DATE(orders.created_at) >= '".date('Y-m-d', strtotime($from_date))."' ")
+            ->whereRaw(" DATE(orders.created_at) <= '".date('Y-m-d', strtotime($to_date))."' ")
             ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
             ->groupBy('orders.user_id')
             ->orderBy('total_orders', $order_by_count)

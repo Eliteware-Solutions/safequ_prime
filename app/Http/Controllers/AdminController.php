@@ -112,7 +112,7 @@ class AdminController extends Controller
             $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
             for ($month = 1; $month <= 12; $month++) {
                 $sales_total_amount = 0;
-                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month ")->first();
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
                 if (floatval($sales_chart_data->total_discount) > 0) {
                     $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
                 } else {
@@ -126,7 +126,7 @@ class AdminController extends Controller
                 $date = date('Y-m-d', strtotime("-$i days"));
                 $labels[] = date('d-m-Y', strtotime("-$i days"));
                 $sales_total_amount = 0;
-                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" DATE(orders.created_at) = '$date' ")->first();
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" DATE(orders.created_at) = '$date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
 
                 if (floatval($sales_chart_data->total_discount) > 0) {
                     $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
@@ -230,6 +230,7 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
         $totalUsersAry = array();
         $totalNewUsersAry = array();
         $totalRepeatUsersAry = array();
+        $totalExistingUsersAry = array();
         $totalUsersAry = array();
         $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
@@ -247,15 +248,30 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
                 $total_customers = 0;
                 $repeat_user_order_data = Order::select('orders.user_id')
                     ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) >= '$prev_month_first_date' AND DATE(orders.created_at) <= '$prev_month_last_date'
-AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GROUP BY orders.user_id) ")
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
                     ->groupBy('orders.user_id')
                     ->get();
                 $totalRepeatUsersAry[] = $repeat_user_order_data->count();
                 $total_customers += $repeat_user_order_data->count();
 
+                $repeat_user_ids = array();
+                $repeat_user_ids = array_column($repeat_user_order_data->toArray(), 'user_id');
+
+                $totalExistingUsersCnt = 0;
+                $existing_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE  DATE(orders.created_at) <= '$prev_month_first_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $existing_user_ids = array();
+                $existing_user_ids = array_column($existing_user_order_data->toArray(), 'user_id');
+                $totalExistingUsersCnt = count(array_diff($existing_user_ids, $repeat_user_ids));
+                $totalExistingUsersAry[] = $totalExistingUsersCnt;
+                $total_customers += $totalExistingUsersCnt;
+
                 $new_user_order_data = Order::select('orders.user_id')
                     ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id NOT IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) <= '$prev_month_last_date'
-AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GROUP BY orders.user_id) ")
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
                     ->groupBy('orders.user_id')
                     ->get();
                 $totalNewUsersAry[] = $new_user_order_data->count();
@@ -266,6 +282,7 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
                 $totalNewUsersAry[] = 0;
                 $totalRepeatUsersAry[] = 0;
                 $totalUsersAry[] = 0;
+                $totalExistingUsersAry[] = 0;
             }
         }
 
@@ -284,6 +301,13 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
                     'backgroundColor' => '#e37674',
                     'borderColor'     => '#e37674',
                     'data'            => $totalNewUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Existing Customers',
+                    'backgroundColor' => '#003f5c',
+                    'borderColor'     => '#003f5c',
+                    'data'            => $totalExistingUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
