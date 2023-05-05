@@ -42,6 +42,7 @@ class CheckoutController extends Controller
     public function checkout(Request $request)
     {
         if ($request->payment_option != null) {
+            $carts_details = array();
             if (!Auth::check()) {
                 $user = User::where('phone', '+91' . $request->phone)->first();
 
@@ -92,14 +93,17 @@ class CheckoutController extends Controller
                     ]);
 
                 Session::forget('temp_user_id');
-            }
 
-            $carts = Cart::where('user_id', Auth::user()->id)
-                ->get();
+                $carts_details = Cart::where('user_id', $user->id)
+                    ->get();
+            } else {
+                $carts_details = Cart::where('user_id', Auth::user()->id)
+                    ->get();
+            }
 
             $return_msg = '';
             $validateCart = true;
-            foreach ($carts as $cart_data) {
+            foreach ($carts_details as $cart_data) {
                 if (isset($cart_data->product) && $cart_data->product->published == 0) {
                     $return_msg = $cart_data->product->name. ' is dis-countinued. Please remove this product from cart.';
                     $validateCart = false;
