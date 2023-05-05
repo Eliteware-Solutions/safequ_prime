@@ -105,14 +105,14 @@ class CheckoutController extends Controller
             $validateCart = true;
             foreach ($carts_details as $cart_data) {
                 if (isset($cart_data->product) && $cart_data->product->published == 0) {
-                    $return_msg = $cart_data->product->name. ' is dis-countinued. Please remove this product from cart.';
+                    $return_msg = $cart_data->product->name. ' is no longer available, kindly remove from cart';
                     $validateCart = false;
                     break;
                 }
             }
 
             if (!$validateCart) {
-                flash(translate($cart_data->product->name. ' is dis-countinued. Please remove this product from cart.'))->error();
+                flash($return_msg)->error();
                 return redirect()->route('cart');
             } else {
                 (new OrderController)->store($request);
