@@ -40,7 +40,7 @@ class HomeController extends Controller
     {
         if (Auth::check() && intval(Auth::user()->joined_community_id) > 0) {
             $shop = Shop::where('user_id', Auth::user()->joined_community_id)->first();
-            return redirect()->route('shop.visit', $shop->slug);
+            return redirect()->route('shop.visit');
         }
 
         $featured_categories = Cache::rememberForever('featured_categories', function () {
