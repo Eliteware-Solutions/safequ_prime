@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
+@section('meta_title', get_setting('website_name') . ' | Product List')
+
 @if (isset($category_id))
     @php
         $meta_title = \App\Models\Category::find($category_id)->meta_title;

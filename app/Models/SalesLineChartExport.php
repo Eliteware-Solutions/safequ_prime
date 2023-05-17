@@ -29,10 +29,10 @@ class SalesLineChartExport implements FromCollection, WithMapping, WithHeadings
         $chart_type = $this->chart_type;
         $sales_data = array();
         if ($chart_type == 'month') {
-            $sales_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'), DB::raw('MONTH(orders.created_at) as order_month'), DB::raw('MONTHNAME(orders.created_at) as label_txt'))->whereRaw(" YEAR(orders.created_at) = $cur_year ")->groupBy('order_month');
+            $sales_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'), DB::raw('MONTH(orders.created_at) as order_month'), DB::raw('MONTHNAME(orders.created_at) as label_txt'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->groupBy('order_month');
         } else {
             $last_date = date('Y-m-d', strtotime("-7 days"));
-            $sales_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'), DB::raw('DATE(orders.created_at) as label_txt'))->whereRaw(" DATE(orders.created_at) >= '$last_date' ")->groupBy('label_txt');
+            $sales_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'), DB::raw('DATE(orders.created_at) as label_txt'))->whereRaw(" DATE(orders.created_at) >= '$last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->groupBy('label_txt');
         }
 
         return $sales_data->get();

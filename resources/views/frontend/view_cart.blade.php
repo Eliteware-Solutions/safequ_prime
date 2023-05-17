@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => false, 'new_footer' => false])
 
+@section('meta_title', get_setting('website_name') . ' | Cart')
+
 @section('content')
     <main class="main-tag mt-0 cart-main-tag">
 
