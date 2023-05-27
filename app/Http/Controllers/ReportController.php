@@ -59,6 +59,7 @@ class ReportController extends Controller
     public function idle_users_report(Request $request)
     {
         $search = null;
+        $order_by_users = '';
         $from_date = date('d-m-Y', strtotime(' -90 days'));
         $to_date = date('d-m-Y');
 
@@ -68,7 +69,19 @@ class ReportController extends Controller
             $to_date = date('d-m-Y', strtotime($req_date[1]));
         }
 
-        $users = User::whereRaw(" user_type='customer' AND users.id NOT IN (SELECT orders.user_id FROM `orders` WHERE DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' GROUP BY orders.user_id) ")->orderBy('users.name', 'asc');
+        $users = User::select(DB::raw('(SELECT orders.created_at FROM orders WHERE orders.user_id = users.id ORDER BY orders.created_at desc LIMIT 1) as last_order_date'), 'users.*')
+                ->whereRaw(" user_type='customer' AND users.id NOT IN (SELECT orders.user_id FROM `orders` WHERE DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' AND DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' GROUP BY orders.user_id) ");
+
+        if (trim($request->order_by_users) != '') {
+            $order_by_users = $request->order_by_users;
+            if ($request->order_by_users == 'desc') {
+                $users = $users->orderBy('last_order_date', 'desc');
+            } else {
+                $users = $users->orderByRaw("COALESCE(last_order_date, 'zz') asc");
+            }
+        } else {
+            $users = $users->orderBy('users.name', 'asc');
+        }
 
         if ($request->search != null) {
             $search = $request->search;
@@ -79,7 +92,7 @@ class ReportController extends Controller
         }
 
         $users = $users->paginate(20);
-        return view('backend.reports.idle_users_report', compact('users', 'from_date', 'to_date', 'search'));
+        return view('backend.reports.idle_users_report', compact('users', 'from_date', 'to_date', 'search', 'order_by_users'));
     }
 
     public function idle_users_export(Request $request)
@@ -146,8 +159,8 @@ class ReportController extends Controller
 
         $orders = Order::select(DB::raw('COUNT(orders.id) as total_orders'), 'users.name as user_name', 'users.phone', 'users.email', 'users.address', 'orders.*')
             ->join('users', 'users.id', '=', 'orders.user_id')
-            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') >= '".date('Y-m-d', strtotime($from_date))."' ")
-            ->whereRaw(" DATE_FORMAT(orders.created_at, '%Y-%m-%d') <= '".date('Y-m-d', strtotime($to_date))."' ")
+            ->whereRaw(" DATE(orders.created_at) >= '".date('Y-m-d', strtotime($from_date))."' ")
+            ->whereRaw(" DATE(orders.created_at) <= '".date('Y-m-d', strtotime($to_date))."' ")
             ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
             ->groupBy('orders.user_id')
             ->orderBy('total_orders', $order_by_count)
@@ -155,9 +168,7 @@ class ReportController extends Controller
 
         if ($request->search != null) {
             $search = $request->search;
-            $orders = $orders->where('users.name', 'like', '%' . $request->search . '%')
-                            ->orWhere('users.phone', 'like', '%' . $request->search . '%')
-                            ->orWhere('users.email', 'like', '%' . $request->search . '%');
+            $orders = $orders->whereRaw(" (users.name LIKE '%".$request->search."%' OR users.phone LIKE '%".$request->search."%' OR users.email LIKE '%".$request->search."%') ");
         }
 
         $orders = $orders->paginate(20);

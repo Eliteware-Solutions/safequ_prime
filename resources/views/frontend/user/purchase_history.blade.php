@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => false, 'footer' => true, 'new_footer' => false])
 
+@section('meta_title', get_setting('website_name') . ' | Orders')
+
 @section('content')
     <main class="main-tag main-tag-mt">
         <div class="container">

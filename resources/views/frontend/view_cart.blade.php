@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app', ['new_header' => false, 'header_show' => true, 'header2' => true, 'footer' => false, 'new_footer' => false])
 
+@section('meta_title', get_setting('website_name') . ' | Cart')
+
 @section('content')
     <main class="main-tag mt-0 cart-main-tag">
 
@@ -44,6 +46,7 @@
                         @php
                             $total = 0;
                             $shipping = 0;
+                            $shipSubtotal = 0;
                         @endphp
                         @foreach ($carts as $key => $cartItem)
                             @php
@@ -77,6 +80,9 @@
                                                 </span>
                                                 <i class="body-txt fsize12">&nbsp; <br class="sm" />
                                                     ({!! single_price_web($cartItem['price']) !!} / {{ $product->unit }})
+                                                </i>
+                                                <i class="fw500 body-txt fsize12 primary-color ls-1">&nbsp; <br class="sm" />
+                                                    {{ $cartItem->delivery }}
                                                 </i>
                                             </p>
                                             <div class="action">
@@ -137,16 +143,36 @@
                             <!-- Amount -->
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <a href="{{ route('shop.visit') }}"
-                                        class="add_more_product_btn">+ Add More Products</a>
+                                    <a href="{{ route('shop.visit') }}" class="add_more_product_btn">+ Add More
+                                        Products</a>
                                 </div>
                             </div>
                             <div class="payings py-4">
+                                @if ($shipping > 0)
+                                    @php
+                                        $shipSubtotal = $total - $shipping;
+                                    @endphp
+                                    <small>
+                                        <i class="fw500">
+                                            <sup>**</sup>Add products worth
+                                            <span class="blinking">{!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!}</span> to avail free delivery
+                                        </i>
+                                    </small>
+                                @endif
                                 <hr class="b-1">
                                 @if ($shipping > 0)
                                     <h6>
                                         <ins class="fw500">Shipping cost :</ins>
                                         <ins class="fw500 text-right"> {!! single_price_web($shipping) !!} </ins>
+                                    </h6>
+                                    <h6>
+                                        <ins class="fw500">Sub cost :</ins>
+                                        <ins class="fw500 text-right"> {!! single_price_web($shipSubtotal) !!} </ins>
+                                    </h6>
+                                @else
+                                    <h6>
+                                        <ins class="fw500">Shipping cost :</ins>
+                                        <ins class="fw500 text-right"> FREE </ins>
                                     </h6>
                                 @endif
                                 @if ($carts->sum('discount') > 0)
@@ -156,13 +182,13 @@
                                             - {!! single_price_web($carts->sum('discount')) !!} </ins>
                                     </h6>
                                 @endif
-                                <h5>
+                                <h5 class="mb-1">
                                     <ins class="fw700">Total :</ins>
                                     <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total) !!} </ins>
                                 </h5>
                             </div>
 
-{{--                            @if (Auth::check() && get_setting('coupon_system') == 1)--}}
+                            {{--                            @if (Auth::check() && get_setting('coupon_system') == 1) --}}
                             @if (get_setting('coupon_system') == 1)
                                 @if ($carts[0]['discount'] > 0)
                                     <div class="mb-3">
@@ -209,7 +235,8 @@
                                     @endif
 
                                     @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
-                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
+                                        <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code"
+                                            value="{{ $carts[0]['coupon_code'] }}">
                                     @endif
                                     <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
                                         options
@@ -229,15 +256,15 @@
                                                     autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="col-md-4 p-2">
+                                        <div class="col-md-6 p-2">
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="Email">
                                         </div>
-                                        <div class="col-md-4 p-2">
+                                        {{-- <div class="col-md-4 p-2">
                                             <input type="text" class="form-control" name="flat_no" id="flat_no"
                                                 placeholder="Flat No.">
-                                        </div>
-                                        <div class="col-md-4 p-2">
+                                        </div> --}}
+                                        <div class="col-md-6 p-2">
                                             <select name="city" id="city" class="form-control" required>
                                                 <option value="Mumbai">Mumbai</option>
                                             </select>

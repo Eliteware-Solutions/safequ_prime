@@ -105,6 +105,50 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header">
+                <h5 class="mb-0 h6">{{translate('Min Order Price for Shipping Cost')}}</h5>
+            </div>
+            <form action="{{ route('shipping_configuration.update') }}" method="POST" enctype="multipart/form-data">
+                <div class="card-body">
+                    @csrf
+                    <input type="hidden" name="type" value="ship_cost_min_price">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <input class="form-control" type="text" name="ship_cost_min_price" value="{{ get_setting('ship_cost_min_price') }}">
+                        </div>
+                    </div>
+                    <div class="form-group mb-0 text-right">
+                        <button type="submit" class="btn btn-sm btn-primary">{{translate('Save')}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0 h6">{{translate('Note')}}</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {{ translate('1. Minimum order price for shipping cost is applicable if Flat rate shipping is enabled.') }}
+                    </li>
+                    <li class="list-group-item">
+                        {{ translate('2. If Minimum order price for shipping cost is 0 then shipping cost will be applicable for all orders.') }}
+                    </li>
+                    <li class="list-group-item">
+                        {{ translate('3. If Minimum order price for shipping cost is set to specific amount then shipping cost will be applicable for orders above that price.') }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
                 <h5 class="mb-0 h6">{{translate('Shipping Cost for Admin Products')}}</h5>
             </div>
             <form action="{{ route('shipping_configuration.update') }}" method="POST" enctype="multipart/form-data">

@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app', ['new_header' => false, 'header_show' => false, 'header2' => false, 'footer' => false])
 
+@section('meta_title', get_setting('website_name') . ' | Login')
+
 @section('content')
     <div class="login-screen container py-4">
         <div class="row justify-content-center pt-3">

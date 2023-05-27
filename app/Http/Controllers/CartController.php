@@ -42,9 +42,68 @@ class CartController extends Controller
             $carts = ($temp_user_id != null) ? Cart::where('temp_user_id', $temp_user_id)->get() : [];
         }
 
+        foreach ($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
+
         $shops = Shop::get();
 
         return view('frontend.view_cart', compact('carts', 'user_data', 'shops'));
+    }
+
+    // Get Products Delivery Day
+    public function get_delivery_day($category)
+    {
+        if ($category == 'fruit') {
+            if (date('D') == 'Sun') {
+                return "Deliver's Tomorrow";
+            }
+
+            if (date('His') < '130000') {
+                return "Delivery today";
+            } else {
+                if (date('D') != 'Sat') {
+                    return "Deliver's Tomorrow";
+                } else {
+                    return "Delivery on Monday";
+                }
+            }
+        } else if ($category == 'vegetables') {
+            if (date('wHis') < '2130000') {
+                return "Delivery on Wednesday";
+            } else if (date('wHis') < '5130000') {
+                return "Delivery on Saturday";
+            } else {
+                return "Delivery on Wednesday";
+            }
+        }
+    }
+
+    public function userOrderCart($id)
+    {
+        if ($id) {
+            $decode_data = base64_decode($id);
+            $decode_data_ary = explode('#', $decode_data);
+            if (isset($decode_data_ary[1]) && !empty($decode_data_ary[1])) {
+                $decode_data_ary2 = explode('$', $decode_data_ary[1]);
+                if (isset($decode_data_ary2[0]) && intval($decode_data_ary2[0]) > 0) {
+                    $user_id = $decode_data_ary2[0];
+                    $user = User::where(['id' => $user_id, 'user_type' => 'customer'])->first();
+                    if ($user) {
+                        auth()->login($user, true);
+                        return redirect()->route('cart');
+                    } else {
+                        return redirect()->route('user.login');
+                    }
+                } else {
+                    return redirect()->route('user.login');
+                }
+            } else {
+                return redirect()->route('user.login');
+            }
+        } else {
+            return redirect()->route('user.login');
+        }
     }
 
     public function showCartModal(Request $request)
@@ -198,7 +257,7 @@ class CartController extends Controller
                     }
 
                     if ($cartItem['product_id'] == $request->id && $cartItem['product_stock_id'] == $request->product_stock_id) {
-//                        $product_stock = $cart_product->stocks->where('variant', $str)->first();
+                        //                        $product_stock = $cart_product->stocks->where('variant', $str)->first();
                         $product_stock = $cart_product->stocks->where('id', $request->product_stock_id)->first();
                         $quantity = $product_stock->qty;
                         /*if($quantity < $cartItem['quantity'] + $request['quantity']){
@@ -210,7 +269,7 @@ class CartController extends Controller
                             );
                         }*/
 
-//                        if (($str != null && $cartItem['variation'] == $str) || $str == null) {
+                        //                        if (($str != null && $cartItem['variation'] == $str) || $str == null) {
                         if ($product_stock) {
                             $foundInCart = true;
                             // $cartItem['quantity'] += $request['quantity'];
@@ -386,7 +445,7 @@ class CartController extends Controller
                             $where = array();
                             if (Auth::user()) {
                                 $where = array('user_id' => Auth::user()->id);
-                            } elseif(session('temp_user_id')) {
+                            } elseif (session('temp_user_id')) {
                                 $where = array('temp_user_id' => session('temp_user_id'));
                             }
                             Cart::where($where)
@@ -401,7 +460,7 @@ class CartController extends Controller
         $where = array();
         if (Auth::user()) {
             $where = array('user_id' => Auth::user()->id);
-        } elseif(session('temp_user_id')) {
+        } elseif (session('temp_user_id')) {
             $where = array('temp_user_id' => session('temp_user_id'));
         }
         $carts = Cart::where($where)->get();
@@ -617,6 +676,10 @@ class CartController extends Controller
 
         $carts = $this->manageCartCoupon($carts);
 
+        foreach ($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
+
         return array(
             'cart_count'    => count($carts),
             'cart_total'    => $cartTotalAmount,
@@ -699,6 +762,10 @@ class CartController extends Controller
         calculateShippingCost($carts);
 
         $carts = $this->manageCartCoupon($carts);
+
+        foreach ($carts as $prd) {
+            $prd['delivery'] = $this->get_delivery_day($prd->product->parent_category->slug);
+        }
 
         return array(
             'cart_count'    => count($carts),

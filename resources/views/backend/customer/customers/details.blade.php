@@ -125,6 +125,12 @@
                             <td>{{ $order->quantity }}</td>
                             <td>{{ single_price($totalPrice) }}</td>
                             <td class="text-center">
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="javascript:void(0)"
+                                   onclick="copyUserOrderCartUrl(this)"
+                                   data-url="{{ route('cart.userOrder', base64_encode(Str::random(3).'#'.$user->id.'$'.Str::random(3))) }}"
+                                   title="{{ translate('Payment Link') }}">
+                                    <i class="las la-eye"></i>
+                                </a>
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                     href="{{ route('customers.edit_product', ['type' => 'cart_order', 'user_id' => $user->id, 'ord_id' => $order->id]) }}"
                                     title="{{ translate('Edit') }}">
@@ -276,6 +282,20 @@
         function copyUrl(e) {
             var url = $(e).data('url');
             var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(url).select();
+            try {
+                document.execCommand("copy");
+                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+            } catch (err) {
+                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+            }
+            $temp.remove();
+        }
+
+        function copyUserOrderCartUrl(e) {
+            let url = $(e).data('url');
+            let $temp = $("<input>");
             $("body").append($temp);
             $temp.val(url).select();
             try {

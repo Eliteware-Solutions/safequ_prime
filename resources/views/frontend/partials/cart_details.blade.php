@@ -1,17 +1,16 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-8 px-1">
-            @if(count($carts) > 0)
+            @if (count($carts) > 0)
                 <h6 class="fw600 title-txt pb-2 mb-2">My Exotic Farm Fresh Order List</h6>
 
-                @if($user_data && $user_data->address != '')
+                @if ($user_data && $user_data->address != '')
                     <div class="delivery-addr p-3 flex-astart-jstart mb-3">
-                        <input type="checkbox" name="delivery_address" id="delivery_address" class="mr-2"
-                               checked/>
+                        <input type="checkbox" name="delivery_address" id="delivery_address" class="mr-2" checked />
                         <span class="check-box"></span>
 
                         <label for="delivery_address" class="body-txt mb-0">
-                            {{ $user_data->address." ".$user_data->city." ".$user_data->state." ".$user_data->postal_code }}
+                            {{ $user_data->address . ' ' . $user_data->city . ' ' . $user_data->state . ' ' . $user_data->postal_code }}
                         </label>
                     </div>
                 @elseif (auth()->user())
@@ -29,6 +28,7 @@
             @php
                 $total = 0;
                 $shipping = 0;
+                $shipSubtotal = 0;
             @endphp
             @foreach ($carts as $key => $cartItem)
                 @php
@@ -38,8 +38,8 @@
                     $shipping += $product_shipping_cost;
                     $sub_total = ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
                     $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
-                    if(floatval($product->min_qty) < 1){
-                        $product->unit = floatval($product->min_qty) * 1000 .' '.$product->secondary_unit;
+                    if (floatval($product->min_qty) < 1) {
+                        $product->unit = floatval($product->min_qty) * 1000 . ' ' . $product->secondary_unit;
                     }
                 @endphp
                 <div class="crtord-itm-card mb-4 p-3">
@@ -47,8 +47,8 @@
                         <div class="p-0 mxw-85px">
                             <div class="item-img text-center">
                                 <img src="{{ uploaded_asset($product->photos) }}"
-                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                     alt="{{ $product->name }}"/>
+                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                    alt="{{ $product->name }}" />
                             </div>
                         </div>
                         <div class="pl-3 w-100">
@@ -58,25 +58,28 @@
                                     <span class="act-price fw700">
                                         {!! single_price_web($sub_total) !!}
                                     </span>
-                                    <i class="body-txt fsize12">&nbsp; <br class="sm"/>
+                                    <i class="body-txt fsize12">&nbsp; <br class="sm" />
                                         ({!! single_price_web($cartItem['price']) !!} / {{ $product->unit }})
+                                    </i>
+                                    <i class="fw500 body-txt fsize12 primary-color ls-1">&nbsp; <br class="sm" />
+                                        {{ $cartItem->delivery }}
                                     </i>
                                 </p>
                                 <div class="action">
                                     <div class="item-count flex-acenter-jbtw">
                                         <button class="btn"
-                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
-                                                type="button" data-field="quantity[{{ $cartItem['id'] }}]"
-                                                data-cart_id="{{ $cartItem['id'] }}">
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
+                                            type="button" data-field="quantity[{{ $cartItem['id'] }}]"
+                                            data-cart_id="{{ $cartItem['id'] }}">
                                             <i class="fa fa-minus"></i>
                                         </button>
                                         <input class="quantity" min="1" name="quantity[{{ $cartItem['id'] }}]"
-                                               value="{{ $cartItem['quantity'] }}"
-                                               type="number" id="quantity_{{ $cartItem['id'] }}" readonly/>
+                                            value="{{ $cartItem['quantity'] }}" type="number"
+                                            id="quantity_{{ $cartItem['id'] }}" readonly />
                                         <button class="btn"
-                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp();"
-                                                type="button" data-field="quantity[{{ $cartItem['id'] }}]"
-                                                data-cart_id="{{ $cartItem['id'] }}">
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp();"
+                                            type="button" data-field="quantity[{{ $cartItem['id'] }}]"
+                                            data-cart_id="{{ $cartItem['id'] }}">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -90,64 +93,76 @@
             @endforeach
             @php
                 $total += $shipping;
-                if ($carts->sum('discount') > 0){
+                if ($carts->sum('discount') > 0) {
                     $total -= $carts->sum('discount');
                 }
             @endphp
 
-            @if($total == 0)
+            @if ($total == 0)
                 <div class="row">
                     <div class="col-xl-8 mx-auto">
                         <div class="shadow-sm bg-white p-4 rounded">
                             <div class="text-center p-3">
                                 <i class="las la-frown la-3x opacity-60 mb-3"></i>
-                                <h3 class="h4 fw-700">{{translate('Your Cart is empty')}}</h3>
+                                <h3 class="h4 fw-700">{{ translate('Your Cart is empty') }}</h3>
                             </div>
                         </div>
                         <div class="pt-4 text-center">
-                            @if($user_data && intval($user_data->joined_community_id) > 0)
-                                <a href="{{ route('shop.visit', $shop->slug) }}">
-                                    <button class="btn primary-btn btn-round px-5">
-                                        Continue Shopping &nbsp;&nbsp;
-                                        <i class="fal fa-long-arrow-right text-white"></i>
-                                    </button>
-                                </a>
-                            @else
-                                <a href="{{ route('home') }}">
-                                    <button class="btn primary-btn btn-round px-5">
-                                        Continue Shopping &nbsp;&nbsp;
-                                        <i class="fal fa-long-arrow-right text-white"></i>
-                                    </button>
-                                </a>
-                            @endif
+                            <a href="{{ route('shop.visit') }}">
+                                <button class="btn primary-btn btn-round px-5">
+                                    Continue Shopping &nbsp;&nbsp;
+                                    <i class="fal fa-long-arrow-right text-white"></i>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
             @endif
 
 
-            @if($total > 0)
-            <!-- Amount -->
+            @if ($total > 0)
+                <!-- Amount -->
                 <div class="row">
                     <div class="col-12 text-center">
                         <a href="{{ route('shop.visit') }}" class="add_more_product_btn">+ Add More Products</a>
                     </div>
                 </div>
                 <div class="payings py-4">
+                    @if ($shipping > 0)
+                        @php
+                            $shipSubtotal = $total - $shipping;
+                        @endphp
+                        <small>
+                            <i class="fw500">
+                                <sup>**</sup>Add products worth
+                                <span class="blinking">{!! single_price_web(abs(get_setting('ship_cost_min_price') - $shipSubtotal)) !!}</span>
+                                to avail free delivery
+                            </i>
+                        </small>
+                    @endif
                     <hr class="b-1">
-                    @if($shipping > 0)
+                    @if ($shipping > 0)
                         <h6>
                             <ins class="fw500">Shipping cost :</ins>
                             <ins class="fw500 text-right"> {!! single_price_web($shipping) !!} </ins>
                         </h6>
+                        <h6>
+                            <ins class="fw500">Sub cost :</ins>
+                            <ins class="fw500 text-right"> {!! single_price_web($total - $shipping) !!} </ins>
+                        </h6>
+                    @else
+                        <h6>
+                            <ins class="fw500">Shipping cost :</ins>
+                            <ins class="fw500 text-right"> FREE </ins>
+                        </h6>
                     @endif
                     @if ($carts->sum('discount') > 0)
                         <h6>
-                            <ins class="fw500">{{translate('Coupon Discount')}} :</ins>
+                            <ins class="fw500">{{ translate('Coupon Discount') }} :</ins>
                             <ins class="fw500 text-right">- {!! single_price_web($carts->sum('discount')) !!} </ins>
                         </h6>
                     @endif
-                    <h5>
+                    <h5 class="mb-1">
                         <ins class="fw700">Total :</ins>
                         <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total) !!} </ins>
                     </h5>
@@ -163,7 +178,7 @@
                                     <div class="form-control">{{ $carts[0]['coupon_code'] }}</div>
                                     <div class="input-group-append">
                                         <button type="button" id="coupon-remove"
-                                                class="btn btn-primary primary-color-bg b-0">{{translate('Change Coupon')}}</button>
+                                            class="btn btn-primary primary-color-bg b-0">{{ translate('Change Coupon') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -175,12 +190,11 @@
                                 <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="code"
-                                           onkeydown="return event.key != 'Enter';"
-                                           placeholder="{{translate('Have coupon code? Enter here')}}"
-                                           required>
+                                        onkeydown="return event.key != 'Enter';"
+                                        placeholder="{{ translate('Have coupon code? Enter here') }}" required>
                                     <div class="input-group-append">
                                         <button type="button" id="coupon-apply"
-                                                class="btn btn-primary primary-color-bg b-0">{{translate('Apply')}}</button>
+                                            class="btn btn-primary primary-color-bg b-0">{{ translate('Apply') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -191,14 +205,15 @@
                 <!-- Checkout Form -->
                 @if (!Auth::user())
                     <form action="{{ route('payment.checkout') }}" role="form" class="checkout-form pb-5"
-                          id="checkout-form" method="POST">
+                        id="checkout-form" method="POST">
                         @csrf
                         @if (count($carts) > 0)
                             <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                         @endif
 
                         @if (get_setting('coupon_system') == 1 && $carts[0]['discount'] > 0)
-                            <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code" value="{{ $carts[0]['coupon_code'] }}">
+                            <input type="hidden" name="hdn_coupon_code" id="hdn_coupon_code"
+                                value="{{ $carts[0]['coupon_code'] }}">
                         @endif
                         <p class="note pt-3 pb-4 text-center">Complete your payment easily using the below
                             options
@@ -207,25 +222,24 @@
                         <div class="row">
                             <div class="col-md-6 p-2">
                                 <input type="text" class="form-control" name="name" id="name"
-                                       placeholder="Full Name">
+                                    placeholder="Full Name">
                             </div>
                             <div class="col-md-6 p-2">
                                 <div class="phone-form-group">
-                                    <input type="tel" id="phone-code" required maxlength="10"
-                                           minlength="10"
-                                           class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
-                                           value="{{ old('phone') }}" placeholder="" name="phone"
-                                           autocomplete="off">
+                                    <input type="tel" id="phone-code" required maxlength="10" minlength="10"
+                                        class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                        value="{{ old('phone') }}" placeholder="" name="phone"
+                                        autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-4 p-2">
                                 <input type="email" class="form-control" name="email" id="email"
-                                       placeholder="Email">
+                                    placeholder="Email">
                             </div>
-                            <div class="col-md-4 p-2">
+                            {{-- <div class="col-md-4 p-2">
                                 <input type="text" class="form-control" name="flat_no" id="flat_no"
-                                       placeholder="Flat No.">
-                            </div>
+                                    placeholder="Flat No.">
+                            </div> --}}
                             <div class="col-md-4 p-2">
                                 <select name="city" id="city" class="form-control" required>
                                     <option value="Mumbai">Mumbai</option>
@@ -236,81 +250,77 @@
                             </div>
                             <div class="col-md-12 p-2">
                                 <label for="pay-option1" class="label-radio m-0 p-3 d-block">
-                                    <input type="radio" id="pay-option1" name="payment_option"
-                                           tabindex="1" value="razorpay" checked />
+                                    <input type="radio" id="pay-option1" name="payment_option" tabindex="1"
+                                        value="razorpay" checked />
                                     <span class="align-middle body-txt">
-                                                    PayTM / G-Pay / UPI / Net Banking
-                                                </span>
+                                        PayTM / G-Pay / UPI / Net Banking
+                                    </span>
                                 </label>
                             </div>
 
                             <div class="col-md-12 mt-4 p-2">
-                                <button type="button" class="btn primary-btn btn-block"
-                                        onclick="submitOrder(this)"
-                                        @if (count($carts) == 0) disabled @endif>Place Your Order
+                                <button type="button" class="btn primary-btn btn-block" onclick="submitOrder(this)"
+                                    @if (count($carts) == 0) disabled @endif>Place Your Order
                                 </button>
                             </div>
                         </div>
                     </form>
                 @endif
 
-                @if(Auth::user())
-                    <form action="{{ route('payment.checkout') }}" class="form-default" role="form" method="POST"
-                          id="checkout-form">
+                @if (Auth::user())
+                    <form action="{{ route('payment.checkout') }}" class="form-default" role="form"
+                        method="POST" id="checkout-form">
                         @csrf
 
-                        @if(count($carts) > 0)
-                            <input type="hidden" name="owner_id" value="{{  $carts[0]['owner_id'] }}">
+                        @if (count($carts) > 0)
+                            <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
                         @endif
 
                         <!-- Payment Method -->
                         <div class="pay-method pb-3">
 
-                                <p class="fsize12">Complete your payment easily using the below options to
-                                    confirm your farm fresh order:</p>
-                                @if ($total > Auth::user()->balance)
-                                    <div class="delivery-addr p-3 flex-astart-jstart mb-3">
-                                        <input type="checkbox" name="partial_payment" id="partial_payment"
-                                               class="mr-2"
-                                               @if(Auth::user()->balance == 0) disabled @else checked @endif/>
-                                        <span class="check-box"></span>
+                            <p class="fsize12">Complete your payment easily using the below options to
+                                confirm your farm fresh order:</p>
+                            @if ($total > Auth::user()->balance)
+                                <div class="delivery-addr p-3 flex-astart-jstart mb-3">
+                                    <input type="checkbox" name="partial_payment" id="partial_payment"
+                                        class="mr-2"
+                                        @if (Auth::user()->balance == 0) disabled @else checked @endif />
+                                    <span class="check-box"></span>
 
-                                        <label for="partial_payment" class="body-txt mb-0">
-                                                        <span class="align-middle body-txt">Use SafeQu balance <ins
-                                                                    class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
-                                        </label>
-                                    </div>
-                                    <input type="hidden" id="payable_amount"
-                                           value='{!! single_price_web($total - Auth::user()->balance) !!}'>
-                                @else
-                                    <div class="other-gatewy p-3 mb-3">
-                                        <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
-                                            <input type="radio" id="pay-option2" name="payment_option" value="wallet"
-                                                   tabindex="1" checked/>
-                                            <span class="align-middle body-txt">
+                                    <label for="partial_payment" class="body-txt mb-0">
+                                        <span class="align-middle body-txt">Use SafeQu balance <ins
+                                                class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins></span>
+                                    </label>
+                                </div>
+                                <input type="hidden" id="payable_amount" value='{!! single_price_web($total - Auth::user()->balance) !!}'>
+                            @else
+                                <div class="other-gatewy p-3 mb-3">
+                                    <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
+                                        <input type="radio" id="pay-option2" name="payment_option" value="wallet"
+                                            tabindex="1" checked />
+                                        <span class="align-middle body-txt">
                                             SafeQu balance
                                         </span>
-                                            <br>
-                                            <span class="align-middle body-txt cart_wallet_bal">
+                                        <br>
+                                        <span class="align-middle body-txt cart_wallet_bal">
                                             Available
-                                            <ins
-                                                    class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins>
+                                            <ins class="fw600 body-txt">{!! single_price_web(Auth::user()->balance) !!} </ins>
                                             for Payment
-                                        </span>
-                                        </label>
-                                    </div>
-                                @endif
-
-                                <div class="other-gatewy p-3 mb-3">
-                                    <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
-                                        <input type="radio" id="pay-option1" name="payment_option" tabindex="1"
-                                               value="razorpay"
-                                               @if($total > Auth::user()->balance) checked @endif />
-                                        <span class="align-middle body-txt">
-                                            PayTM / G-Pay / UPI / Net Banking
                                         </span>
                                     </label>
                                 </div>
+                            @endif
+
+                            <div class="other-gatewy p-3 mb-3">
+                                <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
+                                    <input type="radio" id="pay-option1" name="payment_option" tabindex="1"
+                                        value="razorpay" @if ($total > Auth::user()->balance) checked @endif />
+                                    <span class="align-middle body-txt">
+                                        PayTM / G-Pay / UPI / Net Banking
+                                    </span>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="p-3 pay-btn bt-1 flex-acenter-jbtw">
@@ -324,12 +334,14 @@
                             <div>
                                 @if ($user_data && $user_data->address == '')
                                     <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
-                                       title="Please complete your profile before attempting to make payment">
-                                        <i class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
+                                        title="Please complete your profile before attempting to make payment">
+                                        <i
+                                            class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
                                     </a>
                                 @endif
-                                <button id="btn_pay_now" class="btn primary-btn btn-round py-1" onclick="submitOrder(this)"
-                                        @if(count($carts) == 0 || ($user_data && $user_data->address == '')) disabled @endif >Pay Now
+                                <button id="btn_pay_now" class="btn primary-btn btn-round py-1"
+                                    onclick="submitOrder(this)" @if (count($carts) == 0 || ($user_data && $user_data->address == '')) disabled @endif>Pay
+                                    Now
                                 </button>
                             </div>
                         </div>
@@ -342,8 +354,8 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('.item-count button').on('click', function () {
+    $(document).ready(function() {
+        $('.item-count button').on('click', function() {
             let cart_id = $(this).data('cart_id');
             let qty = parseInt($("#quantity_" + cart_id).val());
 
@@ -359,7 +371,7 @@
                 $("#itm-cnt").addClass("d3");
             }
 
-            (qty < 10) ? $("#itm-cnt").removeClass("d2 d3") : "";
+            (qty < 10) ? $("#itm-cnt").removeClass("d2 d3"): "";
 
             // $('#btn_pay_now').attr('disabled', 'disabled');
             updateQuantity(cart_id, qty);
@@ -370,7 +382,7 @@
                 _token: AIZ.data.csrf,
                 id: cart_id,
                 quantity: qty
-            }, function (data) {
+            }, function(data) {
                 // updateNavCart(data.nav_cart_view,data.cart_count);
                 $('#cart_summary').html('');
                 $('#cart_summary').html(data.cart_view);
@@ -419,9 +431,10 @@
         $('#total_amount').html($('#payable_amount').val());
     }
 
-    $('#partial_payment').on('change', function () {
+    $('#partial_payment').on('change', function() {
         if (this.checked == true) {
-            $('.total h5').append('<span class="fw500 mb-0 strikethrough">' + $('#total_amount').html() + '</span>');
+            $('.total h5').append('<span class="fw500 mb-0 strikethrough">' + $('#total_amount').html() +
+                '</span>');
             $('#total_amount').html($('#payable_amount').val());
         } else {
             $('.total h5 .strikethrough').remove();

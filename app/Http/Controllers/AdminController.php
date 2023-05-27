@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerStackBarChartExport;
 use App\Models\Order;
+use App\Models\OrderAcqStackBarChartExport;
+use App\Models\OrderBreakStackBarChartExport;
+use App\Models\OrdersLineChartExport;
+use App\Models\SalesLineChartExport;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +17,7 @@ use Artisan;
 use Cache;
 use CoreComponentRepository;
 use DB;
+use Excel;
 
 class AdminController extends Controller
 {
@@ -61,11 +67,19 @@ class AdminController extends Controller
             });
         })->count();
 
-        $item['total_sales'] = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
-            $query->where('payment_status', 'paid')->orWhere(function ($query) {
-                $query->where('added_by_admin', 1)->where('payment_status', 'unpaid');
+        $grand_total = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
+            $query->where('added_by_admin', '1')->orWhere(function ($query) {
+                $query->where('added_by_admin', 0)->where('payment_status', 'paid');
             });
         })->sum('grand_total');
+
+        $total_discount = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->where(function ($query) {
+            $query->where('added_by_admin', '1')->orWhere(function ($query) {
+                $query->where('added_by_admin', 0)->where('payment_status', 'paid');
+            });
+        })->sum('coupon_discount');
+
+        $item['total_sales'] = $grand_total - $total_discount;
 
         $item['total_pending_payment'] = Order::where('payment_status', 'unpaid')->where('added_by_admin', 1)->whereDate('created_at', '>=', date('Y-m-d', strtotime($from)))->whereDate('created_at', '<=', date('Y-m-d', strtotime($to)))->sum('grand_total');
 
@@ -106,7 +120,7 @@ class AdminController extends Controller
             $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
             for ($month = 1; $month <= 12; $month++) {
                 $sales_total_amount = 0;
-                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month ")->first();
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
                 if (floatval($sales_chart_data->total_discount) > 0) {
                     $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
                 } else {
@@ -120,7 +134,7 @@ class AdminController extends Controller
                 $date = date('Y-m-d', strtotime("-$i days"));
                 $labels[] = date('d-m-Y', strtotime("-$i days"));
                 $sales_total_amount = 0;
-                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" DATE(orders.created_at) = '$date' ")->first();
+                $sales_chart_data = Order::select(DB::raw('SUM(orders.grand_total) as total_amt'), DB::raw('SUM(orders.coupon_discount) as total_discount'))->whereRaw(" DATE(orders.created_at) = '$date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
 
                 if (floatval($sales_chart_data->total_discount) > 0) {
                     $sales_total_amount = floatval($sales_chart_data->total_amt) - floatval($sales_chart_data->total_discount);
@@ -186,8 +200,6 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
                     $totalRepeatUsersAry[] = 0;
                 }
             }
-        } else { // For weekly
-
         }
 
         $users_bar_chart = [
@@ -195,22 +207,22 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
             'datasets' => [
                 [
                     'label'           => 'Total Customers',
-                    'backgroundColor' => '#4f7dff',
-                    'borderColor'     => '#4f7dff',
+                    'backgroundColor' => '#044c78',
+                    'borderColor'     => '#044c78',
                     'data'            => $totalUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'New Customers',
-                    'backgroundColor' => '#c53da9',
-                    'borderColor'     => '#c53da9',
+                    'backgroundColor' => '#47a6c0',
+                    'borderColor'     => '#47a6c0',
                     'data'            => $totalNewUsersAry,
                     'stack'           => 'Stack 0',
                 ],
                 [
                     'label'           => 'Repeat Customers',
-                    'backgroundColor' => '#009f51',
-                    'borderColor'     => '#009f51',
+                    'backgroundColor' => '#feac54',
+                    'borderColor'     => '#feac54',
                     'data'            => $totalRepeatUsersAry,
                     'stack'           => 'Stack 0',
                 ]
@@ -219,4 +231,236 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GRO
 
         return response()->json(array('data' => $users_bar_chart));
     }
+
+    public function order_acq_bar_chart(Request $request)
+    {
+        $year = $request->year;
+        $totalUsersAry = array();
+        $totalNewUsersAry = array();
+        $totalRepeatUsersAry = array();
+        $totalExistingUsersAry = array();
+        $totalUsersAry = array();
+        $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+
+        for ($month = 1; $month <= 12; $month++) {
+            if ($month < 10) {
+                $month = 0 . $month;
+            }
+            $loop_month = date("$year-$month");
+            $month_start_date = date("$year-$month-01");
+            $month_last_date = date("Y-m-t", strtotime($loop_month));
+            $prev_month_first_date = date("Y-m-01", strtotime($loop_month . ' -1 month'));
+            $prev_month_last_date = date("Y-m-t", strtotime($loop_month . ' -1 month'));
+
+            if (strtotime($loop_month) <= strtotime(date('Y-m'))) {
+                $total_customers = 0;
+                $repeat_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) >= '$prev_month_first_date' AND DATE(orders.created_at) <= '$prev_month_last_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $totalRepeatUsersAry[] = $repeat_user_order_data->count();
+                $total_customers += $repeat_user_order_data->count();
+
+                $repeat_user_ids = array();
+                $repeat_user_ids = array_column($repeat_user_order_data->toArray(), 'user_id');
+
+                $totalExistingUsersCnt = 0;
+                $existing_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE  DATE(orders.created_at) <= '$prev_month_first_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $existing_user_ids = array();
+                $existing_user_ids = array_column($existing_user_order_data->toArray(), 'user_id');
+                $totalExistingUsersCnt = count(array_diff($existing_user_ids, $repeat_user_ids));
+                $totalExistingUsersAry[] = $totalExistingUsersCnt;
+                $total_customers += $totalExistingUsersCnt;
+
+                $new_user_order_data = Order::select('orders.user_id')
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id NOT IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) <= '$prev_month_last_date'
+AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
+                    ->groupBy('orders.user_id')
+                    ->get();
+                $totalNewUsersAry[] = $new_user_order_data->count();
+                $total_customers += $new_user_order_data->count();
+
+                $totalUsersAry[] = $total_customers;
+            } else {
+                $totalNewUsersAry[] = 0;
+                $totalRepeatUsersAry[] = 0;
+                $totalUsersAry[] = 0;
+                $totalExistingUsersAry[] = 0;
+            }
+        }
+
+        $order_acq_bar_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Repeat Customers',
+                    'backgroundColor' => '#4bb3dc',
+                    'borderColor'     => '#4bb3dc',
+                    'data'            => $totalRepeatUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'New Customers',
+                    'backgroundColor' => '#e37674',
+                    'borderColor'     => '#e37674',
+                    'data'            => $totalNewUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Existing Customers',
+                    'backgroundColor' => '#003f5c',
+                    'borderColor'     => '#003f5c',
+                    'data'            => $totalExistingUsersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Total Customers',
+                    'backgroundColor' => '#4ab0aa',
+                    'borderColor'     => '#4ab0aa',
+                    'data'            => $totalUsersAry,
+                    'stack'           => 'Stack 1',
+                ]
+            ],
+        ];
+
+        return response()->json(array('data' => $order_acq_bar_chart));
+    }
+
+    public function orders_line_chart(Request $request)
+    {
+        $cur_year = $request->year;
+        $chart_type = $request->chart_type;
+        $totalOrdersAry = array();
+        $labels = array();
+        if ($chart_type == 'month') {
+            $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+            for ($month = 1; $month <= 12; $month++) {
+                $total_orders_data = Order::select(DB::raw('count(orders.id) as total_orders'))->whereRaw(" YEAR(orders.created_at) = $cur_year AND MONTH(orders.created_at) = $month AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
+                $totalOrdersAry[] = $total_orders_data->total_orders;
+            }
+        } else { // Last 7 days data
+            for ($i = 7; $i > 0; $i--) {
+                $date = date('Y-m-d', strtotime("-$i days"));
+                $labels[] = date('d-m-Y', strtotime("-$i days"));
+                $total_orders_data = Order::select(DB::raw('count(orders.id) as total_orders'))->whereRaw(" DATE(orders.created_at) = '$date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) ")->first();
+
+                $totalOrdersAry[] = $total_orders_data->total_orders;
+            }
+        }
+
+        $total_order_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Total Order',
+                    'backgroundColor' => 'transparent',
+                    'borderColor'     => '#ff6361',
+                    'data'            => $totalOrdersAry,
+                ],
+            ],
+        ];
+
+        return response()->json(array('data' => $total_order_chart));
+    }
+
+    public function order_break_bar_chart(Request $request)
+    {
+        $year = $request->year;
+        $totalUserOrdersAry = array();
+        $totalAdminOrdersAry = array();
+        $totalOrdersAry = array();
+        $labels = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+
+        for ($month = 1; $month <= 12; $month++) {
+            if ($month < 10) {
+                $month = 0 . $month;
+            }
+            $loop_month = date("$year-$month");
+            $month_start_date = date("$year-$month-01");
+            $month_last_date = date("Y-m-t", strtotime($loop_month));
+            $prev_month_first_date = date("Y-m-01", strtotime($loop_month . ' -1 month'));
+            $prev_month_last_date = date("Y-m-t", strtotime($loop_month . ' -1 month'));
+
+            if (strtotime($loop_month) <= strtotime(date('Y-m'))) {
+                $total_orders = 0;
+                $admin_orders_data = Order::select(DB::raw('count(orders.id) as total_admin_orders'))
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND added_by_admin = 1 ")
+                    ->first();
+                $totalAdminOrdersAry[] = $admin_orders_data->total_admin_orders;
+                $total_orders += $admin_orders_data->total_admin_orders;
+
+                $users_order_data = Order::select(DB::raw('count(orders.id) as total_admin_orders'))
+                    ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND payment_status = 'paid' AND added_by_admin = 0 ")
+                    ->first();
+                $totalUserOrdersAry[] = $users_order_data->total_admin_orders;
+                $total_orders += $users_order_data->total_admin_orders;
+
+                $totalOrdersAry[] = $total_orders;
+            } else {
+                $totalUserOrdersAry[] = 0;
+                $totalAdminOrdersAry[] = 0;
+                $totalOrdersAry[] = 0;
+            }
+        }
+
+        $order_break_bar_chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => 'Admin Orders',
+                    'backgroundColor' => '#bc5090',
+                    'borderColor'     => '#bc5090',
+                    'data'            => $totalAdminOrdersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'App Orders',
+                    'backgroundColor' => '#58508d',
+                    'borderColor'     => '#58508d',
+                    'data'            => $totalUserOrdersAry,
+                    'stack'           => 'Stack 0',
+                ],
+                [
+                    'label'           => 'Total Orders',
+                    'backgroundColor' => '#ff7c43',
+                    'borderColor'     => '#ff7c43',
+                    'data'            => $totalOrdersAry,
+                    'stack'           => 'Stack 1',
+                ]
+            ],
+        ];
+
+        return response()->json(array('data' => $order_break_bar_chart));
+    }
+
+    public function sales_line_chart_export(Request $request)
+    {
+        return Excel::download(new SalesLineChartExport($request), 'sales_line_chart.xlsx');
+    }
+
+    public function order_line_chart_export(Request $request)
+    {
+        return Excel::download(new OrdersLineChartExport($request), 'orders_line_chart.xlsx');
+    }
+
+    public function customer_bar_chart_export(Request $request)
+    {
+        return Excel::download(new CustomerStackBarChartExport($request), 'customer_bar_chart.xlsx');
+    }
+
+    public function order_acq_bar_chart_export(Request $request)
+    {
+        return Excel::download(new OrderAcqStackBarChartExport($request), 'order_acq_bar_chart.xlsx');
+    }
+
+    public function order_break_bar_chart_export(Request $request)
+    {
+        return Excel::download(new OrderBreakStackBarChartExport($request), 'order_break_bar_chart.xlsx');
+    }
+
 }

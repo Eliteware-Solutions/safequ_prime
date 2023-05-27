@@ -105,6 +105,7 @@ Route::post('/cart/bulkAddToCart', 'CartController@bulkAddToCart')->name('cart.b
 Route::post('/cart/removeFromCart', 'CartController@removeFromCart')->name('cart.removeFromCart');
 Route::post('/cart/updateQuantity', 'CartController@updateQuantity')->name('cart.updateQuantity');
 Route::post('/cart/cartCount', 'CartController@cartCount')->name('cart.cartCount');
+Route::get('/user-order/cart/{id}', 'CartController@userOrderCart')->name('cart.userOrder');
 
 //Checkout Routes
 //Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'verified', 'unbanned']], function() {

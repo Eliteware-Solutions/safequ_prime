@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="row gutters-10">
+        <div class="row gutters-10" style="display: none;">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -188,11 +188,13 @@
                                 </select>
                                 <button type="button" class="btn btn-primary filter-btn"
                                     onclick="filterSalesLineChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportSalesLineChart()"> Export </button>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="sales_line_chart" class="w-100" height="350"></canvas>
+                        <canvas id="sales_line_chart" height="350"></canvas>
                     </div>
                 </div>
             </div>
@@ -216,25 +218,126 @@
                                     <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
                                         {{ date('Y') }}</option>
                                 </select>
-                                <!--                            <select id="sales_line_chart_type" class="from-control aiz-selectpicker" name="sales_line_chart_type">
-                                                                    <option value="month">Monthly</option>
-                                                                    <option value="week">Weekly</option>
-                                                                </select>-->
                                 <button type="button" class="btn btn-primary filter-btn"
                                     onclick="filterCustomerStackBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportCustomerStackBarChart()"> Export </button>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <canvas id="user_monthly_bar_chart" class="w-100" height="350"></canvas>
+                        <canvas id="user_monthly_bar_chart" height="350"></canvas>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Order Acquisition</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="order_acquisition_bar_year" class="from-control aiz-selectpicker"
+                                        name="order_acquisition_bar_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrderAcqStackBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrderAcqStackBarChart()"> Export </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="order_acq_monthly_bar_chart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Orders Chart</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="orders_line_chart_year" class="from-control aiz-selectpicker"
+                                        name="orders_line_chart_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <select id="orders_line_chart_type" class="from-control aiz-selectpicker"
+                                        name="orders_line_chart_type">
+                                    <option value="month">Monthly</option>
+                                    <option value="week">Weekly</option>
+                                </select>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrdersLineChart()"> Filter </button>
+
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrdersLineChart()"> Export </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="orders_line_chart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 px-2">
+                                <h6 class="mb-2 fs-14">Order Details Chart</h6>
+                            </div>
+                            <div class="col-md-12 text-right px-2">
+                                <select id="order_break_bar_year" class="from-control aiz-selectpicker"
+                                        name="order_break_bar_year">
+                                    <option value="{{ date('Y', strtotime('-3 year')) }}">
+                                        {{ date('Y', strtotime('-3 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-2 year')) }}">
+                                        {{ date('Y', strtotime('-2 year')) }}</option>
+                                    <option value="{{ date('Y', strtotime('-1 year')) }}">
+                                        {{ date('Y', strtotime('-1 year')) }}</option>
+                                    <option value="{{ date('Y') }}" @if ($cur_year == date('Y')) selected @endif>
+                                        {{ date('Y') }}</option>
+                                </select>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="filterOrderBreakBarChart()"> Filter </button>
+                                <button type="button" class="btn btn-primary filter-btn"
+                                        onclick="exportOrderBreakBarChart()"> Export </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="order_break_monthly_bar_chart" height="350"></canvas>
+                    </div>
+                </div>
+            </div>
+
         </div>
     @endif
 
     @if (Auth::user()->user_type == 'admin' || in_array('3', json_decode(Auth::user()->staff->role->permissions)))
-        <div class="row gutters-10">
+        <div class="row gutters-10" style="display: none;">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -248,7 +351,7 @@
         </div>
     @endif
 
-    <div class="card">
+    <div class="card" style="display: none;">
         <div class="card-header">
             <h6 class="mb-0">{{ translate('Top 12 Products') }}</h6>
         </div>
@@ -289,7 +392,7 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        let salesOrderLineChart, customerStackBarChart;
+        let salesOrderLineChart, customerStackBarChart, customerOrderStackBarChart;
 
         AIZ.plugins.chart('#graph-1', {
             type: 'bar',
@@ -358,6 +461,12 @@
         filterSalesLineChart();
 
         filterCustomerStackBarChart();
+
+        filterOrderAcqStackBarChart();
+
+        filterOrdersLineChart();
+
+        filterOrderBreakBarChart();
 
         function filterSalesLineChart() {
             let chartId = 'sales_line_chart';
@@ -468,6 +577,218 @@
                     },
                 });
             }
+        }
+
+        function filterOrderAcqStackBarChart() {
+            let chartId = 'order_acq_monthly_bar_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.order_acq_bar_chart') }}',
+                data: {
+                    year: $('#order_acquisition_bar_year').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrderAcqStackBarChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrderAcqStackBarChart(chartId, data) {
+            if (data) {
+                if (typeof(customerOrderStackBarChart) !== 'undefined') {
+                    customerOrderStackBarChart.destroy();
+                }
+
+                customerOrderStackBarChart = new Chart($('#' + chartId), {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
+                        },
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            },
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }]
+                        }
+                    },
+                });
+            }
+        }
+
+        function filterOrdersLineChart() {
+            let chartId = 'orders_line_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.orders_line_chart') }}',
+                data: {
+                    year: $('#orders_line_chart_year').val(),
+                    chart_type: $('#orders_line_chart_type').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrdersLineChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrdersLineChart(chartId, data) {
+            if (data) {
+                if (typeof(totalOrdersLineChart) !== 'undefined') {
+                    totalOrdersLineChart.destroy();
+                }
+
+                totalOrdersLineChart = new Chart($('#' + chartId), {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        elements: {
+                            line: {
+                                tension: 0
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }/*,
+                        tooltips: {
+                            callbacks: {
+                                title: function(t, d) {
+                                    return 'Sales: ' + d.datasets[0]['extraData'][t[0].index];
+                                },
+                                label: function(t, d) {
+                                    return '';
+                                }
+                            }
+                        }*/
+                    },
+                });
+            }
+        }
+
+        function filterOrderBreakBarChart() {
+            let chartId = 'order_break_monthly_bar_chart';
+            $.ajax({
+                type: "POST",
+                url: '{{ route('admin.order_break_bar_chart') }}',
+                data: {
+                    year: $('#order_break_bar_year').val(),
+                    _token: AIZ.data.csrf
+                },
+                success: function(data) {
+                    initOrderBreakBarChart(chartId, data.data);
+                }
+            });
+        }
+
+        function initOrderBreakBarChart(chartId, data) {
+            if (data) {
+                if (typeof(orderBreakStackBarChart) !== 'undefined') {
+                    orderBreakStackBarChart.destroy();
+                }
+
+                orderBreakStackBarChart = new Chart($('#' + chartId), {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Chart.js Bar Chart - Stacked'
+                            },
+                        },
+                        interaction: {
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true
+                            },
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }]
+                        }
+                    },
+                });
+            }
+        }
+
+        function exportSalesLineChart() {
+            let year = $('#sales_line_chart_year').val();
+            let chart_type = $('#sales_line_chart_type').val();
+            let url = "{{ route('sales_line_chart.excel', ':year:chart_type') }}";
+            url = url.replace(':year', '&year=' + year);
+            url = url.replace(':chart_type', '&chart_type=' + chart_type);
+
+            window.location.href = url;
+        }
+
+        function exportOrdersLineChart() {
+            let year = $('#orders_line_chart_year').val();
+            let chart_type = $('#orders_line_chart_type').val();
+            let url = "{{ route('order_line_chart.excel', ':year:chart_type') }}";
+            url = url.replace(':year', '&year=' + year);
+            url = url.replace(':chart_type', '&chart_type=' + chart_type);
+
+            window.location.href = url;
+        }
+
+        function exportCustomerStackBarChart() {
+            let year = $('#customer_bar_chart_year').val();
+            let url = "{{ route('customer_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
+
+            window.location.href = url;
+        }
+
+        function exportOrderAcqStackBarChart() {
+            let year = $('#order_acquisition_bar_year').val();
+            let url = "{{ route('order_acq_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
+
+            window.location.href = url;
+        }
+
+        function exportOrderBreakBarChart() {
+            let year = $('#order_break_bar_year').val();
+            let url = "{{ route('order_break_bar_chart.excel', ':year') }}";
+            url = url.replace(':year', '&year=' + year);
+
+            window.location.href = url;
         }
 
         $('#filter_date').on('apply.daterangepicker', function(ev, picker) {
