@@ -50,6 +50,7 @@ class WholesaleService
         $product->variation = $request->variation;
         $product->brand_id = $request->brand_id;
         $product->barcode = $request->barcode;
+        $product->delivery_date = $request->delivery_date != '' ? $request->delivery_date : null;
         $product->manufacturer_location = $request->manufacturer_location;
 
         if ($request->purchase_date_range != null) {
@@ -281,6 +282,7 @@ class WholesaleService
         $product->brand_id = $request->brand_id;
         $product->barcode = $request->barcode;
         $product->cash_on_delivery = 0;
+        $product->delivery_date = $request->delivery_date != '' ? $request->delivery_date : null;
         $product->featured = 0;
         $product->todays_deal = 0;
         $product->discount = NULL;
