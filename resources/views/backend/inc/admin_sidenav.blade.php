@@ -519,6 +519,11 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
+                                <a href="{{ route('acquired-users.report') }}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{ translate('Acquired Customers') }}</span>
+                                </a>
+                            </li>
+                            <li class="aiz-side-nav-item">
                                 <a href="{{ route('seller_sale_report.index') }}"
                                     class="aiz-side-nav-link {{ areActiveRoutes(['seller_sale_report.index']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Seller Products Sale') }}</span>

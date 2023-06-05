@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcquireCustomersExport;
 use App\Models\BestSaleProductsExport;
 use App\Models\IdleCustomersExport;
 use App\Models\Order;
@@ -178,6 +179,41 @@ class ReportController extends Controller
     public function regular_users_export(Request $request)
     {
         return Excel::download(new RegularCustomersExport($request), 'regular_customers.xlsx');
+    }
+
+    public function acquired_users_report(Request $request)
+    {
+        $search = null;
+        $order_by_count = 'desc';
+        $from_date = date('01-m-Y');
+        $to_date = date('t-m-Y');
+
+        if ($request->filter_date != null) {
+            $req_date = explode('to', $request->filter_date);
+            $from_date = date('d-m-Y', strtotime($req_date[0]));
+            $to_date = date('d-m-Y', strtotime($req_date[1]));
+        }
+
+        /*if ($request->order_by_count != null) {
+            $order_by_count = $request->order_by_count;
+        }*/
+
+        $users = User::whereRaw(" DATE(users.created_at) >= '".date('Y-m-d', strtotime($from_date))."' ")
+                    ->whereRaw(" DATE(users.created_at) <= '".date('Y-m-d', strtotime($to_date))."' ")
+                    ->orderBy('users.name', 'asc');
+
+        if ($request->search != null) {
+            $search = $request->search;
+            $users = $users->whereRaw(" (users.name LIKE '%".$request->search."%' OR users.phone LIKE '%".$request->search."%' OR users.email LIKE '%".$request->search."%') ");
+        }
+
+        $users = $users->paginate(20);
+        return view('backend.reports.acquired_customers_report', compact('users', 'from_date', 'to_date', 'search', 'order_by_count'));
+    }
+
+    public function acquired_users_export(Request $request)
+    {
+        return Excel::download(new AcquireCustomersExport($request), 'acquired_customers.xlsx');
     }
 
     public function wish_report(Request $request)
