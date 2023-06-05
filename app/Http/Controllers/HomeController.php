@@ -417,7 +417,7 @@ class HomeController extends Controller
         $all_products = array();
         foreach ($categorizedProd as $prd) {
             foreach ($prd as $val) {
-                $val['delivery'] = $this->get_delivery_day($val->product->parent_category->slug);
+                $val['delivery'] = $this->get_delivery_day($val->product->parent_category->slug, $val->product->delivery_date);
                 $all_products[] = $val;
             }
         }
@@ -436,30 +436,35 @@ class HomeController extends Controller
     }
 
     // Get Products Delivery Day
-    public function get_delivery_day($category)
+    public function get_delivery_day($category, $date)
     {
-        if ($category == 'fruit') {
-            if (date('D') == 'Sun') {
-                return "Deliver's Tomorrow";
-            }
-
-            if (date('His') < '130000') {
-                return "Delivery today";
-            } else {
-                if (date('D') != 'Sat') {
+        if ($date == null || strtotime(date('Y-m-d')) > strtotime($date)) {
+            if ($category == 'fruit') {
+                if (date('D') == 'Sun') {
                     return "Deliver's Tomorrow";
+                }
+
+                if (date('His') < '130000') {
+                    return "Delivery today";
                 } else {
-                    return "Delivery on Monday";
+                    if (date('D') != 'Sat') {
+                        return "Deliver's Tomorrow";
+                    } else {
+                        return "Delivery on Monday";
+                    }
+                }
+            } else if ($category == 'vegetables') {
+                if (date('wHis') < '2130000') {
+                    return "Delivery on Wednesday";
+                } else if (date('wHis') < '5130000') {
+                    return "Delivery on Saturday";
+                } else {
+                    return "Delivery on Wednesday";
                 }
             }
-        } else if ($category == 'vegetables') {
-            if (date('wHis') < '2130000') {
-                return "Delivery on Wednesday";
-            } else if (date('wHis') < '5130000') {
-                return "Delivery on Saturday";
-            } else {
-                return "Delivery on Wednesday";
-            }
+        }
+        else {
+            return "Delivery on " . date("l", strtotime($date));
         }
     }
 

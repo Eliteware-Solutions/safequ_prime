@@ -489,6 +489,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-group mb-3">
+                                <label for="name">
+                                    {{ translate('Delivery Date') }}
+                                </label>
+                                <input type="date" class="form-control" name="delivery_date" min="{{ date('Y-m-d') }}"
+                                    value="{{ isset($product->delivery_date) ? $product->delivery_date : '' }}"
+                                    placeholder="{{ translate('Delivery Date') }}">
+                            </div>
                         </div>
                     </div>
 
