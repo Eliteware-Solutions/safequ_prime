@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AcquireCustomersExport;
 use App\Models\BestSaleProductsExport;
 use App\Models\IdleCustomersExport;
+use App\Models\LostCustomersExport;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\RegularCustomersExport;
@@ -214,6 +215,69 @@ class ReportController extends Controller
     public function acquired_users_export(Request $request)
     {
         return Excel::download(new AcquireCustomersExport($request), 'new_customers.xlsx');
+    }
+
+    public function lost_users_report(Request $request)
+    {
+        $search = null;
+        $order_by_count = 'desc';
+        $from_date = date('01-m-Y', strtotime('-1 month'));
+        $to_date = date('t-m-Y', strtotime('-1 month'));
+        $from_date_two = date('01-m-Y');
+        $to_date_two = date('t-m-Y');
+
+        if ($request->filter_date != null) {
+            $req_date = explode('to', $request->filter_date);
+            $from_date = date('d-m-Y', strtotime($req_date[0]));
+            $to_date = date('d-m-Y', strtotime($req_date[1]));
+        }
+
+        if ($request->filter_date_two != null) {
+            $req_date_two = explode('to', $request->filter_date_two);
+            $from_date_two = date('d-m-Y', strtotime($req_date_two[0]));
+            $to_date_two = date('d-m-Y', strtotime($req_date_two[1]));
+        }
+
+        $orders_from = Order::select('orders.user_id')->whereRaw(" DATE(orders.created_at) >= '".date('Y-m-d', strtotime($from_date))."' ")
+            ->whereRaw(" DATE(orders.created_at) <= '".date('Y-m-d', strtotime($to_date))."' ")
+            ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
+            ->groupBy('orders.user_id')
+            ->get();
+
+        $users_from_ary = array();
+        foreach ($orders_from as $val) {
+            array_push($users_from_ary, $val->user_id);
+        }
+
+        $orders_to = Order::select('orders.user_id')->whereRaw(" DATE(orders.created_at) >= '".date('Y-m-d', strtotime($from_date_two))."' ")
+            ->whereIn('user_id', $users_from_ary)
+            ->whereRaw(" DATE(orders.created_at) <= '".date('Y-m-d', strtotime($to_date_two))."' ")
+            ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
+            ->groupBy('orders.user_id')
+            ->get();
+
+        $users_to_ary = array();
+        foreach ($orders_to as $val) {
+            array_push($users_to_ary, $val->user_id);
+        }
+
+        $lost_users = array_diff($users_from_ary, $users_to_ary);
+
+        $users = User::whereIn('id', $lost_users)
+            ->orderBy('users.name', 'asc');
+
+        if ($request->search != null) {
+            $search = $request->search;
+            $users = $users->whereRaw(" (users.name LIKE '%".$request->search."%' OR users.phone LIKE '%".$request->search."%' OR users.email LIKE '%".$request->search."%') ");
+        }
+
+        $users = $users->paginate(20);
+        return view('backend.reports.lost_customers_report', compact('users', 'from_date', 'to_date', 'search', 'order_by_count', 'from_date_two', 'to_date_two'));
+    }
+
+    public function lost_users_export(Request $request)
+    {
+        return Excel::download(new LostCustomersExport($request), 'lost_customers.xlsx');
     }
 
     public function wish_report(Request $request)

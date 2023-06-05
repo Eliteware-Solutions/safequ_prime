@@ -236,6 +236,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     Route::get('/regular-users-export', 'ReportController@regular_users_export')->name('regular-users.excel');
     Route::get('/acquired-users-report', 'ReportController@acquired_users_report')->name('acquired-users.report');
     Route::get('/acquired-users-export', 'ReportController@acquired_users_export')->name('acquired-users.excel');
+    Route::get('/lost-users-report', 'ReportController@lost_users_report')->name('lost-users.report');
+    Route::get('/lost-users-export', 'ReportController@lost_users_export')->name('lost-users.excel');
 
     //Blog Section
     Route::resource('blog-category', 'BlogCategoryController');
