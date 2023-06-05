@@ -213,7 +213,7 @@ class ReportController extends Controller
 
     public function acquired_users_export(Request $request)
     {
-        return Excel::download(new AcquireCustomersExport($request), 'acquired_customers.xlsx');
+        return Excel::download(new AcquireCustomersExport($request), 'new_customers.xlsx');
     }
 
     public function wish_report(Request $request)
