@@ -4,7 +4,7 @@
 
     <div class="aiz-titlebar text-left mt-2 mb-3">
         <div class=" align-items-center">
-            <h1 class="h3">{{translate('New Customers Report')}}</h1>
+            <h1 class="h3">{{translate('Lost Customers Report')}}</h1>
         </div>
     </div>
 
@@ -92,9 +92,11 @@
     <script type="text/javascript">
         function exportExcelLostCustomers() {
             let filter_date = $('#filter_date').val();
+            let filter_date_two = $('#filter_date_two').val();
             let search = $('#search').val();
-            let url = "{{ route('lost-users.excel', ':filter_date:search') }}";
+            let url = "{{ route('lost-users.excel', ':filter_date:filter_date_two:search') }}";
             url = url.replace(':filter_date', '&filter_date=' + filter_date);
+            url = url.replace(':filter_date_two', '&filter_date_two=' + filter_date_two);
             url = url.replace(':search', '&search=' + search);
 
             window.location.href = url;

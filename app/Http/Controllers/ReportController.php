@@ -250,7 +250,7 @@ class ReportController extends Controller
         }
 
         $orders_to = Order::select('orders.user_id')->whereRaw(" DATE(orders.created_at) >= '".date('Y-m-d', strtotime($from_date_two))."' ")
-            ->whereNotIn('user_id', $users_from_ary)
+            ->whereIn('user_id', $users_from_ary)
             ->whereRaw(" DATE(orders.created_at) <= '".date('Y-m-d', strtotime($to_date_two))."' ")
             ->whereRaw(" (added_by_admin = 1 OR (orders.payment_status = 'paid' AND added_by_admin = 0)) ")
             ->groupBy('orders.user_id')
