@@ -421,6 +421,26 @@ class WholesaleService
             }
         }
 
+        $cart_data = Cart::where('product_id', $id)->get();
+        if ($cart_data) {
+            $update_product = Product::find($id);
+            foreach ($cart_data as $cart) {
+                $unit_price = $update_product->unit_price;
+                if ($update_product->productStock->wholesalePrices) {
+                    $wholesale_price_data = WholesalePrice::whereRaw(" product_stock_id  = ".$update_product->productStock->id." AND ".$cart->quantity." BETWEEN min_qty AND max_qty")->first();
+                    if ($wholesale_price_data) {
+                        $unit_price = $wholesale_price_data->price;
+                    } else {
+                        $unit_price = $update_product->unit_price;
+                    }
+                }
+
+                Cart::where('product_id', $id)->update([
+                    'price' => $unit_price,
+                ]);
+            }
+        }
+
         //Flash Deal
         if ($request->flash_deal_id) {
             if ($product->flash_deal_product) {
