@@ -100,9 +100,19 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
             $deliveryDate = date('d-m-Y', strtotime($order->archive_product_stock->purchase_end_date . '+' . intval($order->archive_product_stock->est_shipping_days) . ' days'));
         }
 
-        $qty_unit_main = $order->product->min_qty;
-        if (floatval($order->product->min_qty) < 1) {
-            $qty_unit_main = (1000 * floatval($order->product->min_qty));
+        if (isset($order->product) && isset($order->product->min_qty)) {
+            $qty_unit_main = $order->product->min_qty;
+            if (floatval($order->product->min_qty) < 1) {
+                $qty_unit_main = (1000 * floatval($order->product->min_qty));
+            }
+            $product_name = $order->product->name;
+            $product_variation = $order->product->variation;
+            $product_secondary_unit = $order->product->secondary_unit;
+        } else {
+            $qty_unit_main = 0;
+            $product_name = '--';
+            $product_variation = '--';
+            $product_secondary_unit = '--';
         }
 
         return [
@@ -113,13 +123,13 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
             $userPhone,
             $communityName,
             $flatNo,
-            $order->product->name,
+            $product_name,
             $parentCategory,
             $subCategory,
-            $order->product->variation,
+            $product_variation,
             $farmLocation,
             $order->quantity,
-            number_format($qty_unit_main, 0) . ' ' . $order->product->secondary_unit,
+            number_format($qty_unit_main, 0) . ' ' . $product_secondary_unit,
             number_format(floatval($order->price / $order->quantity), 2),
             $order->price,
             $order->payment_status,
