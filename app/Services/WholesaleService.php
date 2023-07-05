@@ -22,10 +22,10 @@ class WholesaleService
         $product = new Product;
         $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($request->name)));
 
-        if (Product::where('slug', $product->slug)->count() > 0) {
+        /*if (Product::where('slug', $product->slug)->count() > 0) {
             flash(translate('Another product exists with same slug. Please change the slug!'))->warning();
             return back();
-        }
+        }*/
 
         $product->discount = NULL;
         $product->discount_type = NULL;
@@ -319,10 +319,10 @@ class WholesaleService
             $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', strtolower($request->name)));
         }
 
-        if (Product::where('id', '!=', $product->id)->where('slug', $product->slug)->count() > 0) {
+        /*if (Product::where('id', '!=', $product->id)->where('slug', $product->slug)->count() > 0) {
             flash(translate('Another product exists with same slug. Please change the slug!'))->warning();
             return back();
-        }
+        }*/
 
         $product->photos = $request->photos;
         $product->thumbnail_img = $request->thumbnail_img;
