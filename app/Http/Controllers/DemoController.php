@@ -572,20 +572,21 @@ class DemoController extends Controller
         }
     }
 
+    // Comment code in function because From 2023 Purchase start and end start system has been removed.
     public function archive_product_stock()
     {
-        $product_stocks = ProductStock::whereRaw('DATE_ADD(purchase_end_date,INTERVAL IFNULL(est_shipping_days,0) day) < NOW()')->get();
-
-        $product_stocks->each(function ($oldRecord) {
-            $newRecord = $oldRecord->replicate();
-            $newRecord->setTable('archive_product_stocks');
-            $newRecord->id = $oldRecord->id;
-            $newRecord->save();
-
-            OrderDetail::where('product_stock_id', $oldRecord->id)->update(['is_archived' => 1]);
-
-            $oldRecord->delete();
-        });
+//        $product_stocks = ProductStock::whereRaw('DATE_ADD(purchase_end_date,INTERVAL IFNULL(est_shipping_days,0) day) < NOW()')->get();
+//
+//        $product_stocks->each(function ($oldRecord) {
+//            $newRecord = $oldRecord->replicate();
+//            $newRecord->setTable('archive_product_stocks');
+//            $newRecord->id = $oldRecord->id;
+//            $newRecord->save();
+//
+//            OrderDetail::where('product_stock_id', $oldRecord->id)->update(['is_archived' => 1]);
+//
+//            $oldRecord->delete();
+//        });
     }
 
     public function archive_unpaid_products()
