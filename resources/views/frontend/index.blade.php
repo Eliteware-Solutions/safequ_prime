@@ -781,7 +781,7 @@
             </div>
         </div>
         <div class="copyright text-center position-relative">
-            <p class="text-white mb-0 fw500">Copyright &copy; 2023 SafeQu. All Rights Reserved.</p>
+            <p class="text-white mb-0 fw500">Copyright &copy; ELUCIIDAATE TECH PRIVATE LIMITED. All Rights Reserved.</p>
         </div>
     </footer>
 
