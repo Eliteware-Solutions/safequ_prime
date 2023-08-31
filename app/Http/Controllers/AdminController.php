@@ -29,10 +29,6 @@ class AdminController extends Controller
      */
     public function admin_dashboard(Request $request)
     {
-
-        // $this->paymentGetUtility();
-        // exit;
-
         CoreComponentRepository::initializeCache();
         $root_categories = Category::where('level', 0)->get();
         $from = date('01-m-Y');
