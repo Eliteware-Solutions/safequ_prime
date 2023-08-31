@@ -238,12 +238,16 @@ class CheckoutController extends Controller
     //redirects to this method after a successful checkout
     public function checkout_done($combined_order_id, $payment, $wallet_amount = 0)
     {
+        $paymentData = json_decode($payment, true);
         $combined_order = CombinedOrder::findOrFail($combined_order_id);
 
         foreach ($combined_order->orders as $key => $order) {
             $order = Order::findOrFail($order->id);
             $order->payment_status = 'paid';
             $order->payment_details = $payment;
+            if($paymentData['payment_done_at'] != ''){
+                $order->payment_datetime = date('Y-m-d H:i:s', $paymentData['payment_done_at']);
+            }
             $order->save();
 
             // If Order is done from Wallet then make transaction entry in Wallet of Debit

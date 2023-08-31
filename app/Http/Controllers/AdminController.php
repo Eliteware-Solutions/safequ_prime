@@ -12,6 +12,7 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\PaymentWebhook;
 use App\Models\Product;
 use Artisan;
 use Cache;
@@ -28,6 +29,10 @@ class AdminController extends Controller
      */
     public function admin_dashboard(Request $request)
     {
+
+        // $this->paymentGetUtility();
+        // exit;
+
         CoreComponentRepository::initializeCache();
         $root_categories = Category::where('level', 0)->get();
         $from = date('01-m-Y');
@@ -100,6 +105,20 @@ class AdminController extends Controller
         $cur_year = date('Y');
 
         return view('backend.dashboard', compact('root_categories', 'cached_data', 'from', 'to', 'cur_year'));
+    }
+
+    public function paymentGetUtility()
+    {
+        $webHooks = PaymentWebhook::orderBy('id', 'DESC')->get();
+        foreach ($webHooks as $wH) {
+            $data = json_decode($wH->webhook_data, true);
+            $paymentId = $data['payload']['payment']['entity']['id'];
+            $created_at = isset($data['created_at']) && $data['created_at'] != '' ? $data['created_at'] : '';
+
+            if($created_at != ''){
+                $updatedRows = Order::where('payment_details', 'LIKE', '%' . $paymentId . '%')->where('payment_datetime', null)->update(['payment_datetime' => date('Y-m-d H:i:s', $created_at)]);
+            }
+        }
     }
 
     function clearCache(Request $request)
@@ -188,10 +207,10 @@ class AdminController extends Controller
                     $totalNewUsersAry[] = intval($total_new_users_data->total_new_users);
 
                     $sales_chart_data = Order::select('orders.user_id')
-                                ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) < '$month_start_date'
+                        ->whereRaw(" DATE(orders.created_at) >= '$month_start_date' AND DATE(orders.created_at) <= '$month_last_date' AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) AND user_id IN (SELECT orders.user_id  FROM `orders` WHERE DATE(orders.created_at) < '$month_start_date'
 AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0)) GROUP BY orders.user_id) ")
-                                ->groupBy('orders.user_id')
-                                ->get();
+                        ->groupBy('orders.user_id')
+                        ->get();
 
                     $totalRepeatUsersAry[] = $sales_chart_data->count();
                 } else {
@@ -462,5 +481,4 @@ AND (added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))) ")
     {
         return Excel::download(new OrderBreakStackBarChartExport($request), 'order_break_bar_chart.xlsx');
     }
-
 }

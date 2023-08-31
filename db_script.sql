@@ -210,3 +210,8 @@ INSERT INTO `safequ_prime`.`business_settings` (`type`, `value`, `lang`, `create
 -- ----------------------------
 ALTER TABLE `products` ADD COLUMN `delivery_date` date NULL AFTER `est_shipping_days`;
 
+-- ----------------------------
+-- Dt: 31-08-23
+-- ----------------------------
+ALTER TABLE `orders` ADD `payment_datetime` DATETIME NULL DEFAULT NULL AFTER `payment_status`;
+

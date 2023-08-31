@@ -127,6 +127,7 @@
                             <th data-breakpoints="md">{{ translate('Amount') }}</th>
                             <th data-breakpoints="md">{{ translate('Delivery Status') }}</th>
                             <th data-breakpoints="md">{{ translate('Payment Status') }}</th>
+                            <th data-breakpoints="md">{{ translate('Payment Date & Time') }}</th>
                             @if (addon_is_activated('refund_request'))
                                 <th>{{ translate('Refund') }}</th>
                             @endif
@@ -178,6 +179,7 @@
                                         <span class="badge badge-inline badge-danger">{{ translate('Unpaid') }}</span>
                                     @endif
                                 </td>
+                                <td>{{ $order->payment_datetime ? date('d-m-Y H:i:s', strtotime($order->payment_datetime)) : '--' }}</td>
                                 @if (addon_is_activated('refund_request'))
                                     <td>
                                         @if (count($order->refund_requests) > 0)

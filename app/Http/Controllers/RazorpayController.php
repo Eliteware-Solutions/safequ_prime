@@ -59,10 +59,13 @@ class RazorpayController extends Controller
             $payment_detalis = null;
             try {
                 $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount' => $payment['amount']));
+
+                $payment_done_at = (isset($response['created_at']) && $response['created_at'] != '') ? $response['created_at'] : '';
+
                 if (Session::get('payment_type') == 'cart_payment') {
-                    $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'wallet_amount' => floatval($input['wallet_amount']), 'currency' => $response['currency']));
+                    $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'wallet_amount' => floatval($input['wallet_amount']), 'currency' => $response['currency'], 'payment_done_at' => $payment_done_at));
                 } else {
-                    $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'currency' => $response['currency']));
+                    $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'currency' => $response['currency'], 'payment_done_at' => $payment_done_at));
                 }
             } catch (\Exception $e) {
 //                return  $e->getMessage();
@@ -129,6 +132,9 @@ class RazorpayController extends Controller
 
                                 $order->payment_status = 'paid';
                                 $order->payment_details = $payment_detalis;
+                                if(isset($request['created_at']) && $request['created_at'] != ''){
+                                    $order->payment_datetime = date('Y-m-d H:i:s', $request['created_at']);
+                                }
                                 $order->save();
 
                                 OrderDetail::where('order_id', $order_id)->update([
@@ -146,6 +152,9 @@ class RazorpayController extends Controller
 
                                     $order->payment_status = 'paid';
                                     $order->payment_details = $payment_detalis;
+                                    if(isset($request['created_at']) && $request['created_at'] != ''){
+                                        $order->payment_datetime = date('Y-m-d H:i:s', $request['created_at']);
+                                    }
                                     $order->save();
 
                                     OrderDetail::where('order_id', $order->id)->update([
