@@ -123,7 +123,7 @@ class RegisterController extends Controller
 
                     $user->referral_key = md5($user->id);
                     $user->save();
-                    $this->guard()->login($user);
+                    // $this->guard()->login($user);
 
                     $customer = new Customer;
                     $customer->user_id = $user->id;
