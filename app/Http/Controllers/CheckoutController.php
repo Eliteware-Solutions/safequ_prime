@@ -105,7 +105,7 @@ class CheckoutController extends Controller
             $validateCart = true;
             foreach ($carts_details as $cart_data) {
                 if (isset($cart_data->product) && $cart_data->product->published == 0) {
-                    $return_msg = $cart_data->product->name. ' is no longer available, kindly remove from cart';
+                    $return_msg = $cart_data->product->name . ' is no longer available, kindly remove from cart';
                     $validateCart = false;
                     break;
                 }
@@ -115,6 +115,7 @@ class CheckoutController extends Controller
                 flash($return_msg)->error();
                 return redirect()->route('cart');
             } else {
+                // dd($request);
                 (new OrderController)->store($request);
 
                 $request->session()->put('payment_type', 'cart_payment');
@@ -216,7 +217,9 @@ class CheckoutController extends Controller
                         if ($user->balance >= $combined_order->grand_total) {
                             $user->balance -= $combined_order->grand_total;
                             $user->save();
-                            return $this->checkout_done($request->session()->get('combined_order_id'), null);
+
+                            $payment = json_encode(array('payment_done_at' => strtotime(date('Y-m-d H:i:s'))));
+                            return $this->checkout_done($request->session()->get('combined_order_id'), $payment);
                         }
                     } else {
                         $combined_order = CombinedOrder::findOrFail($request->session()->get('combined_order_id'));
@@ -245,9 +248,11 @@ class CheckoutController extends Controller
             $order = Order::findOrFail($order->id);
             $order->payment_status = 'paid';
             $order->payment_details = $payment;
-            if($paymentData['payment_done_at'] != ''){
+
+            if (isset($paymentData['payment_done_at']) && $paymentData['payment_done_at'] != '') {
                 $order->payment_datetime = date('Y-m-d H:i:s', $paymentData['payment_done_at']);
             }
+
             $order->save();
 
             // If Order is done from Wallet then make transaction entry in Wallet of Debit
@@ -445,7 +450,7 @@ class CheckoutController extends Controller
                         $where = array();
                         if (Auth::user()) {
                             $where = array('user_id' => Auth::user()->id);
-                        } elseif($request->session()->get('temp_user_id')) {
+                        } elseif ($request->session()->get('temp_user_id')) {
                             $where = array('temp_user_id' => $request->session()->get('temp_user_id'));
                         }
                         Cart::where($where)
@@ -493,7 +498,7 @@ class CheckoutController extends Controller
         $where = array();
         if (Auth::user()) {
             $where = array('user_id' => Auth::user()->id);
-        } elseif($request->session()->get('temp_user_id')) {
+        } elseif ($request->session()->get('temp_user_id')) {
             $where = array('temp_user_id' => $request->session()->get('temp_user_id'));
         }
         Cart::where($where)
