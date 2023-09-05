@@ -57,10 +57,14 @@
                     <div class="col-lg-2 mb-2 mb-md-0">
                         <select class="form-control aiz-selectpicker" name="payment_status" id="payment_status">
                             <option value="">{{ translate('Payment Status') }}</option>
-                            <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>
-                                {{ translate('Unpaid') }}</option>
+                            <option value="payment_initiated" @if ($payment_status == 'payment_initiated') selected @endif>
+                                {{ translate('Payment Initiated') }}</option>
                             <option value="paid" @if ($payment_status == 'paid') selected @endif>
                                 {{ translate('Paid') }}</option>
+                            <option value="unpaid" @if ($payment_status == 'unpaid') selected @endif>
+                                {{ translate('Unpaid') }}</option>
+                            <option value="failed" @if ($payment_status == 'failed') selected @endif>
+                                {{ translate('Failed') }}</option>
                         </select>
                     </div>
                     <div class="col-lg-2 mb-2 mb-md-0">
@@ -173,13 +177,19 @@
                                     {!! $status !!}
                                 </td>
                                 <td>
-                                    @if ($order->payment_status == 'paid')
+                                    @if ($order->payment_status == 'payment_initiated')
+                                        <span
+                                            class="badge badge-inline badge-info">{{ translate('Payment Initiated') }}</span>
+                                    @elseif($order->payment_status == 'paid')
                                         <span class="badge badge-inline badge-success">{{ translate('Paid') }}</span>
-                                    @else
+                                    @elseif($order->payment_status == 'unpaid')
                                         <span class="badge badge-inline badge-danger">{{ translate('Unpaid') }}</span>
+                                    @else
+                                        <span class="badge badge-inline badge-danger">{{ translate('Failed') }}</span>
                                     @endif
                                 </td>
-                                <td>{{ $order->payment_datetime ? date('d-m-Y H:i:s', strtotime($order->payment_datetime)) : '--' }}</td>
+                                <td>{{ $order->payment_datetime ? date('d-m-Y H:i:s', strtotime($order->payment_datetime)) : '--' }}
+                                </td>
                                 @if (addon_is_activated('refund_request'))
                                     <td>
                                         @if (count($order->refund_requests) > 0)

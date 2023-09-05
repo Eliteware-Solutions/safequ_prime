@@ -215,3 +215,9 @@ ALTER TABLE `products` ADD COLUMN `delivery_date` date NULL AFTER `est_shipping_
 -- ----------------------------
 ALTER TABLE `orders` ADD `payment_datetime` DATETIME NULL DEFAULT NULL AFTER `payment_status`;
 
+-- ----------------------------
+-- Dt: 05-09-23
+-- ----------------------------
+ALTER TABLE `orders` CHANGE `payment_status` `payment_status` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT 'payment_initiated';
+ALTER TABLE `order_details` CHANGE `payment_status` `payment_status` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'payment_initiated';
+
