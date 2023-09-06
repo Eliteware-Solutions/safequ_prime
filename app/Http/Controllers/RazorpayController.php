@@ -33,7 +33,13 @@ class RazorpayController extends Controller
                 if ($request->partial_payment == 'on') {
                     $wallet_amount = $user->balance;
                 }
-                return view('frontend.razor_wallet.order_payment_Razorpay', compact('combined_order', 'wallet_amount'));
+                $notes = [];
+                $i = 1;
+                foreach ($combined_order->orders as $val) {
+                    $notes['ord_' . $i] = json_encode(array("order_id" => "$val->id", "order_code" => "$val->code", "payment_for" => "order", "payment_method" => "Cart Checkout"));
+                    $i++;
+                }
+                return view('frontend.razor_wallet.order_payment_Razorpay', compact('combined_order', 'wallet_amount', 'notes'));
             } elseif (Session::get('payment_type') == 'wallet_payment') {
                 return view('frontend.razor_wallet.wallet_payment_Razorpay');
             } elseif (Session::get('payment_type') == 'customer_package_payment') {
@@ -42,7 +48,6 @@ class RazorpayController extends Controller
                 return view('frontend.razor_wallet.seller_package_payment_Razorpay');
             }
         }
-
     }
 
     public function payment(Request $request)
@@ -54,23 +59,35 @@ class RazorpayController extends Controller
 
         //Fetch payment information by razorpay_payment_id
         $payment = $api->payment->fetch($input['razorpay_payment_id']);
+        $payment_done_at = (isset($payment['created_at']) && $payment['created_at'] != '') ? $payment['created_at'] : '';
 
         if (count($input) && !empty($input['razorpay_payment_id'])) {
             $payment_detalis = null;
             try {
                 $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount' => $payment['amount']));
 
-                $payment_done_at = (isset($response['created_at']) && $response['created_at'] != '') ? $response['created_at'] : '';
-
                 if (Session::get('payment_type') == 'cart_payment') {
                     $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'wallet_amount' => floatval($input['wallet_amount']), 'currency' => $response['currency'], 'payment_done_at' => $payment_done_at));
                 } else {
                     $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'currency' => $response['currency'], 'payment_done_at' => $payment_done_at));
                 }
+                //
             } catch (\Exception $e) {
-//                return  $e->getMessage();
+                // return  $e->getMessage();
                 \Session::put('error', $e->getMessage());
-                return redirect()->back();
+                // return redirect()->back();
+
+                if ($payment->status == 'failed') {
+                    $payment_detalis = json_encode(array('id' => $payment['id'], 'method' => $payment['method'], 'amount' => $payment['amount'], 'currency' => $payment['currency'], 'error' => $payment->error_reason, 'error_msg' => $payment->error_description, 'payment_done_at' => $payment_done_at));
+                }
+
+                $checkoutController = new CheckoutController;
+                return $checkoutController->checkout_failed(Session::get('combined_order_id'), $payment_detalis);
+
+                // $return_msg = 'Payment failed.' . PHP_EOL . $payment->error_description;
+
+                // flash($return_msg)->error();
+                // return redirect()->route('cart');
             }
 
             // Do something here for store payment details in database...
@@ -132,7 +149,7 @@ class RazorpayController extends Controller
 
                                 $order->payment_status = 'paid';
                                 $order->payment_details = $payment_detalis;
-                                if(isset($request['created_at']) && $request['created_at'] != ''){
+                                if (isset($request['created_at']) && $request['created_at'] != '') {
                                     $order->payment_datetime = date('Y-m-d H:i:s', $request['created_at']);
                                 }
                                 $order->save();
@@ -147,12 +164,12 @@ class RazorpayController extends Controller
 
                             if ($user) {
                                 $orders = Order::where(array('user_id' => $user_id, 'payment_status' => 'unpaid'))->get();
-                                foreach ($orders AS $order) {
+                                foreach ($orders as $order) {
                                     $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => floatval($order->grand_total) * 100, 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
 
                                     $order->payment_status = 'paid';
                                     $order->payment_details = $payment_detalis;
-                                    if(isset($request['created_at']) && $request['created_at'] != ''){
+                                    if (isset($request['created_at']) && $request['created_at'] != '') {
                                         $order->payment_datetime = date('Y-m-d H:i:s', $request['created_at']);
                                     }
                                     $order->save();

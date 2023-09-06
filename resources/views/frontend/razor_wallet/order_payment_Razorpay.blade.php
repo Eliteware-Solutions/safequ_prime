@@ -1,7 +1,6 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
     <form action="{!!route('payment.rozer')!!}" method="POST" id='razorpay' style="display: none;">
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <input type="hidden" name="_token" value="{!!csrf_token()!!}">
@@ -13,7 +12,8 @@
 
 @section('script')
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function (e) {
+
             let options = {
                 "key": "{{ env('RAZOR_KEY') }}", // Enter the Key ID generated from the Dashboard
                 "amount": "{{round(($combined_order->grand_total - $wallet_amount) * 100)}}", //amount need to be in multiple of 100
@@ -28,6 +28,7 @@
                 "theme": {
                     "color": "#ff7529"
                 },
+                "notes": {!! json_encode($notes) !!},
                 config: {
                     display: {
                         blocks: {
@@ -58,9 +59,16 @@
                     }
                 }
             };
+
             let rzp = new Razorpay(options);
             rzp.open();
-            e.preventDefault();
+
+            rzp.on('payment.failed', function(data){
+                document.getElementById('razorpay_payment_id').value = data.error.metadata.payment_id;
+                document.getElementById('razorpay').submit();
+            })
+
+            e.preventDefault()
         });
     </script>
 @endsection

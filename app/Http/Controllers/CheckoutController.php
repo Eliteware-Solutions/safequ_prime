@@ -24,6 +24,7 @@ use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Address;
 use App\Models\CombinedOrder;
+use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Hash;
 use Session;
 use App\Utility\PayhereUtility;
@@ -276,6 +277,33 @@ class CheckoutController extends Controller
 
         Session::put('combined_order_id', $combined_order_id);
         return redirect()->route('order_confirmed');
+    }
+
+    //redirects to this method after a unsuccessful checkout
+    public function checkout_failed($combined_order_id, $payment)
+    {
+        $paymentData = json_decode($payment, true);
+        $combined_order = CombinedOrder::findOrFail($combined_order_id);
+        foreach ($combined_order->orders as $order) {
+            $id = $order->id;
+            $order = Order::findOrFail($id);
+            $order->payment_details = $payment;
+            $order->payment_status = 'failed';
+            if (isset($paymentData['payment_done_at']) && $paymentData['payment_done_at'] != '') {
+                $order->payment_datetime = date('Y-m-d H:i:s', $paymentData['payment_done_at']);
+            }
+            $order->save();
+
+            $orderDetail = OrderDetail::findOrFail($id);
+            $orderDetail->payment_status = 'failed';
+            $orderDetail->save();
+        }
+
+        Session::put('combined_order_id', $combined_order_id);
+        $return_msg = 'Payment failed. ' . $paymentData['error_msg'];
+
+        flash($return_msg)->error();
+        return redirect()->route('cart');
     }
 
     public function get_shipping_info(Request $request)
