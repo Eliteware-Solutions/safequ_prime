@@ -83,11 +83,6 @@ class RazorpayController extends Controller
 
                 $checkoutController = new CheckoutController;
                 return $checkoutController->checkout_failed(Session::get('combined_order_id'), $payment_detalis);
-
-                // $return_msg = 'Payment failed.' . PHP_EOL . $payment->error_description;
-
-                // flash($return_msg)->error();
-                // return redirect()->route('cart');
             }
 
             // Do something here for store payment details in database...
@@ -184,6 +179,28 @@ class RazorpayController extends Controller
                                 $user->save();
                             }
                         }
+                    }
+                }
+            } elseif ($request['event'] == 'payment.captured') {
+                $payment = $request['payload']['payment'];
+                $notes = $payment['entity']['notes'];
+                foreach($notes as $note){
+                    $val = json_decode($note);
+                    $order_id = $val->order_id;
+                    $order = Order::findOrFail($order_id);
+                    if ($order->payment_status != 'paid') {
+                        $payment_detalis = json_encode(array('id' => $payment['entity']['id'], 'method' => $payment['entity']['method'], 'amount' => $payment['entity']['base_amount'], 'wallet_amount' => 0, 'currency' => $payment['entity']['currency']));
+
+                        $order->payment_status = 'paid';
+                        $order->payment_details = $payment_detalis;
+                        if (isset($request['created_at']) && $request['created_at'] != '') {
+                            $order->payment_datetime = date('Y-m-d H:i:s', $request['created_at']);
+                        }
+                        $order->save();
+
+                        OrderDetail::where('order_id', $order_id)->update([
+                            'payment_status' => 'paid'
+                        ]);
                     }
                 }
             }
