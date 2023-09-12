@@ -33,13 +33,27 @@ class RazorpayController extends Controller
                 if ($request->partial_payment == 'on') {
                     $wallet_amount = $user->balance;
                 }
+
                 $notes = [];
                 $i = 1;
                 foreach ($combined_order->orders as $val) {
-                    $notes['ord_' . $i] = json_encode(array("order_id" => "$val->id", "order_code" => "$val->code", "payment_for" => "order", "payment_method" => "Cart Checkout"));
+                    $notes['ord_' . $i] = json_encode(array("order_id" => "$val->id", "order_code" => "$val->code", "payment_for" => "order", "payment_method" => "Cart Checkout", 'receipt' => $combined_order->id));
                     $i++;
                 }
-                return view('frontend.razor_wallet.order_payment_Razorpay', compact('combined_order', 'wallet_amount', 'notes'));
+                $api = new Api(env('RAZOR_KEY'), env('RAZOR_SECRET'));
+
+                $orderData = [
+                    'receipt'         => $combined_order->id,
+                    'amount'          => round(($combined_order->grand_total - $wallet_amount) * 100), // 2000 rupees in paise
+                    'currency'        => 'INR',
+                    'payment_capture' => 1 // auto capture
+                ];
+
+                $razorpayOrder = $api->order->create($orderData);
+
+                $razorpayOrderId = $razorpayOrder['id'];
+
+                return view('frontend.razor_wallet.order_payment_Razorpay', compact('combined_order', 'wallet_amount', 'notes', 'razorpayOrderId'));
             } elseif (Session::get('payment_type') == 'wallet_payment') {
                 return view('frontend.razor_wallet.wallet_payment_Razorpay');
             } elseif (Session::get('payment_type') == 'customer_package_payment') {
@@ -64,7 +78,11 @@ class RazorpayController extends Controller
         if (count($input) && !empty($input['razorpay_payment_id'])) {
             $payment_detalis = null;
             try {
-                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount' => $payment['amount']));
+                if ($payment['status'] != 'captured') {
+                    $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount' => $payment['amount']));
+                } else {
+                    $response = $payment;
+                }
 
                 if (Session::get('payment_type') == 'cart_payment') {
                     $payment_detalis = json_encode(array('id' => $response['id'], 'method' => $response['method'], 'amount' => $response['amount'], 'wallet_amount' => floatval($input['wallet_amount']), 'currency' => $response['currency'], 'payment_done_at' => $payment_done_at));
@@ -83,11 +101,6 @@ class RazorpayController extends Controller
 
                 $checkoutController = new CheckoutController;
                 return $checkoutController->checkout_failed(Session::get('combined_order_id'), $payment_detalis);
-
-                // $return_msg = 'Payment failed.' . PHP_EOL . $payment->error_description;
-
-                // flash($return_msg)->error();
-                // return redirect()->route('cart');
             }
 
             // Do something here for store payment details in database...

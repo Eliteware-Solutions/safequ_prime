@@ -17,6 +17,7 @@
             let options = {
                 "key": "{{ env('RAZOR_KEY') }}", // Enter the Key ID generated from the Dashboard
                 "amount": "{{round(($combined_order->grand_total - $wallet_amount) * 100)}}", //amount need to be in multiple of 100
+                "order_id": "{{ $razorpayOrderId }}",
                 "name": "{{ env('APP_NAME') }}",
                 "description": "Cart Payment",
                 "image": "{{ uploaded_asset(get_setting('header_logo')) }}",
