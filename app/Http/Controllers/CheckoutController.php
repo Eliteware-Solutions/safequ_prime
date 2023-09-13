@@ -294,16 +294,13 @@ class CheckoutController extends Controller
             }
             $order->save();
 
-            $orderDetail = OrderDetail::findOrFail($id);
-            $orderDetail->payment_status = 'failed';
-            $orderDetail->save();
+            // $orderDetail = OrderDetail::findOrFail($id);
+            // $orderDetail->payment_status = 'failed';
+            // $orderDetail->save();
         }
 
         Session::put('combined_order_id', $combined_order_id);
-        $return_msg = 'Payment failed. ' . $paymentData['error_msg'];
-
-        flash($return_msg)->error();
-        return redirect()->route('cart');
+        return 'Payment failed. ' . $paymentData['error_msg'];        
     }
 
     public function get_shipping_info(Request $request)

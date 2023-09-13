@@ -100,7 +100,10 @@ class RazorpayController extends Controller
                 }
 
                 $checkoutController = new CheckoutController;
-                return $checkoutController->checkout_failed(Session::get('combined_order_id'), $payment_detalis);
+                $return_msg = $checkoutController->checkout_failed(Session::get('combined_order_id'), $payment_detalis);
+
+                flash($return_msg)->error();
+                return redirect()->route('cart');
             }
 
             // Do something here for store payment details in database...
