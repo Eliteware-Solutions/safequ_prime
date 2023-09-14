@@ -202,10 +202,23 @@ class RazorpayController extends Controller
                         }
                     }
                 }
-            } elseif ($request['event'] == 'payment.captured') {
+            }
+        }
+
+        return response()->json('success', 200);
+    }
+
+    public function web_payment_webhook(Request $request)
+    {
+        Log::error('Web Webhook Data Start');
+        Log::error($request);
+        Log::error('Web Webhook Data Ends');
+
+        if ($request) {
+            if ($request['event'] == 'payment.captured') {
                 $payment = $request['payload']['payment'];
                 $notes = $payment['entity']['notes'];
-                foreach($notes as $note){
+                foreach ($notes as $note) {
                     $val = json_decode($note);
                     $order_id = $val->order_id;
                     $order = Order::findOrFail($order_id);
@@ -226,15 +239,6 @@ class RazorpayController extends Controller
                 }
             }
         }
-
-        return response()->json('success', 200);
-    }
-
-    public function web_payment_webhook(Request $request)
-    {
-        Log::error('Web Webhook Data Start');
-        Log::error($request);
-        Log::error('Web Webhook Data Ends');
 
         $webhookData = array();
         $webhookData['entity'] = $request['entity'];

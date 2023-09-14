@@ -286,6 +286,7 @@ class CheckoutController extends Controller
         $combined_order = CombinedOrder::findOrFail($combined_order_id);
         foreach ($combined_order->orders as $order) {
             $id = $order->id;
+
             $order = Order::findOrFail($id);
             $order->payment_details = $payment;
             $order->payment_status = 'failed';
@@ -294,9 +295,9 @@ class CheckoutController extends Controller
             }
             $order->save();
 
-            // $orderDetail = OrderDetail::findOrFail($id);
-            // $orderDetail->payment_status = 'failed';
-            // $orderDetail->save();
+            OrderDetail::where('order_id', $id)->update([
+                'payment_status' => 'failed'
+            ]);
         }
 
         Session::put('combined_order_id', $combined_order_id);
