@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\CouponUsage;
+use App\Models\Order;
 use App\Models\ProductStock;
 use App\Models\Shop;
 use Illuminate\Http\Request;
@@ -1037,5 +1038,54 @@ class CartController extends Controller
         }
 
         calculateShippingCost($carts);
+    }
+
+    public function adminOrderPayment(Request $request, $id)
+    {
+        if ($id && isset($request->order_id) && intval($request->order_id) > 0) {
+            $decode_data = base64_decode($id);
+            $decode_data_ary = explode('#', $decode_data);
+            if (isset($decode_data_ary[1]) && !empty($decode_data_ary[1])) {
+                $decode_data_ary2 = explode('$', $decode_data_ary[1]);
+                if (isset($decode_data_ary2[0]) && intval($decode_data_ary2[0]) > 0) {
+                    $user_id = $decode_data_ary2[0];
+                    $user = User::where(['id' => $user_id, 'user_type' => 'customer'])->first();
+                    if ($user) {
+                        auth()->login($user, true);
+                        return redirect()->route('cart.adminOrderCheckout', [ 'id' => $user->id, 'order_id' => $request->order_id ]);
+                    } else {
+                        return redirect()->route('user.login');
+                    }
+                } else {
+                    return redirect()->route('user.login');
+                }
+            } else {
+                return redirect()->route('user.login');
+            }
+        } else {
+            return redirect()->route('user.login');
+        }
+    }
+
+    public function adminOrderCheckout(Request $request, $id)
+    {
+        $user_data = array();
+        $shop = array();
+        if (auth()->user() != null && isset($request->order_id) && intval($request->order_id) > 0) {
+            $user_id = auth()->user()->id;
+            $user_data = auth()->user();
+            $order = Order::findOrFail($request->order_id);
+
+            foreach ($order->orderDetails as $detail) {
+                $detail['delivery'] = $this->get_delivery_day($detail->product->parent_category->slug, $detail->product->delivery_date);
+            }
+
+            $shops = Shop::get();
+
+            return view('frontend.admin_order_checkout', compact('order', 'user_data', 'shops'));
+
+        } else {
+            return redirect()->route('user.login');
+        }
     }
 }

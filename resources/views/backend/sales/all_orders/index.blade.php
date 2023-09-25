@@ -200,13 +200,19 @@
                                     </td>
                                 @endif
                                 <td class="text-right">
-                                    @if ($order->payment_status != 'paid')
+                                    @if ($order->payment_status != 'paid' && $order->added_by_admin == 1)
                                         <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
+                                           href="javascript:void(0)" onclick="copyAdminOrderPaymentUrl(this)"
+                                           data-url="{{ route('cart.adminOrderPayment', [ 'id' => base64_encode(Str::random(3).'#'.$order->user_id.'$'.Str::random(3)), 'order_id' => $order->id ] ) }}"
+                                           title="{{ translate('Generate Payment Link') }}">
+                                            <i class="las la-money-bill"></i>
+                                        </a>
+<!--                                        <a class="btn btn-soft-success btn-icon btn-circle btn-sm"
                                             href="javascript:void(0)" onclick="copyPaymentUrl(this)"
                                             data-url="{{ $order->razorpay_payment_link }}" data-id="{{ $order->id }}"
                                             title="{{ translate('Generate Payment Link') }}">
                                             <i class="las la-money-bill"></i>
-                                        </a>
+                                        </a>-->
                                     @endif
                                     <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
                                         href="{{ route('all_orders.show', encrypt($order->id)) }}"
@@ -311,6 +317,20 @@
             url = url.replace(':search', '&search=' + search);
 
             window.location.href = url;
+        }
+
+        function copyAdminOrderPaymentUrl(e) {
+            let url = $(e).data('url');
+            let $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val(url).select();
+            try {
+                document.execCommand("copy");
+                AIZ.plugins.notify('success', '{{ translate('Link copied to clipboard') }}');
+            } catch (err) {
+                AIZ.plugins.notify('danger', '{{ translate('Oops, unable to copy') }}');
+            }
+            $temp.remove();
         }
 
         function copyPaymentUrl(e) {

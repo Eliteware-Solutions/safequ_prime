@@ -98,6 +98,8 @@ Route::get('/shop', 'HomeController@shop')->name('shop.visit');
 Route::get('/shop/{slug}/{type}', 'HomeController@filter_shop')->name('shop.visit.type');
 Route::get('/shopfilter/{cat}', 'HomeController@product_filter')->name('shop.filter');
 
+Route::get('/admin-order-checkout/{id}', 'CartController@adminOrderCheckout')->name('cart.adminOrderCheckout');
+
 Route::get('/cart', 'CartController@index')->name('cart');
 Route::post('/cart/show-cart-modal', 'CartController@showCartModal')->name('cart.showCartModal');
 Route::post('/cart/addtocart', 'CartController@addToCart')->name('cart.addToCart');
@@ -106,6 +108,7 @@ Route::post('/cart/removeFromCart', 'CartController@removeFromCart')->name('cart
 Route::post('/cart/updateQuantity', 'CartController@updateQuantity')->name('cart.updateQuantity');
 Route::post('/cart/cartCount', 'CartController@cartCount')->name('cart.cartCount');
 Route::get('/user-order/cart/{id}', 'CartController@userOrderCart')->name('cart.userOrder');
+Route::get('/user-admin-order-payment/{id}', 'CartController@adminOrderPayment')->name('cart.adminOrderPayment');
 
 //Checkout Routes
 //Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'verified', 'unbanned']], function() {
@@ -116,6 +119,7 @@ Route::group(['prefix' => 'checkout', 'middleware' => ['user', 'unbanned']], fun
 
     Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
     Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
+    Route::post('/admin-order-payment', 'CheckoutController@adminOrderCheckout')->name('admin.order.payment.checkout');
     Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
     Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
     Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');

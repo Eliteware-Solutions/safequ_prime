@@ -260,4 +260,40 @@ class RazorpayController extends Controller
         $user = array();
         return view('frontend.user_pending_bill_success', compact('user'));
     }
+
+    public function payAdminOrderWithRazorpay($request)
+    {
+        if (Session::has('payment_type')) {
+            if (Session::get('payment_type') == 'cart_payment') {
+                $user = Auth::user();
+                $order_data = Order::findOrFail($request->order_id);
+                $combined_order = CombinedOrder::with('user')->findOrFail(Session::get('combined_order_id'));
+                $wallet_amount = 0;
+                if ($request->partial_payment == 'on') {
+                    $wallet_amount = $user->balance;
+                }
+
+                $notes = [];
+                $i = 1;
+                foreach ($combined_order->orders as $val) {
+                    $notes['ord_' . $i] = json_encode(array("order_id" => "$val->id", "order_code" => "$val->code", "payment_for" => "order", "payment_method" => "Cart Checkout", 'receipt' => $combined_order->id));
+                    $i++;
+                }
+                $api = new Api(env('RAZOR_KEY'), env('RAZOR_SECRET'));
+
+                $orderData = [
+                    'receipt'         => $combined_order->id,
+                    'amount'          => round(($order_data->grand_total - $wallet_amount) * 100), // 2000 rupees in paise
+                    'currency'        => 'INR',
+                    'payment_capture' => 1 // auto capture
+                ];
+
+                $razorpayOrder = $api->order->create($orderData);
+
+                $razorpayOrderId = $razorpayOrder['id'];
+
+                return view('frontend.razor_wallet.admin_order_payment_Razorpay', compact('combined_order', 'wallet_amount', 'notes', 'razorpayOrderId', 'order_data'));
+            }
+        }
+    }
 }
