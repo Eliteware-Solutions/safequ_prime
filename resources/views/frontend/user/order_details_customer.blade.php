@@ -32,7 +32,6 @@
                                 <a href="{{ route('invoice.download', $order->id) }}" class="fsize12 fw500">
                                     <i class="fad fa-file-download text-primary"></i> &nbsp; Download invoice
                                 </a>
-                                {{-- <a href="#" class="fsize12 fw500">Repeat</a> --}}
                             </div>
                         </div>
 
@@ -88,14 +87,6 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    {{--                                 <tr> --}}
-                                    {{--                                    <th colspan="2">Sub Total</th> --}}
-                                    {{--                                    <th class="text-right">{{$order->grand_total}}</th> --}}
-                                    {{--                                </tr> --}}
-                                    {{--                                <tr> --}}
-                                    {{--                                    <th colspan="2" class="bt-0">Discount</th> --}}
-                                    {{--                                    <th class="text-right bt-0">- 200</th> --}}
-                                    {{--                                </tr> --}}
                                     @if ($order->orderDetails->sum('shipping_cost') > 0)
                                         <tr>
                                             <th colspan="2" class="bt-0">Shipping cost</th>
@@ -109,10 +100,6 @@
                                                 - {!! single_price_web($order->coupon_discount) !!}</th>
                                         </tr>
                                     @endif
-                                    {{--                                <tr> --}}
-                                    {{--                                    <th colspan="2" class="bt-0">Service Tax</th> --}}
-                                    {{--                                    <th class="text-right bt-0">80</th> --}}
-                                    {{--                                </tr> --}}
                                     <tr class="bb-1">
                                         <th colspan="2" class="fw600 fsize15 py-2">Total</th>
                                         <th class="fw600 fsize15 text-right py-2">
@@ -131,6 +118,7 @@
                                     <i class="fal fa-long-arrow-right text-white"></i>
                                 </button>
                             </a>
+                            @endif
                         </div>
 
                     </div>
