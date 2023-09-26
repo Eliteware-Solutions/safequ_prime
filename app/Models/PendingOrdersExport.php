@@ -9,13 +9,13 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class OrdersExport implements FromCollection, WithMapping, WithHeadings
+class PendingOrdersExport implements FromCollection, WithMapping, WithHeadings
 {
-    public $delivery_status, $filter_date, $search;
+    public $filter_date, $search;
 
     public function __construct($request)
     {
-        $this->delivery_status = $request->delivery_status;
+//        $this->delivery_status = $request->delivery_status;
         $this->payment_status = $request->payment_status;
         $this->filter_date = $request->filter_date;
         $this->search = $request->search;
@@ -25,19 +25,14 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
     {
         ini_set('memory_limit', -1);
         $orders = OrderDetail::orderBy('id', 'desc');
-        /*if ($this->payment_status != 'unpaid') {
-            $orders = $orders->whereHas('order', function ($query) {
-                $query->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
-            });
-        }*/
 
         if ($this->payment_status != null && trim($this->payment_status) != '') {
             $orders = $orders->whereHas('order', function ($query) {
-                $query->whereRaw("(added_by_admin = 1 AND payment_status = '".$this->payment_status."')");
+                $query->whereRaw(" added_by_admin = 0 AND payment_status = '".$this->payment_status."' ");
             });
         } else {
             $orders = $orders->whereHas('order', function ($query) {
-                $query->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
+                $query->whereRaw("(added_by_admin = 0 AND (payment_status = 'payment_initiated' OR payment_status = 'unpaid' OR payment_status = 'failed'))");
             });
         }
 
@@ -46,14 +41,7 @@ class OrdersExport implements FromCollection, WithMapping, WithHeadings
                 $query->where('code', 'like', '%' . $this->search . '%');
             });
         }
-        if ($this->delivery_status != null) {
-            $orders = $orders->where('delivery_status', $this->delivery_status);
-        }
-        /*if ($this->payment_status != null) {
-            $orders = $orders->whereHas('order', function ($query) {
-                $query->where('added_by_admin', 1)->where('payment_status', $this->payment_status);
-            });
-        }*/
+
         if ($this->filter_date != null) {
             $orders = $orders->where('created_at', '>=', date('Y-m-d', strtotime(explode(" to ", $this->filter_date)[0])))->where('created_at', '<=', date('Y-m-d', strtotime(explode(" to ", $this->filter_date)[1])));
         }

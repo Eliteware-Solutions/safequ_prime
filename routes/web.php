@@ -298,6 +298,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     //Sales Order Export
     Route::get('/sales-order-export', 'OrderController@export')->name('order_export.excel');
+    Route::get('/pending-order-export', 'OrderController@pending_order_export')->name('pending_order_export.excel');
     Route::get('/customer-export', 'CustomerController@export')->name('customer_export.excel');
 
     Route::resource('digitalproducts', 'DigitalProductController');

@@ -191,6 +191,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function(
     // Route::get('/sales', 'OrderController@sales')->name('sales.index');
     // All Orders
     Route::get('/all_orders', 'OrderController@all_orders')->name('all_orders.index');
+    Route::get('/all_pending_orders', 'OrderController@all_pending_orders')->name('pending_orders.index');
     Route::get('/past_orders', 'OrderController@past_orders')->name('all_orders.past_orders');
     Route::get('/unpaid_orders', 'OrderController@unpaid_orders')->name('unpaid_orders.list');
     Route::get('/cart_orders', 'OrderController@cart_orders')->name('cart_orders.list');

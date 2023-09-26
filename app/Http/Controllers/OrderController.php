@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\OTPVerificationController;
 use App\Models\OrdersExport;
+use App\Models\PendingOrdersExport;
 use App\Models\ProductsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ClubPointController;
@@ -87,9 +88,12 @@ class OrderController extends Controller
         $payment_status = null;
 
         $orders = Order::orderBy('id', 'desc');
-        if ($request->payment_status != 'unpaid' && $request->payment_status != null) {
-            // $orders = $orders->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
-            $orders = $orders->whereRaw("(added_by_admin = 1 OR (payment_status = '" . $request->payment_status . "' AND added_by_admin = 0))");
+
+        if ($request->payment_status != null && trim($request->payment_status) != '') {
+            $payment_status = $request->payment_status;
+            $orders = $orders->whereRaw("(added_by_admin = 1 AND payment_status = '".$payment_status."')");
+        } else {
+            $orders = $orders->whereRaw("(added_by_admin = 1 OR (payment_status = 'paid' AND added_by_admin = 0))");
         }
 
         if ($request->has('search')) {
@@ -106,21 +110,58 @@ class OrderController extends Controller
             $orders = $orders->where('delivery_status', $request->delivery_status);
             $delivery_status = trim($request->delivery_status);
         }
-        if ($request->payment_status != null) {
-            // $orders = $orders->where('payment_status', $request->payment_status)->where('added_by_admin', 1);
-            $orders = $orders->where('payment_status', $request->payment_status);
-            $payment_status = $request->payment_status;
-        }
+
         if ($date != null) {
             $orders = $orders->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
         } else {
             $date = date('01-m-Y') . ' to ' . date('t-m-Y');
-            $orders = Order::whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->orderBy('id', 'desc');
+            $orders = $orders->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->orderBy('id', 'desc');
         }
 
         $orders = $orders->paginate(15);
 
         return view('backend.sales.all_orders.index', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
+    }
+
+    public function all_pending_orders(Request $request)
+    {
+        $date = $request->date;
+        $sort_search = null;
+        $delivery_status = null;
+        $payment_status = null;
+
+        $orders = Order::orderBy('id', 'desc');
+        if ($request->payment_status != null) {
+            $payment_status = $request->payment_status;
+            $orders = $orders->whereRaw(" added_by_admin = 0 AND payment_status = '" . $payment_status . "' ");
+        } else {
+            $orders = $orders->whereRaw(" added_by_admin = 0 AND (payment_status = 'payment_initiated' OR payment_status = 'unpaid' OR payment_status = 'failed') ");
+        }
+
+        if ($request->has('search')) {
+            $sort_search = $request->search;
+            if (trim($sort_search) != '') {
+                $orders = $orders->where('code', 'like', '%' . $sort_search . '%')
+                    ->orWhereHas('user', function ($query) use ($sort_search) {
+                        $query->where('name', 'like', '%' . $sort_search . '%');
+                    });
+            }
+        }
+
+        /*if (trim($request->delivery_status) != null && trim($request->delivery_status) != 'pending') {
+            $orders = $orders->where('delivery_status', $request->delivery_status);
+            $delivery_status = trim($request->delivery_status);
+        }*/
+        if ($date != null) {
+            $orders = $orders->where('created_at', '>=', date('Y-m-d 00:00:00', strtotime(explode(" to ", $date)[0])))->where('created_at', '<=', date('Y-m-d 23:59:59', strtotime(explode(" to ", $date)[1])));
+        } else {
+            $date = date('01-m-Y') . ' to ' . date('t-m-Y');
+            $orders = $orders->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->orderBy('id', 'desc');
+        }
+
+        $orders = $orders->paginate(15);
+
+        return view('backend.sales.all_orders.pending_orders', compact('orders', 'sort_search', 'payment_status', 'delivery_status', 'date'));
     }
 
     // Past All Orders
@@ -1290,6 +1331,11 @@ class OrderController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new OrdersExport($request), 'orders.xlsx');
+        return Excel::download(new OrdersExport($request), 'confirm_orders.xlsx');
+    }
+
+    public function pending_order_export(Request $request)
+    {
+        return Excel::download(new PendingOrdersExport($request), 'pending_orders.xlsx');
     }
 }
