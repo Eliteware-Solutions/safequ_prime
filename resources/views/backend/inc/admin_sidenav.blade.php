@@ -254,7 +254,7 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{ route('all_orders.index') }}"
                                     class="aiz-side-nav-link {{ areActiveRoutes(['all_orders.index', 'all_orders.show']) }}">
-                                    <span class="aiz-side-nav-text">{{ translate('Confirm Orders') }}</span>
+                                    <span class="aiz-side-nav-text">{{ translate('Confirmed Orders') }}</span>
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
