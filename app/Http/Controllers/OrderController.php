@@ -1048,6 +1048,10 @@ class OrderController extends Controller
         
         if($request->status == 'delivered' && $order->payment_status != 'paid') {
             $order->service_charge = 100;
+            
+            $getCombinedOrder = CombinedOrder::findOrFail($order->combined_order_id);
+            $getCombinedOrder->grand_total = $getCombinedOrder->grand_total + 100;
+            $getCombinedOrder->save();            
         }
         
         $order->save();

@@ -223,7 +223,7 @@
                                         <div class="total">
                                             <p class="fsize15 mb-1 body-txt w-100">Total:</p>
                                             <h5 class="mb-0">
-                                                <span class="fw500 h5" id="total_amount">{!! single_price_web($total) !!}</span>
+                                                <span class="fw500 h5" id="total_amount">{!! single_price_web($total + $order->service_charge) !!}</span>
                                                 &nbsp;
 
                                             </h5>
