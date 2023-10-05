@@ -159,7 +159,7 @@
                                         Guest ({{ $order->guest_id }})
                                     @endif
                                 </td>
-                                <td>{!! single_price($order->grand_total) !!}</td>
+                                <td>{!! single_price($order->grand_total + $order->service_charge) !!}</td>
                                 <td>
                                     @php
                                         $status = $order->delivery_status;

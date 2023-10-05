@@ -100,10 +100,17 @@
                                                 - {!! single_price_web($order->coupon_discount) !!}</th>
                                         </tr>
                                     @endif
+                                    @if ($order->service_charge > 0)
+                                        <tr>
+                                            <th colspan="2" class="bt-0">{{ translate('Service Charge') }}</th>
+                                            <th class="text-right bt-0">
+                                                {!! single_price_web($order->service_charge) !!}</th>
+                                        </tr>
+                                    @endif
                                     <tr class="bb-1">
                                         <th colspan="2" class="fw600 fsize15 py-2">Total</th>
                                         <th class="fw600 fsize15 text-right py-2">
-                                            {!! single_price_web($order->grand_total) !!}
+                                            {!! single_price_web($order->grand_total + $order->service_charge) !!}
                                         </th>
                                     </tr>
                                 </tfoot>

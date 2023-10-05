@@ -140,7 +140,7 @@
                                 {{translate('Total amount')}}
                             </td>
                             <td class="text-right">
-                                {{ single_price($order->grand_total) }}
+                                {{ single_price($order->grand_total + $order->service_charge) }}
                             </td>
                         </tr>
                         <tr>
@@ -263,6 +263,14 @@
                     </tr>
                     <tr>
                         <td>
+                            <strong class="text-muted">{{translate('Service Charge')}} :</strong>
+                        </td>
+                        <td class="text-right">
+                            {{ single_price($order->service_charge) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <strong class="text-muted">{{translate('Tax')}} :</strong>
                         </td>
                         <td class="text-right">
@@ -290,7 +298,7 @@
                             <strong class="text-muted">{{translate('TOTAL')}} :</strong>
                         </td>
                         <td class="text-muted h5">
-                            {{ single_price($order->grand_total) }}
+                            {{ single_price($order->grand_total + $order->service_charge) }}
                         </td>
                     </tr>
                     </tbody>

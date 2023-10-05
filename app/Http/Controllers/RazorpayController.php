@@ -283,7 +283,7 @@ class RazorpayController extends Controller
 
                 $orderData = [
                     'receipt'         => $combined_order->id,
-                    'amount'          => round(($order_data->grand_total - $wallet_amount) * 100), // 2000 rupees in paise
+                    'amount'          => round(($order_data->grand_total - $wallet_amount + $order_data->service_charge) * 100), // 2000 rupees in paise
                     'currency'        => 'INR',
                     'payment_capture' => 1 // auto capture
                 ];

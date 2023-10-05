@@ -24,7 +24,7 @@
                             @if ($user_data && isset($user_data->address) && $user_data->address != '')
                                 <div class="delivery-addr p-3 flex-astart-jstart mb-3">
                                     <input type="checkbox" name="delivery_address" id="delivery_address" class="mr-2"
-                                           checked />
+                                        checked />
                                     <span class="check-box"></span>
 
                                     <label for="delivery_address" class="body-txt mb-0">
@@ -52,23 +52,23 @@
                             @php
                                 $product = \App\Models\Product::find($detail->product_id);
                                 $product_stock = $product->stocks->where('id', $detail->product_stock_id)->first();
-
+                                
                                 $product_shipping_cost = $detail->shipping_cost;
                                 $shipping += $product_shipping_cost;
-
-                                $sub_total = ($detail->price + $detail->tax);
+                                
+                                $sub_total = $detail->price + $detail->tax;
                                 if (floatval($product->min_qty) < 1) {
                                     $product->unit = floatval($product->min_qty) * 1000 . ' ' . $product->secondary_unit;
                                 }
-                                $unit_price = (floatval($detail->price) > 0 && ($detail->price / $detail->quantity) > 0 ? $detail->price / $detail->quantity : $product->unit_price);
+                                $unit_price = floatval($detail->price) > 0 && $detail->price / $detail->quantity > 0 ? $detail->price / $detail->quantity : $product->unit_price;
                             @endphp
                             <div class="crtord-itm-card mb-4 py-3 px-2">
                                 <div class="img-name w-100">
                                     <div class="p-0">
                                         <div class="item-img text-center">
                                             <img src="{{ uploaded_asset($product->photos) }}"
-                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
-                                                 alt="{{ $product->name }}" />
+                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/no-image-found.jpg') }}';"
+                                                alt="{{ $product->name }}" />
                                         </div>
                                     </div>
                                     <div class="pl-3 w-100">
@@ -85,9 +85,8 @@
                                             <div class="action">
                                                 <div class="item-count flex-acenter-jbtw">
                                                     <input class="quantity" min="1"
-                                                           name="quantity[{{ $detail->id }}]"
-                                                           value="{{ $detail->quantity }}" type="number"
-                                                           id="quantity_{{ $detail->id }}" readonly />
+                                                        name="quantity[{{ $detail->id }}]" value="{{ $detail->quantity }}"
+                                                        type="number" id="quantity_{{ $detail->id }}" readonly />
                                                 </div>
                                             </div>
                                         </div>
@@ -117,7 +116,7 @@
                         @endif
 
                         @if ($total > 0)
-                        <!-- Amount -->
+                            <!-- Amount -->
                             <div class="payings py-4">
                                 @if ($shipping > 0)
                                     @php
@@ -146,17 +145,25 @@
                                         <ins class="fw500 text-right"> FREE </ins>
                                     </h6>
                                 @endif
-                                <h5 class="mb-1">
+
+                                @if ($order->service_charge > 0)
+                                    <h6>
+                                        <ins class="fw500">Service Charge :</ins>
+                                        <ins class="fw500 text-right"> {!! single_price_web($order->service_charge) !!}</ins>
+                                    </h6>
+                                @endif
+
+                                <h5 class="mt-3">
                                     <ins class="fw700">Total :</ins>
-                                    <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total) !!} </ins>
+                                    <ins class="fw700 text-right" id="basic_amount"> {!! single_price_web($total + $order->service_charge) !!} </ins>
                                 </h5>
                             </div>
 
 
-                        <!-- Checkout Form -->
+                            <!-- Checkout Form -->
                             @if (Auth::user())
-                                <form action="{{ route('admin.order.payment.checkout') }}" class="form-default" role="form"
-                                      method="POST" id="checkout-form-login">
+                                <form action="{{ route('admin.order.payment.checkout') }}" class="form-default"
+                                    role="form" method="POST" id="checkout-form-login">
                                     @csrf
 
                                     @if ($order)
@@ -172,8 +179,8 @@
                                             @if ($total > Auth::user()->balance)
                                                 <div class="delivery-addr p-3 flex-astart-jstart mb-3">
                                                     <input type="checkbox" name="partial_payment" id="partial_payment"
-                                                           class="mr-2"
-                                                           @if (Auth::user()->balance == 0) disabled
+                                                        class="mr-2"
+                                                        @if (Auth::user()->balance == 0) disabled
                                                            @else checked @endif />
                                                     <span class="check-box"></span>
 
@@ -183,13 +190,12 @@
                                                             </ins></span>
                                                     </label>
                                                 </div>
-                                                <input type="hidden" id="payable_amount"
-                                                       value='{!! single_price_web($total - Auth::user()->balance) !!}'>
+                                                <input type="hidden" id="payable_amount" value='{!! single_price_web($total - Auth::user()->balance) !!}'>
                                             @else
                                                 <div class="other-gatewy p-3 mb-3">
                                                     <label for="pay-option2" class="label-radio mb-0 py-2 d-block">
                                                         <input type="radio" id="pay-option2" name="payment_option"
-                                                               value="wallet" tabindex="1" checked />
+                                                            value="wallet" tabindex="1" checked />
                                                         <span class="align-middle body-txt">SafeQu balance</span>
                                                         <br>
                                                         <span class="align-middle body-txt cart_wallet_bal">
@@ -203,8 +209,8 @@
                                             <div class="other-gatewy p-3 mb-3">
                                                 <label for="pay-option1" class="label-radio mb-0 py-2 d-block">
                                                     <input type="radio" id="pay-option1" name="payment_option"
-                                                           tabindex="1" value="razorpay"
-                                                           @if ($total > Auth::user()->balance) checked @endif />
+                                                        tabindex="1" value="razorpay"
+                                                        @if ($total > Auth::user()->balance) checked @endif />
                                                     <span class="align-middle body-txt">
                                                         PayTM / G-Pay / UPI / Net Banking
                                                     </span>
@@ -225,15 +231,15 @@
                                         <div>
                                             @if ($user_data && isset($user_data->address) && $user_data->address == '')
                                                 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top"
-                                                   title="Please complete your profile before attempting to make payment">
+                                                    title="Please complete your profile before attempting to make payment">
                                                     <i
                                                         class="fad fa-info-circle primary-color-dark animated faa-tada align-middle"></i>
                                                 </a>
                                             @endif
                                             <button type="button" id="btn_pay_now"
-                                                    class="ml-2 btn primary-btn btn-round py-1"
-                                                    onclick="submitLoginOrder(this)"
-                                                    @if (count($order->orderDetails) == 0) disabled @endif>
+                                                class="ml-2 btn primary-btn btn-round py-1"
+                                                onclick="submitLoginOrder(this)"
+                                                @if (count($order->orderDetails) == 0) disabled @endif>
                                                 Pay Now
                                             </button>
                                         </div>

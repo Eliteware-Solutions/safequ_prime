@@ -221,3 +221,7 @@ ALTER TABLE `orders` ADD `payment_datetime` DATETIME NULL DEFAULT NULL AFTER `pa
 ALTER TABLE `orders` CHANGE `payment_status` `payment_status` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT 'payment_initiated';
 ALTER TABLE `order_details` CHANGE `payment_status` `payment_status` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'payment_initiated';
 
+-- ----------------------------
+-- Dt: 05-10-23
+-- ----------------------------
+ALTER TABLE `orders` ADD `service_charge` DOUBLE(20,2) NOT NULL DEFAULT '0.00' AFTER `grand_total`;

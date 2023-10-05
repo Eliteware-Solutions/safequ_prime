@@ -1045,6 +1045,11 @@ class OrderController extends Controller
         $order = Order::findOrFail($request->order_id);
         $order->delivery_viewed = '0';
         $order->delivery_status = $request->status;
+        
+        if($request->status == 'delivered' && $order->payment_status != 'paid') {
+            $order->service_charge = 100;
+        }
+        
         $order->save();
 
         if ($request->status == 'cancelled' && $order->payment_type == 'wallet') {

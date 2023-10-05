@@ -100,7 +100,7 @@
                                 @endif
                             </td>
                             <td>
-                                {!! single_price($order->grand_total)  !!}
+                                {!! single_price($order->grand_total + $order->service_charge)  !!}
                             </td>
                             <td class="text-right">
                                 <a class="btn btn-soft-primary btn-icon btn-circle btn-sm"
