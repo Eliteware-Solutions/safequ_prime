@@ -783,6 +783,7 @@ class CartController extends Controller
     public function cartCount(Request $request)
     {
         $cart_count = 0;
+        $carts = array();
         if (auth()->user() != null) {
             $user_id = Auth::user()->id;
             $carts = Cart::where('user_id', $user_id)->get();
