@@ -45,7 +45,7 @@ class CheckoutController extends Controller
         if ($request->payment_option != null) {
             $carts_details = array();
             if (!Auth::check()) {
-                $user = User::where('phone', '+91' . $request->phone)->first();
+                $user = User::where('phone', '+91' . $request->phone)->where('user_type', 'customer')->first();
 
                 if ($user) {
                     if (isset($request->hdn_coupon_code)) {

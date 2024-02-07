@@ -245,7 +245,7 @@
                                     <div class="row">
                                         <div class="col-md-6 p-2">
                                             <input type="text" class="form-control" name="name" id="name"
-                                                placeholder="Full Name">
+                                                placeholder="Full Name" required >
                                         </div>
                                         <div class="col-md-6 p-2">
                                             <div class="phone-form-group">
@@ -260,17 +260,13 @@
                                             <input type="email" class="form-control" name="email" id="email"
                                                 placeholder="Email">
                                         </div>
-                                        {{-- <div class="col-md-4 p-2">
-                                            <input type="text" class="form-control" name="flat_no" id="flat_no"
-                                                placeholder="Flat No.">
-                                        </div> --}}
                                         <div class="col-md-6 p-2">
                                             <select name="city" id="city" class="form-control" required>
                                                 <option value="Mumbai">Mumbai</option>
                                             </select>
                                         </div>
                                         <div class="col-md-12 p-2">
-                                            <textarea name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>
+                                            <textarea required name="address" id="address" cols="30" rows="10" class="form-control" placeholder="Address"></textarea>
                                         </div>
                                         <div class="col-md-12 p-2">
                                             <label for="pay-option1" class="label-radio m-0 p-3 d-block">
@@ -283,9 +279,8 @@
                                         </div>
 
                                         <div class="col-md-12 mt-4 p-2">
-                                            <button type="button" class="btn primary-btn btn-block"
-                                                onclick="submitOrder(this)"
-                                                @if (count($carts) == 0) disabled @endif>Place Your Order
+                                            <button type="submit" class="btn primary-btn btn-block"
+                                                    @if (count($carts) == 0) disabled @endif >Place Your Order
                                             </button>
                                         </div>
                                     </div>
@@ -437,10 +432,6 @@
                 updateQuantity(cart_id, qty);
             })
         })
-
-        function submitOrder(el) {
-            $('#checkout-form').submit();
-        }
 
         function submitLoginOrder(el) {
             $(el).prop('disabled', true);
