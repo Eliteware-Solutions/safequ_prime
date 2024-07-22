@@ -207,7 +207,7 @@
                 </div>
                 <div id="offline_wallet_recharge_modal_body">
                     <form class="" action="{{route('admin_wallet_recharge')}}" method="post"
-                          enctype="multipart/form-data">
+                          enctype="multipart/form-data" onsubmit="submitWalletRechargeForm(this)">
                         @csrf
                         <input type="hidden" id="user_id" name="user_id">
                         <div class="modal-body gry-bg px-3 pt-3 mx-auto">
@@ -235,7 +235,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group text-right">
-                                    <button type="submit" class="btn btn-sm btn-primary transition-3d-hover mr-1">
+                                    <button type="submit" class="btn btn-sm btn-primary transition-3d-hover mr-1" id="submit-wallet-recharge-btn">
                                         Confirm
                                     </button>
                                 </div>
@@ -264,6 +264,11 @@
             }
 
         });
+
+        function submitWalletRechargeForm(form) {
+            document.getElementById("submit-wallet-recharge-btn").disabled = true;
+            form.submit();
+        }
 
         function sort_customers(el) {
             $('#sort_customers').submit();
